@@ -1,0 +1,13 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500&display=swap");
+@import "tailwindcss";
+@import "../../../build/site.css";
+@import "../../../build/theme.css";
+
+@source "../../../registry";
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+    overflow-x: clip;
+  }
+}
