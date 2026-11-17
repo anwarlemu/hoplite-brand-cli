@@ -29,5 +29,5 @@ Each is in force today; each names where it lives, so a change is one edit.
     chart, carousel and resizable are written by hand.
 11. The logo is the horse lockup and app icon from the website (`brand/logo/`), in the ink.
 12. Review passes at 7 on every score. `brand/brand.json`.
-13. The repository should be private: it holds copies of the website's stylesheets. Apps then need a GitHub token to
-    install from `#release`.
+13. The repository is public (the owner's choice), so installs from `#release` need no token. It holds copies of the
+    website's public stylesheets as reference material.
