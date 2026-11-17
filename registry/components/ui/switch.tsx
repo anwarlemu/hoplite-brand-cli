@@ -6,7 +6,7 @@ import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import { cn } from "@/lib/utils";
 
 // The product's switch from the site's app demo (.pa-sw): a 28 by 16 rounded track (one of the few round things) in the
-// off gray, the orange when on, holding a 12px knob of the ground 2px in that travels 12px. `size="sm"` is the
+// off gray, the orange when on, holding a 12px light knob (the site.s --day, the same in both themes) 2px in that travels 12px. `size="sm"` is the
 // demo's 20 by 12 switch with an 8px knob (.tt-sw). The track's color changes in 160ms on the ease-out; the knob
 // travels on screen, so it moves in 160ms on the in-out curve; with reduced motion both are instant. Keyboard focus is
 // the 2px ink outline 2px out; invalid adds the orange outline; disabled turns the track the quiet line (the off gray
@@ -26,7 +26,7 @@ function Switch({ className, size = "default", ...props }: SwitchProps) {
     >
       <BaseSwitch.Thumb
         data-slot="switch-thumb"
-        className="pointer-events-none block rounded-pill bg-surface transition-[translate] duration-base ease-in-out group-data-[size=default]/switch:size-3 group-data-[size=sm]/switch:size-2 data-checked:translate-x-3 group-data-[size=sm]/switch:data-checked:translate-x-2 motion-reduce:transition-none"
+        className="pointer-events-none block rounded-pill bg-white transition-[translate] duration-base ease-in-out group-data-[size=default]/switch:size-3 group-data-[size=sm]/switch:size-2 data-checked:translate-x-3 group-data-[size=sm]/switch:data-checked:translate-x-2 motion-reduce:transition-none"
       />
     </BaseSwitch.Root>
   );

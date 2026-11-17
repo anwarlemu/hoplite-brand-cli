@@ -10,3 +10,4 @@ registry.json
 .claude/worktrees/
 .shots/
 scripts/.shot.mjs
+scripts/.sheet.mjs

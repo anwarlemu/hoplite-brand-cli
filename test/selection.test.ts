@@ -6,7 +6,6 @@ import { describe, expect, it } from 'vitest';
 import { preToolUse, stop } from '../src/hooks/handlers.js';
 import { changedFiles } from '../src/check/engine.js';
 import { scopeTheme, tokensOnly, unlayer } from '../src/install/styles.js';
-import { missingChakraPackages } from '../src/install/chakra.js';
 import { binCommand, installPreCommit } from '../src/install/agents.js';
 import { Writer } from '../src/install/files.js';
 import { adaptComponent, dropOrphanStyles, restyleCva, restyleRoot, useSiteLook } from '../src/library/adapt.js';
@@ -43,7 +42,7 @@ const cli = (dir: string, ...args: string[]) => spawnSync(process.execPath, [BIN
 const read = (dir: string, rel: string) => readFileSync(join(dir, rel), 'utf8');
 
 // Everything the library's components import is already a dependency, so applying never reaches the network.
-const DEPS = { next: '16.0.0', react: '19.0.0', 'react-dom': '19.0.0', tailwindcss: '4.1.0', '@chakra-ui/react': '^3.37.0', '@emotion/react': '^11.14.0', '@emotion/cache': '^11.14.0', 'radix-ui': '*', '@phosphor-icons/react': '*', clsx: '*', 'tailwind-merge': '*', 'class-variance-authority': '*' };
+const DEPS = { next: '16.0.0', react: '19.0.0', 'react-dom': '19.0.0', tailwindcss: '4.1.0', '@base-ui/react': '*', cmdk: '*', sonner: '*', '@phosphor-icons/react': '*', clsx: '*', 'tailwind-merge': '*', 'class-variance-authority': '*' };
 const BUTTON = `import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type PrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "danger"; size?: "sm" | "md"; children: ReactNode };
@@ -397,19 +396,12 @@ describe('bugs found applying to real apps', () => {
 		const out = restyleRoot(text, tag, 'badge', 'rounded-control border');
 		expect(out).toContain('.join(" ")');
 	});
-	it('a swap sets up the provider its library components render in, with server-rendered styles in Next', () => {
+	it('a swap needs no provider: the library is built on Base UI, so nothing wraps the root layout', () => {
 		const dir = project(APP);
 		try {
 			expect(cli(dir, 'apply', 'button').status).toBe(0);
-			const layout = read(dir, 'app/layout.tsx');
-			expect(layout).toMatch(/<\w+ChakraProvider>/);
-			const provider = read(dir, 'components/ui/provider.tsx');
-			expect(provider).toContain('useServerInsertedHTML');
-			expect(provider).toContain('@emotion/cache');
-			const bare = project({ 'package.json': JSON.stringify({ dependencies: { '@chakra-ui/react': '^3.37.0', '@emotion/react': '^11.14.0' } }) });
-			expect(missingChakraPackages(bare, true)).toEqual(['@emotion/cache@^11.14.0']);
-			expect(missingChakraPackages(bare, false)).toEqual([]);
-			rmSync(bare, { recursive: true });
+			expect(read(dir, 'app/layout.tsx')).not.toMatch(/Provider[\s>]/);
+			expect(existsSync(join(dir, 'components/ui/provider.tsx'))).toBe(false);
 		} finally {
 			rmSync(dir, { recursive: true });
 		}
@@ -510,20 +502,15 @@ describe('reruns and class maps (shared with the sibling engine)', () => {
 	});
 });
 
-describe('the provider, set up once (shared with the sibling engine)', () => {
-	it('a second add wraps nothing again, warns of nothing, and keeps a provider the app edited', () => {
+describe('no provider to set up (Base UI)', () => {
+	it('add wraps nothing and warns of nothing, however many components are added', () => {
 		const layout = "import './globals.css';\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body>{children}</body>\n    </html>\n  );\n}\n";
 		const dir = project({ 'package.json': JSON.stringify({ dependencies: DEPS }), 'tsconfig.json': JSON.stringify({ compilerOptions: { paths: { '@/*': ['./*'] } } }), 'app/globals.css': '@import "tailwindcss";', 'app/layout.tsx': layout });
 		try {
 			expect(cli(dir, 'add', 'button').stdout).not.toMatch(/Wrap the application root/);
-			const wrapped = read(dir, 'app/layout.tsx');
-			expect(wrapped.match(/ChakraProvider>/g)).toHaveLength(2);
-			expect(cli(dir, 'add', 'badge').stdout).not.toMatch(/Wrap the application root/);
-			expect(read(dir, 'app/layout.tsx')).toBe(wrapped);
-			const provider = read(dir, 'components/ui/provider.tsx');
-			writeFileSync(join(dir, 'components/ui/provider.tsx'), `${provider}\n// Acme theme tweaks\n`);
-			cli(dir, 'add', 'card');
-			expect(read(dir, 'components/ui/provider.tsx')).toContain('Acme theme tweaks');
+			expect(cli(dir, 'add', 'badge', 'card').stdout).not.toMatch(/Wrap the application root/);
+			expect(read(dir, 'app/layout.tsx')).not.toMatch(/Provider[\s>]/);
+			expect(existsSync(join(dir, 'components/ui/provider.tsx'))).toBe(false);
 		} finally {
 			rmSync(dir, { recursive: true });
 		}
@@ -532,7 +519,7 @@ describe('the provider, set up once (shared with the sibling engine)', () => {
 
 describe('add and init leave the pages they do not touch alone', () => {
 	const brandCss = (dir: string) => read(dir, `app/_${bin}/brand.css`);
-	it('add in an app with pages installs tokens, theme and fonts, without the base layer or Chakra global styles', () => {
+	it('add in an app with pages installs tokens, theme and fonts, without the base layer', () => {
 		const dir = project({ ...APP, 'node_modules/tailwindcss/package.json': JSON.stringify({ name: 'tailwindcss', version: '4.1.0', exports: { './theme.css': './theme.css' } }), 'node_modules/tailwindcss/theme.css': '@theme default {\n  --font-sans: ui-sans-serif, system-ui;\n  --font-weight-bold: 700;\n}\n' });
 		try {
 			expect(cli(dir, 'add', 'button').status).toBe(0);
@@ -541,7 +528,6 @@ describe('add and init leave the pages they do not touch alone', () => {
 			// Components still render the brand: its font and type inside [data-slot].
 			expect(brandCss(dir)).toMatch(/:where\(\[data-slot\], \.ds-page\) \{[^}]*--ds-scope-font-sans: var\(--ds-font-sans\)/);
 			expect(JSON.parse(read(dir, '.ds/config.json')).baseLayer).toBe(false);
-			expect(read(dir, 'components/ui/provider.tsx')).toContain('globalCss: {}');
 		} finally {
 			rmSync(dir, { recursive: true });
 		}
@@ -577,18 +563,6 @@ describe('add and init leave the pages they do not touch alone', () => {
 		try {
 			expect(cli(dir, 'init').status).toBe(0);
 			expect(brandCss(dir)).not.toMatch(BASE_LAYER);
-		} finally {
-			rmSync(dir, { recursive: true });
-		}
-	});
-	it('an unedited provider from an earlier version loses Chakra global styles; an edited one is kept', () => {
-		const dir = project(APP);
-		try {
-			cli(dir, 'add', 'button');
-			const legacy = read(dir, 'components/ui/provider.tsx').replace(/\/\/ Behavior only[^\n]*\nconst brandSystem = createSystem\(\{ \.\.\.defaultConfig, globalCss: \{\} \}, \{ preflight: false \}\);/, 'const brandSystem = createSystem(defaultConfig, { preflight: false });');
-			writeFileSync(join(dir, 'components/ui/provider.tsx'), legacy);
-			cli(dir, 'add', 'badge');
-			expect(read(dir, 'components/ui/provider.tsx')).toContain('globalCss: {}');
 		} finally {
 			rmSync(dir, { recursive: true });
 		}
@@ -665,8 +639,8 @@ describe('a cva button the app already has (shadcn)', () => {
 		try {
 			expect(cli(dir, 'apply', 'button').status).toBe(0);
 			const out = read(dir, 'components/ui/button.tsx');
-			expect(out).toContain('rounded-pill');
-			expect(out).toContain('bg-danger');
+			expect(out).toContain('ds-hex-frame');
+			expect(out).toContain('before:bg-danger');
 			expect(out).not.toContain('rounded-lg');
 			expect(out).toContain('h-8 gap-1.5 px-2.5'.replace('h-8 gap-1.5 px-2.5', 'h-10'));
 			expect(read(dir, 'app/globals.css')).not.toContain('--color-background: var(--ds-color-bg-page)');
@@ -686,7 +660,7 @@ describe('a named page renders in the brand', () => {
 			expect(cli(dir, 'apply', '/settings').status).toBe(0);
 			const page = read(dir, 'app/settings/page.tsx');
 			expect(page).toContain('<main className="ds-page p-[13px]">');
-			expect(page).toMatch(/<PrimaryButton className="[^"]*rounded-pill![^"]*" variant="secondary">Export<\/PrimaryButton>/);
+			expect(page).toMatch(/<PrimaryButton className="[^"]*ds-hex-frame![^"]*" variant="secondary">Export<\/PrimaryButton>/);
 			expect(read(dir, 'components/primary-button.tsx')).toBe(APP['components/primary-button.tsx']);
 			expect(read(dir, 'app/page.tsx')).toBe(APP['app/page.tsx']);
 			expect(read(dir, `app/_${bin}/brand.css`)).toMatch(/@layer base \{\s*\.ds-page \{[^}]*font-family: var\(--ds-font-sans\)/);
@@ -722,7 +696,7 @@ describe('combined selections, a widened base layer and use-site clearing', () =
 		try {
 			expect(cli(dir, 'apply', 'button', '--pages', '/settings').status).toBe(0);
 			const page = read(dir, 'app/settings/page.tsx');
-			expect(page).toMatch(/<PrimaryButton className="[^"]*rounded-pill![^"]*" variant="secondary">Export<\/PrimaryButton>/);
+			expect(page).toMatch(/<PrimaryButton className="[^"]*ds-hex-frame![^"]*" variant="secondary">Export<\/PrimaryButton>/);
 			expect(page).not.toContain('ds-page');
 			expect(page).toContain('text-[#0f172a]');
 			expect(read(dir, 'components/primary-button.tsx')).toBe(APP['components/primary-button.tsx']);
@@ -745,10 +719,12 @@ describe('combined selections, a widened base layer and use-site clearing', () =
 	});
 	it('a use-site look clears the component ground only where the library draws its own cut shape', () => {
 		const button = loadItemSync('button')!.files![0].content;
+		// The library's own key is a hexagon drawn on pseudo-elements, so its use-site look clears the ground under it.
 		const own = useSiteLook('button', button, 'site', 'primary')!;
-		expect(own).toContain('rounded-pill');
-		expect(own).not.toContain('bg-transparent');
-		expect(own).not.toContain('rounded-none');
+		expect(own).toContain('ds-hex-frame');
+		expect(own).toEqual(expect.arrayContaining(['bg-transparent', 'border-0', 'rounded-none', 'shadow-none']));
+		const flat = 'const v = cva("rounded-pill", { variants: { variant: { default: "bg-primary text-on-primary" } } });';
+		expect(useSiteLook('button', flat, 'site')).not.toContain('bg-transparent');
 		const cut = 'const v = cva("ds-cut relative", { variants: { variant: { default: "text-fg" } } });';
 		expect(useSiteLook('button', cut, 'site')).toEqual(expect.arrayContaining(['ds-cut', 'bg-transparent', 'border-0', 'rounded-none', 'shadow-none']));
 	});
@@ -757,16 +733,18 @@ describe('combined selections, a widened base layer and use-site clearing', () =
 describe('raw elements take the brand look, and classes its steps', () => {
 	const HOME = 'export default function Home() {\n  return (\n    <main className="mx-auto max-w-2xl p-8">\n      <h1 className="text-3xl font-bold text-slate-900">Acme dashboard</h1>\n      <p className="mt-2 text-sm text-slate-600 uppercase tracking-wide">Everything in one place.</p>\n      <div className="mt-6 flex gap-3">\n        <button className="rounded-md bg-indigo-600 px-4 py-2 text-white">Get started</button>\n        <button className="rounded-md border border-slate-300 px-4 py-2 text-slate-900">Learn more</button>\n        <button className="rounded-md px-3 py-1.5 text-sm text-indigo-600">Docs</button>\n      </div>\n      <div className="mt-8 rounded-xl border border-slate-200 p-6 shadow-sm">\n        <input className="mt-3 w-full rounded-md border border-slate-300 px-3 py-2 text-sm" placeholder="name@acme.test" />\n        <input type="checkbox" className="size-4 accent-indigo-600" />\n        <textarea rows={3} className="mt-3 w-full rounded-md border border-slate-300 px-3 py-2" />\n      </div>\n    </main>\n  );\n}\n';
 	it('maps default steps to the nearest brand step, deterministically', () => {
-		expect(brandStep('text-sm')).toBe('text-body');
+		expect(brandStep('text-sm')).toBe('text-body-sm');
 		expect(brandStep('md:text-xs')).toBe('md:text-caption');
 		expect(brandStep('text-3xl', undefined, 1)).toBe('text-h1');
-		expect(brandStep('rounded-md')).toBe('rounded-xs');
-		expect(brandStep('rounded-xl')).toBe('rounded-control');
+		// Hoplite is square: every corner goes to none; a full rounding stays a pill.
+		expect(brandStep('rounded-md')).toBe('rounded-none');
+		expect(brandStep('rounded-xl')).toBe('rounded-none');
 		expect(brandStep('rounded-full')).toBe('rounded-pill');
-		expect(brandStep('rounded-t-lg')).toBe('rounded-t-sm');
+		expect(brandStep('rounded-t-lg')).toBe('rounded-t-none');
 		expect(brandStep('shadow-sm')).toBe('shadow-card');
 		expect(brandStep('shadow-lg')).toBe('shadow-floating');
-		expect(brandStep('uppercase')).toBe('normal-case');
+		// Hoplite sets labels in capitals, so uppercase stays.
+		expect(brandStep('uppercase')).toBe('uppercase');
 		expect(brandStep('tracking-wide')).toBe('tracking-normal');
 		expect(brandStep('mt-2')).toBe('mt-2');
 	});
@@ -775,14 +753,14 @@ describe('raw elements take the brand look, and classes its steps', () => {
 		try {
 			expect(cli(dir, 'apply').status).toBe(0);
 			const out = read(dir, 'app/page.tsx');
-			expect(out).toMatch(/<h1 className="[^"]*font-display text-h3 font-normal leading-heading[^"]*">/);
+			expect(out).toMatch(/<h1 className="[^"]*font-display text-h3 sm:text-h2 font-light leading-heading[^"]*">/);
 			expect(out).not.toMatch(/text-3xl|font-bold|rounded-md|px-4 py-2|shadow-sm/);
-			expect(out).toMatch(/<button className="[^"]*rounded-pill[^"]*bg-primary text-on-primary[^"]*h-10 px-5">Get started/);
-			expect(out).toMatch(/<button className="[^"]*border border-line-field bg-surface[^"]*">Learn more/);
-			expect(out).toMatch(/<button className="[^"]*text-icon-secondary[^"]*h-9[^"]*">Docs/);
-			expect(out).toMatch(/<input className="mt-3 w-full h-10 px-4 [^"]*rounded-pill/);
+			expect(out).toMatch(/<button className="[^"]*ds-hex-frame text-on-primary before:bg-primary[^"]*h-10 px-6[^"]*">Get started/);
+			expect(out).toMatch(/<button className="[^"]*ds-hex-frame text-fg before:bg-line-strong after:bg-surface[^"]*">Learn more/);
+			expect(out).toMatch(/<button className="[^"]*ds-hex-frame-s[^"]*text-fg-secondary[^"]*h-8[^"]*">Docs/);
+			expect(out).toMatch(/<input className="mt-3 w-full h-10 px-3 border border-line-field rounded-none/);
 			expect(out).toContain('<input type="checkbox" className="size-4 accent-primary" />');
-			expect(out).toMatch(/<textarea rows=\{3\} className="mt-3 w-full px-4 [^"]*rounded-pill \[&:is\(textarea\)\]:rounded-control/);
+			expect(out).toMatch(/<textarea rows=\{3\} className="mt-3 w-full px-3 border border-line-field rounded-none/);
 			expect(out).not.toMatch(/<textarea[^>]*\bh-10\b/);
 			expect(out).toContain('className="mt-6 flex gap-3"');
 			expect(JSON.parse(cli(dir, 'check', 'app/page.tsx', '--json').stdout).findings).toEqual([]);
@@ -797,7 +775,7 @@ describe('raw elements take the brand look, and classes its steps', () => {
 		try {
 			cli(dir, 'apply', 'button');
 			const out = read(dir, 'app/page.tsx');
-			expect(out).toMatch(/rounded-pill[^"]*bg-primary/);
+			expect(out).toMatch(/ds-hex-frame[^"]*before:bg-primary/);
 			expect(out).toContain('<h1 className="text-3xl font-bold text-slate-900">');
 			expect(out).toContain('rounded-md border border-slate-300 px-3 py-2 text-sm');
 		} finally {

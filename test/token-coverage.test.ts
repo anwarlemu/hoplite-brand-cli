@@ -59,7 +59,7 @@ describe('complete token output', () => {
     try {
       const index = JSON.parse(read('apps/www/public/r/index.json')).items as { name: string }[];
       const items = index.map(item => JSON.parse(read(`apps/www/public/r/${item.name}.json`)));
-      const dependencies: Record<string, string> = { react: '19.2.8', 'react-dom': '19.2.8', tailwindcss: '4.3.3', '@chakra-ui/react': '^3.37.0', '@emotion/react': '^11.14.0' };
+      const dependencies: Record<string, string> = { react: '19.2.8', 'react-dom': '19.2.8', tailwindcss: '4.3.3', '@base-ui/react': '1.7.0' };
       for (const item of items) for (const dependency of item.packages ?? []) dependencies[dependency] ??= '*';
       writeFileSync(join(root, 'package.json'), JSON.stringify({ private: true, dependencies }));
       writeFileSync(join(root, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'ESNext', moduleResolution: 'Bundler', jsx: 'react-jsx', strict: true, skipLibCheck: true, noEmit: true, esModuleInterop: true, paths: { '@/*': ['./src/*'] } }, include: ['src'] }));

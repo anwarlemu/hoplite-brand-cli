@@ -10,7 +10,7 @@ mkdirSync(out,{recursive:true});
 const {items}=JSON.parse(readFileSync(`${root}/apps/www/lib/registry-index.json`));
 const jobs=items.flatMap(item=>item.examples.flatMap(example=>[false,true].map(phone=>({name:item.name,example,phone,width:phone?390:item.type==='ui'?720:1440}))));
 const total=jobs.length;
-const browser=await chromium.launch();
+const browser=await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
 const results=[];
 try {
   await Promise.all(Array.from({length:3},async()=>{

@@ -29,7 +29,7 @@ export function Outline() {
         </Button>
         <Button variant="outline">
           <TerminalWindowIcon />
-          Open in terminal
+          Terminal
         </Button>
         <Button variant="outline" size="icon" aria-label="More branch actions">
           <DotsThreeIcon />

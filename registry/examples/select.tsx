@@ -14,6 +14,7 @@ const MODELS = [
 ];
 
 export function Preview() {
+  const [model, setModel] = React.useState("auto");
   const [saved, setSaved] = React.useState<string>();
   return (
     <form
@@ -26,7 +27,7 @@ export function Preview() {
       <label id="model-label" className="text-body-sm font-medium text-fg">
         Default model
       </label>
-      <Select name="model" items={MODELS} defaultValue="auto">
+      <Select name="model" items={MODELS} value={model} onValueChange={(next) => setModel(String(next))}>
         <SelectTrigger aria-labelledby="model-label">
           <SelectValue />
         </SelectTrigger>

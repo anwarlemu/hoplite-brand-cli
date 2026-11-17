@@ -176,16 +176,16 @@
 			},
 			"css": {
 				"font-family": "var(--ds-font-display)",
-				"font-size": "var(--ds-text-display)",
+				"font-size": "var(--ds-text-h2)",
 				"font-weight": "var(--ds-font-weight-heading)",
-				"line-height": "var(--ds-leading-display)",
+				"line-height": "var(--ds-leading-heading)",
 				"letter-spacing": "var(--ds-tracking-tight)",
 				"color": "var(--ds-color-text-default)",
 				"text-wrap": "balance"
 			},
-			"tailwind": "font-display text-display font-light leading-display tracking-tight text-fg text-balance",
+			"tailwind": "font-display text-h3 sm:text-h2 font-light leading-heading tracking-tight text-fg text-balance",
 			"rules": [
-				"Chakra Petch light at 64px, drawn 1 percent tighter, balanced, at most 800px wide. Never bold.",
+				"Chakra Petch light at 44px (32px on a phone), the site's .heading, drawn 1 percent tighter and balanced. A page in an app keeps its proportions; the 64px display is for a marketing hero only. Never bold.",
 				"One accent word may be the flat orange (a ds-accent span)."
 			],
 			"source": "hoplite-website-fawn.vercel.app: .display, .hero__title"

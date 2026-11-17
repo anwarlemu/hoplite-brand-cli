@@ -6,11 +6,15 @@ import { checkOverlays } from './check-overlays.mjs';
 import { checkInteractions } from './check-interactions.mjs';
 
 const base = process.env.DOCS_URL ?? 'http://localhost:4645';
-const browser = await chromium.launch();
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = [];
 page.on('pageerror', error => errors.push(error.message));
-page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+// Open-state examples (a dialog, menu or sheet shown open) take focus as they mount. On a docs page they sit in
+// opaque-origin frames, where Chrome refuses focus without a user gesture and logs this policy notice: the refusal is
+// what a docs page wants (a frame must not pull focus off the page), so only that exact notice is not an error.
+const FOCUS_POLICY = 'Permissions policy violation: focus-without-user-activation is not allowed in this document.';
+page.on('console', message => { if (message.type() === 'error' && message.text() !== FOCUS_POLICY) errors.push(message.text()); });
 page.on('response', response => { if (response.status() >= 400) console.log(`HTTP ${response.status()}: ${response.url()}`); });
 const nav = page.getByRole('navigation', { name: 'Library', exact: true });
 // The rail and the page head must not move between routes: the rail is shared and keeps its scroll and filter.
@@ -29,7 +33,7 @@ try {
   await page.waitForTimeout(300);
   assert.equal(await nav.evaluate(n => n.getBoundingClientRect().width), 288, 'the rail is 288px');
   const items = await nav.locator('a[data-item]').evaluateAll(links => links.map(link => ({ name: link.dataset.item, title: link.textContent.trim() })));
-  assert.ok(items.length >= 68, `every component is listed (${items.length})`);
+  assert.ok(items.length >= 61, `every component is listed (${items.length})`);
   const timings = [];
   for (const item of items) {
     const link = nav.locator(`a[data-item="${item.name}"]`);

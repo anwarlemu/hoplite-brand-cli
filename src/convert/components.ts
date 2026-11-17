@@ -44,13 +44,19 @@ function cssColors(css: Record<string, string>) {
 
 function classRecipe(classes: string): Recipe {
 	const result: Recipe = { '': {} };
+	// A shape drawn on pseudo-elements (a hexagon key): an after: fill is the inside of an outlined shape, and a before:
+	// fill is its edge then, or the whole fill of a solid shape.
+	const outlined = /(^|\s)([\w-]+:)*after:bg-/.test(classes);
 	for (const cls of classes.split(/\s+/)) {
 		const { variants, base } = utility(cls);
 		const m = base.match(/^(bg|text|border|outline|ring)-(.+)$/);
 		const name = m && tokens().theme[m[2]];
 		if (!m || !name) continue;
-		const state = canonical(variants.replace(/:$/, ''));
-		(result[state] ??= {})[PROPERTY[m[1]]] = `var(--ds-color-${name})`;
+		const pseudo = variants.match(/(^|:)(before|after):/)?.[2];
+		if (pseudo && m[1] !== 'bg') continue;
+		const property = pseudo === 'before' && outlined ? 'border-color' : PROPERTY[m[1]];
+		const state = canonical(variants.replace(/(^|:)(before|after):/, '$1').replace(/:$/, ''));
+		(result[state] ??= {})[property] = `var(--ds-color-${name})`;
 	}
 	return result;
 }

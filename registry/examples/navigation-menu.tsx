@@ -109,7 +109,7 @@ function Groups({ groups }: { groups: { heading: string; links: Link[] }[] }) {
 
 function Header({ defaultValue }: { defaultValue?: string }) {
   return (
-    <NavigationMenu defaultValue={defaultValue} className="h-16 w-full border-b border-line px-6">
+    <NavigationMenu defaultValue={defaultValue} className="h-16 w-full border-b border-line px-4 sm:px-6">
       <NavigationMenuList>
         <NavigationMenuItem value="product">
           <NavigationMenuTrigger>Product</NavigationMenuTrigger>
@@ -127,19 +127,19 @@ function Header({ defaultValue }: { defaultValue?: string }) {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem value="resources">
+        <NavigationMenuItem value="resources" className="max-sm:hidden">
           <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
           <NavigationMenuContent>
             <Groups groups={RESOURCES} />
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
+        <NavigationMenuItem className="max-sm:hidden">
           <NavigationMenuLink href="#pricing" className={navigationMenuTriggerStyle()}>
             Pricing
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
-      <Button size="sm" className="ml-auto">
+      <Button size="sm" className="ml-auto max-sm:hidden">
         Start building
       </Button>
     </NavigationMenu>
