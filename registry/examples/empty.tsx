@@ -1,72 +1,60 @@
-import { ArrowsHorizontalIcon, ChatCircleIcon, EnvelopeIcon, EnvelopeOpenIcon, EnvelopeSimpleIcon, PaperPlaneTiltIcon, PhoneIcon, PlusIcon, TextAlignLeftIcon, TrayIcon, VaultIcon } from "@phosphor-icons/react/ssr";
+import { ArrowRightIcon, GitBranchIcon, RobotIcon } from "@phosphor-icons/react/ssr";
 
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMascot, EmptyMedia, EmptyOrbit, EmptyTitle } from "@/components/ui/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
 export function Preview() {
   return (
-    <Empty className="min-h-100">
-      <EmptyMedia variant="mascot">
-        <EmptyOrbit>
-          <EnvelopeIcon weight="fill" />
-          <PhoneIcon weight="fill" />
-          <ChatCircleIcon weight="bold" className="size-7 text-success" />
-          <ArrowsHorizontalIcon weight="bold" />
-          <VaultIcon weight="fill" />
-        </EmptyOrbit>
-        <EmptyMascot src="/octopus.png" />
-      </EmptyMedia>
+    <Empty variant="outline">
       <EmptyHeader>
-        <EmptyTitle>Create Your First Agent</EmptyTitle>
-        <EmptyDescription>Set up an identity to unlock mailbox, phone, and vault features</EmptyDescription>
+        <EmptyMedia variant="icon">
+          <RobotIcon />
+        </EmptyMedia>
+        <EmptyTitle>No threads yet</EmptyTitle>
+        <EmptyDescription>Start a thread and an agent picks up the task in its own sandbox.</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button>
-          <PlusIcon />
-          Create Agent
+        <Button>Start a thread</Button>
+        <Button variant="outline">Import an issue</Button>
+      </EmptyContent>
+    </Empty>
+  );
+}
+
+export function Corners() {
+  return (
+    <Empty variant="corners">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <GitBranchIcon />
+        </EmptyMedia>
+        <EmptyTitle>Connect a repository</EmptyTitle>
+        <EmptyDescription>
+          Agents need a repository to work in. <a href="#docs">Read the setup guide</a>.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button variant="link">
+          Connect GitHub
+          <ArrowRightIcon />
         </Button>
       </EmptyContent>
     </Empty>
   );
 }
 
-export function NoSelection() {
+export function Bare() {
   return (
-    <Empty className="min-h-100">
-      <EmptyMedia variant="mascot">
-        <EmptyOrbit>
-          <TextAlignLeftIcon weight="bold" />
-          <EnvelopeOpenIcon weight="fill" />
-          <EnvelopeSimpleIcon weight="fill" />
-          <PaperPlaneTiltIcon weight="fill" />
-          <TrayIcon weight="fill" />
-        </EmptyOrbit>
-        <EmptyMascot src="/octopus.png" />
-      </EmptyMedia>
+    <Empty>
       <EmptyHeader>
-        <EmptyTitle>No email selected</EmptyTitle>
-        <EmptyDescription>Select an email from the list to read it</EmptyDescription>
+        <EmptyTitle>No automations match “nightly”</EmptyTitle>
+        <EmptyDescription>Try another name, or clear the filter.</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button>
-          <PlusIcon />
-          Compose Email
+        <Button variant="secondary" size="sm">
+          Clear filter
         </Button>
       </EmptyContent>
-    </Empty>
-  );
-}
-
-export function Icon() {
-  return (
-    <Empty className="min-h-72">
-      <EmptyMedia variant="icon">
-        <TrayIcon weight="fill" />
-      </EmptyMedia>
-      <EmptyHeader>
-        <EmptyTitle>No emails to display</EmptyTitle>
-        <EmptyDescription>New mail for @acme lands here.</EmptyDescription>
-      </EmptyHeader>
     </Empty>
   );
 }

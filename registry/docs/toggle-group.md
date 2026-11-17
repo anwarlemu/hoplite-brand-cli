@@ -1,10 +1,11 @@
 ---
 name: toggle-group
-title: Toggle Group
+title: Toggle group
 type: ui
 surface: site
-description: "The segmented choice: a lilac track of 40px choices where the chosen one is a white pill with Shadow/S."
-use_for: "Use for a choice among a few options that changes what is shown next (Where does this agent run? Hermes, Openclaw, Codex, Claude Code). Use type single for one choice, multiple for several. Put a 24px logo tile or a 20px glyph before each label. Use variant outline for separate keys."
-never: [A purple chosen key, A sliding indicator between choices, More than seven choices in one track]
-source: "Figma 427:2715: Where does this agent run? in Modal - Created"
+kinds: [tabs]
+description: "Segmented toggles: an outlined hexagon holding compact hexagons with the chosen one filled ink (the pricing period switch), or joined square boxes with the chosen ones filled ink (the changelog filter)."
+use_for: "Use ToggleGroup for a set of related toggles: type=\"single\" (the default) for one choice that changes a view in place, type=\"multiple\" for filters that combine. Use variant=\"outline\" for filter rows and icon toolbars. To switch between panels of content use Tabs."
+never: [A rounded track, Separate floating keys in the default variant, An orange chosen state, A chosen key that grows or bolds]
+source: "The Hoplite website's pricing period switch (.pr-period, .pr-period__option) and changelog filter (.cl-filter, .cl-filter__option)"
 ---

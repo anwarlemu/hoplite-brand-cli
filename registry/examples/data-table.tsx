@@ -1,93 +1,89 @@
 "use client";
 
 import * as React from "react";
-import { ArrowsClockwiseIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react/ssr";
+import { PlusIcon } from "@phosphor-icons/react/ssr";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 
-type Mailbox = { address: string; agent: string; webhooks: number; storage: number; created: Date; status: "active" | "paused" };
+type Run = { id: string; thread: string; repo: string; agent: string; status: string; minutes: number; started: Date };
 
-const AGENTS = ["acme", "support-desk", "ops-runner", "acme-support", "test-agent-233", "billing-bot"];
-const MAILBOXES: Mailbox[] = Array.from({ length: 23 }, (_, i) => {
-  const agent = AGENTS[i % AGENTS.length];
-  return { address: `${agent}${i > 5 ? `-${i}` : ""}@inkboxmail.com`, agent, webhooks: (i * 7) % 4, storage: (i * 13) % 61, created: new Date(2026, 6, 27 + (i % 20)), status: i % 5 === 3 ? "paused" : "active" };
-});
+const AGENTS = ["Claude Code", "Codex", "Amp", "Gemini CLI"];
+const REPOS = ["acme/api", "acme/web", "acme/storefront", "acme/infra"];
+const STATUS = ["Ready for review", "Running", "Merged", "Needs input", "Failed"];
+const TASKS = ["Fix flaky checkout test", "Migrate auth to sessions", "Bump Next to 16.1", "Add rate limits to webhooks", "Cache search results", "Split the billing service", "Upgrade Postgres driver", "Remove the legacy cron", "Add audit log export", "Tighten CSP headers", "Speed up cold starts", "Retry failed webhooks", "Port tests to Vitest", "Document the CLI flags"];
 
-const date = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
+const RUNS: Run[] = TASKS.map((thread, i) => ({
+  id: `run-${1040 + i}`,
+  thread,
+  repo: REPOS[i % REPOS.length],
+  agent: AGENTS[(i * 3) % AGENTS.length],
+  status: STATUS[(i * 7) % STATUS.length],
+  minutes: 4 + ((i * 13) % 47),
+  started: new Date(2026, 10, 17, 9 + (i % 8), (i * 11) % 60),
+}));
 
-const COLUMNS: DataTableColumn<Mailbox>[] = [
-  { id: "address", header: "Email address", accessor: (m) => m.address, sortable: true, hideable: false },
-  { id: "agent", header: "Agent", accessor: (m) => m.agent, sortable: true, cell: (m) => <span className="text-rose">@{m.agent}</span> },
-  { id: "webhooks", header: "Webhooks", accessor: (m) => m.webhooks, sortable: true, cell: (m) => (m.webhooks ? m.webhooks : "None") },
-  { id: "storage", header: "Storage", accessor: (m) => m.storage, sortable: true, cell: (m) => `${m.storage}%` },
-  { id: "status", header: "Status", accessor: (m) => m.status, hidden: true, cell: (m) => <Badge variant={m.status === "active" ? "green" : "gray"} size="sm">{m.status === "active" ? "Active" : "Paused"}</Badge> },
-  { id: "created", header: "Created", accessor: (m) => m.created, sortable: true, cell: (m) => date.format(m.created) },
-  {
-    id: "actions",
-    header: <span className="sr-only">Actions</span>,
-    hideable: false,
-    align: "end",
-    className: "w-14",
-    cell: (m) => (
-      <Button variant="ghost" size="icon" aria-label={`Edit ${m.address}`}>
-        <PencilSimpleIcon weight="fill" />
-      </Button>
-    ),
-  },
+const time = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" });
+
+const COLUMNS: DataTableColumn<Run>[] = [
+  { id: "thread", header: "Thread", accessor: (r) => r.thread, sortable: true, hideable: false, className: "font-medium" },
+  { id: "repo", header: "Repository", accessor: (r) => r.repo, sortable: true, cell: (r) => <span className="font-code text-fg-secondary">{r.repo}</span> },
+  { id: "agent", header: "Agent", accessor: (r) => r.agent, sortable: true },
+  { id: "status", header: "Status", accessor: (r) => r.status, cell: (r) => <span className={r.status === "Failed" ? "text-danger" : "text-fg-secondary"}>{r.status}</span> },
+  { id: "minutes", header: "Minutes", accessor: (r) => r.minutes, sortable: true, align: "end", cell: (r) => <span className="tabular-nums">{r.minutes}</span> },
+  { id: "started", header: "Started", accessor: (r) => r.started, sortable: true, align: "end", hidden: true, cell: (r) => <span className="text-fg-muted tabular-nums">{time.format(r.started)}</span> },
 ];
 
 export function Preview() {
-  return <DataTable columns={COLUMNS} data={MAILBOXES} getRowId={(m) => m.address} rowName="mailbox" pageSize={5} filter={{ placeholder: "Filter mailboxes" }} defaultSort={{ id: "created", desc: false }} empty="No mailbox matches." />;
+  return (
+    <div className="w-full min-w-0">
+      <DataTable columns={COLUMNS} data={RUNS} getRowId={(r) => r.id} pageSize={5} pageSizes={[5, 10, 20]} filter={{ placeholder: "Filter runs" }} defaultSort={{ id: "minutes", desc: true }} rowName="run" />
+    </div>
+  );
 }
 
-export function Selection() {
-  const [rows, setRows] = React.useState(MAILBOXES.slice(0, 8));
-  const [selected, setSelected] = React.useState<string[]>([]);
+export function Selectable() {
+  const [selection, setSelection] = React.useState<string[]>(["run-1041"]);
   return (
-    <DataTable
-      columns={COLUMNS}
-      data={rows}
-      getRowId={(m) => m.address}
-      rowName="mailbox"
-      selectable
-      selection={selected}
-      onSelectionChange={setSelected}
-      pageSize={5}
-      pageSizes={[5, 10, 20]}
-      filter={{ placeholder: "Filter mailboxes", columns: ["address", "agent"] }}
-      toolbar={
-        <>
-          <Button
-            variant="ghost"
-            size="icon-lg"
-            aria-label="Refresh"
-            onClick={() => {
-              setRows(MAILBOXES.slice(0, 8));
-              setSelected([]);
-            }}
-          >
-            <ArrowsClockwiseIcon />
+    <div className="w-full min-w-0">
+      <DataTable
+        columns={COLUMNS}
+        data={RUNS}
+        getRowId={(r) => r.id}
+        selectable
+        selection={selection}
+        onSelectionChange={setSelection}
+        pageSize={5}
+        rowName="run"
+        filter={{ placeholder: "Filter runs" }}
+        toolbar={
+          <Button size="sm" variant="secondary" disabled={!selection.length}>
+            Rerun {selection.length || ""}
           </Button>
-          {selected.length > 0 && (
-            <Button
-              variant="destructive"
-              onClick={() => {
-                setRows((r) => r.filter((m) => !selected.includes(m.address)));
-                setSelected([]);
-              }}
-            >
-              <TrashIcon weight="fill" />
-              Delete {selected.length}
-            </Button>
-          )}
-        </>
-      }
-    />
+        }
+      />
+    </div>
   );
 }
 
 export function Empty() {
-  return <DataTable columns={COLUMNS} data={[]} getRowId={(m) => m.address} filter={false} hideViewOptions empty="No mailboxes yet. Mailboxes are created with their agent identity." />;
+  return (
+    <div className="w-full min-w-0">
+      <DataTable
+        columns={COLUMNS}
+        data={[]}
+        getRowId={(r) => r.id}
+        hideViewOptions
+        empty={
+          <span className="grid justify-items-center gap-3">
+            No runs yet. Start a thread and its runs land here.
+            <Button size="sm" variant="outline">
+              <PlusIcon />
+              New thread
+            </Button>
+          </span>
+        }
+      />
+    </div>
+  );
 }

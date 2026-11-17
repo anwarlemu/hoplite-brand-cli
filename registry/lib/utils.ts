@@ -8,7 +8,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 const twMerge = extendTailwindMerge<"brand-font-size">({
   extend: {
     theme: {
-      leading: ["tight", "display", "heading", "title", "snug", "body", "relaxed", "prose", "code", "body-sm", "caption"],
+      leading: ["tight", "display", "heading", "title", "snug", "body", "relaxed", "prose", "code", "line-body", "line-body-sm", "line-caption"],
       tracking: ["normal", "tight", "caps", "code"],
       radius: ["xs", "sm", "control", "panel", "dialog", "pill"],
       shadow: ["s", "line", "card", "floating", "dialog", "cast", "knob", "focus"],
@@ -28,13 +28,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-type RenderProp = React.ReactElement | ((props: Record<string, unknown>, state: never) => React.ReactElement) | undefined;
-
 /**
  * `asChild` for a Base UI part: the one child element becomes the rendered element (Base UI's `render`), keeping its
  * own children, so `<Button asChild><a href="/docs">Docs</a></Button>` renders the link with the button's look.
  */
-export function slot(asChild: boolean | undefined, children: React.ReactNode, render?: RenderProp) {
-  if (asChild && React.isValidElement<{ children?: React.ReactNode }>(children)) return { render: children as React.ReactElement, children: children.props.children };
+export function slot<R>(asChild: boolean | undefined, children: React.ReactNode, render?: R): { render: R | React.ReactElement | undefined; children: React.ReactNode } {
+  if (asChild && React.isValidElement<{ children?: React.ReactNode }>(children)) return { render: children, children: children.props.children };
   return { render, children };
 }

@@ -2,16 +2,15 @@
 
 import * as React from "react";
 
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from "@/components/ui/input-otp";
-import { Label } from "@/components/ui/label";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, REGEXP_ONLY_DIGITS_AND_CHARS } from "@/components/ui/input-otp";
 
 export function Preview() {
-  const [code, setCode] = React.useState("");
-  const [done, setDone] = React.useState(false);
   return (
     <div className="grid gap-2">
-      <Label htmlFor="login-code">Login code</Label>
-      <InputOTP id="login-code" maxLength={6} pattern={REGEXP_ONLY_DIGITS} value={code} onChange={(v) => { setCode(v); setDone(false); }} onComplete={() => setDone(true)}>
+      <label htmlFor="otp-code" className="font-sans text-body-sm font-medium text-fg">
+        Verification code
+      </label>
+      <InputOTP id="otp-code" maxLength={6}>
         <InputOTPGroup>
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
@@ -24,9 +23,24 @@ export function Preview() {
           <InputOTPSlot index={5} />
         </InputOTPGroup>
       </InputOTP>
-      <p className="text-caption text-fg-muted" aria-live="polite">
-        {done ? "Code entered. Checking it now." : "Enter the 6-digit code we sent to robert@acme.com."}
-      </p>
+      <p className="m-0 text-body-sm text-fg-muted">Enter the code we sent to your device.</p>
+    </div>
+  );
+}
+
+export function Controlled() {
+  const [value, setValue] = React.useState("");
+  return (
+    <div className="grid gap-2">
+      <InputOTP maxLength={4} value={value} onChange={setValue} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} aria-label="Pairing code">
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={2} />
+          <InputOTPSlot index={3} />
+        </InputOTPGroup>
+      </InputOTP>
+      <p className="m-0 text-body-sm text-fg-muted">{value ? `Pairing code: ${value.toUpperCase()}` : "Enter the pairing code shown in the desktop app."}</p>
     </div>
   );
 }
@@ -34,28 +48,25 @@ export function Preview() {
 export function States() {
   return (
     <div className="grid gap-4">
-      <InputOTP aria-label="Recovery code" maxLength={4} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} defaultValue="A7">
+      <InputOTP maxLength={6} defaultValue="482913" aria-label="Complete">
         <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-          <InputOTPSlot index={3} />
+          {Array.from({ length: 6 }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
         </InputOTPGroup>
       </InputOTP>
-      <InputOTP aria-label="Wrong code" maxLength={4} defaultValue="1234" aria-invalid>
+      <InputOTP maxLength={6} defaultValue="4829" aria-invalid aria-label="Invalid">
         <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-          <InputOTPSlot index={3} />
+          {Array.from({ length: 6 }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
         </InputOTPGroup>
       </InputOTP>
-      <InputOTP aria-label="Disabled" maxLength={4} defaultValue="12" disabled>
+      <InputOTP maxLength={6} defaultValue="48" disabled aria-label="Disabled">
         <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-          <InputOTPSlot index={3} />
+          {Array.from({ length: 6 }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
         </InputOTPGroup>
       </InputOTP>
     </div>

@@ -1,74 +1,77 @@
 "use client";
 
 import * as React from "react";
-import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
-import { type VariantProps } from "class-variance-authority";
+import { Toggle as BaseToggle } from "@base-ui/react/toggle";
+import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 
-import { toggleVariants } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
 
-// The console's segmented choice (Figma 427:2715, Modal - Created: "Where does this agent run?"): a lilac track with
-// fully rounded corners and a 2px inset holding 40px choices 8px apart; each choice is a 24px logo tile 8px from a 14px medium
-// ink label, 12px from the sides, and the chosen one is a white pill with Shadow/S. With `spacing={0}`
-// the choices sit flush in the track. `variant="outline"` drops the track: separate keys with the field edge, the chosen
-// one white with Shadow/S. Choosing is instant (no sliding key): the choice is made often and must feel immediate.
-const ToggleGroupContext = React.createContext<VariantProps<typeof toggleVariants> & { spacing?: number; orientation?: "horizontal" | "vertical" }>({
-  size: "default",
-  variant: "default",
-  spacing: 2,
-  orientation: "horizontal",
-});
+// The site's two segmented choices, as toggles. `default` is the pricing period switch (.pr-period): an outlined
+// hexagon (the strong line around the ground) 4px around compact hexagons, 32px tall with 8px cuts and 20px sides; the
+// chosen one is a filled ink hexagon with its 14px medium label in the ground color, the others quiet until the pointer
+// turns them ink. `outline` is the changelog filter (.cl-filter): joined square 32px boxes with 12px sides on the quiet
+// rule, the chosen one filled ink. Choosing is instant in place (several may be on, so nothing slides); fills and label
+// colors change in 160ms on the ease-out. Keyboard focus is the 2px ink outline 2px out. `type="single"` (the default)
+// takes and reports one value as a string, `type="multiple"` an array. `lg` makes the keys 40px.
+type Variant = "default" | "outline";
+type Size = "default" | "sm" | "lg";
+const ToggleGroupContext = React.createContext<{ variant: Variant; size: Size; spacing: number }>({ variant: "default", size: "default", spacing: 0 });
 
-function ToggleGroup({
-  className,
-  variant = "default",
-  size = "default",
-  spacing = 2,
-  orientation = "horizontal",
-  children,
-  ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> & VariantProps<typeof toggleVariants> & { spacing?: number; orientation?: "horizontal" | "vertical" }) {
+type Single = { type?: "single"; value?: string; defaultValue?: string; onValueChange?: (value: string) => void };
+type Multiple = { type: "multiple"; value?: string[]; defaultValue?: string[]; onValueChange?: (value: string[]) => void };
+type ToggleGroupProps = Omit<React.ComponentProps<typeof BaseToggleGroup>, "value" | "defaultValue" | "onValueChange" | "multiple"> & { variant?: Variant; size?: Size; spacing?: number } & (Single | Multiple);
+
+const toArray = (value: string | string[] | undefined) => (value === undefined ? undefined : Array.isArray(value) ? value : value ? [value] : []);
+
+function ToggleGroup({ className, variant = "default", size = "default", spacing = 0, orientation = "horizontal", children, type, value, defaultValue, onValueChange, style, ...props }: ToggleGroupProps) {
+  const multiple = type === "multiple";
+  const emit = onValueChange as ((value: string | string[]) => void) | undefined;
   return (
-    <ToggleGroupPrimitive.Root
+    <BaseToggleGroup
       data-slot="toggle-group"
       data-variant={variant}
       data-size={size}
       data-spacing={spacing}
-      data-orientation={orientation}
       orientation={orientation}
-      style={{ "--gap": spacing } as React.CSSProperties}
+      multiple={multiple}
+      value={toArray(value)}
+      defaultValue={toArray(defaultValue)}
+      onValueChange={emit ? (next) => emit(multiple ? (next as string[]) : ((next as string[])[0] ?? "")) : undefined}
+      style={{ ...(typeof style === "object" ? style : null), "--gap": spacing } as React.CSSProperties}
       className={cn(
         "group/toggle-group flex w-fit max-w-full items-center gap-[calc(var(--spacing)*var(--gap))] data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch",
-        variant === "default" && "overflow-x-auto rounded-pill data-[orientation=vertical]:rounded-dialog bg-subtle p-0.5 [scrollbar-width:none]",
+        variant === "default" && "ds-hex-frame p-1 before:bg-line-strong after:bg-surface data-disabled:before:bg-line",
         className,
       )}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ variant, size, spacing, orientation }}>{children}</ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive.Root>
+      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>{children}</ToggleGroupContext.Provider>
+    </BaseToggleGroup>
   );
 }
 
-function ToggleGroupItem({ className, children, variant, size, ...props }: React.ComponentProps<typeof ToggleGroupPrimitive.Item> & VariantProps<typeof toggleVariants>) {
+type ToggleGroupItemProps = React.ComponentProps<typeof BaseToggle> & { variant?: Variant; size?: Size };
+
+function ToggleGroupItem({ className, variant, size, ...props }: ToggleGroupItemProps) {
   const context = React.useContext(ToggleGroupContext);
-  const v = context.variant || variant || "default";
+  const v = variant ?? context.variant;
+  const s = size ?? context.size;
   return (
-    <ToggleGroupPrimitive.Item
+    <BaseToggle
       data-slot="toggle-group-item"
       data-variant={v}
-      data-size={context.size || size}
-      data-spacing={context.spacing}
+      data-size={s}
       className={cn(
-        toggleVariants({ variant: v, size: context.size || size }),
-        // In the track the chosen choice is the white key, as in the segmented choice.
-        v === "default" && "hover:bg-subtle-hover data-[state=on]:bg-surface data-[state=on]:text-fg data-[state=on]:hover:bg-surface data-[state=on]:shadow-s data-[state=on]:focus-visible:shadow-[var(--ds-shadow-s),var(--ds-shadow-focus)] data-[state=on]:active:shadow-[inset_0_0_0_9996px_var(--ds-color-wash-pressed),var(--ds-shadow-s)]",
-        "focus-visible:z-10",
+        "relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 font-sans text-body-sm leading-none font-medium whitespace-nowrap text-fg-muted select-none transition-colors duration-base ease-out hover:text-fg focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-pressed:text-on-primary data-pressed:hover:text-on-primary data-disabled:pointer-events-none data-disabled:text-fg-faint motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        v === "default" && "data-pressed:before:bg-primary data-disabled:data-pressed:before:bg-off",
+        v === "default" && (s === "lg" ? "ds-hex-frame h-10 min-w-10 px-6" : s === "sm" ? "ds-hex-frame-s h-8 min-w-8 px-3" : "ds-hex-frame-s h-8 min-w-8 px-5"),
+        v === "outline" && "border border-line data-pressed:border-primary data-pressed:bg-primary data-disabled:data-pressed:border-off data-disabled:data-pressed:bg-off",
+        v === "outline" && context.spacing === 0 && "-ml-px first:ml-0 group-data-[orientation=vertical]/toggle-group:ml-0 group-data-[orientation=vertical]/toggle-group:-mt-px group-data-[orientation=vertical]/toggle-group:first:mt-0",
+        v === "outline" && (s === "lg" ? "h-10 min-w-10 px-4" : s === "sm" ? "h-8 min-w-8 px-2" : "h-8 min-w-8 px-3"),
         className,
       )}
       {...props}
-    >
-      {children}
-    </ToggleGroupPrimitive.Item>
+    />
   );
 }
 

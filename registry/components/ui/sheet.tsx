@@ -1,91 +1,112 @@
 "use client";
 
 import * as React from "react";
-import { Dialog as SheetPrimitive } from "radix-ui";
+import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { XIcon } from "@phosphor-icons/react/ssr";
 
+import { cn, slot } from "@/lib/utils";
 import { usePortalContainer } from "@/lib/surface";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-// A panel from the edge of the screen, drawn as the console's dialog and drawer: white over the blurred page under the
-// ink at 32 percent, a 20px regular title 24px in, the dialog's close key (a 36px squircle 16px from the corner, a bold
-// 20px X in the faint purple) and the same 24px sides. It travels its own size from its edge on the drawer curve (160ms
-// in, 120ms out); its inner corner takes the dialog's 16px. Side panels are 384px wide (the full width on phones); top
-// and bottom panels take their content's height.
-function Sheet(props: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />;
+// A side panel: a square, full-height panel of the ground, 384px wide (three quarters of a phone), ruled off from the
+// page by the quiet line and casting the long soft shadow over it (shadow-cast), over the ink at 32 percent. A 24px
+// header holds a Chakra Petch light 20px title and a 14px graphite description; the footer sits at the bottom with its
+// hexagon keys at the end; the close key is a compact ghost hexagon with an X in the top right corner. The panel slides
+// its own width (or height, from the top or bottom) on the dock curve: in 240ms, out in 200ms. With reduced motion it
+// appears in place.
+const SIDES = {
+  right: "inset-y-0 right-0 h-full w-3/4 max-w-sm border-l border-line shadow-cast data-starting-style:translate-x-full data-ending-style:translate-x-full",
+  left: "inset-y-0 left-0 h-full w-3/4 max-w-sm border-r border-line shadow-floating data-starting-style:-translate-x-full data-ending-style:-translate-x-full",
+  top: "inset-x-0 top-0 max-h-dvh border-b border-line shadow-floating data-starting-style:-translate-y-full data-ending-style:-translate-y-full",
+  bottom: "inset-x-0 bottom-0 max-h-dvh border-t border-line shadow-floating data-starting-style:translate-y-full data-ending-style:translate-y-full",
+} as const;
+
+/** A trigger renders a native button unless its `render` (or asChild child) is another tag. */
+function isNativeButton(render: unknown) {
+  return !React.isValidElement(render) || typeof render.type !== "string" || render.type === "button";
 }
 
-function SheetTrigger(props: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
+type SheetProps = Omit<React.ComponentProps<typeof BaseDialog.Root>, "onOpenChange"> & { onOpenChange?: (open: boolean) => void };
+
+function Sheet({ onOpenChange, ...props }: SheetProps) {
+  return <BaseDialog.Root data-slot="sheet" onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined} {...props} />;
 }
 
-function SheetClose(props: React.ComponentProps<typeof SheetPrimitive.Close>) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
-}
-
-function SheetPortal(props: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-  const container = usePortalContainer();
-  return <SheetPrimitive.Portal data-slot="sheet-portal" container={container} {...props} />;
-}
-
-function SheetOverlay({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
+function SheetTrigger({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDialog.Trigger> & { asChild?: boolean }) {
+  const parts = slot(asChild, children, render);
   return (
-    <SheetPrimitive.Overlay
+    <BaseDialog.Trigger data-slot="sheet-trigger" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>
+      {parts.children}
+    </BaseDialog.Trigger>
+  );
+}
+
+function SheetClose({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDialog.Close> & { asChild?: boolean }) {
+  const parts = slot(asChild, children, render);
+  return (
+    <BaseDialog.Close data-slot="sheet-close" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>
+      {parts.children}
+    </BaseDialog.Close>
+  );
+}
+
+function SheetPortal(props: React.ComponentProps<typeof BaseDialog.Portal>) {
+  const container = usePortalContainer();
+  return <BaseDialog.Portal data-slot="sheet-portal" container={container} {...props} />;
+}
+
+function SheetOverlay({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Backdrop>, "className"> & { className?: string }) {
+  return (
+    <BaseDialog.Backdrop
       data-slot="sheet-overlay"
-      className={cn("fixed inset-0 z-50 bg-scrim backdrop-blur-[var(--ds-blur-scrim)] data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in", className)}
+      className={cn("fixed inset-0 z-50 bg-scrim transition-opacity duration-slow ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-none", className)}
       {...props}
     />
   );
 }
 
-const SIDES = {
-  right: "inset-y-0 right-0 h-full w-full rounded-l-panel sm:max-w-96 data-[state=closed]:animate-sheet-out-right data-[state=open]:animate-sheet-in-right",
-  left: "inset-y-0 left-0 h-full w-full rounded-r-panel sm:max-w-96 data-[state=closed]:animate-sheet-out-left data-[state=open]:animate-sheet-in-left",
-  top: "inset-x-0 top-0 h-auto max-h-[85dvh] rounded-b-panel data-[state=closed]:animate-sheet-out-top data-[state=open]:animate-sheet-in-top",
-  bottom: "inset-x-0 bottom-0 h-auto max-h-[85dvh] rounded-t-panel data-[state=closed]:animate-sheet-out-bottom data-[state=open]:animate-sheet-in-bottom",
-} as const;
+type SheetContentProps = Omit<React.ComponentProps<typeof BaseDialog.Popup>, "className"> & { className?: string; side?: keyof typeof SIDES; showCloseButton?: boolean; showClose?: boolean };
 
-function SheetContent({ className, children, side = "right", showCloseButton = true, instant = false, ...props }: React.ComponentProps<typeof SheetPrimitive.Content> & { side?: keyof typeof SIDES; showCloseButton?: boolean; instant?: boolean }) {
+function SheetContent({ className, children, side = "right", showCloseButton, showClose, ...props }: SheetContentProps) {
+  const close = showClose ?? showCloseButton ?? true;
   return (
     <SheetPortal>
-      <SheetOverlay data-ds-motion={instant ? "instant" : undefined} />
-      <SheetPrimitive.Content
+      <SheetOverlay />
+      <BaseDialog.Popup
         data-slot="sheet-content"
-        data-ds-motion={instant ? "instant" : undefined}
         data-side={side}
-        className={cn("fixed z-50 flex flex-col overflow-y-auto bg-surface text-fg shadow-dialog outline-none", SIDES[side], className)}
+        className={cn(
+          "fixed z-50 flex flex-col overflow-y-auto overscroll-contain bg-surface text-fg outline-none transition-[translate] duration-slow ease-drawer data-ending-style:duration-moderate motion-reduce:transition-none",
+          SIDES[side],
+          className,
+        )}
         {...props}
       >
         {children}
-        {showCloseButton && (
-          <SheetPrimitive.Close
-            data-slot="sheet-close"
-            className="absolute top-4 right-4 inline-flex size-9 items-center justify-center rounded-control text-fg-faint outline-none transition-colors duration-fast ease-out hover:bg-subtle hover:text-fg-muted active:bg-subtle-hover active:text-fg-muted active:transition-none focus-visible:shadow-focus motion-reduce:transition-none"
-          >
-            <XIcon className="size-5" weight="bold" />
-            <span className="sr-only">Close</span>
-          </SheetPrimitive.Close>
+        {close && (
+          <BaseDialog.Close data-slot="sheet-close" render={<Button variant="ghost" size="icon-sm" />} className="absolute top-4 right-4" aria-label="Close">
+            <XIcon />
+          </BaseDialog.Close>
         )}
-      </SheetPrimitive.Content>
+      </BaseDialog.Popup>
     </SheetPortal>
   );
 }
 
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="sheet-header" className={cn("flex shrink-0 flex-col justify-center gap-1 py-5 pr-14 pl-6", className)} {...props} />;
+  return <div data-slot="sheet-header" className={cn("flex flex-col gap-2 p-6 pr-14", className)} {...props} />;
 }
 
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="sheet-footer" className={cn("mt-auto flex shrink-0 flex-col gap-2 p-6", className)} {...props} />;
+  return <div data-slot="sheet-footer" className={cn("mt-auto flex flex-col-reverse gap-3 p-6 sm:flex-row sm:items-center sm:justify-end", className)} {...props} />;
 }
 
-function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
-  return <SheetPrimitive.Title data-slot="sheet-title" className={cn("font-sans text-h3 leading-heading font-normal text-fg", className)} {...props} />;
+function SheetTitle({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Title>, "className"> & { className?: string }) {
+  return <BaseDialog.Title data-slot="sheet-title" className={cn("font-display text-h5 leading-title font-light text-balance text-fg", className)} {...props} />;
 }
 
-function SheetDescription({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Description>) {
-  return <SheetPrimitive.Description data-slot="sheet-description" className={cn("text-body leading-body text-fg-secondary", className)} {...props} />;
+function SheetDescription({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Description>, "className"> & { className?: string }) {
+  return <BaseDialog.Description data-slot="sheet-description" className={cn("text-body-sm leading-line-body-sm text-pretty text-fg-secondary", className)} {...props} />;
 }
 
 export { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger };

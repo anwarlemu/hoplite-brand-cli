@@ -1,35 +1,44 @@
 "use client";
 
 import * as React from "react";
-import { RadioGroup as ChakraRadioGroup } from "@chakra-ui/react";
+import { Radio as BaseRadio } from "@base-ui/react/radio";
+import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 
 import { cn } from "@/lib/utils";
 
-// The console's radios (Tunnel TLS mode: Edge (default), Passthrough): an 18px circle on white. Unselected it has a
-// 1.5px strong edge; selected it takes a 6px brand purple ring around a white center, with no inner dot. The edge's
-// color and width change at the fast step; keyboard focus is the soft ring. Options stack 8px apart, each label
-// 14px ink 8px from its circle (wrap item and label in a `label`, or pair them with htmlFor).
-type RadioGroupProps = Omit<React.ComponentProps<typeof ChakraRadioGroup.Root>, "onValueChange"> & { onValueChange?: (value: string | null) => void };
+// A radio is a hexagon that fills (the site's principles), drawn as its bullets are (.pr-features svg, .bp-list__mark:
+// a regular hexagon outlined in the strong line), stood point-up like every mark: a 14 by 16 hexagon in a 16px box,
+// its 1px edge an outer hexagon of the strong line around an inner one of the ground. Chosen, the hexagon fills with
+// the ink and holds an 8px hexagon of the ground. The edge turns the ink under the pointer; fills change in 120ms on the
+// ease-out and nothing moves or grows. The box stays square so keyboard focus is the 2px ink outline 2px out. Invalid
+// radios take the orange edge; disabled ones go quiet. Options stack 12px apart, each label 8px away in 14px medium ink.
+type RadioGroupProps = Omit<React.ComponentProps<typeof BaseRadioGroup>, "onValueChange"> & { onValueChange?: (value: string) => void };
+
 function RadioGroup({ className, onValueChange, ...props }: RadioGroupProps) {
-  return <ChakraRadioGroup.Root unstyled data-slot="radio-group" className={cn("grid gap-2", className)} onValueChange={(details) => onValueChange?.(details.value)} {...props} />;
+  return <BaseRadioGroup data-slot="radio-group" className={cn("grid gap-3", className)} onValueChange={onValueChange ? (value) => onValueChange(String(value)) : undefined} {...props} />;
 }
 
-function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof ChakraRadioGroup.Item>) {
+function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof BaseRadio.Root>) {
   return (
-    <ChakraRadioGroup.Item
+    <BaseRadio.Root
       data-slot="radio-group-item"
-      unstyled
       className={cn(
-        "peer relative aspect-square size-4.5 shrink-0 cursor-pointer rounded-pill border-[1.5px] border-line-strong bg-surface outline-none transition-[border-color,border-width,box-shadow] duration-fast ease-out data-focus-visible:shadow-focus disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger data-[state=checked]:border-[6px] data-[state=checked]:border-brand motion-reduce:transition-none",
+        "peer group/radio relative grid size-4 shrink-0 cursor-pointer place-items-center *:col-start-1 *:row-start-1 after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-disabled:cursor-not-allowed",
         className,
       )}
       {...props}
     >
-      <ChakraRadioGroup.ItemHiddenInput />
-      <ChakraRadioGroup.ItemControl className="contents">
-        <ChakraRadioGroup.ItemIndicator data-slot="radio-group-indicator" className="sr-only" />
-      </ChakraRadioGroup.ItemControl>
-    </ChakraRadioGroup.Item>
+      <span
+        aria-hidden
+        data-slot="radio-group-edge"
+        className="ds-hex-mark h-4 w-3.5 bg-line-strong transition-[background-color] duration-fast ease-out group-hover/radio:bg-primary group-data-checked/radio:bg-primary group-aria-invalid/radio:bg-danger group-data-invalid/radio:bg-danger group-data-disabled/radio:bg-line group-data-disabled/radio:group-data-checked/radio:bg-off motion-reduce:transition-none"
+      />
+      <span
+        aria-hidden
+        className="ds-hex-mark h-3.5 w-3 bg-surface transition-[background-color] duration-fast ease-out group-data-checked/radio:bg-primary group-data-disabled/radio:group-data-checked/radio:bg-off motion-reduce:transition-none"
+      />
+      <BaseRadio.Indicator data-slot="radio-group-indicator" className="ds-hex-mark h-2 w-[7px] bg-surface" />
+    </BaseRadio.Root>
   );
 }
 

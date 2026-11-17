@@ -3,8 +3,8 @@ name: collapsible
 title: Collapsible
 type: ui
 surface: site
-description: "A part that shows and hides in place, opening with its height."
-use_for: "Use for one optional group (Advanced settings under the channels). Make the trigger the whole row: a 14px ink label with a 16px bold caret at the right that turns when open. For the console's collapsible section card, give it the field edge and 24px corners and let the content open at once (see Section). For several sections, use Accordion."
-never: [Hiding required fields in it, A trigger without a caret, Animating anything but the content height and the caret]
-source: "Figma 427:2715: Create Agent Identity (Advanced settings - tunnel mode, phone state, line sharing)"
+description: "A section that opens in place: a 14px medium graphite trigger with a caret that turns a quarter when open, and a panel that opens with its height."
+use_for: "Use Collapsible for one optional section (advanced settings, the full list of checks). Use the built-in trigger for a quiet text toggle, or asChild with a Button (ghost icon-sm) beside a heading. For several sections in a column, use Accordion."
+never: [A caret that moves on hover, A filled or boxed trigger, Content that fades or slides in sideways]
+source: "Extrapolated from the Hoplite website: the changelog's quiet disclosures (.cl-entry__summary) and the FAQ's height animation (.faq__item)"
 ---

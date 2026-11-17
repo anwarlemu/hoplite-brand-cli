@@ -1,50 +1,47 @@
 "use client";
 
 import * as React from "react";
-import { EnvelopeSimpleIcon, PhoneIcon, ChatCircleIcon } from "@phosphor-icons/react/ssr";
+import { CloudIcon, CpuIcon, DesktopTowerIcon } from "@phosphor-icons/react/ssr";
 
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+const MODELS = [
+  { value: "auto", label: "Auto" },
+  { value: "opus", label: "Claude Opus" },
+  { value: "sonnet", label: "Claude Sonnet" },
+  { value: "gpt", label: "GPT-5 Codex" },
+];
+
 export function Preview() {
-  const [state, setState] = React.useState("any");
   const [saved, setSaved] = React.useState<string>();
   return (
     <form
-      className="grid w-full max-w-114.5 gap-1"
+      className="grid w-full max-w-sm gap-2"
       onSubmit={(event) => {
         event.preventDefault();
-        setSaved(String(new FormData(event.currentTarget).get("state")));
+        setSaved(String(new FormData(event.currentTarget).get("model")));
       }}
     >
-      <Label htmlFor="any-state">Phone number state</Label>
-      <Select name="state" value={state} onValueChange={setState}>
-        <SelectTrigger id="any-state">
-          <SelectValue placeholder="Choose a state" />
+      <label id="model-label" className="text-body-sm font-medium text-fg">
+        Default model
+      </label>
+      <Select name="model" items={MODELS} defaultValue="auto">
+        <SelectTrigger aria-labelledby="model-label">
+          <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="any">Any State</SelectItem>
-          <SelectSeparator />
-          <SelectGroup>
-            <SelectLabel>West</SelectLabel>
-            <SelectItem value="ca">California</SelectItem>
-            <SelectItem value="or">Oregon</SelectItem>
-            <SelectItem value="wa">Washington</SelectItem>
-          </SelectGroup>
-          <SelectGroup>
-            <SelectLabel>East</SelectLabel>
-            <SelectItem value="ny">New York</SelectItem>
-            <SelectItem value="ma">Massachusetts</SelectItem>
-            <SelectItem value="fl" disabled>
-              Florida (no numbers left)
+          {MODELS.map((m) => (
+            <SelectItem key={m.value} value={m.value}>
+              {m.label}
             </SelectItem>
-          </SelectGroup>
+          ))}
         </SelectContent>
       </Select>
-      <div className="mt-3 flex items-center gap-3">
+      <p className="text-body-sm text-fg-muted">New threads start on this model.</p>
+      <div className="mt-2 flex items-center gap-4">
         <Button type="submit">Save</Button>
-        <p aria-live="polite" className="text-body text-fg-muted">
+        <p aria-live="polite" className="text-body-sm text-fg-muted">
           {saved ? `Saved: ${saved}` : ""}
         </p>
       </div>
@@ -52,53 +49,70 @@ export function Preview() {
   );
 }
 
-export function WithIcons() {
+export function Grouped() {
   return (
-    <Select defaultValue="email">
-      <SelectTrigger aria-label="Channel" className="w-60">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="email">
-          <EnvelopeSimpleIcon weight="fill" /> Email
-        </SelectItem>
-        <SelectItem value="phone">
-          <PhoneIcon weight="fill" /> Phone
-        </SelectItem>
-        <SelectItem value="imessage">
-          <ChatCircleIcon weight="fill" /> iMessage
-        </SelectItem>
-      </SelectContent>
-    </Select>
+    <div className="grid w-full max-w-sm gap-2">
+      <label id="sandbox-label" className="text-body-sm font-medium text-fg">
+        Sandbox size
+      </label>
+      <Select defaultValue={null}>
+        <SelectTrigger aria-labelledby="sandbox-label">
+          <SelectValue placeholder="Choose a size" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Cloud</SelectLabel>
+            <SelectItem value="s">
+              <CloudIcon /> 2 vCPU, 8 GiB
+            </SelectItem>
+            <SelectItem value="m">
+              <CloudIcon /> 8 vCPU, 32 GiB
+            </SelectItem>
+            <SelectItem value="l" disabled>
+              <CpuIcon /> 16 vCPU, 64 GiB (Team)
+            </SelectItem>
+          </SelectGroup>
+          <SelectSeparator />
+          <SelectGroup>
+            <SelectLabel>Local</SelectLabel>
+            <SelectItem value="local">
+              <DesktopTowerIcon /> This Mac
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 
 export function States() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Select>
-        <SelectTrigger aria-label="Line" size="sm" className="w-44">
-          <SelectValue placeholder="Choose a line" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="shared">Shared</SelectItem>
-          <SelectItem value="dedicated">Dedicated</SelectItem>
-        </SelectContent>
-      </Select>
-      <Select defaultValue="shared" disabled>
-        <SelectTrigger aria-label="Disabled" className="w-44">
+    <div className="grid w-full max-w-sm gap-3">
+      <Select defaultValue="main">
+        <SelectTrigger size="sm" aria-label="Base branch" className="w-44">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="shared">Shared</SelectItem>
+          <SelectItem value="main">main</SelectItem>
+          <SelectItem value="develop">develop</SelectItem>
+          <SelectItem value="release">release/1.4</SelectItem>
         </SelectContent>
       </Select>
-      <Select>
-        <SelectTrigger aria-label="Invalid" aria-invalid className="w-44">
-          <SelectValue placeholder="Required" />
+      <Select defaultValue={null}>
+        <SelectTrigger aria-label="Reviewer" aria-invalid>
+          <SelectValue placeholder="Choose a reviewer" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="edge">Edge</SelectItem>
+          <SelectItem value="maya">Maya</SelectItem>
+          <SelectItem value="lead">Platform lead</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select defaultValue="weekly" disabled>
+        <SelectTrigger aria-label="Report">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="weekly">Weekly usage report</SelectItem>
         </SelectContent>
       </Select>
     </div>

@@ -1,54 +1,54 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircleIcon, InfoIcon, SpinnerGapIcon, WarningIcon, XCircleIcon, XIcon } from "@phosphor-icons/react/ssr";
+import { CheckCircleIcon, InfoIcon, SpinnerGapIcon, WarningCircleIcon, WarningIcon, XIcon } from "@phosphor-icons/react/ssr";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
-// Toasts (extrapolated from the Hoplite console, Figma 427:2715: its white floating panels, 16px corners, filled status
-// glyphs and the purple action). A toast is a white panel with the floating shadow and 16px of padding: a 20px filled
-// glyph (green success, red error, amber warning, teal info, a spinning loader), the 14px medium ink title, the 14px
-// muted description (a long one scrolls past 160px and keeps its line breaks), and a small purple pill for its action
-// beside a lilac one for cancel. The close key is the console's: a 32px squircle 10px from the top and 8px from the
-// right, a bold 16px X in the faint purple that takes the lilac under the pointer. The stack sits 20px above the bottom
-// and 24px in from the right. Sonner stacks, swipes and times them; its motion (400ms, ease) is kept as Emil Kowalski
-// tuned it.
-function Toaster({ toastOptions, ...props }: ToasterProps) {
+// Toasts, extrapolated from the Hoplite website's popups (the nav's sheet and menus): a square 360px panel of the
+// ground with the floating shadow (a quiet hairline and a long soft cast) and 16px of padding. A 16px Phosphor status
+// glyph leads (a check in green, a warning in amber, an error in orange, info in the quiet gray, a turning loader),
+// then the 14px medium ink title over the 14px quiet description. The action is the compact ink hexagon (32px, 8px
+// cuts) and cancel the compact outlined one; the close key is a ghost glyph at the top right whose compact hexagon of
+// the hover wash appears under the pointer. The stack sits 24px in from the bottom right. Sonner stacks, swipes and
+// times them; its motion is retimed to the brand's: toasts rise in 240ms on the strong ease-out and leave in 200ms,
+// and reduced motion turns it off.
+const KEY = "ds-hex-frame-s inline-flex h-8 shrink-0 cursor-pointer items-center justify-center px-4 font-sans text-body-sm leading-none font-medium whitespace-nowrap transition-colors duration-base ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none";
+
+function Toaster({ toastOptions, closeButton, offset = 24, mobileOffset = 16, ...props }: ToasterProps) {
   return (
     <Sonner
       data-slot="sonner"
-      className="toaster group"
-      offset={{ bottom: 20, right: 24 }}
+      className="toaster group font-sans duration-slow! ease-out!"
+      closeButton={closeButton}
+      offset={offset}
+      mobileOffset={mobileOffset}
+      gap={12}
       icons={{
-        success: <CheckCircleIcon weight="fill" className="size-5.5 text-success" />,
-        info: <InfoIcon weight="fill" className="size-5.5 text-info" />,
-        warning: <WarningIcon weight="fill" className="size-5.5 text-warning" />,
-        error: <XCircleIcon weight="fill" className="size-5.5 text-danger-strong" />,
-        loading: <SpinnerGapIcon className="size-5.5 animate-spin-steady text-fg-muted" />,
-        close: <XIcon weight="bold" className="size-4" />,
+        success: <CheckCircleIcon className="size-4 text-success" />,
+        info: <InfoIcon className="size-4 text-fg-muted" />,
+        warning: <WarningIcon className="size-4 text-warning" />,
+        error: <WarningCircleIcon className="size-4 text-danger" />,
+        loading: <SpinnerGapIcon className="size-4 animate-spin text-fg-muted motion-reduce:animate-none" />,
+        close: <XIcon className="size-4" />,
       }}
       toastOptions={{
         ...toastOptions,
+        unstyled: true,
         classNames: {
-          toast: "group/toast flex! w-(--width) items-start! gap-3! rounded-panel bg-surface p-4! font-sans text-fg shadow-floating!",
-          icon: "mt-px flex size-5 shrink-0 items-center justify-center",
-          content: "grid min-w-0 flex-1 gap-0.5 pr-6",
-          title: "text-body! leading-body font-medium! text-fg",
-          description: "max-h-40 overflow-y-auto text-body! leading-body text-fg-muted! whitespace-pre-line wrap-anywhere",
-          actionButton: "inline-flex h-8! shrink-0 items-center rounded-pill! bg-primary! px-3.5! font-sans text-body! leading-tight font-normal! text-on-primary! outline-none transition-[background-color] duration-150 ease-out hover:bg-primary-hover! active:bg-primary-hover! active:brightness-95 active:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
-          cancelButton: "inline-flex h-8! shrink-0 items-center rounded-pill! bg-subtle! px-3.5! font-sans text-body! leading-tight font-normal! text-fg! outline-none transition-[background-color] duration-150 ease-out hover:bg-subtle-hover! active:bg-subtle-hover! active:brightness-95 active:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
-          closeButton: "top-2.5! right-2! left-auto! inline-flex size-8! transform-none! items-center justify-center rounded-control! border-0! bg-transparent! text-fg-faint! shadow-none! outline-none transition-colors duration-150 ease-out hover:bg-subtle! hover:text-fg-muted! focus-visible:outline-2 focus-visible:outline-focus-ring",
+          toast:
+            "group/toast flex w-(--width) items-start gap-3 bg-surface p-4 font-sans text-fg shadow-floating duration-slow! ease-out! focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-[removed=true]:duration-moderate! data-[expanded=false]:data-[front=false]:[&>*]:opacity-0 [&>*]:duration-slow! [&>*]:ease-out!",
+          icon: "flex h-6 w-4 shrink-0 items-center justify-center",
+          content: "grid min-w-0 flex-1 gap-1 pr-8 group-has-data-button/toast:pr-0",
+          title: "text-body-sm leading-line-body-sm font-medium text-fg",
+          description: "max-h-40 overflow-y-auto text-body-sm leading-line-body-sm text-fg-muted whitespace-pre-line wrap-anywhere",
+          actionButton: `${KEY} self-center group-has-data-close-button/toast:last:mr-8 text-on-primary before:bg-primary hover:before:bg-primary-hover active:before:bg-primary-hover`,
+          cancelButton: `${KEY} self-center group-has-data-close-button/toast:last:mr-8 text-fg before:bg-line-strong after:bg-surface hover:after:bg-subtle-hover active:after:bg-pressed`,
+          closeButton:
+            "ds-hex-frame-s absolute! top-3 right-3 inline-flex size-8 cursor-pointer items-center justify-center text-fg-muted transition-colors duration-base ease-out hover:text-fg hover:before:bg-subtle-hover active:before:bg-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none",
           ...toastOptions?.classNames,
         },
       }}
-      style={
-        {
-          "--width": "22.25rem",
-          "--normal-bg": "var(--ds-color-bg-default)",
-          "--normal-text": "var(--ds-color-text-default)",
-          "--normal-border": "transparent",
-          "--border-radius": "var(--ds-radius-panel)",
-        } as React.CSSProperties
-      }
+      style={{ "--width": "22.5rem" } as React.CSSProperties}
       {...props}
     />
   );

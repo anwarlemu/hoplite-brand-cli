@@ -3,8 +3,8 @@ name: separator
 title: Separator
 type: ui
 surface: site
-description: "A 1px rule in the faint lilac, across or down."
-use_for: "Use between groups: under a page head, above the rail's footer, between list rows, between toolbar groups (orientation=\"vertical\"). It is decorative unless you set decorative={false}."
-never: [Darker rules than the faint lilac between rows, Double rules, Rules inside a lilac panel]
-source: "Figma 427:2715: the rail's footer rule, page head rules, inbox list dividers"
+description: "The site's rules: a quiet 16 percent 1px line, or the section guide's dashes (10px on an 18px period), across or down."
+use_for: "Use Separator between groups in a list, a menu or a toolbar, and the dashed variant for a guide inside a band or between plans. Rules are decorative unless decorative={false}."
+never: [A heavy or dark rule, A colored rule, Rules around every row where a list already rules them]
+source: "The Hoplite website's quiet rules (--line-quiet under the header and between FAQ rows) and dashed guides (--rule-dash-y, .pr-plan__mark)"
 ---

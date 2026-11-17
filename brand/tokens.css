@@ -196,9 +196,9 @@
 
 	/* Shape: square. Frames, fields, panels and popups have no radius; actions, tags and segments are hexagons cut at
 	   12px (8px when compact) instead. The pill is kept for dots and a switch's track ends only. */
+	--ds-radius-control: 0;
 	--ds-radius-xs: 0;
 	--ds-radius-sm: 0;
-	--ds-radius-control: 0;
 	--ds-radius-panel: 0;
 	--ds-radius-dialog: 0;
 	--ds-radius-pill: 9999px;

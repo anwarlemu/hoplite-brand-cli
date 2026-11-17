@@ -498,7 +498,7 @@ export function useSiteLook(item: string, libraryContent: string, surface: Surfa
 	// line, corners and shadow, or the component's background shows through the cut corner.
 	const look = (s: string) => {
 		const out = s.split(/\s+/).filter((cls) => cls && isLook(cls, control));
-		return out.some((cls) => /^ds-cut(-frame)?$/.test(cls)) ? [...out, 'bg-transparent', 'border-0', 'rounded-none', 'shadow-none'] : out;
+		return out.some((cls) => /^ds-(cut(-frame)?|hex-frame(-s)?)$/.test(cls)) ? [...out, 'bg-transparent', 'border-0', 'rounded-none', 'shadow-none'] : out;
 	};
 	if (!lib) {
 		const classes = libraryClasses(libraryContent, item.replace(/(^|-)([a-z])/g, (_m, _d, c: string) => c.toUpperCase()), () => undefined);

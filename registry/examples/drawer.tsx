@@ -1,108 +1,75 @@
 "use client";
 
-import * as React from "react";
-import { CheckCircleIcon } from "@phosphor-icons/react/ssr";
-
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 
-const LINES = [
-  { id: "shared", title: "Shared", body: "Assigned when someone connects to this agent." },
-  { id: "dedicated", title: "Dedicated", body: "A number only this agent uses." },
+const AGENTS = [
+  { name: "Fix flaky upload test", state: "Running checks" },
+  { name: "Prorate seats on upgrade", state: "Waiting for review" },
+  { name: "Bump the Node image", state: "Done" },
 ];
 
-function ChooseLine({ onChoose }: { onChoose?: () => void }) {
-  const [line, setLine] = React.useState("shared");
+function Subagents({ defaultOpen }: { defaultOpen?: boolean }) {
   return (
-    <>
-      <DrawerHeader>
-        <DrawerTitle>iMessage line</DrawerTitle>
-        <DrawerDescription>Choose how recipients connect to @acme.</DrawerDescription>
-      </DrawerHeader>
-      <div role="radiogroup" aria-label="iMessage line" className="grid gap-2 px-6">
-        {LINES.map((l) => (
-          <button
-            key={l.id}
-            type="button"
-            role="radio"
-            aria-checked={line === l.id}
-            onClick={() => setLine(l.id)}
-            className="flex items-start gap-3 rounded-control bg-subtle p-3.5 text-left outline-none transition-colors duration-150 ease-out hover:bg-subtle-hover focus-visible:outline-2 focus-visible:outline-focus-ring aria-checked:bg-surface aria-checked:shadow-s motion-reduce:transition-none"
-          >
-            <span className="grid flex-1 gap-0.5">
-              <span className="text-body font-medium text-fg">{l.title}</span>
-              <span className="text-body text-fg-muted">{l.body}</span>
-            </span>
-            {line === l.id && <CheckCircleIcon weight="fill" className="size-5.5 text-success" />}
-          </button>
-        ))}
-      </div>
-      <DrawerFooter>
-        <Button variant="secondary" className="w-full" onClick={onChoose}>Use {line} line</Button>
-        <DrawerClose asChild>
-          <Button variant="ghost" className="w-full">Cancel</Button>
-        </DrawerClose>
-      </DrawerFooter>
-    </>
+    <Drawer defaultOpen={defaultOpen}>
+      <DrawerTrigger render={<Button variant="outline" />}>Steer subagents</DrawerTrigger>
+      <DrawerContent>
+        <div className="mx-auto flex w-full max-w-md flex-col">
+          <DrawerHeader>
+            <DrawerTitle>Running subagents</DrawerTitle>
+            <DrawerDescription>Three agents are working in acme-web. Swipe down to close.</DrawerDescription>
+          </DrawerHeader>
+          <ul className="m-0 list-none px-6 py-0">
+            {AGENTS.map((agent) => (
+              <li key={agent.name} className="flex items-center justify-between gap-4 border-b border-line py-3 text-body-sm leading-line-body-sm first:border-t">
+                <span className="text-fg">{agent.name}</span>
+                <span className="shrink-0 text-fg-muted">{agent.state}</span>
+              </li>
+            ))}
+          </ul>
+          <DrawerFooter>
+            <Button>Open threads</Button>
+            <DrawerClose render={<Button variant="outline" />}>Close</DrawerClose>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
 export function Preview() {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <div className="flex justify-center">
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>
-          <Button variant="outline">Choose a line</Button>
-        </DrawerTrigger>
-        <DrawerContent>
-          <div className="mx-auto w-full max-w-md">
-            <ChooseLine onChoose={() => setOpen(false)} />
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </div>
-  );
-}
-
-export function Directions() {
-  const directions = ["bottom", "top", "right", "left"] as const;
-  return (
-    <div className="flex flex-wrap justify-center gap-3">
-      {directions.map((direction) => (
-        <Drawer key={direction} direction={direction}>
-          <DrawerTrigger asChild>
-            <Button variant="outline" className="capitalize">
-              {direction}
-            </Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Drawer from the {direction}</DrawerTitle>
-              <DrawerDescription>Drag it back toward its edge, or flick it, to close.</DrawerDescription>
-            </DrawerHeader>
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button variant="secondary">Close</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      ))}
-    </div>
-  );
+  return <Subagents />;
 }
 
 export function Open() {
   return (
     <div className="min-h-120">
-      <Drawer defaultOpen>
-        <DrawerContent>
-          <div className="mx-auto w-full max-w-md">
-            <ChooseLine />
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <Subagents defaultOpen />
     </div>
+  );
+}
+
+export function Side() {
+  return (
+    <Drawer direction="right">
+      <DrawerTrigger render={<Button variant="outline" />}>Open from the right</DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Thread details</DrawerTitle>
+          <DrawerDescription>Swipe right to close.</DrawerDescription>
+        </DrawerHeader>
+        <dl className="m-0 grid grid-cols-2 gap-x-4 gap-y-3 px-6 text-body-sm leading-line-body-sm">
+          <dt className="text-fg-muted">Repository</dt>
+          <dd className="m-0 text-fg">acme/web</dd>
+          <dt className="text-fg-muted">Branch</dt>
+          <dd className="m-0 text-fg">fix/upload-retry</dd>
+          <dt className="text-fg-muted">Agent</dt>
+          <dd className="m-0 text-fg">Claude Code</dd>
+        </dl>
+        <DrawerFooter>
+          <DrawerClose render={<Button variant="outline" />}>Close</DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

@@ -1,18 +1,21 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+"use client";
 
-const TEMPLATES = [
-  { name: "Support desk", text: "Answers inbound email and hands hard cases to a person." },
-  { name: "Scheduler", text: "Books calls over iMessage and confirms by email." },
-  { name: "Researcher", text: "Reads replies and files notes to the shared vault." },
-  { name: "Recruiter", text: "Screens candidates by phone and logs each call." },
-  { name: "Concierge", text: "Greets new contacts and routes them to the right agent." },
+import { Carousel, CarouselContent, CarouselDots, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
+const AUTOMATIONS = [
+  { label: "On a schedule", name: "Sentry triage", text: "Picks up new errors every night and opens a pull request with a failing test and a fix." },
+  { label: "On a check", name: "Flaky test hunter", text: "Reruns a failing check on main, finds the flaky test and quarantines it." },
+  { label: "On a label", name: "Dependency bumps", text: "Updates a package when its pull request is labeled, then runs the full suite." },
+  { label: "On a comment", name: "Review follow-up", text: "Applies the changes a reviewer asks for and pushes them to the same branch." },
+  { label: "On a release", name: "Changelog writer", text: "Drafts the release notes from the merged pull requests since the last tag." },
 ];
 
-function Slide({ name, text }: { name: string; text: string }) {
+function Slide({ label, name, text }: { label: string; name: string; text: string }) {
   return (
-    <div className="grid h-36 content-start gap-1 rounded-control border border-line-field bg-surface p-4">
-      <p className="text-body leading-tight font-medium text-fg">{name}</p>
-      <p className="text-body leading-body text-fg-muted">{text}</p>
+    <div className="grid h-44 content-start gap-2 border border-line p-5">
+      <p className="ds-label m-0">{label}</p>
+      <p className="m-0 font-display text-h5 leading-title font-light text-fg">{name}</p>
+      <p className="m-0 text-body-sm leading-line-body-sm text-fg-secondary">{text}</p>
     </div>
   );
 }
@@ -22,14 +25,15 @@ export function Preview() {
     <div className="mx-auto w-full max-w-sm px-12">
       <Carousel>
         <CarouselContent>
-          {TEMPLATES.map((t) => (
-            <CarouselItem key={t.name}>
-              <Slide {...t} />
+          {AUTOMATIONS.map((a) => (
+            <CarouselItem key={a.name}>
+              <Slide {...a} />
             </CarouselItem>
           ))}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
+        <CarouselDots />
       </Carousel>
     </div>
   );
@@ -40,9 +44,9 @@ export function Sizes() {
     <div className="mx-auto w-full max-w-2xl px-12">
       <Carousel opts={{ align: "start" }}>
         <CarouselContent>
-          {TEMPLATES.map((t) => (
-            <CarouselItem key={t.name} className="sm:basis-1/2 lg:basis-1/3">
-              <Slide {...t} />
+          {AUTOMATIONS.map((a) => (
+            <CarouselItem key={a.name} className="sm:basis-1/2">
+              <Slide {...a} />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -57,10 +61,10 @@ export function Vertical() {
   return (
     <div className="mx-auto w-full max-w-xs py-12">
       <Carousel orientation="vertical">
-        <CarouselContent className="h-40">
-          {TEMPLATES.map((t) => (
-            <CarouselItem key={t.name}>
-              <Slide {...t} />
+        <CarouselContent className="h-48">
+          {AUTOMATIONS.map((a) => (
+            <CarouselItem key={a.name}>
+              <Slide {...a} />
             </CarouselItem>
           ))}
         </CarouselContent>

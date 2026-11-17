@@ -12,38 +12,65 @@ export function Preview() {
       <Button
         variant="outline"
         onClick={() =>
-          toast("Webhook paused", {
-            description: "message.sent stops delivering to api.acme.dev.",
-            action: { label: "Undo", onClick: () => toast.success("Webhook resumed") },
+          toast("Sandbox paused", {
+            description: "sbx-7f3a keeps its files for seven days.",
+            action: { label: "Resume", onClick: () => toast.success("Sandbox resumed") },
           })
         }
       >
-        Pause webhook
+        Pause sandbox
       </Button>
-      <Button variant="outline" onClick={() => toast.success("Agent created", { description: "@test-agent is ready to send its first email." })}>
+    </div>
+  );
+}
+
+export function Types() {
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Toaster />
+      <Button variant="outline" onClick={() => toast.success("Pull request merged", { description: "Fix the null check in billing is on main." })}>
         Success
       </Button>
-      <Button variant="outline" onClick={() => toast.error("Handle not available", { description: "acme-support is taken. Try another." })}>
+      <Button variant="outline" onClick={() => toast.error("Check failed", { description: "npm test exited with code 1 on sbx-91c2." })}>
         Error
       </Button>
-      <Button variant="outline" onClick={() => toast.warning("Copy this API key now", { description: "For security, the full key cannot be shown again." })}>
+      <Button variant="outline" onClick={() => toast.warning("2 seats left", { description: "Add seats before inviting more people." })}>
         Warning
       </Button>
-      <Button variant="outline" onClick={() => toast.info("The vault is zero-knowledge", { description: "Encryption happens in your browser." })}>
+      <Button variant="outline" onClick={() => toast.info("Automation scheduled", { description: "Sentry triage runs every night at 2:00." })}>
         Info
+      </Button>
+    </div>
+  );
+}
+
+export function Promise() {
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Toaster />
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.promise(
+            // ds-latency: demonstrates a pending notification; no control or input waits for the demo timer.
+            new globalThis.Promise((resolve) => setTimeout(resolve, 1600)),
+            { loading: "Starting the agent...", success: "The agent is running in sbx-04de", error: "Could not start the agent" },
+          )
+        }
+      >
+        Start agent
       </Button>
       <Button
         variant="outline"
         onClick={() =>
-          // ds-latency: demonstrates a pending notification; no control or input waits for the demo timer.
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1600)), {
-            loading: "Provisioning phone line...",
-            success: "Line +1 650 474 9720 is live",
-            error: "Could not provision a line",
+          toast("Delete this automation?", {
+            description: "Its runs and logs are removed too.",
+            cancel: { label: "Cancel", onClick: () => undefined },
+            action: { label: "Delete", onClick: () => toast("Automation deleted") },
           })
         }
       >
-        Promise
+        With cancel
       </Button>
     </div>
   );

@@ -3,8 +3,9 @@ name: sonner
 title: Sonner
 type: ui
 surface: site
-description: "Toasts as white floating panels with a filled status glyph, an ink title, a muted description and a purple action."
-use_for: "Use to confirm something that happened in the background or will undo (API key copied, agent created, webhook paused). Mount Toaster once near the root and call toast(), toast.success(), toast.error() or toast.promise() from anywhere. Give undoable actions an action button."
-never: [A toast for an error that blocks the task (say it in place instead), Colored toast backgrounds, More than one sentence of description]
-source: "The Hoplite console's src/components/ui/sonner.tsx (a copy of this one, with its close key, offset and long descriptions)"
+kinds: [popover-panel]
+description: "Toasts: square panels of the ground with the floating shadow, a 16px status glyph, a 14px medium title over a quiet description, a compact ink hexagon action and a ghost close glyph. Stacked at the bottom right; they rise in 240ms and leave in 200ms."
+use_for: "Mount Toaster once near the root and call toast() from sonner anywhere: toast(\"Sandbox paused\", { description, action }), toast.success, toast.error, toast.warning, toast.info and toast.promise for work in flight. Keep titles short and say what happened; give an undo action where one exists."
+never: [Rounded toasts, Colored toast backgrounds, More than one action, A toast for something people must act on (use a dialog), Bouncy or slow motion]
+source: "Extrapolated from the Hoplite website's popups (the nav sheet and menus, .hn__): the square ground panel with its hairline and long cast, and its compact keys (.button--s)"
 ---

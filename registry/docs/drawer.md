@@ -3,8 +3,8 @@ name: drawer
 title: Drawer
 type: ui
 surface: site
-description: "A panel pulled up from the bottom edge with a handle, dragged away with a flick or a pull."
-use_for: "Use on phones for a task or a choice from the bottom of the screen (choose a phone line, confirm a key). Pair it with Dialog on larger screens when the same task is needed. Set direction for other edges."
-never: [A drawer without its handle, Dragging that fights scrolling content (mark scroll areas data-drawer-no-drag), A drawer on desktop for long forms]
-source: "The Hoplite console's Chakra drawer theme (panel, title, scrim), with the handle extrapolated from Figma 427:2715"
+description: "A square sheet of the ground that rises from the bottom edge, ruled off by the quiet line with a long soft cast, over the ink at 32 percent: a small square handle near its top, a centered Chakra Petch light 20px title over a 14px graphite description, stacked hexagon keys. It slides its own height on the dock curve and follows a swipe down to close."
+use_for: "Use on touch screens for a short task or a list to act on (steering running subagents) that should feel like part of the page. Put the title in DrawerHeader and stacked actions in DrawerFooter. direction=\"right\" or \"left\" makes a swipeable side panel; on desktop prefer Dialog or Sheet."
+never: [A rounded top or handle, A white panel, Content that needs a long scroll, Nested drawers, Easing in]
+source: "Extrapolated from the Hoplite website: the square ground panel of its popups (.hn__sheet), the dock curve (--dock) and the long soft cast; built on Base UI's drawer for the swipe."
 ---

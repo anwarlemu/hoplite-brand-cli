@@ -1,57 +1,64 @@
 "use client";
 
 import * as React from "react";
-import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui";
+import { NavigationMenu as BaseNavigationMenu } from "@base-ui/react/navigation-menu";
 import { CaretDownIcon } from "@phosphor-icons/react/ssr";
-import { cva } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
+import { cn, slot } from "@/lib/utils";
+import { usePortalContainer } from "@/lib/surface";
+import { buttonVariants } from "@/components/ui/button";
 
-// Site navigation with panels, extrapolated from the console's nav rows (Figma 427:2715: Agent Workspace, Manage
-// Agents): triggers and links are 38px rows with fully rounded corners, 12px of side padding and a 14px regular ink label, the
-// lilac under the pointer and under an open trigger; the trigger's bold 16px caret turns over when open (160ms,
-// ease-out). The panel opens below in the console's menu panel (white, no edge, 16px corners, the floating shadow, 4px
-// of padding) that grows out of the trigger from 98 percent with a fade (160ms in, 100ms out), with no animated resizing
-// (centered under the menu on phones, at its start from 768px); links inside are rows with 12px corners, a 14px title
-// and a 14px muted line, and the deeper lilac under the pointer with no fade.
-function NavigationMenu({ className, children, viewport = true, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & { viewport?: boolean }) {
+// The site's header nav (.hn__list, .hn__top, .hn__sheet, .hn__panel, .hn__item). Triggers are bare 14px labels in
+// graphite with a 12px quiet chevron; under the pointer or while their panel is open, a compact hexagon of the hover
+// wash appears behind them, the label turns ink and the chevron turns over (200ms, strong ease-out). The panel is a
+// square sheet of the ground the full width of the bar, ruled off underneath by the quiet line, with 32px above and
+// 40px below its content. Links are rows of a 20px glyph 12px before a 14px medium label over a 14px quiet line, 8px
+// above and below and 12px in; the row under the pointer takes the paper. Group heads are Kode Mono eyebrows and
+// groups are divided by dashed rules (ds-rule-y). The panel fades in over 4px in 240ms and leaves faster; moving to
+// another trigger slides the content 16px toward it while the sheet takes the new height.
+function NavigationMenu({ className, children, viewport = true, ...props }: Omit<React.ComponentProps<typeof BaseNavigationMenu.Root>, "className"> & { className?: string; viewport?: boolean }) {
+  const [bar, setBar] = React.useState<HTMLElement | null>(null);
   return (
-    <NavigationMenuPrimitive.Root data-slot="navigation-menu" data-viewport={viewport} className={cn("group/navigation-menu relative flex max-w-max flex-1 items-center justify-center", className)} {...props}>
+    <BaseNavigationMenu.Root ref={setBar} data-slot="navigation-menu" data-viewport={viewport} className={cn("relative flex items-center", className)} {...props}>
       {children}
-      {viewport && <NavigationMenuViewport />}
-    </NavigationMenuPrimitive.Root>
+      {viewport && <NavigationMenuViewport anchor={bar} />}
+    </BaseNavigationMenu.Root>
   );
 }
 
-function NavigationMenuList({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.List>) {
-  return <NavigationMenuPrimitive.List data-slot="navigation-menu-list" className={cn("group flex flex-1 list-none items-center justify-center gap-1", className)} {...props} />;
+function NavigationMenuList({ className, ...props }: Omit<React.ComponentProps<typeof BaseNavigationMenu.List>, "className"> & { className?: string }) {
+  return <BaseNavigationMenu.List data-slot="navigation-menu-list" className={cn("m-0 flex list-none items-center gap-1 p-0", className)} {...props} />;
 }
 
-function NavigationMenuItem({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Item>) {
-  return <NavigationMenuPrimitive.Item data-slot="navigation-menu-item" className={cn("relative", className)} {...props} />;
+function NavigationMenuItem({ className, ...props }: Omit<React.ComponentProps<typeof BaseNavigationMenu.Item>, "className"> & { className?: string }) {
+  return <BaseNavigationMenu.Item data-slot="navigation-menu-item" className={cn("relative flex items-center", className)} {...props} />;
 }
 
-const navigationMenuTriggerStyle = cva(
-  "group inline-flex h-9.5 w-max items-center justify-center gap-1.5 rounded-pill px-3 font-sans text-body leading-tight text-fg outline-none active:shadow-[inset_0_0_0_9996px_var(--ds-color-wash-pressed)] active:transition-none transition-colors duration-150 ease-out hover:bg-subtle active:bg-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-subtle data-[state=open]:bg-subtle motion-reduce:transition-none [&_svg:not([class*='size-'])]:size-5.5",
-);
+/** The trigger's look: the ghost hexagon key of the site's nav (.hn__top), for a top-level link beside the triggers. */
+function navigationMenuTriggerStyle() {
+  return cn(buttonVariants({ variant: "ghost" }), "py-0 hover:bg-transparent data-active:text-fg");
+}
 
-function NavigationMenuTrigger({ className, children, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Trigger>) {
+function NavigationMenuTrigger({ className, children, ...props }: Omit<React.ComponentProps<typeof BaseNavigationMenu.Trigger>, "className"> & { className?: string }) {
   return (
-    <NavigationMenuPrimitive.Trigger data-slot="navigation-menu-trigger" className={cn(navigationMenuTriggerStyle(), className)} {...props}>
+    <BaseNavigationMenu.Trigger data-slot="navigation-menu-trigger" className={cn(navigationMenuTriggerStyle(), "gap-2", className)} {...props}>
       {children}
-      <CaretDownIcon aria-hidden weight="bold" className="size-4 text-fg-muted transition-transform duration-slow ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none" />
-    </NavigationMenuPrimitive.Trigger>
+      <BaseNavigationMenu.Icon
+        data-slot="navigation-menu-chevron"
+        className="flex text-fg-muted transition-transform duration-moderate ease-out data-popup-open:rotate-180 motion-reduce:transition-none"
+      >
+        <CaretDownIcon aria-hidden className="size-3" />
+      </BaseNavigationMenu.Icon>
+    </BaseNavigationMenu.Trigger>
   );
 }
 
-function NavigationMenuContent({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Content>) {
+function NavigationMenuContent({ className, ...props }: Omit<React.ComponentProps<typeof BaseNavigationMenu.Content>, "className"> & { className?: string }) {
   return (
-    <NavigationMenuPrimitive.Content
+    <BaseNavigationMenu.Content
       data-slot="navigation-menu-content"
       className={cn(
-        "top-0 left-0 w-full p-1 md:absolute md:w-auto",
-        "group-data-[viewport=false]/navigation-menu:top-full group-data-[viewport=false]/navigation-menu:mt-1.5 group-data-[viewport=false]/navigation-menu:overflow-hidden group-data-[viewport=false]/navigation-menu:rounded-panel group-data-[viewport=false]/navigation-menu:bg-surface group-data-[viewport=false]/navigation-menu:shadow-floating group-data-[viewport=false]/navigation-menu:origin-top-left group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-pop-out group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-pop-in",
-        "data-[motion^=from-]:animate-fade-in data-[motion^=to-]:animate-fade-out",
+        "h-full w-full px-6 pt-8 pb-10 transition-[opacity,translate] duration-slow ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-moderate data-starting-style:data-[activation-direction=left]:-translate-x-4 data-starting-style:data-[activation-direction=right]:translate-x-4 data-ending-style:data-[activation-direction=left]:translate-x-4 data-ending-style:data-[activation-direction=right]:-translate-x-4 motion-reduce:transition-opacity",
         className,
       )}
       {...props}
@@ -59,44 +66,63 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
   );
 }
 
-function NavigationMenuViewport({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport>) {
+type ViewportProps = Omit<React.ComponentProps<typeof BaseNavigationMenu.Popup>, "className"> & {
+  className?: string;
+  /** The element the sheet spans and hangs from; by default the bar (the menu's root). */
+  anchor?: React.ComponentProps<typeof BaseNavigationMenu.Positioner>["anchor"];
+  sideOffset?: number;
+};
+
+function NavigationMenuViewport({ className, anchor, sideOffset = 0, ...props }: ViewportProps) {
+  const container = usePortalContainer();
   return (
-    <div className="absolute top-full left-1/2 isolate z-50 flex -translate-x-1/2 justify-center md:left-0 md:translate-x-0">
-      <NavigationMenuPrimitive.Viewport
-        data-slot="navigation-menu-viewport"
-        className={cn(
-          "relative mt-1.5 h-(--radix-navigation-menu-viewport-height) w-(--radix-navigation-menu-viewport-width) max-w-[calc(100vw-2rem)] origin-top md:origin-top-left overflow-hidden rounded-panel bg-surface text-fg shadow-floating data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in motion-reduce:transition-none",
-          className,
-        )}
-        {...props}
-      />
-    </div>
+    <BaseNavigationMenu.Portal container={container}>
+      <BaseNavigationMenu.Positioner
+        data-slot="navigation-menu-positioner"
+        anchor={anchor}
+        side="bottom"
+        align="start"
+        sideOffset={sideOffset}
+        collisionPadding={0}
+        collisionAvoidance={{ side: "none", align: "none" }}
+        className="z-50 h-(--positioner-height) w-(--anchor-width) max-w-(--available-width)"
+      >
+        <BaseNavigationMenu.Popup
+          data-slot="navigation-menu-viewport"
+          className={cn(
+            "relative h-(--popup-height) w-full overflow-hidden border-b border-line bg-surface text-fg outline-none transition-[opacity,translate,height] duration-slow ease-out data-starting-style:-translate-y-1 data-starting-style:opacity-0 data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-ending-style:duration-fast motion-reduce:transition-opacity",
+            className,
+          )}
+          {...props}
+        >
+          <BaseNavigationMenu.Viewport className="relative h-full w-full overflow-hidden" />
+        </BaseNavigationMenu.Popup>
+      </BaseNavigationMenu.Positioner>
+    </BaseNavigationMenu.Portal>
   );
 }
 
-function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
+type LinkProps = Omit<React.ComponentProps<typeof BaseNavigationMenu.Link>, "className"> & { className?: string; asChild?: boolean };
+
+function NavigationMenuLink({ className, asChild = false, render, children, ...props }: LinkProps) {
+  const parts = slot(asChild, children, render);
   return (
-    <NavigationMenuPrimitive.Link
+    <BaseNavigationMenu.Link
       data-slot="navigation-menu-link"
+      render={parts.render}
       className={cn(
-        "flex flex-col gap-0.5 rounded-control p-3 text-body leading-tight text-fg outline-none hover:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-[active=true]:bg-subtle-hover [&_svg:not([class*='size-'])]:size-5.5 [&_svg:not([class*='text-'])]:text-icon-default",
+        "flex items-start gap-3 px-3 py-2 font-sans text-body-sm leading-line-body-sm text-fg no-underline transition-colors duration-fast ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
         className,
       )}
-      {...props}
-    />
-  );
-}
-
-function NavigationMenuIndicator({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Indicator>) {
-  return (
-    <NavigationMenuPrimitive.Indicator
-      data-slot="navigation-menu-indicator"
-      className={cn("top-full z-10 flex h-1.5 items-end justify-center overflow-hidden data-[state=hidden]:animate-fade-out data-[state=visible]:animate-fade-in", className)}
       {...props}
     >
-      <div className="relative top-[60%] size-2.5 rotate-45 rounded-tl-xs bg-surface shadow-floating" />
-    </NavigationMenuPrimitive.Indicator>
+      {parts.children}
+    </BaseNavigationMenu.Link>
   );
+}
+
+function NavigationMenuIndicator({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="navigation-menu-indicator" aria-hidden className={cn("hidden", className)} {...props} />;
 }
 
 export {

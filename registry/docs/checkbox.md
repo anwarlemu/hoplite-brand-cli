@@ -3,8 +3,8 @@ name: checkbox
 title: Checkbox
 type: ui
 surface: site
-description: "Always a circle, drawn with Phosphor's circle glyphs on Chakra's checkbox: an empty circle when off, the filled brand-purple check circle when on and the filled minus circle when some are on."
-use_for: "Use for independent on or off choices that apply when a form is submitted (event subscriptions, consent). Pair each checkbox with a Label 8px to its right. Use the indeterminate state for a parent that covers some of its children. For a setting that applies at once use Switch."
-never: [A pink checked box, A square checkbox, A square glyph or a glyph other than Phosphor's circles, A checkbox that acts immediately like a switch, An animated check glyph]
-source: "The Hoplite console's round Checkbox (18px circle, brand purple), drawn with Phosphor Circle, CheckCircle (fill) and MinusCircle (fill), as the user asked on 2026-11-04"
+description: "A square 16px check with a 1px strong edge on the ground; on, it fills with the ink and holds a ground-colored check, and a dash when some are on. Fills change in 120ms; nothing moves or grows."
+use_for: "Use Checkbox for an on or off choice that takes effect on submit, or to pick several items from a list. Wrap it and its text in a Label, or pair them with htmlFor. Use indeterminate on a parent that controls a list. For a setting that applies at once use Switch."
+never: [A round or hexagonal check, An orange fill, A check that scales or bounces in, A half-opacity disabled check]
+source: "Extrapolated from the Hoplite website: its strong 70 percent edge (--line) and ink fills (.button--primary), and the principles (checks are square)"
 ---

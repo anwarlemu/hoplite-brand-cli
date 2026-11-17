@@ -1,6 +1,6 @@
-// Inline code in docs text: IBM Plex Mono on the lilac with 4px corners, kept whole across a line break.
+// Inline code in docs text: Kode Mono in the ink, tracked 4 percent, kept whole across a line break.
 export function InlineCode({ children }: { children: React.ReactNode }) {
-  return <code className="rounded-xs bg-subtle px-1 py-px font-mono text-body-sm text-fg [box-decoration-break:clone] [overflow-wrap:anywhere]">{children}</code>;
+  return <code className="font-code text-body-sm tracking-code text-fg [overflow-wrap:anywhere]">{children}</code>;
 }
 
 // Docs text from the registry's frontmatter: `backticked` names become inline code.

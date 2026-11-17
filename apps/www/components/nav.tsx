@@ -11,10 +11,10 @@ import { Lockup } from "@www/components/logo";
 
 type Entry = { name: string; title: string };
 
-// A rail row, as the console draws one (Agent Workspace, Email, Vault): 38px tall with 8px corners, a 22px glyph 10px
-// from a 14px regular ink label; the current page sits on the lilac. Hover washes the row; there is no motion.
+// A rail row, as the site's nav items (.hn__top): a 32px 14px label in graphite; under the pointer, and on the current
+// page, a compact hexagon of the hover wash appears behind it and the label turns ink. Colors only, no motion.
 const ROW =
-  "flex h-9 items-center gap-2 rounded-pill px-2.5 text-body leading-snug font-medium text-icon-secondary outline-none transition-colors duration-150 ease-out hover:bg-[color-mix(in_srgb,var(--ds-color-bg-subtle-hover)_50%,transparent)] focus-visible:shadow-focus aria-[current=page]:bg-subtle-hover motion-reduce:transition-none [&_svg]:size-4.5 [&_svg]:shrink-0";
+  "ds-hex-frame-s flex h-8 items-center gap-2 px-3 text-body-sm leading-line-body-sm text-fg-secondary transition-colors duration-base ease-out hover:text-fg hover:before:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-[current=page]:text-fg aria-[current=page]:before:bg-subtle-hover motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0";
 
 const PAGES = [
   { href: "/", label: "Introduction", icon: BookOpenTextIcon },
@@ -33,7 +33,7 @@ function Groups({ entries, query, onNavigate }: { entries: Entry[]; query: strin
           {PAGES.map(({ href, label, icon: Icon }) => (
             <li key={href}>
               <Link href={href} onNavigate={onNavigate} aria-current={pathname === href ? "page" : undefined} className={ROW}>
-                <Icon weight="fill" aria-hidden />
+                <Icon aria-hidden />
                 {label}
               </Link>
             </li>
@@ -41,7 +41,7 @@ function Groups({ entries, query, onNavigate }: { entries: Entry[]; query: strin
         </ul>
       )}
       <div>
-        <p className="ds-label mb-2 px-1 text-body-sm leading-tight text-fg-label">Components</p>
+        <p className="ds-label mb-3 px-3">Components</p>
         {shown.length ? (
           <ul className="grid gap-1">
             {shown.map((e) => {
@@ -56,7 +56,7 @@ function Groups({ entries, query, onNavigate }: { entries: Entry[]; query: strin
             })}
           </ul>
         ) : (
-          <p className="px-3 text-body text-fg-muted">Nothing matches.</p>
+          <p className="px-3 text-body-sm text-fg-muted">Nothing matches.</p>
         )}
       </div>
     </>
@@ -64,8 +64,8 @@ function Groups({ entries, query, onNavigate }: { entries: Entry[]; query: strin
 }
 
 /**
- * The docs' rail, as the console's (288px of white beside the page, a hairline at its edge): the lockup, a filter, the
- * pages and every component. Below 1024px it folds into a bar at the top of the page that opens it over the page.
+ * The docs' rail: 288px of the ground beside the page with a quiet rule at its edge, the lockup in a 64px head, a
+ * filter, the pages and every component. Below 1024px it folds into a bar at the top that opens it over the page.
  */
 export function DocsRail({ entries }: { entries: Entry[] }) {
   const [query, setQuery] = React.useState("");
@@ -73,12 +73,12 @@ export function DocsRail({ entries }: { entries: Entry[] }) {
   const close = React.useCallback(() => setOpen(false), []);
   return (
     <>
-      <div className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line-subtle bg-surface px-4 lg:hidden">
-        <Link href="/" aria-label="Hoplite design system" className="rounded-control outline-none focus-visible:outline-2 focus-visible:outline-focus-ring">
+      <div className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line bg-surface px-4 lg:hidden">
+        <Link href="/" aria-label="Hoplite design system" className="py-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus-ring">
           <Lockup />
         </Link>
-        <button type="button" aria-expanded={open} aria-controls="docs-rail" onClick={() => setOpen((o) => !o)} className="inline-flex size-9 items-center justify-center rounded-pill text-fg outline-none hover:bg-subtle focus-visible:outline-2 focus-visible:outline-focus-ring">
-          {open ? <XIcon className="size-5.5" /> : <ListIcon className="size-5.5" />}
+        <button type="button" aria-expanded={open} aria-controls="docs-rail" onClick={() => setOpen((o) => !o)} className="inline-flex size-12 cursor-pointer items-center justify-center text-fg outline-none focus-visible:outline-2 focus-visible:outline-focus-ring">
+          {open ? <XIcon className="size-5" /> : <ListIcon className="size-5" />}
           <span className="sr-only">{open ? "Close the library" : "Open the library"}</span>
         </button>
       </div>
@@ -86,18 +86,20 @@ export function DocsRail({ entries }: { entries: Entry[] }) {
         id="docs-rail"
         aria-label="Library"
         className={cn(
-          "z-20 flex-col border-r border-line-subtle bg-surface max-lg:fixed max-lg:inset-x-0 max-lg:top-14 max-lg:bottom-0 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-(--ds-layout-rail) lg:shrink-0",
+          "z-20 flex-col border-r border-line bg-surface max-lg:fixed max-lg:inset-x-0 max-lg:top-16 max-lg:bottom-0 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-(--ds-layout-rail) lg:shrink-0",
           open ? "flex" : "hidden",
         )}
       >
-        <Link href="/" aria-label="Hoplite design system" className="mx-4 mt-4 mb-3 hidden w-fit rounded-control outline-none focus-visible:outline-2 focus-visible:outline-focus-ring lg:block">
-          <Lockup />
-        </Link>
-        <div className="relative mx-3 mb-3 mt-3 lg:mt-1">
-          <MagnifyingGlassIcon aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-fg-subtle" />
+        <div className="hidden h-16 shrink-0 items-center px-6 lg:flex">
+          <Link href="/" aria-label="Hoplite design system" className="py-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus-ring">
+            <Lockup />
+          </Link>
+        </div>
+        <div className="relative mx-3 mt-4 mb-5 lg:mt-2">
+          <MagnifyingGlassIcon aria-hidden className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-fg-subtle" />
           <Input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Filter components" aria-label="Filter components" className="h-9 pl-9" />
         </div>
-        <div className="grid min-h-0 flex-1 content-start gap-5 overflow-y-auto overscroll-contain px-3 pb-6 [scrollbar-width:thin]">
+        <div className="grid min-h-0 flex-1 content-start gap-6 overflow-y-auto overscroll-contain px-3 pb-8 [scrollbar-width:thin]">
           <Groups entries={entries} query={query} onNavigate={close} />
         </div>
       </nav>

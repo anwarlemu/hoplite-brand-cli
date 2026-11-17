@@ -1,400 +1,214 @@
 "use client";
 
 import * as React from "react";
-import { Popover as PopoverPrimitive } from "radix-ui";
-import { Command as CommandPrimitive } from "cmdk";
-import { CaretDownIcon, CheckCircleIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react/ssr";
+import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
+import { CaretDownIcon, CheckIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react/ssr";
 
 import { usePortalContainer } from "@/lib/surface";
 import { cn } from "@/lib/utils";
 
-// A searchable choice (extrapolated from the Hoplite console's select and menus). The trigger is the select's: a white
-// 40px pill with the Shadow/S ring, the value in 14px regular ink (the placeholder in the light purple) and a 16px bold
-// caret at the right that turns over while the list is open; disabled it sits on the lilac with no ring. It opens the
-// menu panel 8px from the trigger (white, 16px corners, the floating shadow), growing from the trigger over 160ms and
-// leaving in 100ms: a 44px search row with a 16px magnifier, then 36px rows 4px apart with 12px corners and sides, 14px
-// ink, the highlighted row on the lilac at once and a 16px bold purple check 12px after each chosen label; groups are
-// headed in 12px purple. For several values, ComboboxChips is a field with 24px corners: lilac pill chips with an x, and
-// an input that filters as you type (Backspace on an empty input removes the last chip). Moving through the rows is
-// instant: it is done by keyboard.
+// A searchable choice, extrapolated from the site's field and popup (the site has none). The field is the input: square,
+// 40px, a 32 percent edge on the ground that turns strong under the pointer and while the list is open, the ink on focus;
+// 14px ink text 12px in, a 16px caret in the quiet gray at the right and, once something is chosen, a 16px clear key
+// beside it. ComboboxTrigger is the same field as a button (the value or a slate placeholder), for a list that holds its
+// own search row: a 40px row with a 16px magnifier over the quiet rule. The list is the site's popup 4px below: a square
+// panel of the ground with the hairline and long soft cast, 4px inside, 36px rows with 12px sides, the highlighted row
+// on the hover wash at once (it follows the keys) and a 16px check at the end of each chosen row. Group heads are Kode
+// Mono labels. For several values, ComboboxChips is the field holding 24px outlined hexagon chips with an x, then the
+// typing. The list grows from the field (opacity and 98 percent scale, 240ms on the strong ease-out) and leaves in
+// 200ms; filtering and moving through rows have no motion.
 
-type Item = { value: string; label: string; disabled?: boolean };
+const Combobox = BaseCombobox.Root;
 
-type ComboboxContextValue = {
-  multiple: boolean;
-  values: string[];
-  toggle: (value: string) => void;
-  remove: (value: string) => void;
-  clear: () => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  search: string;
-  setSearch: (search: string) => void;
-  labelOf: (value: string) => string;
-  register: (value: string, label: string) => void;
-  items?: Item[];
-  disabled?: boolean;
-  listRef: React.RefObject<HTMLDivElement | null>;
-  chipsRef: React.RefObject<HTMLDivElement | null>;
-  chips: boolean;
-  setChips: (chips: boolean) => void;
-  contentId: string;
-};
+/** True inside ComboboxContent, so ComboboxInput draws the search row there and the field outside. */
+const InPopup = React.createContext(false);
 
-const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
+const FIELD =
+  "flex w-full min-w-0 border border-line-field bg-transparent font-sans text-body-sm leading-line-body-sm text-fg transition-[border-color] duration-fast ease-out hover:border-line-strong has-[[data-popup-open]]:border-line-strong has-[input:focus-visible]:border-focus-ring has-[input:focus-visible]:outline-1 has-[input:focus-visible]:-outline-offset-2 has-[input:focus-visible]:outline-focus-ring has-[[aria-invalid=true]]:border-danger data-disabled:cursor-not-allowed data-disabled:border-line data-disabled:text-fg-subtle motion-reduce:transition-none";
 
-function useCombobox() {
-  const context = React.useContext(ComboboxContext);
-  if (!context) throw new Error("Combobox parts must be used within <Combobox>");
-  return context;
-}
+const ICON_KEY =
+  "flex size-6 shrink-0 cursor-pointer items-center justify-center text-fg-muted transition-colors duration-fast ease-out hover:text-fg focus-visible:outline-2 focus-visible:outline-focus-ring data-disabled:pointer-events-none data-disabled:text-fg-subtle motion-reduce:transition-none [&_svg]:size-4";
 
-type ComboboxBaseProps = {
-  /** The choices, for labels while the list is closed and for ComboboxList's render function. */
-  items?: (Item | string)[];
-  open?: boolean;
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  disabled?: boolean;
-  /** The submitted name: one hidden input per chosen value. */
-  name?: string;
+type ComboboxInputProps = React.ComponentProps<typeof BaseCombobox.Input> & {
+  /** The caret key at the field's end (default true). */
+  showTrigger?: boolean;
+  /** A key that clears the value, shown once there is one (default false). */
+  showClear?: boolean;
   children?: React.ReactNode;
 };
 
-type ComboboxSingleProps = ComboboxBaseProps & { multiple?: false; value?: string | null; defaultValue?: string | null; onValueChange?: (value: string | null) => void };
-type ComboboxMultipleProps = ComboboxBaseProps & { multiple: true; value?: string[]; defaultValue?: string[]; onValueChange?: (value: string[]) => void };
-
-const normalize = (items?: (Item | string)[]) => items?.map((i) => (typeof i === "string" ? { value: i, label: i } : i));
-
-function Combobox(props: ComboboxSingleProps | ComboboxMultipleProps) {
-  const { open: openProp, defaultOpen = false, onOpenChange, disabled, name, children } = props;
-  const multiple = props.multiple === true;
-  const items = React.useMemo(() => normalize(props.items), [props.items]);
-  const initial = props.defaultValue == null ? [] : Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue];
-  const [inner, setInner] = React.useState<string[]>(initial);
-  const controlled = props.value !== undefined;
-  const values = controlled ? (props.value == null ? [] : Array.isArray(props.value) ? props.value : [props.value]) : inner;
-  const [openInner, setOpenInner] = React.useState(defaultOpen);
-  const open = openProp ?? openInner;
-  const [search, setSearch] = React.useState("");
-  const [chips, setChips] = React.useState(false);
-  const labels = React.useRef(new Map<string, string>());
-  const listRef = React.useRef<HTMLDivElement>(null);
-  const chipsRef = React.useRef<HTMLDivElement>(null);
-  const contentId = React.useId();
-
-  const setOpen = React.useCallback(
-    (next: boolean) => {
-      if (openProp === undefined) setOpenInner(next);
-      onOpenChange?.(next);
-      if (!next) setSearch("");
-    },
-    [openProp, onOpenChange],
-  );
-  const commit = (next: string[]) => {
-    if (!controlled) setInner(next);
-    if (multiple) (props as ComboboxMultipleProps).onValueChange?.(next);
-    else (props as ComboboxSingleProps).onValueChange?.(next[0] ?? null);
-  };
-  const toggle = (value: string) => {
-    if (multiple) {
-      commit(values.includes(value) ? values.filter((v) => v !== value) : [...values, value]);
-      setSearch("");
-    } else {
-      // Picking the chosen value again keeps it; ComboboxClear empties the field.
-      commit([value]);
-      setOpen(false);
-    }
-  };
-  const remove = (value: string) => commit(values.filter((v) => v !== value));
-  const labelOf = (value: string) => labels.current.get(value) ?? items?.find((i) => i.value === value)?.label ?? value;
-  const register = React.useCallback((value: string, label: string) => labels.current.set(value, label), []);
-
-  return (
-    <ComboboxContext.Provider value={{ multiple, values, toggle, remove, clear: () => commit([]), open, setOpen, search, setSearch, labelOf, register, items, disabled, listRef, chipsRef, chips, setChips, contentId }}>
-      <PopoverPrimitive.Root data-slot="combobox" open={open} onOpenChange={setOpen}>
-        {children}
-      </PopoverPrimitive.Root>
-      {name && values.map((v) => <input key={v} type="hidden" name={name} value={v} />)}
-    </ComboboxContext.Provider>
-  );
-}
-
-const FIELD =
-  "flex min-h-10 w-full min-w-0 items-center gap-2 rounded-pill bg-surface pr-3 pl-[calc(var(--spacing)*3.5)] font-sans text-body leading-tight font-normal text-fg shadow-s outline-none transition-[box-shadow] duration-fast ease-out aria-invalid:shadow-[0_0_0_1px_var(--ds-color-status-danger)] motion-reduce:transition-none";
-
-/** The closed field: the chosen value (ComboboxValue) and the caret. Opens the list. */
-function ComboboxTrigger({ className, children, ...props }: React.ComponentProps<"button">) {
-  const { open, disabled, values, contentId } = useCombobox();
-  return (
-    <PopoverPrimitive.Trigger asChild>
-      <button
-        type="button"
-        role="combobox"
-        aria-expanded={open}
-        aria-controls={contentId}
-        data-slot="combobox-trigger"
-        data-empty={!values.length}
-        disabled={disabled}
-        className={cn(FIELD, "group/combobox-trigger h-10 cursor-pointer text-left focus-visible:shadow-[var(--ds-shadow-s),var(--ds-shadow-focus)] disabled:cursor-not-allowed disabled:bg-subtle disabled:text-fg-muted disabled:shadow-none data-[empty=true]:text-fg-subtle", className)}
-        {...props}
-      >
-        <span className="flex min-w-0 flex-1 items-center gap-2 truncate">{children ?? <ComboboxValue />}</span>
-        <CaretDownIcon aria-hidden weight="bold" className="size-4 shrink-0 text-fg transition-transform duration-slow ease-out group-aria-expanded/combobox-trigger:rotate-180 group-disabled/combobox-trigger:text-fg-muted motion-reduce:transition-none" />
-      </button>
-    </PopoverPrimitive.Trigger>
-  );
-}
-
-/** The chosen value's label, the chosen labels joined, or the placeholder. */
-function ComboboxValue({ placeholder = "Select", children }: { placeholder?: string; children?: (values: string[]) => React.ReactNode }) {
-  const { values, labelOf } = useCombobox();
-  if (children) return <>{children(values)}</>;
-  return <span data-slot="combobox-value">{values.length ? values.map(labelOf).join(", ") : placeholder}</span>;
-}
-
-/** Clears every chosen value. Put it inside ComboboxChips or beside a trigger. */
-function ComboboxClear({ className, ...props }: React.ComponentProps<"button">) {
-  const { values, clear, disabled } = useCombobox();
-  if (!values.length) return null;
-  return (
-    <button
-      type="button"
-      data-slot="combobox-clear"
-      aria-label="Clear"
-      disabled={disabled}
-      onClick={(e) => {
-        e.stopPropagation();
-        clear();
-      }}
-      className={cn("inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-pill text-fg-faint outline-none transition-[color,box-shadow] duration-fast ease-out hover:text-fg-muted active:text-fg focus-visible:shadow-focus motion-reduce:transition-none", className)}
-      {...props}
-    >
-      <XIcon weight="bold" className="size-4" />
-    </button>
-  );
-}
-
-function ComboboxContent({ className, children, align = "start", sideOffset = 8, anchor, onInteractOutside, ...props }: React.ComponentProps<typeof PopoverPrimitive.Content> & { anchor?: React.RefObject<HTMLElement | null> }) {
-  const container = usePortalContainer();
-  const { search, chips, listRef, chipsRef, contentId, open } = useCombobox();
-  // With chips cmdk does not filter, so it would keep a hidden row highlighted: highlight the first match instead.
-  const [active, setActive] = React.useState("");
-  React.useEffect(() => {
-    if (!chips || !open) return;
-    const frame = requestAnimationFrame(() => setActive(listRef.current?.querySelector("[cmdk-item]:not([data-disabled=true])")?.getAttribute("data-value") ?? ""));
-    return () => cancelAnimationFrame(frame);
-  }, [chips, open, search, listRef]);
-  return (
-    <>
-    {anchor && <PopoverPrimitive.Anchor virtualRef={anchor as React.RefObject<HTMLElement>} />}
-    <PopoverPrimitive.Portal container={container}>
-      <PopoverPrimitive.Content
-        id={contentId}
-        data-slot="combobox-content"
-        align={align}
-        sideOffset={sideOffset}
-        // With chips the typing stays in the field; the list follows it.
-        onOpenAutoFocus={chips ? (e) => e.preventDefault() : undefined}
-        onInteractOutside={(e) => {
-          onInteractOutside?.(e);
-          // A press in the chips field keeps the list open: the field is where the typing happens.
-          if (chips && chipsRef.current?.contains(e.target as Node)) e.preventDefault();
-        }}
-        className={cn(
-          "z-50 w-(--radix-popover-trigger-width) min-w-56 max-w-[calc(100vw-2rem)] origin-(--radix-popover-content-transform-origin) overflow-hidden rounded-panel bg-surface text-fg shadow-floating outline-none data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in motion-reduce:animate-none",
-          className,
-        )}
-        {...props}
-      >
-        <CommandPrimitive ref={listRef} shouldFilter={!chips} {...(chips ? { value: active, onValueChange: setActive } : {})} className="flex flex-col">
-          {children}
-        </CommandPrimitive>
-      </PopoverPrimitive.Content>
-    </PopoverPrimitive.Portal>
-    </>
-  );
-}
-
-/** The search row at the top of the list. */
-function ComboboxInput({ className, placeholder = "Search", ...props }: Omit<React.ComponentProps<typeof CommandPrimitive.Input>, "value" | "onValueChange">) {
-  const { search, setSearch } = useCombobox();
-  return (
-    <div data-slot="combobox-input-wrapper" className="flex h-11 shrink-0 items-center gap-2.5 border-b border-line-subtle px-4">
-      <MagnifyingGlassIcon aria-hidden className="size-4 shrink-0 text-icon-secondary" />
-      <CommandPrimitive.Input
-        data-slot="combobox-input"
-        value={search}
-        onValueChange={setSearch}
-        placeholder={placeholder}
-        className={cn("h-full w-full min-w-0 bg-transparent font-sans text-body leading-tight text-fg outline-none placeholder:text-fg-subtle", className)}
-        {...props}
-      />
-    </div>
-  );
-}
-
-/** The rows. Pass items as children, or a function that renders each of the Combobox's items. */
-function ComboboxList({ className, children, ...props }: Omit<React.ComponentProps<typeof CommandPrimitive.List>, "children"> & { children?: React.ReactNode | ((item: Item) => React.ReactNode) }) {
-  const { items } = useCombobox();
-  return (
-    <CommandPrimitive.List data-slot="combobox-list" className={cn("max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto overscroll-contain p-1 [&_[cmdk-list-sizer]]:flex [&_[cmdk-list-sizer]]:flex-col [&_[cmdk-list-sizer]]:gap-1 [&_[cmdk-group-items]]:flex [&_[cmdk-group-items]]:flex-col [&_[cmdk-group-items]]:gap-1", className)} {...props}>
-      {typeof children === "function" ? items?.map((item) => <React.Fragment key={item.value}>{children(item)}</React.Fragment>) : children}
-    </CommandPrimitive.List>
-  );
-}
-
-/** Renders a group's own items with a function, inside a ComboboxGroup. */
-function ComboboxCollection({ items, children }: { items: (Item | string)[]; children: (item: Item) => React.ReactNode }) {
-  return <>{normalize(items)?.map((item) => <React.Fragment key={item.value}>{children(item)}</React.Fragment>)}</>;
-}
-
-function ComboboxItem({ value, label, className, children, disabled, ...props }: Omit<React.ComponentProps<typeof CommandPrimitive.Item>, "value" | "onSelect"> & { value: string; label?: string }) {
-  const { values, toggle, register, chips, search } = useCombobox();
-  const text = label ?? (typeof children === "string" ? children : value);
-  React.useEffect(() => {
-    register(value, text);
-  }, [register, value, text]);
-  // With chips, cmdk does not filter (the typing is outside it): hide rows that do not match here.
-  if (chips && search && !text.toLowerCase().includes(search.toLowerCase())) return null;
-  const selected = values.includes(value);
-  return (
-    <CommandPrimitive.Item
-      data-slot="combobox-item"
-      value={`${text} ${value}`}
-      disabled={disabled}
-      data-checked={selected || undefined}
-      onSelect={() => toggle(value)}
-      className={cn(
-        "relative flex h-9 shrink-0 cursor-default items-center gap-2.5 rounded-control px-3 font-sans text-body leading-tight font-normal text-fg outline-none select-none data-checked:pe-10 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-subtle-hover [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5.5 [&_svg:not([class*='text-'])]:text-icon-secondary",
-        className,
-      )}
-      {...props}
-    >
-      {children ?? text}
-      {selected && <CheckCircleIcon aria-hidden weight="fill" className="absolute right-3 size-5 text-fg-brand" />}
-    </CommandPrimitive.Item>
-  );
-}
-
-function ComboboxEmpty({ className, children = "No results.", ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
-  const { chips, search, items, labelOf, values } = useCombobox();
-  // cmdk's own empty state only knows its filter; with chips, decide here.
-  if (chips) {
-    const any = (items ?? values.map((v) => ({ value: v, label: labelOf(v) }))).some((i) => !search || i.label.toLowerCase().includes(search.toLowerCase()));
-    if (any) return null;
+function ComboboxInput({ className, showTrigger = true, showClear = false, children, placeholder, disabled, ...props }: ComboboxInputProps) {
+  const inPopup = React.useContext(InPopup);
+  if (inPopup) {
     return (
-      <div data-slot="combobox-empty" className={cn("py-6 text-center text-body text-fg-muted", className)}>
-        {children}
+      <div data-slot="combobox-input-wrapper" className="flex h-10 shrink-0 items-center gap-2 border-b border-line px-3">
+        <MagnifyingGlassIcon aria-hidden className="size-4 shrink-0 text-fg-muted" />
+        <BaseCombobox.Input
+          data-slot="combobox-input"
+          placeholder={placeholder ?? "Search"}
+          disabled={disabled}
+          className={cn("h-full w-full min-w-0 bg-transparent font-sans text-body-sm leading-line-body-sm text-fg outline-none placeholder:text-fg-subtle pointer-coarse:text-body", className)}
+          {...props}
+        />
       </div>
     );
   }
   return (
-    <CommandPrimitive.Empty data-slot="combobox-empty" className={cn("py-6 text-center text-body text-fg-muted", className)} {...props}>
-      {children}
-    </CommandPrimitive.Empty>
-  );
-}
-
-function ComboboxGroup({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Group>) {
-  return (
-    <CommandPrimitive.Group
-      data-slot="combobox-group"
-      className={cn("overflow-hidden text-fg [&_[cmdk-group-heading]]:mx-3 [&_[cmdk-group-heading]]:my-1 [&_[cmdk-group-heading]]:text-caption [&_[cmdk-group-heading]]:leading-line-caption [&_[cmdk-group-heading]]:text-fg-brand", className)}
-      {...props}
-    />
-  );
-}
-
-/** A heading inside the list that is not a group's (a note above the rows). */
-function ComboboxLabel({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="combobox-label" className={cn("mx-3 my-1 text-caption leading-line-caption text-fg-brand", className)} {...props} />;
-}
-
-function ComboboxSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
-  return <CommandPrimitive.Separator data-slot="combobox-separator" className={cn("-mx-1 h-px shrink-0 bg-line-subtle", className)} {...props} />;
-}
-
-/** The field for several values: chips and a text input, anchoring the list. */
-function ComboboxChips({ className, children, ...props }: React.ComponentProps<"div">) {
-  const { setChips, setOpen, disabled, chipsRef } = useCombobox();
-  React.useEffect(() => {
-    setChips(true);
-    return () => setChips(false);
-  }, [setChips]);
-  return (
-    <PopoverPrimitive.Anchor asChild>
-      <div
-        ref={chipsRef}
-        data-slot="combobox-chips"
-        data-disabled={disabled || undefined}
-        onMouseDown={(e) => {
-          if (disabled || e.target !== e.currentTarget) return;
-          e.preventDefault();
-          e.currentTarget.querySelector("input")?.focus();
-          setOpen(true);
-        }}
-        className={cn(FIELD, "flex-wrap gap-1.5 rounded-dialog py-1.5 pl-1.5 has-[input:focus-visible]:shadow-[var(--ds-shadow-s),var(--ds-shadow-focus)] data-disabled:bg-subtle data-disabled:text-fg-muted", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    </PopoverPrimitive.Anchor>
-  );
-}
-
-function ComboboxChip({ value, className, children, ...props }: React.ComponentProps<"span"> & { value: string }) {
-  const { remove, labelOf, disabled } = useCombobox();
-  return (
-    <span data-slot="combobox-chip" className={cn("inline-flex h-7 max-w-full items-center gap-1 rounded-pill bg-subtle pr-1 pl-2 text-body leading-tight text-fg", className)} {...props}>
-      <span className="truncate">{children ?? labelOf(value)}</span>
-      <button
-        type="button"
-        aria-label={`Remove ${labelOf(value)}`}
+    <BaseCombobox.InputGroup data-slot="combobox-input-group" className={cn(FIELD, "h-10 items-center gap-1 pr-2 pointer-coarse:h-12")}>
+      <BaseCombobox.Input
+        data-slot="combobox-input"
+        placeholder={placeholder}
         disabled={disabled}
-        onClick={() => remove(value)}
-        className="inline-flex size-5 cursor-pointer items-center justify-center rounded-pill text-fg-muted outline-none transition-[background-color,color,box-shadow] duration-fast ease-out hover:bg-subtle-hover hover:text-fg focus-visible:shadow-focus active:shadow-[inset_0_0_0_9996px_var(--ds-color-wash-pressed)] active:transition-none motion-reduce:transition-none"
-      >
-        <XIcon weight="bold" className="size-3.5" />
-      </button>
-    </span>
+        className={cn("h-full min-w-0 flex-1 bg-transparent pl-3 outline-none placeholder:text-fg-subtle disabled:cursor-not-allowed pointer-coarse:text-body", className)}
+        {...props}
+      />
+      {children}
+      {showClear && (
+        <BaseCombobox.Clear data-slot="combobox-clear" aria-label="Clear" disabled={disabled} className={ICON_KEY}>
+          <XIcon />
+        </BaseCombobox.Clear>
+      )}
+      {showTrigger && (
+        <BaseCombobox.Trigger data-slot="combobox-trigger" aria-label="Open list" disabled={disabled} className={ICON_KEY}>
+          <CaretDownIcon />
+        </BaseCombobox.Trigger>
+      )}
+    </BaseCombobox.InputGroup>
   );
 }
 
-/** The typing part of ComboboxChips: filters the list; arrows and Enter work the list; Backspace removes the last chip. */
-function ComboboxChipsInput({ className, onKeyDown, ...props }: React.ComponentProps<"input">) {
-  const { search, setSearch, setOpen, open, values, remove, listRef, disabled, contentId } = useCombobox();
+const TRIGGER =
+  "group/combobox-trigger flex h-10 w-full min-w-0 cursor-pointer items-center justify-between gap-2 border border-line-field bg-transparent px-3 font-sans text-body-sm leading-line-body-sm font-normal whitespace-nowrap text-fg select-none transition-[border-color] duration-fast ease-out hover:border-line-strong focus-visible:border-focus-ring focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-popup-open:border-line-strong aria-invalid:border-danger data-disabled:cursor-not-allowed data-disabled:border-line data-disabled:text-fg-subtle data-placeholder:text-fg-subtle pointer-coarse:h-12 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0";
+
+/** The closed field as a button: the value (ComboboxValue) and the caret. Without children it is the caret key alone. */
+function ComboboxTrigger({ className, children, ...props }: React.ComponentProps<typeof BaseCombobox.Trigger>) {
+  if (children == null) {
+    return (
+      <BaseCombobox.Trigger data-slot="combobox-trigger" aria-label="Open list" className={cn(ICON_KEY, className)} {...props}>
+        <CaretDownIcon />
+      </BaseCombobox.Trigger>
+    );
+  }
   return (
-    <input
-      data-slot="combobox-chips-input"
-      role="combobox"
-      aria-expanded={open}
-      aria-controls={contentId}
-      aria-autocomplete="list"
-      disabled={disabled}
-      value={search}
-      onChange={(e) => {
-        setSearch(e.target.value);
-        if (!open) setOpen(true);
-      }}
-      onFocus={() => setOpen(true)}
-      onKeyDown={(e) => {
-        onKeyDown?.(e);
-        if (e.defaultPrevented) return;
-        if (e.key === "Backspace" && !search && values.length) remove(values[values.length - 1]);
-        else if (["ArrowDown", "ArrowUp", "Enter", "Home", "End"].includes(e.key) && open && listRef.current) {
-          e.preventDefault();
-          // Hand the key to the list, which moves the highlight or picks the highlighted row.
-          listRef.current.dispatchEvent(new KeyboardEvent("keydown", { key: e.key, bubbles: true, cancelable: true }));
-        } else if (e.key === "ArrowDown" && !open) setOpen(true);
-      }}
-      className={cn("h-7 min-w-24 flex-1 bg-transparent font-sans text-body leading-tight text-fg outline-none placeholder:text-fg-subtle disabled:cursor-not-allowed", className)}
-      {...props}
-    />
+    <BaseCombobox.Trigger data-slot="combobox-trigger" className={cn(TRIGGER, className)} {...props}>
+      <span className="flex min-w-0 flex-1 items-center gap-2 truncate text-left">{children}</span>
+      <CaretDownIcon aria-hidden className="size-4 text-fg-muted group-data-disabled/combobox-trigger:text-fg-subtle" />
+    </BaseCombobox.Trigger>
   );
 }
 
-/** A ref for an element the list should open from, when it is not the trigger (pass it to ComboboxContent's anchor). */
+/** The chosen value's label (or the placeholder); a function child renders the value its own way. */
+function ComboboxValue(props: React.ComponentProps<typeof BaseCombobox.Value>) {
+  return <BaseCombobox.Value {...props} />;
+}
+
+/** Clears the value. ComboboxInput draws one with showClear; use this beside a trigger or in the chips field. */
+function ComboboxClear({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Clear>) {
+  return (
+    <BaseCombobox.Clear data-slot="combobox-clear" aria-label="Clear" className={cn(ICON_KEY, className)} {...props}>
+      <XIcon />
+    </BaseCombobox.Clear>
+  );
+}
+
+const POPUP =
+  "flex max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-60 origin-(--transform-origin) flex-col overflow-hidden bg-surface text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]";
+
+type ComboboxContentProps = React.ComponentProps<typeof BaseCombobox.Popup> &
+  Pick<React.ComponentProps<typeof BaseCombobox.Positioner>, "side" | "sideOffset" | "align" | "alignOffset" | "anchor">;
+
+function ComboboxContent({ className, children, side = "bottom", sideOffset = 4, align = "start", alignOffset = 0, anchor, ...props }: ComboboxContentProps) {
+  const container = usePortalContainer();
+  return (
+    <BaseCombobox.Portal container={container}>
+      <BaseCombobox.Positioner side={side} sideOffset={sideOffset} align={align} alignOffset={alignOffset} anchor={anchor} className="z-50 outline-none">
+        <BaseCombobox.Popup data-slot="combobox-content" className={cn(POPUP, className)} {...props}>
+          <InPopup.Provider value>{children}</InPopup.Provider>
+        </BaseCombobox.Popup>
+      </BaseCombobox.Positioner>
+    </BaseCombobox.Portal>
+  );
+}
+
+function ComboboxList({ className, ...props }: React.ComponentProps<typeof BaseCombobox.List>) {
+  return <BaseCombobox.List data-slot="combobox-list" className={cn("max-h-72 min-h-0 scroll-py-1 overflow-y-auto overscroll-contain p-1 data-empty:p-0", className)} {...props} />;
+}
+
+function ComboboxItem({ className, children, ...props }: React.ComponentProps<typeof BaseCombobox.Item>) {
+  return (
+    <BaseCombobox.Item
+      data-slot="combobox-item"
+      className={cn(
+        "relative flex h-9 shrink-0 cursor-default items-center gap-2 px-3 font-sans text-body-sm leading-line-body-sm font-normal text-fg outline-none select-none data-disabled:pointer-events-none data-disabled:text-fg-subtle data-highlighted:bg-subtle-hover pointer-coarse:h-11 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-fg-muted",
+        className,
+      )}
+      {...props}
+    >
+      <span className="flex min-w-0 flex-1 items-center gap-2 truncate">{children}</span>
+      <BaseCombobox.ItemIndicator data-slot="combobox-item-indicator" className="flex shrink-0">
+        <CheckIcon className="text-fg" />
+      </BaseCombobox.ItemIndicator>
+    </BaseCombobox.Item>
+  );
+}
+
+function ComboboxEmpty({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Empty>) {
+  return <BaseCombobox.Empty data-slot="combobox-empty" className={cn("px-3 py-6 text-center font-sans text-body-sm leading-line-body-sm text-fg-muted empty:hidden", className)} {...props} />;
+}
+
+function ComboboxGroup({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Group>) {
+  return <BaseCombobox.Group data-slot="combobox-group" className={cn("flex flex-col", className)} {...props} />;
+}
+
+function ComboboxLabel({ className, ...props }: React.ComponentProps<typeof BaseCombobox.GroupLabel>) {
+  return <BaseCombobox.GroupLabel data-slot="combobox-label" className={cn("ds-label flex h-8 items-center px-3 select-none", className)} {...props} />;
+}
+
+function ComboboxCollection(props: React.ComponentProps<typeof BaseCombobox.Collection>) {
+  return <BaseCombobox.Collection {...props} />;
+}
+
+function ComboboxSeparator({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Separator>) {
+  return <BaseCombobox.Separator data-slot="combobox-separator" className={cn("pointer-events-none -mx-1 my-1 h-px shrink-0 bg-line", className)} {...props} />;
+}
+
+/** The field for several values: the chips, then ComboboxChipsInput. The list opens from it. */
+function ComboboxChips({ className, children, ...props }: React.ComponentProps<typeof BaseCombobox.InputGroup>) {
+  return (
+    <BaseCombobox.InputGroup data-slot="combobox-chips" className={cn(FIELD, "min-h-10 cursor-text items-center p-1 pointer-coarse:min-h-12", className)} {...props}>
+      <BaseCombobox.Chips className="flex min-w-0 flex-1 flex-wrap items-center gap-1">{children}</BaseCombobox.Chips>
+    </BaseCombobox.InputGroup>
+  );
+}
+
+/** A chosen value in the chips field: a 24px outlined hexagon with an x. */
+function ComboboxChip({ className, children, showRemove = true, ...props }: React.ComponentProps<typeof BaseCombobox.Chip> & { showRemove?: boolean }) {
+  return (
+    <BaseCombobox.Chip
+      data-slot="combobox-chip"
+      className={cn(
+        "ds-hex-frame-s inline-flex h-6 max-w-full cursor-default items-center gap-1 pr-2 pl-3 font-sans text-body-sm leading-none text-fg outline-none select-none before:bg-line-strong after:bg-surface data-highlighted:after:bg-subtle-hover focus-within:after:bg-subtle-hover",
+        !showRemove && "pr-3",
+        className,
+      )}
+      {...props}
+    >
+      <span className="truncate">{children}</span>
+      {showRemove && (
+        <BaseCombobox.ChipRemove data-slot="combobox-chip-remove" aria-label="Remove" className="flex size-4 shrink-0 cursor-pointer items-center justify-center text-fg-muted transition-colors duration-fast ease-out hover:text-fg motion-reduce:transition-none [&_svg]:size-3">
+          <XIcon />
+        </BaseCombobox.ChipRemove>
+      )}
+    </BaseCombobox.Chip>
+  );
+}
+
+/** The typing part of the chips field: it filters the list; Backspace on an empty input removes the last chip. */
+function ComboboxChipsInput({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Input>) {
+  return <BaseCombobox.Input data-slot="combobox-chips-input" className={cn("h-6 min-w-24 flex-1 bg-transparent px-2 font-sans text-body-sm text-fg outline-none placeholder:text-fg-subtle disabled:cursor-not-allowed pointer-coarse:text-body", className)} {...props} />;
+}
+
+/** A ref for an element the list should open from, when it is not the field (pass it to ComboboxContent's anchor). */
 function useComboboxAnchor<T extends HTMLElement = HTMLDivElement>() {
   return React.useRef<T>(null);
 }
@@ -416,6 +230,5 @@ export {
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,
-  useCombobox,
   useComboboxAnchor,
 };

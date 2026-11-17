@@ -33,18 +33,20 @@ describe('complete token output', () => {
 
   it('compiles spacing, weights, motion, layout and visual utilities to live token references', async () => {
     const compiler = await compile(`${read('build/theme.css')}\n@tailwind utilities;`);
-    const output = compiler.build(['p-3.5', 'gap-2', 'pl-1.5', 'h-10', 'w-layout-rail', 'max-w-frame-column', 'font-normal', 'font-medium', 'text-body', 'leading-body', 'tracking-normal', 'rounded-panel', 'rounded-dialog', 'shadow-floating', 'bg-surface-brand', 'backdrop-blur-scrim', 'duration-150', 'duration-base', 'ease-out']);
-    for (const token of ['space-3-5', 'space-2', 'space-1-5', 'space-10', 'layout-rail', 'frame-column', 'font-weight-regular', 'font-weight-medium', 'text-body', 'leading-body', 'tracking-normal', 'radius-panel', 'radius-dialog', 'shadow-floating', 'color-bg-brand', 'blur-scrim', 'duration-fast', 'duration-base', 'easing-out']) expect(output, token).toContain(`var(--ds-${token})`);
-    expect(output).not.toMatch(/transition-duration:\s*150ms|font-weight:\s*(400|500)|padding:\s*14px/);
+    const output = compiler.build(['p-3', 'gap-2', 'pl-1.5', 'h-10', 'w-layout-rail', 'max-w-frame-column', 'font-normal', 'font-medium', 'text-body', 'leading-body', 'tracking-normal', 'rounded-panel', 'rounded-dialog', 'shadow-floating', 'bg-surface-brand', 'backdrop-blur-scrim', 'duration-150', 'duration-base', 'ease-out']);
+    for (const token of ['space-3', 'space-2', 'space-1-5', 'space-10', 'layout-rail', 'frame-column', 'font-weight-regular', 'font-weight-medium', 'text-body', 'leading-body', 'tracking-normal', 'radius-panel', 'radius-dialog', 'shadow-floating', 'color-bg-brand', 'blur-scrim', 'duration-fast', 'duration-base', 'easing-out']) expect(output, token).toContain(`var(--ds-${token})`);
+    expect(output).not.toMatch(/transition-duration:\s*150ms|font-weight:\s*(400|500)|padding:\s*12px/);
   });
 
   it('lets the converter use every fixed radius step while preserving explicit pills', () => {
+    // Hoplite is square: every fixed radius snaps to the square step; an explicit pill stays a pill.
     const out = convertCss('.detail { border-radius:6px } .panel { border-radius:16px } .card { border-radius:24px } .pill { border-radius:9999px }', sitePalette(''), newStats());
-    for (const radius of ['xs', 'panel', 'dialog', 'pill']) expect(out).toContain(`var(--ds-radius-${radius})`);
+    for (const radius of ['control', 'pill']) expect(out).toContain(`var(--ds-radius-${radius})`);
+    expect(out).not.toMatch(/border-radius:\s*\d/);
   });
 
   it('keeps the smallest and largest type and spacing steps available to conversion', () => {
-    const out = convertCss('.micro { font-size:11px; padding:1px } .display { font-size:32px }', sitePalette(''), newStats());
+    const out = convertCss('.micro { font-size:11px; padding:1px } .display { font-size:64px }', sitePalette(''), newStats());
     // The smallest type step may share its size with the caption; either name is the brand's smallest size.
     const smallest = table['--ds-text-micro'];
     const used = out.match(/\.micro \{ font-size:var\((--ds-text-[\w-]+)\)/)?.[1];

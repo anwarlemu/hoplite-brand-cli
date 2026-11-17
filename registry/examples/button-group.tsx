@@ -1,4 +1,4 @@
-import { CaretDownIcon, CopyIcon, FileTextIcon, MinusIcon, PlusIcon } from "@phosphor-icons/react/ssr";
+import { CaretDownIcon, CopyIcon, DotsThreeIcon, GitMergeIcon, MinusIcon, PlusIcon, TerminalWindowIcon } from "@phosphor-icons/react/ssr";
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "@/components/ui/button-group";
@@ -6,50 +6,41 @@ import { Input } from "@/components/ui/input";
 
 export function Preview() {
   return (
-    <ButtonGroup aria-label="Prompt actions">
-      <Button variant="outline">
-        <FileTextIcon weight="fill" />
-        View as formatted
+    <ButtonGroup aria-label="Merge the pull request">
+      <Button className="pl-8">
+        <GitMergeIcon />
+        Squash and merge
       </Button>
-      <Button variant="outline">
-        <CopyIcon weight="duotone" />
-        Copy as markdown
+      <ButtonGroupSeparator />
+      <Button size="icon" className="w-12" aria-label="More merge options">
+        <CaretDownIcon />
       </Button>
     </ButtonGroup>
   );
 }
 
-export function WithField() {
-  return (
-    <div className="grid w-full max-w-115 gap-4">
-      <ButtonGroup className="w-full">
-        <Input aria-label="Mailbox name" defaultValue="acme-support" />
-        <ButtonGroupText>@inboxmail.com</ButtonGroupText>
-      </ButtonGroup>
-      <ButtonGroup className="w-full">
-        <Input aria-label="Search contacts" placeholder="Search contacts" />
-        <Button variant="outline">Search</Button>
-      </ButtonGroup>
-    </div>
-  );
-}
-
-export function Split() {
+export function Outline() {
   return (
     <div className="flex flex-wrap items-center gap-6">
-      <ButtonGroup>
-        <Button>Create Agent</Button>
-        <ButtonGroupSeparator />
-        <Button size="icon-lg" aria-label="More create options">
-          <CaretDownIcon />
+      <ButtonGroup aria-label="Branch actions">
+        <Button variant="outline">
+          <CopyIcon />
+          Copy branch
+        </Button>
+        <Button variant="outline">
+          <TerminalWindowIcon />
+          Open in terminal
+        </Button>
+        <Button variant="outline" size="icon" aria-label="More branch actions">
+          <DotsThreeIcon />
         </Button>
       </ButtonGroup>
-      <ButtonGroup aria-label="Phone lines">
-        <Button variant="outline" size="icon" className="size-9" aria-label="Remove a line">
+      <ButtonGroup aria-label="Seats">
+        <Button variant="outline" size="icon" aria-label="Remove a seat">
           <MinusIcon />
         </Button>
-        <ButtonGroupText className="min-w-12 justify-center text-fg">2</ButtonGroupText>
-        <Button variant="outline" size="icon" className="size-9" aria-label="Add a line">
+        <ButtonGroupText className="min-w-24 justify-center text-fg">4 seats</ButtonGroupText>
+        <Button variant="outline" size="icon" aria-label="Add a seat">
           <PlusIcon />
         </Button>
       </ButtonGroup>
@@ -57,15 +48,37 @@ export function Split() {
   );
 }
 
-export function Vertical() {
+export function WithField() {
   return (
-    <ButtonGroup orientation="vertical" aria-label="Zoom">
-      <Button variant="outline" size="icon" className="size-9" aria-label="Zoom in">
-        <PlusIcon />
-      </Button>
-      <Button variant="outline" size="icon" className="size-9" aria-label="Zoom out">
-        <MinusIcon />
-      </Button>
+    <ButtonGroup className="w-full max-w-md">
+      <Input aria-label="Email to invite" placeholder="maya@acme.dev" />
+      <Button variant="outline">Invite</Button>
     </ButtonGroup>
+  );
+}
+
+export function Sizes() {
+  return (
+    <div className="flex flex-wrap items-center gap-6">
+      <ButtonGroup aria-label="Run the agent">
+        <Button size="sm">Run agent</Button>
+        <ButtonGroupSeparator />
+        <Button size="icon-sm" className="w-10" aria-label="More run options">
+          <CaretDownIcon />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup aria-label="Zoom">
+        <Button variant="outline" size="icon-sm" aria-label="Zoom out">
+          <MinusIcon />
+        </Button>
+        <Button variant="outline" size="icon-sm" aria-label="Zoom in">
+          <PlusIcon />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup orientation="vertical" aria-label="Sandbox actions">
+        <Button variant="outline" size="sm">Restart sandbox</Button>
+        <Button variant="outline" size="sm">Open logs</Button>
+      </ButtonGroup>
+    </div>
   );
 }

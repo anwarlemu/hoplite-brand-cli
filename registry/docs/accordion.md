@@ -3,8 +3,9 @@ name: accordion
 title: Accordion
 type: ui
 surface: site
-description: "Sections that open in place: 14px ink labels with a 16px bold caret at the right, ruled by the faint lilac line."
-use_for: "Use for settings or answers people open one at a time (advanced options, FAQs). Pass type=\"single\" collapsible for one open at a time, type=\"multiple\" for several. Keep the label a short phrase; the content is 14px secondary text or a group of fields."
-never: [Bold or purple trigger labels, A chevron at the left, Boxing each item in a card, Opening animation longer than 200ms]
-source: "Figma 427:2715: Create Agent Identity (Advanced settings - tunnel mode, phone state, line sharing)"
+kinds: [faq]
+description: "The pricing FAQ: ruled rows of 18px questions, each with a 20px outlined hexagon holding a plus at the end; open, the hexagon turns 30 degrees, the plus becomes a minus and the 16px light graphite answer opens with its height. A compact variant is the changelog entry."
+use_for: "Use Accordion for questions and answers (a pricing FAQ, setup help) and for long lists people scan by title. type=\"single\" (the default) keeps one item open; type=\"multiple\" lets several stay open. Use variant=\"compact\" for a changelog or an activity list (the mark first, 14px titles, no rules). Keep answers short; link out for more."
+never: [A caret or chevron in place of the hexagon, Boxed or filled rows, Bold questions, Panels that slide sideways or fade in, An orange mark]
+source: "The Hoplite website's pricing FAQ (.faq__item, .faq__icon, .faq__hex, .faq__bar) and changelog entries (.cl-entry, .cl-entry__icon, .cl-entry__body)"
 ---

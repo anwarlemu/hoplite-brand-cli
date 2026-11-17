@@ -1,12 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { ArchiveIcon, ArrowBendUpLeftIcon, ArrowBendUpRightIcon, EnvelopeOpenIcon, ProhibitIcon, TrashIcon, WarningIcon } from "@phosphor-icons/react/ssr";
+import { ArrowClockwiseIcon, CopyIcon, GitPullRequestIcon, PencilSimpleIcon, PushPinIcon, TrashIcon } from "@phosphor-icons/react/ssr";
 
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
+  ContextMenuGroup,
   ContextMenuItem,
   ContextMenuLabel,
   ContextMenuRadioGroup,
@@ -20,64 +21,74 @@ import {
 } from "@/components/ui/context-menu";
 
 export function Preview() {
-  const [starred, setStarred] = React.useState(false);
-  const [folder, setFolder] = React.useState("inbox");
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="mx-auto grid w-full max-w-96 gap-1 rounded-control bg-subtle p-3">
-        <span className="flex justify-between text-body text-fg">
-          Ray Liao <span className="text-fg-muted">Yesterday</span>
-        </span>
-        <span className="text-body text-fg">Hoplite A2A: publish your Agent Card</span>
-        <span className="truncate text-body text-fg-brand">Hello @acme, This is Ray, cofounder of Hoplite.</span>
-        <span className="mt-2 text-caption text-fg-muted">Right-click or long-press the email</span>
+      <ContextMenuTrigger className="ds-corners flex h-48 w-full max-w-md flex-col items-center justify-center gap-1 text-center">
+        <span className="text-body-sm leading-line-body-sm font-medium text-fg">Fix flaky upload test</span>
+        <span className="text-body-sm leading-line-body-sm text-fg-muted">Right-click, or press and hold, for actions</span>
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-60">
+      <ContextMenuContent className="w-56">
         <ContextMenuItem>
-          <ArrowBendUpLeftIcon />
-          Reply
-          <ContextMenuShortcut>R</ContextMenuShortcut>
+          <PencilSimpleIcon />
+          Rename
+          <ContextMenuShortcut>⌘R</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem>
-          <ArrowBendUpRightIcon />
-          Forward
-          <ContextMenuShortcut>F</ContextMenuShortcut>
+          <CopyIcon />
+          Copy thread link
+          <ContextMenuShortcut>⌘L</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem>
-          <EnvelopeOpenIcon weight="fill" />
-          Mark as unread
+          <ArrowClockwiseIcon />
+          Rerun checks
         </ContextMenuItem>
-        <ContextMenuCheckboxItem checked={starred} onCheckedChange={(v) => setStarred(v === true)}>
-          Starred
-        </ContextMenuCheckboxItem>
         <ContextMenuSub>
           <ContextMenuSubTrigger>
-            <ArchiveIcon weight="fill" />
-            Move to
+            <GitPullRequestIcon />
+            Open pull request
           </ContextMenuSubTrigger>
-          <ContextMenuSubContent className="w-44">
-            <ContextMenuLabel>Folders</ContextMenuLabel>
-            <ContextMenuRadioGroup value={folder} onValueChange={setFolder}>
-              <ContextMenuRadioItem value="inbox">Inbox</ContextMenuRadioItem>
-              <ContextMenuRadioItem value="sent">Sent</ContextMenuRadioItem>
-              <ContextMenuRadioItem value="spam">Spam</ContextMenuRadioItem>
-            </ContextMenuRadioGroup>
+          <ContextMenuSubContent>
+            <ContextMenuItem>As draft</ContextMenuItem>
+            <ContextMenuItem>Ready for review</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuItem>
-          <WarningIcon weight="fill" />
-          Report spam
-        </ContextMenuItem>
-        <ContextMenuItem>
-          <ProhibitIcon />
-          Block sender
-        </ContextMenuItem>
         <ContextMenuItem variant="destructive">
-          <TrashIcon weight="fill" />
-          Delete
-          <ContextMenuShortcut>⌫</ContextMenuShortcut>
+          <TrashIcon />
+          Delete thread
         </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  );
+}
+
+export function Options() {
+  const [pinned, setPinned] = React.useState(true);
+  const [notify, setNotify] = React.useState(false);
+  const [agent, setAgent] = React.useState("claude");
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="flex h-48 w-full max-w-md items-center justify-center border border-line text-body-sm leading-line-body-sm text-fg-muted">
+        <PushPinIcon className="mr-2 size-4" />
+        Right-click the thread list
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-56">
+        <ContextMenuGroup>
+          <ContextMenuLabel>Thread</ContextMenuLabel>
+          <ContextMenuCheckboxItem checked={pinned} onCheckedChange={setPinned}>
+            Pinned
+          </ContextMenuCheckboxItem>
+          <ContextMenuCheckboxItem checked={notify} onCheckedChange={setNotify}>
+            Notify when done
+          </ContextMenuCheckboxItem>
+        </ContextMenuGroup>
+        <ContextMenuSeparator />
+        <ContextMenuRadioGroup value={agent} onValueChange={(value) => setAgent(String(value))}>
+          <ContextMenuLabel>Agent</ContextMenuLabel>
+          <ContextMenuRadioItem value="claude">Claude Code</ContextMenuRadioItem>
+          <ContextMenuRadioItem value="codex">Codex</ContextMenuRadioItem>
+          <ContextMenuRadioItem value="cursor">Cursor</ContextMenuRadioItem>
+        </ContextMenuRadioGroup>
       </ContextMenuContent>
     </ContextMenu>
   );

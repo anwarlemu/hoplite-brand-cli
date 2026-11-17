@@ -1,192 +1,161 @@
 "use client";
 
 import * as React from "react";
-import { Menu as ChakraMenu, Portal } from "@chakra-ui/react";
-import { CaretRightIcon, CheckCircleIcon } from "@phosphor-icons/react/ssr";
+import { Menu as BaseMenu } from "@base-ui/react/menu";
+import { CaretRightIcon, CheckIcon } from "@phosphor-icons/react/ssr";
 
+import { cn, slot } from "@/lib/utils";
 import { usePortalContainer } from "@/lib/surface";
-import { cn } from "@/lib/utils";
 
-// A menu, from the console's Chakra menu theme:
-// the panel is white with no edge, 16px corners, the floating shadow and 4px of padding; items are rows of at least
-// 36px (12px sides, 8px above and below) with 12px corners and a 14px regular ink label after a 16px glyph in the
-// label's color, 4px apart, with the deeper lilac under the highlighted row and no fade (menus are used by keyboard and
-// many times a day). Check and radio marks sit at the end of the row: a bold 16px check in the brand purple. Section
-// labels are 12px regular in the brand purple, separators the subtle hairline, shortcuts 12px muted, destructive items
-// red. The panel grows out of its trigger from 98 percent with a fade (160ms) and leaves in 100ms.
-const CONTENT =
-  "z-50 max-h-(--available-height) min-w-48 overflow-x-hidden overflow-y-auto rounded-panel bg-surface p-1 text-fg shadow-floating outline-none data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in [&_[role^=menuitem]+[role^=menuitem]]:mt-1";
+// A menu as the site draws its popups (the nav's sheet, .hn__sheet and .hn__item): a square panel of the ground with a
+// quiet hairline and a long soft cast, 4px of air above and below. Rows are 36px with 12px sides and 14px Satoshi in the
+// ink, a 16px glyph 8px before the label in the quiet gray; the row under the pointer or the keys takes the hover wash.
+// Shortcuts sit at the end in 12px Kode Mono, quiet. A checked row shows an ink check at its end; the chosen radio row
+// a small filled ink hexagon. Group labels are Kode Mono caps eyebrows, separators quiet rules, a submenu row ends in a
+// caret. Destructive rows are orange. The panel opens from its trigger in 240ms (fade and 0.98 scale on the strong
+// ease-out) and leaves in 200ms; with reduced motion it only fades.
+const POPUP =
+  "max-h-(--available-height) min-w-48 overflow-y-auto overscroll-contain bg-surface py-1 text-fg shadow-floating outline-none origin-(--transform-origin) transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate data-instant:transition-none motion-reduce:transition-opacity";
+
 const ITEM =
-  "relative flex min-h-9 cursor-default items-center gap-3 rounded-control px-3 py-2 font-sans text-body leading-line-body font-normal text-fg outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-subtle-hover data-[inset]:pl-10 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+  "relative flex h-9 cursor-default items-center gap-2 px-3 font-sans text-body-sm leading-none whitespace-nowrap text-fg select-none transition-colors duration-fast ease-out data-highlighted:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-disabled:pointer-events-none data-disabled:text-fg-subtle pointer-coarse:h-11 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>svg]:text-fg-muted";
 
-// The trigger, so focus can go back to it when the menu closes.
-const TriggerRef = React.createContext<React.RefObject<HTMLElement | null> | null>(null);
-
-type MenuProps = Omit<React.ComponentProps<typeof ChakraMenu.Root>, "onOpenChange"> & { onOpenChange?: (open: boolean) => void };
-function DropdownMenu({ onOpenChange, onExitComplete, ...props }: MenuProps) {
-  const trigger = React.useRef<HTMLElement | null>(null);
-  const restore = React.useCallback(() => {
-    if (document.activeElement === document.body || document.activeElement === null) trigger.current?.focus();
-  }, []);
-  return (
-    <TriggerRef.Provider value={trigger}>
-      <ChakraMenu.Root
-        unstyled
-        data-slot="dropdown-menu"
-        onOpenChange={(details) => {
-          onOpenChange?.(details.open);
-          // Closing right after a keyboard open can leave focus on the page body (the menu's own first-item focus lands
-          // in the panel as it leaves). Hand it back to the trigger then; focus moved on purpose (a dialog an item opened)
-          // is left alone.
-          if (!details.open) requestAnimationFrame(() => requestAnimationFrame(restore));
-        }}
-        // And again once the panel has left: its unmount can drop focus after the close.
-        onExitComplete={() => {
-          onExitComplete?.();
-          restore();
-        }}
-        {...props}
-      />
-    </TriggerRef.Provider>
-  );
+/** A trigger renders a native button unless its `render` (or asChild child) is another tag. */
+function isNativeButton(render: unknown) {
+  return !React.isValidElement(render) || typeof render.type !== "string" || render.type === "button";
 }
 
-function DropdownMenuPortal(props: React.ComponentProps<typeof Portal>) {
+const InGroup = React.createContext(false);
+
+function DropdownMenu(props: React.ComponentProps<typeof BaseMenu.Root>) {
+  return <BaseMenu.Root data-slot="dropdown-menu" {...props} />;
+}
+
+function DropdownMenuPortal(props: React.ComponentProps<typeof BaseMenu.Portal>) {
   const container = usePortalContainer();
-  const portalRef = React.useMemo(() => container ? { current: container } : undefined, [container]);
-  return <Portal data-slot="dropdown-menu-portal" container={portalRef} {...props} />;
+  return <BaseMenu.Portal data-slot="dropdown-menu-portal" container={container} {...props} />;
 }
 
-function DropdownMenuTrigger({ ref, ...props }: React.ComponentProps<typeof ChakraMenu.Trigger>) {
-  const trigger = React.useContext(TriggerRef);
-  const setRef = React.useCallback(
-    (node: HTMLButtonElement | null) => {
-      if (trigger) trigger.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    },
-    [trigger, ref],
+function DropdownMenuTrigger({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseMenu.Trigger> & { asChild?: boolean }) {
+  const parts = slot(asChild, children, render);
+  return (
+    <BaseMenu.Trigger data-slot="dropdown-menu-trigger" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>
+      {parts.children}
+    </BaseMenu.Trigger>
   );
-  return <ChakraMenu.Trigger ref={setRef} data-slot="dropdown-menu-trigger" {...props} />;
 }
 
-function DropdownMenuContent({ className, sideOffset = 8, align, onFocus, ...props }: Omit<React.ComponentProps<typeof ChakraMenu.Content>, "align"> & { sideOffset?: number; align?: "start" | "center" | "end" }) {
-  const trigger = React.useContext(TriggerRef);
+type Placement = Pick<React.ComponentProps<typeof BaseMenu.Positioner>, "side" | "align" | "sideOffset" | "alignOffset" | "collisionPadding" | "anchor">;
+type ContentProps = React.ComponentProps<typeof BaseMenu.Popup> & Placement & { className?: string };
+
+function DropdownMenuContent({ className, side, align = "start", sideOffset = 4, alignOffset = 0, collisionPadding = 8, anchor, ...props }: ContentProps) {
   return (
     <DropdownMenuPortal>
-      <ChakraMenu.Positioner data-align={align}>
-        <ChakraMenu.Content
-          unstyled
-          data-slot="dropdown-menu-content"
-          style={{ marginBlockStart: sideOffset }}
-          className={cn(CONTENT, "origin-(--transform-origin)", className)}
-          onFocus={(event) => {
-            onFocus?.(event);
-            // A keyboard open focuses the panel a moment later; if the menu closed first (a quick Escape), that focus
-            // would land in a panel that is leaving. Send it back to the trigger.
-            if (event.currentTarget.getAttribute("data-state") === "closed") trigger?.current?.focus();
-          }}
-          {...props}
-        />
-      </ChakraMenu.Positioner>
+      <BaseMenu.Positioner className="z-50 outline-none" side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset} collisionPadding={collisionPadding} anchor={anchor}>
+        <BaseMenu.Popup data-slot="dropdown-menu-content" className={cn(POPUP, className)} {...props} />
+      </BaseMenu.Positioner>
     </DropdownMenuPortal>
   );
 }
 
-function DropdownMenuGroup(props: React.ComponentProps<typeof ChakraMenu.ItemGroup>) {
-  return <ChakraMenu.ItemGroup data-slot="dropdown-menu-group" {...props} />;
-}
-
-// An item's value identifies it to the menu (highlight, selection), so items without one each get their own: a label
-// when the children are plain text, otherwise a generated id (a shared fallback would highlight every such row at once).
-function useItemValue(value: string | undefined, children: React.ReactNode) {
-  const id = React.useId();
-  return value ?? (typeof children === "string" ? children : id);
-}
-
-function DropdownMenuItem({ className, inset, variant = "default", value, children, ...props }: Omit<React.ComponentProps<typeof ChakraMenu.Item>, "value"> & { value?: string; inset?: boolean; variant?: "default" | "destructive" }) {
-  const itemValue = useItemValue(value, children);
+function DropdownMenuGroup(props: React.ComponentProps<typeof BaseMenu.Group>) {
   return (
-    <ChakraMenu.Item unstyled
+    <InGroup.Provider value>
+      <BaseMenu.Group data-slot="dropdown-menu-group" {...props} />
+    </InGroup.Provider>
+  );
+}
+
+type ItemProps = Omit<React.ComponentProps<typeof BaseMenu.Item>, "className" | "onSelect"> & {
+  className?: string;
+  inset?: boolean;
+  variant?: "default" | "destructive";
+  /** shadcn's selection callback: runs with the click that picks the row. */
+  onSelect?: (event: React.MouseEvent<HTMLDivElement>) => void;
+};
+
+function DropdownMenuItem({ className, inset, variant = "default", onSelect, onClick, ...props }: ItemProps) {
+  return (
+    <BaseMenu.Item
       data-slot="dropdown-menu-item"
-      data-inset={inset || undefined}
       data-variant={variant}
-      value={itemValue}
-      className={cn(ITEM, "data-[variant=destructive]:text-danger data-[variant=destructive]:[&_svg]:text-danger", className)}
+      data-inset={inset ? "" : undefined}
+      onClick={
+        onSelect
+          ? (event) => {
+              onClick?.(event);
+              onSelect(event as React.MouseEvent<HTMLDivElement>);
+            }
+          : onClick
+      }
+      className={cn(ITEM, inset && "pl-9", variant === "destructive" && "text-danger [&>svg]:text-danger", className)}
       {...props}
-    >{children}</ChakraMenu.Item>
+    />
   );
 }
 
-function DropdownMenuCheckboxItem({ className, children, checked, onCheckedChange, value, ...props }: Omit<React.ComponentProps<typeof ChakraMenu.CheckboxItem>, "onCheckedChange" | "value"> & { value?: string; onCheckedChange?: (checked: boolean) => void }) {
-  const itemValue = useItemValue(value, children);
+function DropdownMenuCheckboxItem({ className, children, inset, ...props }: Omit<React.ComponentProps<typeof BaseMenu.CheckboxItem>, "className"> & { className?: string; inset?: boolean }) {
   return (
-    <ChakraMenu.CheckboxItem unstyled data-slot="dropdown-menu-checkbox-item" value={itemValue} checked={checked} onCheckedChange={onCheckedChange} className={cn(ITEM, className)} {...props}>
+    <BaseMenu.CheckboxItem data-slot="dropdown-menu-checkbox-item" className={cn(ITEM, "pr-10", inset && "pl-9", className)} {...props}>
       {children}
-      <span className="pointer-events-none ml-auto flex size-5 shrink-0 items-center justify-center">
-        <ChakraMenu.ItemIndicator>
-          <CheckCircleIcon weight="fill" className="size-5 text-fg-brand" />
-        </ChakraMenu.ItemIndicator>
+      <span aria-hidden className="pointer-events-none absolute right-3 flex size-4 items-center justify-center">
+        <BaseMenu.CheckboxItemIndicator data-slot="dropdown-menu-checkbox-item-indicator" className="flex">
+          <CheckIcon className="size-4 text-fg" />
+        </BaseMenu.CheckboxItemIndicator>
       </span>
-    </ChakraMenu.CheckboxItem>
+    </BaseMenu.CheckboxItem>
   );
 }
 
-type RadioMenuProps = Omit<React.ComponentProps<typeof ChakraMenu.RadioItemGroup>, "onValueChange"> & { onValueChange?: (value: string) => void };
-function DropdownMenuRadioGroup({ onValueChange, ...props }: RadioMenuProps) {
-  return <ChakraMenu.RadioItemGroup data-slot="dropdown-menu-radio-group" onValueChange={(details) => onValueChange?.(details.value)} {...props} />;
-}
-
-// The selected choice takes the same end check as a checkbox item (the console's menu option).
-function DropdownMenuRadioItem({ className, children, value, ...props }: Omit<React.ComponentProps<typeof ChakraMenu.RadioItem>, "value"> & { value?: string }) {
-  const itemValue = useItemValue(value, children);
+function DropdownMenuRadioGroup(props: React.ComponentProps<typeof BaseMenu.RadioGroup>) {
   return (
-    <ChakraMenu.RadioItem unstyled data-slot="dropdown-menu-radio-item" value={itemValue} className={cn(ITEM, className)} {...props}>
-      {children}
-      <span className="pointer-events-none ml-auto flex size-5 shrink-0 items-center justify-center">
-        <ChakraMenu.ItemIndicator>
-          <CheckCircleIcon weight="fill" className="size-5 text-fg-brand" />
-        </ChakraMenu.ItemIndicator>
-      </span>
-    </ChakraMenu.RadioItem>
+    <InGroup.Provider value>
+      <BaseMenu.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />
+    </InGroup.Provider>
   );
 }
 
-// A heading above items: shadcn's label stands alone, so it is a plain element rather than Chakra's group label (which
-// must sit inside a group).
+function DropdownMenuRadioItem({ className, children, inset, ...props }: Omit<React.ComponentProps<typeof BaseMenu.RadioItem>, "className"> & { className?: string; inset?: boolean }) {
+  return (
+    <BaseMenu.RadioItem data-slot="dropdown-menu-radio-item" className={cn(ITEM, "pr-10", inset && "pl-9", className)} {...props}>
+      {children}
+      <span aria-hidden className="pointer-events-none absolute right-3 flex size-4 items-center justify-center">
+        <BaseMenu.RadioItemIndicator data-slot="dropdown-menu-radio-item-indicator" className="ds-hex-mark size-2 bg-fg" />
+      </span>
+    </BaseMenu.RadioItem>
+  );
+}
+
 function DropdownMenuLabel({ className, inset, ...props }: React.ComponentProps<"div"> & { inset?: boolean }) {
-  return <div data-slot="dropdown-menu-label" data-inset={inset || undefined} className={cn("mx-3 my-2 font-sans text-caption leading-line-caption font-normal text-fg-brand data-[inset]:pl-7", className)} {...props} />;
+  const inGroup = React.useContext(InGroup);
+  const classes = cn("ds-label px-3 pt-2 pb-1 select-none", inset && "pl-9", className);
+  if (inGroup) return <BaseMenu.GroupLabel data-slot="dropdown-menu-label" className={classes} {...props} />;
+  return <div data-slot="dropdown-menu-label" role="presentation" className={classes} {...props} />;
 }
 
-function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typeof ChakraMenu.Separator>) {
-  return <ChakraMenu.Separator data-slot="dropdown-menu-separator" className={cn("my-2 h-px border-0 bg-line-subtle", className)} {...props} />;
+function DropdownMenuSeparator({ className, ...props }: Omit<React.ComponentProps<typeof BaseMenu.Separator>, "className"> & { className?: string }) {
+  return <BaseMenu.Separator data-slot="dropdown-menu-separator" className={cn("my-1 h-px bg-line", className)} {...props} />;
 }
 
 function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
-  return <span data-slot="dropdown-menu-shortcut" className={cn("ml-auto pl-4 font-sans text-caption text-fg-muted", className)} {...props} />;
+  return <span data-slot="dropdown-menu-shortcut" className={cn("ml-auto pl-6 font-code text-caption leading-none tracking-code text-fg-muted", className)} {...props} />;
 }
 
-function DropdownMenuSub({ onOpenChange, ...props }: MenuProps) {
-  return <ChakraMenu.Root unstyled data-slot="dropdown-menu-sub" onOpenChange={(details) => onOpenChange?.(details.open)} {...props} />;
+function DropdownMenuSub(props: React.ComponentProps<typeof BaseMenu.SubmenuRoot>) {
+  return <BaseMenu.SubmenuRoot data-slot="dropdown-menu-sub" {...props} />;
 }
 
-function DropdownMenuSubTrigger({ className, inset, children, ...props }: React.ComponentProps<typeof ChakraMenu.TriggerItem> & { inset?: boolean }) {
+function DropdownMenuSubTrigger({ className, inset, children, ...props }: Omit<React.ComponentProps<typeof BaseMenu.SubmenuTrigger>, "className"> & { className?: string; inset?: boolean }) {
   return (
-    <ChakraMenu.TriggerItem unstyled data-slot="dropdown-menu-sub-trigger" data-inset={inset || undefined} className={cn(ITEM, "data-[state=open]:bg-subtle-hover", className)} {...props}>
+    <BaseMenu.SubmenuTrigger data-slot="dropdown-menu-sub-trigger" className={cn(ITEM, "data-popup-open:bg-subtle-hover", inset && "pl-9", className)} {...props}>
       {children}
-      <CaretRightIcon weight="bold" className="ml-auto size-4 text-fg-muted" />
-    </ChakraMenu.TriggerItem>
+      <CaretRightIcon aria-hidden className="ml-auto size-4 text-fg-muted" />
+    </BaseMenu.SubmenuTrigger>
   );
 }
 
-function DropdownMenuSubContent({ className, ...props }: React.ComponentProps<typeof ChakraMenu.Content>) {
-  return (
-    <DropdownMenuPortal>
-      <ChakraMenu.Positioner>
-        <ChakraMenu.Content unstyled data-slot="dropdown-menu-sub-content" className={cn(CONTENT, "origin-(--transform-origin)", className)} {...props} />
-      </ChakraMenu.Positioner>
-    </DropdownMenuPortal>
-  );
+function DropdownMenuSubContent({ side = "inline-end", align = "start", sideOffset = 0, alignOffset = -4, ...props }: ContentProps) {
+  return <DropdownMenuContent data-slot="dropdown-menu-sub-content" side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset} {...props} />;
 }
 
 export {

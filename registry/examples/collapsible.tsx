@@ -1,47 +1,59 @@
 "use client";
 
 import * as React from "react";
-import { CaretDownIcon } from "@phosphor-icons/react/ssr";
+import { CaretUpDownIcon } from "@phosphor-icons/react/ssr";
 
+import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Label } from "@/components/ui/label";
 
 export function Preview() {
-  const [open, setOpen] = React.useState(false);
   return (
-    <Collapsible open={open} onOpenChange={setOpen} className="w-full max-w-122">
-      <CollapsibleTrigger className="group flex w-full items-center justify-between gap-4 rounded-pill py-2 text-left text-body text-fg outline-none transition-colors duration-fast ease-out hover:text-fg-brand focus-visible:shadow-focus motion-reduce:transition-none">
-        Advanced settings - tunnel mode, phone state, line sharing
-        <CaretDownIcon aria-hidden weight="bold" className="size-4 shrink-0 text-icon-default transition-transform duration-base ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none" />
-      </CollapsibleTrigger>
+    <Collapsible defaultOpen className="w-full max-w-md">
+      <CollapsibleTrigger>Advanced sandbox settings</CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="grid gap-2 pt-3" role="radiogroup" aria-label="Tunnel TLS mode">
-          <p className="text-body text-fg">Tunnel TLS mode</p>
-          <Label className="gap-2">
-            <input type="radio" name="tls" defaultChecked className="size-4 accent-[var(--ds-color-action-primary)]" />
-            Edge (default)
-          </Label>
-          <Label className="gap-2">
-            <input type="radio" name="tls" className="size-4 accent-[var(--ds-color-action-primary)]" />
-            Passthrough
-          </Label>
+        <div className="grid gap-2 pt-4 pl-6 text-body-sm leading-line-body-sm text-fg-secondary">
+          <p>Image: ubuntu-24.04 with Node 22</p>
+          <p>Size: 4 vCPU, 16 GiB</p>
+          <p>Idle timeout: 30 minutes</p>
         </div>
       </CollapsibleContent>
     </Collapsible>
   );
 }
 
-/** The console's collapsible section: a card with the field edge and 24px corners whose content opens at once. */
-export function Section() {
+const CHECKS = ["lint", "typecheck", "unit tests", "e2e: checkout"];
+
+export function WithButton() {
+  const [open, setOpen] = React.useState(false);
   return (
-    <Collapsible defaultOpen className="w-full max-w-122 rounded-dialog border border-line-field py-3 ps-3.5 pe-3">
-      <CollapsibleTrigger className="group flex w-full items-center gap-1.5 rounded-xs text-left text-body text-fg outline-none focus-visible:shadow-focus">
-        Allowed senders
-        <CaretDownIcon aria-hidden weight="bold" className="ms-auto size-4 shrink-0 transition-transform duration-base ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none" />
-      </CollapsibleTrigger>
-      <CollapsibleContent className="data-[state=closed]:animate-none data-[state=open]:animate-none">
-        <p className="pt-2 text-body text-fg-muted">Only these addresses can reach the agent. Everyone else is held for review.</p>
+    <Collapsible open={open} onOpenChange={setOpen} className="w-full max-w-md">
+      <div className="flex items-center justify-between gap-4 border-b border-line pb-3">
+        <span className="text-body-sm leading-line-body-sm font-medium text-fg">4 checks passed on #482</span>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" size="icon-sm" aria-label={open ? "Hide checks" : "Show checks"}>
+            <CaretUpDownIcon />
+          </Button>
+        </CollapsibleTrigger>
+      </div>
+      <CollapsibleContent>
+        <ul className="grid">
+          {CHECKS.map((check) => (
+            <li key={check} className="flex h-9 items-center justify-between border-b border-line text-body-sm leading-line-body-sm text-fg-secondary">
+              {check}
+              <span className="font-mono text-caption tracking-code text-fg-muted">passed</span>
+            </li>
+          ))}
+        </ul>
       </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+export function Disabled() {
+  return (
+    <Collapsible disabled>
+      <CollapsibleTrigger>Billing history (owners only)</CollapsibleTrigger>
+      <CollapsibleContent>Hidden</CollapsibleContent>
     </Collapsible>
   );
 }

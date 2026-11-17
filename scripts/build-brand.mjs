@@ -356,6 +356,10 @@ const motion = `@theme {
 	}
 }
 `;
+// Any token without a theme role (a shape's chamfer, a section's head space) is still exposed under its own name, so
+// every brand value can be read through the theme.
+const exposed = new Set(theme.flatMap((line) => [...line.matchAll(/var\((--ds-[\w-]+)\)/g)].map((m) => m[1])));
+for (const name of Object.keys(t)) if (!exposed.has(name)) theme.push(`\t--${name.slice(5)}: var(${name});`);
 const themeCss = `${header}@theme inline {\n${theme.join('\n')}\n}\n\n${motion}\n${interactions}`;
 // Every stylesheet the brand's fonts need: Google's (css) and any that next/font cannot load (always).
 const fontUrls = [...[brand.fonts.css].flat(), ...(brand.fonts.always ?? [])];

@@ -1,81 +1,27 @@
-import { ArrowRightIcon, EnvelopeIcon, GearIcon, KeyIcon, PencilSimpleIcon, PhoneIcon, RobotIcon, UsersThreeIcon } from "@phosphor-icons/react/ssr";
+import { CaretRightIcon, ChatsCircleIcon, CubeIcon, GithubLogoIcon, GitPullRequestIcon, LightningIcon, SlackLogoIcon, WarningIcon } from "@phosphor-icons/react/ssr";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemHeader, ItemMedia, ItemSeparator, ItemTitle } from "@/components/ui/item";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item";
 
-const EMAILS = [
-  { from: "Ray Liao", when: "Yesterday", subject: "Hoplite A2A: publish your Agent Card and connect by...", preview: "Hello @acme, This is Ray, cofounder of Hoplite. This update is written for you..." },
-  { from: "Ray Liao", when: "Jul 31", subject: "Agent-to-Agent on Hoplite: you can now delegate...", preview: "Hello @acme, This is Ray, cofounder of Hoplite. This week we took A2A across..." },
-  { from: "Ray Liao", when: "Jul 31", subject: "Agent-to-Agent on Hoplite: you can now delegate...", preview: "Hello @acme, This is Ray, cofounder of Hoplite. Two new capabilities, with exact..." },
+const NAV = [
+  { icon: ChatsCircleIcon, title: "Threads", body: "Run agents side by side and steer them" },
+  { icon: CubeIcon, title: "Sandboxes", body: "A fresh machine for every task" },
+  { icon: LightningIcon, title: "Automations", body: "Start work from alerts, issues and schedules" },
 ];
 
 export function Preview() {
   return (
-    <ItemGroup className="w-full max-w-96">
-      {EMAILS.map((email, i) => (
-        <div key={i}>
-          {i > 0 && <ItemSeparator />}
-          <Item asChild aria-current={i === 0 ? "true" : undefined}>
-            <a href="#email">
-              <ItemHeader>
-                <span className="text-fg">{email.from}</span>
-                <span className="text-fg-muted">{email.when}</span>
-              </ItemHeader>
-              <ItemContent>
-                <ItemTitle className="w-full truncate">{email.subject}</ItemTitle>
-                <ItemDescription className="line-clamp-1">{email.preview}</ItemDescription>
-              </ItemContent>
-            </a>
-          </Item>
-        </div>
-      ))}
-    </ItemGroup>
-  );
-}
-
-export function Events() {
-  return (
-    <ItemGroup className="w-full max-w-96">
-      {["message.sent", "message.delivered", "message.bounced"].map((event, i) => (
-        <div key={event}>
-          {i > 0 && <ItemSeparator />}
-          <Item asChild data-selected={i === 0}>
-            <button type="button" className="w-full text-left">
-              <ItemHeader className="justify-start">
-                <Badge variant="blue" size="sm">Email</Badge>
-                <ArrowRightIcon aria-hidden className="size-4.5 text-fg-muted" />
-              </ItemHeader>
-              <ItemContent>
-                <ItemTitle>{event}</ItemTitle>
-                <ItemDescription>0 configured destinations</ItemDescription>
-              </ItemContent>
-            </button>
-          </Item>
-        </div>
-      ))}
-    </ItemGroup>
-  );
-}
-
-export function Rail() {
-  const rows = [
-    { label: "Agent Workspace", icon: RobotIcon, current: true },
-    { label: "Manage Agents", icon: UsersThreeIcon },
-    { label: "API Keys", icon: KeyIcon },
-    { label: "Email", icon: EnvelopeIcon },
-    { label: "Phone", icon: PhoneIcon },
-  ];
-  return (
-    <ItemGroup className="w-full max-w-66 gap-0.5">
-      {rows.map(({ label, icon: Icon, current }) => (
-        <Item key={label} size="sm" asChild aria-current={current ? "page" : undefined}>
-          <a href={`#${label}`}>
+    <ItemGroup className="max-w-sm">
+      {NAV.map(({ icon: Icon, title, body }) => (
+        <Item key={title} asChild role="listitem">
+          <a href={`#${title.toLowerCase()}`}>
             <ItemMedia variant="icon">
-              <Icon weight="fill" />
+              <Icon />
             </ItemMedia>
             <ItemContent>
-              <ItemTitle>{label}</ItemTitle>
+              <ItemTitle>{title}</ItemTitle>
+              <ItemDescription>{body}</ItemDescription>
             </ItemContent>
           </a>
         </Item>
@@ -84,35 +30,60 @@ export function Rail() {
   );
 }
 
+const STACK = [
+  { icon: WarningIcon, title: "Starts from an alert", body: "A new Sentry issue starts a fix before anyone has opened it." },
+  { icon: GitPullRequestIcon, title: "Ships a pull request", body: "Tests pass before you look. Comment on it and the agent pushes the change." },
+  { icon: GithubLogoIcon, title: "Keeps issues current", body: "Each issue is linked to its run and moves along as the work lands." },
+  { icon: SlackLogoIcon, title: "Reports back in Slack", body: "The pull request lands in the thread your team already reads." },
+];
+
+export function Ruled() {
+  return (
+    <ItemGroup className="max-w-md">
+      {STACK.map(({ icon: Icon, title, body }) => (
+        <Item key={title} variant="ruled" role="listitem">
+          <ItemMedia variant="icon">
+            <Icon />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>{title}</ItemTitle>
+            <ItemDescription>{body}</ItemDescription>
+          </ItemContent>
+        </Item>
+      ))}
+    </ItemGroup>
+  );
+}
+
 export function Variants() {
   return (
-    <div className="grid w-full max-w-120 gap-3">
-      <Item variant="outline">
-        <ItemMedia variant="icon">
-          <EnvelopeIcon weight="fill" />
-        </ItemMedia>
+    <div className="grid max-w-md gap-4">
+      <Item variant="outline" asChild>
+        <a href="#subagents" className="flex-col items-start">
+          <Badge>New</Badge>
+          <ItemTitle>Steer running subagents from your phone</ItemTitle>
+        </a>
+      </Item>
+      <Item variant="muted">
         <ItemContent>
-          <ItemTitle>acme@inkboxmail.com</ItemTitle>
-          <ItemDescription>Created Jul 27, 2026</ItemDescription>
+          <ItemTitle>acme/storefront</ItemTitle>
+          <ItemDescription>Setup ran green · 3 threads running</ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button variant="ghost" size="icon" aria-label="Edit mailbox">
-            <PencilSimpleIcon weight="fill" />
+          <Button size="sm" variant="secondary">
+            Open
           </Button>
         </ItemActions>
       </Item>
-      <Item variant="muted" size="sm">
-        <ItemMedia variant="icon">
-          <GearIcon weight="fill" />
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle>Mailbox settings</ItemTitle>
-        </ItemContent>
-      </Item>
-      <Item size="xs">
-        <ItemContent>
-          <ItemTitle>Shared iMessage Line: Enabled</ItemTitle>
-        </ItemContent>
+      <Item size="sm" asChild>
+        <a href="#billing">
+          <ItemContent>
+            <ItemTitle>Billing and seats</ItemTitle>
+          </ItemContent>
+          <ItemActions>
+            <CaretRightIcon className="size-4 text-fg-muted" />
+          </ItemActions>
+        </a>
       </Item>
     </div>
   );

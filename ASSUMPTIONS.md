@@ -2,27 +2,32 @@
 
 Each is in force today; each names where it lives, so a change is one edit.
 
-1. Source. Values come from the Figma file "Hoplite (Copy) (Copy)", section "New" (node 427:2715), the console's
-   screens, measured on 2026-10-23. The Figma MCP stopped after 16 calls (Starter plan limit), so colors were sampled
-   from its 1x renders, type sizes and weights were fitted to its text layers' widths (Inter, no tracking), and sizes
-   and radii come from the layer geometry. Shared styles were read directly: Shadow/S, Line/S Bottom and the 4, 8, 12,
-   16 and 24 spacing variables. `brand/tokens.css`, `brand/elements.json`.
-2. Hoplite has one look, the console's, applied to every project (`"surfaces": ["site"]` is the engine's single-look
-   mode). There is no dark theme in the design. `brand/brand.json`.
-3. The muted purples (#998EA5 for table heads and dates, #9E94A9 for placeholders and descriptions) are the design's
-   own values and sit near 3:1 on white, under WCAG AA for small text. They are kept as measured; the guidance limits
-   them to secondary information. Darken `--ds-color-text-muted` and `--ds-color-text-subtle` to pass AA.
-4. Hover and focus states are not in the design. Hovers darken the lilac a step (#ECE9F0) or the purple a step
-   (#67568E); focus is a 2px purple outline on controls and a purple edge with a soft ring on fields.
-5. Components the design does not show (menus, popovers, tooltips, calendar, charts, carousel, toasts and others)
-   extend its patterns: white panels with Shadow/S and 8px corners, 14px Inter, lilac highlights, filled glyphs.
-   Each component's docs entry says what it is drawn from.
-6. Icons are Phosphor (the design uses another set): fill weight for the console's solid glyphs, regular for line
-   glyphs (chevrons, close, plus), duotone for copy.
-7. Keys, hosts and IDs are IBM Plex Mono; code blocks use the system monospace in the editor's light theme, as the
-   event catalog shows.
-8. Primitives come from Radix (`radix-ui`), `cmdk` and `sonner`; no shadcn code. Calendar, chart, carousel,
-   resizable, input OTP and the drawer are written by hand.
-9. The logo is the octopus mark and the wordmark from hoplite.sh (`brand/logo/`), recolored to the ink.
-10. Review passes at 7 on every score. `brand/brand.json`.
-11. The repo is public, so installs need no token. Make it private if the brand's files should not be public.
+1. Source. Values come from the Hoplite website as rendered at https://hoplite-website-fawn.vercel.app on 2026-11-17:
+   its stylesheet variables (--cream, --charcoal, --graphite, --slate, --ash, --stone, --orange, --line, --hex-shape,
+   --s-*, --t-*) and the computed styles of its pages. Its source is not in a repository we can read, so the
+   stylesheets are kept in `brand/reference/site-css/`. `brand/tokens.css`, `brand/site.css`, `brand/elements.json`.
+2. Hoplite has one look, the website's, applied to every project (`"surfaces": ["site"]`). The product UI shown in
+   the site's demos (Geist, 8 and 12px corners, white panels) is not a second surface: the library follows the
+   marketing system. Light is the default; the night theme follows `.dark` or `data-theme="dark"`. `brand/site.css`.
+3. Nothing is rounded except dots and a switch's track: frames, fields, panels and popups are square; actions, tags
+   and segmented controls are hexagons cut 12px (8px when 32px tall); avatars, bullets and radios are point-up
+   hexagons. The site has no fields, menus or dialogs of its own; those extend its lines and frames.
+4. Three typefaces, as on the site: Chakra Petch (light, regular) for display, Satoshi (light, regular, medium) for
+   text, Kode Mono for labels and code. This is one more than the earlier "two families" rule for the site; the live
+   site uses all three. Satoshi loads from Fontshare (its free license allows commercial use from their CDN; the
+   files are not shipped). `brand/brand.json`.
+5. The orange (#FF3616) is a mark and also the danger color (an error, a destructive action), because the site uses
+   one interface red. Success is the product's green (#299236); warning is a derived amber (#A15C00).
+6. Popups get a hairline ring and a long soft cast (`shadow-floating`) so they read over content; the site's own nav
+   sheet has only a rule under it. Dialogs sit on the ink at 32 percent.
+7. Press feedback is the pressed fill at once, with no scale: the engine rejects state changes that move geometry,
+   and the site does not scale its keys.
+8. The text link keeps the site's dashed rule that wipes in and marches under the pointer, but its arrow does not
+   nudge (icons never move on hover).
+9. Icons are Phosphor at regular weight (the site uses its own line glyphs); the site's Nucleo set is paid.
+10. Primitives come from Base UI (`@base-ui/react` 1.7.0), plus `cmdk` and `sonner`; no shadcn code. Calendar,
+    chart, carousel and resizable are written by hand.
+11. The logo is the horse lockup and app icon from the website (`brand/logo/`), in the ink.
+12. Review passes at 7 on every score. `brand/brand.json`.
+13. The repository should be private: it holds copies of the website's stylesheets. Apps then need a GitHub token to
+    install from `#release`.

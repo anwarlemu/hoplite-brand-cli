@@ -3,8 +3,8 @@ name: typography
 title: Typography
 type: ui
 surface: site
-description: "The console's type as components: regular titles, 14px body copy, muted lines, lists, quotes and inline keys."
-use_for: "Use for written content (docs, help panes, agent prompts). TypographyH3 is the 20px page or dialog title; TypographyP is body copy; TypographyMuted the line under a title; TypographyInlineCode a key, host or ID. Interfaces built from components rarely need these."
-never: [Bold titles, Letter spacing, Text sizes outside the scale, Purple body copy]
-source: "Figma 427:2715: page titles (Vault, Webhooks), dialog titles, the email body, inline hosts and keys"
+description: "The site's type: Chakra Petch light headings at 56, 44, 32 and 24px, an 18px light graphite lead, 16px body, the Kode Mono eyebrow, the flat orange accent word, dashed-rule quotes, hexagon-bulleted lists, Kode Mono inline code and a whole-article prose style."
+use_for: "Use the Typography parts for page and section headings, leads and articles outside a component. One accent word per headline at most. Use TypographyProse around rendered Markdown (a blog post, docs), TypographyEyebrow for the label above a heading."
+never: [Bold or semibold text, A fourth typeface, Sizes off the scale, Gradient or glowing accent words, Round list bullets]
+source: "The Hoplite website's .display, .heading, .lead, .bp-prose (h2, h3, blockquote, code, a) and .bp-list (.bp-list__mark)"
 ---

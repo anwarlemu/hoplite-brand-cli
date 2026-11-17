@@ -165,13 +165,13 @@
 	   (before:bg-primary, or before:bg-line-strong after:bg-surface). ds-hex-frame-s cuts the ends 8px deep. */
 	.ds-hex-frame,
 	.ds-hex-frame-s {
-		--ds-hex-cut: var(--ds-hex-chamfer);
+		--hex-cut: var(--ds-hex-chamfer);
 		position: relative;
 		isolation: isolate;
 	}
 
 	.ds-hex-frame-s {
-		--ds-hex-cut: var(--ds-hex-chamfer-s);
+		--hex-cut: var(--ds-hex-chamfer-s);
 	}
 
 	:is(.ds-hex-frame, .ds-hex-frame-s)::before,
@@ -181,7 +181,7 @@
 		inset: 0;
 		z-index: -1;
 		pointer-events: none;
-		clip-path: polygon(var(--ds-hex-cut) 0, calc(100% - var(--ds-hex-cut)) 0, 100% 50%, calc(100% - var(--ds-hex-cut)) 100%, var(--ds-hex-cut) 100%, 0 50%);
+		clip-path: polygon(var(--hex-cut) 0, calc(100% - var(--hex-cut)) 0, 100% 50%, calc(100% - var(--hex-cut)) 100%, var(--hex-cut) 100%, 0 50%);
 		transition: background-color var(--ds-duration-base) var(--ds-easing-out);
 	}
 

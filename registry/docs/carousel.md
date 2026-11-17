@@ -3,8 +3,9 @@ name: carousel
 title: Carousel
 type: ui
 surface: site
-description: "A row of slides that snap into place, with white round previous and next keys outside it."
-use_for: "Use to page through a set of similar cards when space is short (agent templates, integrations). Give each CarouselItem a basis for how many show at once. Leave room either side for the arrow keys, or place them yourself."
-never: [Autoplay, Dots as the only way to move, Slides of different heights in one row]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): white keys with Shadow/S"
+kinds: [button-secondary]
+description: "A row of slides that snap into place, with 32px outlined hexagon keys for previous and next outside the row and optional point-up hexagon marks for the slides, the current one ink. Native scroll, touch and arrow keys."
+use_for: "Use Carousel for a short set of peer items people browse one at a time (automation templates, plan highlights). Put each slide in CarouselItem (basis-1/2 for two at once), add CarouselPrevious and CarouselNext, and CarouselDots under the row when the count matters. Leave 48px of room at the sides for the keys."
+never: [Autoplay, Round arrow keys or round dots, Slides that fade or scale, Hiding content that people must see in a carousel]
+source: "Extrapolated from the Hoplite website: its outlined icon keys (.button--line) and hexagon bullets on a native snapping scroll"
 ---

@@ -1,55 +1,99 @@
-import { TypographyBlockquote, TypographyH1, TypographyH2, TypographyH3, TypographyH4, TypographyInlineCode, TypographyLarge, TypographyLead, TypographyList, TypographyMuted, TypographyP, TypographySmall, TypographyTable } from "@/components/ui/typography";
+import {
+  TypographyAccent,
+  TypographyBlockquote,
+  TypographyEyebrow,
+  TypographyH1,
+  TypographyH2,
+  TypographyH3,
+  TypographyH4,
+  TypographyInlineCode,
+  TypographyLead,
+  TypographyList,
+  TypographyMuted,
+  TypographyP,
+  TypographyProse,
+  TypographyTable,
+} from "@/components/ui/typography";
 
 export function Preview() {
   return (
-    <article className="w-full max-w-160">
-      <TypographyH3>Tunnel</TypographyH3>
-      <TypographyMuted>Stable hostname routing inbound traffic to @acme.</TypographyMuted>
+    <div className="grid max-w-3xl gap-6">
+      <TypographyEyebrow>Agents</TypographyEyebrow>
+      <TypographyH1>
+        A workstation for an army of <TypographyAccent>agents</TypographyAccent>
+      </TypographyH1>
+      <TypographyLead>Run coding agents side by side, each in its own sandbox, and merge what passes.</TypographyLead>
+    </div>
+  );
+}
+
+export function Headings() {
+  return (
+    <div className="grid gap-6">
+      <TypographyH1>Heading one, 56px</TypographyH1>
+      <TypographyH2>Heading two, 44px</TypographyH2>
+      <TypographyH3>Heading three, 32px</TypographyH3>
+      <TypographyH4>Heading four, 24px</TypographyH4>
+      <TypographyMuted>Updated Oct 28 by the platform team</TypographyMuted>
+    </div>
+  );
+}
+
+export function Text() {
+  return (
+    <div className="max-w-2xl">
       <TypographyP>
-        Each agent gets a public host such as <TypographyInlineCode>acme.inkboxwire.com</TypographyInlineCode>. Traffic reaches the agent wherever it runs, with TLS handled at the edge by default.
+        Each thread runs in a fresh sandbox with your repository checked out. Set the image with <TypographyInlineCode>hoplite.toml</TypographyInlineCode> and every agent starts from the same place.
       </TypographyP>
-      <TypographyBlockquote>Direct card URLs stay public whether or not you list in the directory. Listing only controls discovery.</TypographyBlockquote>
+      <TypographyBlockquote>Take the issue affecting the most users, reproduce it with a failing test, fix it, and open a pull request.</TypographyBlockquote>
       <TypographyList>
-        <li>Opt your card into the public directory with an admin key.</li>
-        <li>View the card Hoplite serves for you.</li>
-        <li>Find workers in the public directory.</li>
+        <li>A workspace with your repository connected</li>
+        <li>Setup that runs green in the sandbox</li>
+        <li>A Sentry project with alerts turned on</li>
+      </TypographyList>
+      <TypographyList ordered>
+        <li>Create the automation</li>
+        <li>Pick the trigger and the repository</li>
+        <li>Write the instructions the agent follows</li>
       </TypographyList>
       <TypographyTable>
         <thead>
           <tr>
-            <th>Field</th>
-            <th>Value</th>
+            <th>Plan</th>
+            <th>Sessions</th>
+            <th>Sandbox</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Handle</td>
-            <td>@test-agent-233</td>
+            <td>Free</td>
+            <td>5</td>
+            <td>2 vCPU, 8 GiB</td>
           </tr>
           <tr>
-            <td>Email</td>
-            <td>test-agent-233@inkboxmail.com</td>
+            <td>Team</td>
+            <td>20 per seat</td>
+            <td>8 vCPU, 32 GiB</td>
           </tr>
         </tbody>
       </TypographyTable>
-    </article>
+    </div>
   );
 }
 
-export function Scale() {
+export function Prose() {
   return (
-    <div className="grid w-full max-w-160 gap-3">
-      <TypographyH1>Agent Workspace</TypographyH1>
-      <TypographyH2>Create Your First Agent</TypographyH2>
-      <TypographyH3>Create Agent Identity</TypographyH3>
-      <TypographyH4>Email</TypographyH4>
-      <TypographyLead>Set up an identity to unlock mailbox, phone, and vault features.</TypographyLead>
-      <TypographyLarge>Your agent will be reachable at</TypographyLarge>
-      <TypographySmall>Shared lines are assigned when someone connects.</TypographySmall>
-      <TypographyList ordered>
-        <li>Create the agent.</li>
-        <li>Copy its API key.</li>
-      </TypographyList>
-    </div>
+    <TypographyProse className="max-w-2xl">
+      <p>Most alerts sit in a queue until someone has time. An automation can start the fix the moment the issue appears.</p>
+      <h2>Set up the trigger</h2>
+      <p>
+        Open Automations, choose <code>Sentry issue created</code>, and pick the repository the agent should work in. <a href="#docs">Read the setup guide</a> for the permissions it needs.
+      </p>
+      <blockquote>
+        <p>Look at unresolved issues that first appeared in the last hour. Skip anything already linked to an open pull request.</p>
+      </blockquote>
+      <h3>What the agent does</h3>
+      <p>It reproduces the issue with a failing test, fixes it, and opens a pull request only when <strong>every check passes</strong>.</p>
+    </TypographyProse>
   );
 }

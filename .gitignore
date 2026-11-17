@@ -8,3 +8,5 @@ registry.json
 .vercel
 .env*
 .claude/worktrees/
+.shots/
+scripts/.shot.mjs

@@ -1,92 +1,101 @@
 "use client";
 
 import * as React from "react";
-import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
+import { AlertDialog as BaseAlertDialog } from "@base-ui/react/alert-dialog";
 
-import { buttonVariants } from "@/components/ui/button";
+import { cn, slot } from "@/lib/utils";
 import { usePortalContainer } from "@/lib/surface";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-// A confirmation, drawn as the console's dialog (its BaseModal): a white panel with 16px corners and no shadow over the
-// blurred page under the ink at 32 percent, a 20px regular title and a 14px secondary line, 24px of padding, then the
-// actions 8px apart: the cancel as the lilac pill and the action as the purple pill (red for a destructive one), side by
-// side at the end, stacked full width on phones. Below 768px it fills the screen with square corners inside the safe
-// area, as the console's dialogs do. `size="sm"` is a 320px card with the title centered under an optional media tile
-// (AlertDialogMedia), on phones too. It has no close glyph: the person answers it. Opens from 96 percent with a fade
-// (120ms), centered; closes to 97 percent faster (100ms).
-function AlertDialog(props: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
-  return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
+// The dialog's panel for a decision that cannot be dismissed by a click outside: a square panel of the ground, 448px
+// wide (384px for `sm`) with 24px of air, a quiet hairline and a deep soft cast, centered over the ink at 32 percent.
+// The title is Chakra Petch light at 20px, the description 14px graphite. The footer ends in two hexagon keys: Cancel
+// outlined, the action in ink, or in the orange when it destroys something. An optional media mark above the title is
+// a 40px point-up hexagon of the hover wash holding a 20px glyph. It opens in place from 0.96 with a fade in 200ms on
+// the strong ease-out and leaves in 120ms; with reduced motion it only fades.
+const OVERLAY =
+  "fixed inset-0 z-50 bg-scrim transition-opacity duration-moderate ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-fast motion-reduce:transition-none";
+
+const POPUP =
+  "relative flex w-full max-w-md flex-col gap-6 bg-surface p-6 text-fg shadow-dialog outline-none transition-[opacity,scale] duration-moderate ease-out data-starting-style:scale-96 data-starting-style:opacity-0 data-ending-style:scale-96 data-ending-style:opacity-0 data-ending-style:duration-fast data-[size=sm]:max-w-sm motion-reduce:transition-opacity";
+
+/** A trigger renders a native button unless its `render` (or asChild child) is another tag. */
+function isNativeButton(render: unknown) {
+  return !React.isValidElement(render) || typeof render.type !== "string" || render.type === "button";
 }
 
-function AlertDialogTrigger(props: React.ComponentProps<typeof AlertDialogPrimitive.Trigger>) {
-  return <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />;
+type AlertDialogProps = Omit<React.ComponentProps<typeof BaseAlertDialog.Root>, "onOpenChange"> & { onOpenChange?: (open: boolean) => void };
+
+function AlertDialog({ onOpenChange, ...props }: AlertDialogProps) {
+  return <BaseAlertDialog.Root data-slot="alert-dialog" onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined} {...props} />;
 }
 
-function AlertDialogPortal(props: React.ComponentProps<typeof AlertDialogPrimitive.Portal>) {
-  const container = usePortalContainer();
-  return <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" container={container} {...props} />;
-}
-
-function AlertDialogOverlay({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
+function AlertDialogTrigger({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseAlertDialog.Trigger> & { asChild?: boolean }) {
+  const parts = slot(asChild, children, render);
   return (
-    <AlertDialogPrimitive.Overlay
-      data-slot="alert-dialog-overlay"
-      className={cn("fixed inset-0 z-50 bg-scrim backdrop-blur-[var(--ds-blur-scrim)] data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in", className)}
-      {...props}
-    />
+    <BaseAlertDialog.Trigger data-slot="alert-dialog-trigger" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>
+      {parts.children}
+    </BaseAlertDialog.Trigger>
   );
 }
 
-function AlertDialogContent({ className, size = "default", ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Content> & { size?: "default" | "sm" }) {
+function AlertDialogPortal(props: React.ComponentProps<typeof BaseAlertDialog.Portal>) {
+  const container = usePortalContainer();
+  return <BaseAlertDialog.Portal data-slot="alert-dialog-portal" container={container} {...props} />;
+}
+
+function AlertDialogOverlay({ className, ...props }: Omit<React.ComponentProps<typeof BaseAlertDialog.Backdrop>, "className"> & { className?: string }) {
+  return <BaseAlertDialog.Backdrop data-slot="alert-dialog-overlay" className={cn(OVERLAY, className)} {...props} />;
+}
+
+function AlertDialogContent({ className, size = "default", ...props }: Omit<React.ComponentProps<typeof BaseAlertDialog.Popup>, "className"> & { className?: string; size?: "default" | "sm" }) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
-      <AlertDialogPrimitive.Content
-        data-slot="alert-dialog-content"
-        data-size={size}
-        className={cn(
-          "group/alert-dialog fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 overflow-y-auto rounded-panel bg-surface p-6 text-fg outline-none data-[size=default]:max-w-112 data-[size=sm]:max-w-80 data-[state=closed]:animate-dialog-out data-[state=open]:animate-dialog-in max-md:data-[size=default]:top-0 max-md:data-[size=default]:left-0 max-md:data-[size=default]:translate-x-0 max-md:data-[size=default]:translate-y-0 max-md:data-[size=default]:h-dvh max-md:data-[size=default]:max-h-dvh max-md:data-[size=default]:w-full max-md:data-[size=default]:max-w-none max-md:data-[size=default]:content-start max-md:data-[size=default]:rounded-none max-md:data-[size=default]:px-[calc(env(safe-area-inset-left,0px)+16px)] max-md:data-[size=default]:pt-[calc(env(safe-area-inset-top,0px)+20px)] max-md:data-[size=default]:pb-[calc(env(safe-area-inset-bottom,0px)+24px)]",
-          className,
-        )}
-        {...props}
-      />
+      <BaseAlertDialog.Viewport data-slot="alert-dialog-viewport" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 sm:p-6">
+        <BaseAlertDialog.Popup data-slot="alert-dialog-content" data-size={size} className={cn(POPUP, className)} {...props} />
+      </BaseAlertDialog.Viewport>
     </AlertDialogPortal>
   );
 }
 
 function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="alert-dialog-header" className={cn("grid gap-1.5 group-data-[size=sm]/alert-dialog:justify-items-center group-data-[size=sm]/alert-dialog:text-center", className)} {...props} />;
+  return <div data-slot="alert-dialog-header" className={cn("flex flex-col gap-2", className)} {...props} />;
 }
 
 function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="alert-dialog-footer" className={cn("flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end", className)} {...props} />;
+}
+
+function AlertDialogMedia({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="alert-dialog-media" className={cn("ds-hex-mark mb-2 flex size-10 shrink-0 items-center justify-center bg-subtle-hover text-fg [&_svg:not([class*='size-'])]:size-5", className)} {...props} />;
+}
+
+function AlertDialogTitle({ className, ...props }: Omit<React.ComponentProps<typeof BaseAlertDialog.Title>, "className"> & { className?: string }) {
+  return <BaseAlertDialog.Title data-slot="alert-dialog-title" className={cn("font-display text-h5 leading-title font-light text-balance text-fg", className)} {...props} />;
+}
+
+function AlertDialogDescription({ className, ...props }: Omit<React.ComponentProps<typeof BaseAlertDialog.Description>, "className"> & { className?: string }) {
+  return <BaseAlertDialog.Description data-slot="alert-dialog-description" className={cn("text-body-sm leading-line-body-sm text-pretty text-fg-secondary", className)} {...props} />;
+}
+
+type KeyProps = Omit<React.ComponentProps<typeof Button>, "variant"> & { variant?: "default" | "destructive" };
+
+/** The decision: an ink hexagon (or orange, for destructive) that closes the dialog after its own onClick runs. */
+function AlertDialogAction({ variant = "default", children, ...props }: KeyProps) {
   return (
-    <div
-      data-slot="alert-dialog-footer"
-      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end group-data-[size=sm]/alert-dialog:grid group-data-[size=sm]/alert-dialog:grid-cols-2 group-data-[size=sm]/alert-dialog:[&>*]:w-full", className)}
-      {...props}
-    />
+    <BaseAlertDialog.Close data-slot="alert-dialog-action" render={<Button variant={variant} {...props} />}>
+      {children}
+    </BaseAlertDialog.Close>
   );
 }
 
-/** A 48px tile above the title (the console's pink channel tile): put a filled glyph inside. */
-function AlertDialogMedia({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="alert-dialog-media" className={cn("mb-1.5 inline-flex size-12 items-center justify-center rounded-pill bg-pink text-rose [&_svg:not([class*='size-'])]:size-7", className)} {...props} />;
-}
-
-function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
-  return <AlertDialogPrimitive.Title data-slot="alert-dialog-title" className={cn("font-sans text-h3 leading-heading font-normal text-fg", className)} {...props} />;
-}
-
-function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
-  return <AlertDialogPrimitive.Description data-slot="alert-dialog-description" className={cn("text-body leading-body text-fg-secondary", className)} {...props} />;
-}
-
-function AlertDialogAction({ className, variant = "default", ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action> & { variant?: "default" | "destructive" }) {
-  return <AlertDialogPrimitive.Action data-slot="alert-dialog-action" className={cn(buttonVariants({ variant }), className)} {...props} />;
-}
-
-function AlertDialogCancel({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
-  return <AlertDialogPrimitive.Cancel data-slot="alert-dialog-cancel" className={cn(buttonVariants({ variant: "secondary" }), className)} {...props} />;
+function AlertDialogCancel({ children, ...props }: Omit<React.ComponentProps<typeof Button>, "variant">) {
+  return (
+    <BaseAlertDialog.Close data-slot="alert-dialog-cancel" render={<Button variant="outline" {...props} />}>
+      {children}
+    </BaseAlertDialog.Close>
+  );
 }
 
 export {

@@ -1,6 +1,6 @@
 # Review rubric
 
-Score a restyled screen against the reference screenshots (the console's own screens) and the principles. The screen
+Score a restyled screen against the reference screenshots (the Hoplite website's own pages) and the principles. The screen
 keeps its own copy, elements and purpose; judge only how it looks and how usable it is. Scores 0 to 10: 7 is
 shippable, 9 matches the reference in quality, 5 is generic. Be consistent: the same screen with the same problems
 gets the same scores. When a previous punch list is given, check each item first and say whether it is fixed.
@@ -13,20 +13,22 @@ image or effect lost. Colors and type are expected to change; sizes, proportions
 break as a blocker naming the element.
 
 ## Purpose (score: hierarchy)
-Say in one line what the screen is for. Its main action is the most prominent thing (one purple pill), its key
+Say in one line what the screen is for. Its main action is the most prominent thing (one ink hexagon), its key
 information is easy to find and scan, and the restyle did not bury, flatten or reorder anything.
 
 ## One system (score: coherence)
-Every section uses the same few parts: the same pills and keys, fields, lilac wells, Shadow/S panels, pill controls, 12px panel corners,
-spacing rhythm and type scale. Nothing left from the old look: an old accent color or font, black text, a dark panel,
-square main actions, heavy shadows, gray smudges where an old shadow or fade was converted.
+Every section uses the same few parts: the same hexagonal keys, square fields, ruled lists, line frames with corner
+ticks, square popups, spacing rhythm (4px steps) and type scale. Nothing left from the old look: an old accent color or
+font, pure black or white panels, rounded corners, pill or square buttons, drop shadows on cards, gray smudges where an
+old shadow or fade was converted.
 
 ## Reads as Hoplite (score: brand_voice)
-Compared side by side with the reference, does it look like the same product? White pages and a lilac rail or wells;
-deep purple ink and muted purple secondary text; Inter at 14px with 20px regular titles; a purple pill for the main
-action; 40px fields with the lilac-gray edge; tables as a lilac head, a white Shadow/S body and a lilac foot; filled
-glyphs; the pink accent used sparingly. Too little reads as a generic white page (5 at most). Too much is as wrong
-(5 at most): purple everywhere, pink as a main color, gradients, bold titles, octopus art on every screen.
+Compared side by side with the reference, does it look like the same product? The warm gray ground (#F2F2F0) and
+near-black ink with gray steps for quieter text; Chakra Petch light headings, Satoshi text, Kode Mono capital labels;
+an ink hexagon for the main action and outlined hexagons beside it; square frames and fields drawn with lines from the
+ink; ruled tables and lists; the orange used only as a mark. Too little reads as a generic gray page (5 at most). Too
+much is as wrong (5 at most): orange fills, hexagons on everything including frames, corner ticks on every box, bold
+titles, gradients or glows.
 
 ## Common UX errors (score: detail_quality)
 Flag each as a blocker or major:
@@ -46,5 +48,5 @@ must use the same interaction treatment and size variant. Audit debounce/timeout
 remove nonessential input latency. Reduced motion must disable animations. Static screenshots cannot prove timing.
 
 ## Accessibility (score: accessibility)
-Primary copy at least 4.5:1 (the ink and the action purple pass); the muted purples are allowed only for secondary
-information. Touch targets at least 44px on phones. Visible focus. States not told apart by color alone.
+Primary copy at least 4.5:1 (the ink and the graphite pass); the quiet gray (#626261) passes for notes; the slate is for
+placeholders and decoration only. Touch targets at least 44px on phones. Visible focus. States not told apart by color alone.

@@ -1,4 +1,4 @@
-import { BellRingingIcon, CheckCircleIcon, EnvelopeIcon, LightningIcon, PhoneIcon, PlugsIcon } from "@phosphor-icons/react/ssr";
+import { CheckIcon, DotsThreeIcon } from "@phosphor-icons/react/ssr";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,105 +6,98 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 
 export function Preview() {
   return (
-    <div className="grid w-full gap-6 sm:grid-cols-3">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <LightningIcon weight="fill" />
-            Trigger
-          </CardTitle>
-          <CardDescription>Triggered after an inbound email is accepted and persisted to the mailbox.</CardDescription>
-        </CardHeader>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <BellRingingIcon weight="fill" />
-            Delivery
-          </CardTitle>
-          <CardDescription>Fire-and-forget POST. Delivery failures are logged and do not block mail processing.</CardDescription>
-        </CardHeader>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <PlugsIcon weight="fill" />
-            Response contract
-          </CardTitle>
-          <CardDescription>Any response body is ignored.</CardDescription>
-        </CardHeader>
-      </Card>
-    </div>
-  );
-}
-
-function Tile({ children }: { children: React.ReactNode }) {
-  return <span className="flex size-7 shrink-0 items-center justify-center rounded-pill bg-pink text-rose">{children}</span>;
-}
-
-export function Channel() {
-  return (
-    <div className="grid w-full max-w-122 gap-2">
-      <Card variant="muted">
-        <CardHeader className="items-center">
-          <CardTitle className="gap-2.5">
-            <Tile>
-              <EnvelopeIcon weight="fill" className="size-5.5" />
-            </Tile>
-            Email
-          </CardTitle>
-          <CardAction className="self-center">
-            <Badge variant="success" size="lg">
-              <CheckCircleIcon weight="fill" />
-              Included
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <p className="flex h-10 items-center rounded-pill border border-line-field bg-subtle px-3.5 text-body text-fg-muted">acme-support@inboxmail.com</p>
-        </CardContent>
-      </Card>
-      <Card variant="muted">
-        <CardHeader className="items-center">
-          <CardTitle className="gap-2.5">
-            <Tile>
-              <PhoneIcon weight="fill" className="size-5.5" />
-            </Tile>
-            Phone Number
-          </CardTitle>
-        </CardHeader>
-      </Card>
-    </div>
-  );
-}
-
-export function WithFooter() {
-  return (
-    <Card variant="raised" className="w-full max-w-100">
+    <Card className="max-w-sm">
       <CardHeader>
-        <CardTitle className="text-body-lg">Custom domain</CardTitle>
-        <CardDescription>Send and receive as you@yourcompany.com. Add the DNS records, then verify.</CardDescription>
+        <CardTitle>Team</CardTitle>
+        <CardDescription>For teams shipping with agents every day. Shared threads, seats and automations.</CardDescription>
         <CardAction>
-          <Button variant="ghost" size="sm">Docs</Button>
+          <Badge variant="accent">Most popular</Badge>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <p className="font-mono text-body text-fg">mail.yourcompany.com</p>
+      <CardContent className="grid gap-1">
+        <span className="font-display text-h2 leading-heading font-light text-fg">$20</span>
+        <span className="text-body-sm leading-line-body-sm font-normal text-fg-muted">per seat a month</span>
       </CardContent>
-      <CardFooter className="justify-end">
-        <Button variant="outline">Verify domain</Button>
+      <CardFooter>
+        <Button className="w-full">Start team</Button>
       </CardFooter>
     </Card>
   );
 }
 
+const FEATURES = ["20 concurrent cloud sessions", "Sandboxes up to 8 vCPU, 32 GiB", "Unlimited projects"];
+
+export function Variants() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Free</CardTitle>
+          <CardDescription>Run agents yourself, with a monthly usage allowance.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="grid gap-3 border-t border-line pt-6">
+            {FEATURES.map((feature) => (
+              <li key={feature} className="flex items-center gap-3 text-body-sm leading-line-body-sm font-normal text-fg">
+                <CheckIcon className="size-4 text-fg-muted" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+      <Card variant="corners">
+        <CardHeader>
+          <CardTitle>Every agent in one place</CardTitle>
+          <CardDescription>Watch threads run side by side, step in when one needs you, and merge when checks pass.</CardDescription>
+        </CardHeader>
+        <div className="grid aspect-4/3 w-full place-items-center border border-line">
+          <span className="ds-label">Product art</span>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
 export function Small() {
   return (
-    <Card size="sm" className="w-full max-w-72">
+    <Card size="sm" className="max-w-sm">
       <CardHeader>
-        <CardTitle>Last connected</CardTitle>
-        <CardDescription>Aug 8, 2026, 07:16 PM</CardDescription>
+        <CardTitle>Nightly dependency bump</CardTitle>
+        <CardDescription>Automation · runs at 02:00 on acme/storefront</CardDescription>
+        <CardAction>
+          <Button variant="ghost" size="icon-sm" aria-label="More">
+            <DotsThreeIcon />
+          </Button>
+        </CardAction>
       </CardHeader>
+      <CardFooter>
+        <Button size="sm" variant="outline">
+          Run now
+        </Button>
+        <Button size="sm" variant="ghost">
+          Edit
+        </Button>
+      </CardFooter>
     </Card>
+  );
+}
+
+export function Ruled() {
+  return (
+    <div className="grid gap-8 md:grid-cols-3">
+      {[
+        ["Parallel threads", "Start as many agents as the work needs, each in its own sandbox."],
+        ["Checks first", "Nothing reaches review until tests pass in the sandbox."],
+        ["Yours to steer", "Message a running agent from the desktop or your phone."],
+      ].map(([title, body]) => (
+        <Card key={title} variant="ruled" size="sm">
+          <CardHeader>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>{body}</CardDescription>
+          </CardHeader>
+        </Card>
+      ))}
+    </div>
   );
 }

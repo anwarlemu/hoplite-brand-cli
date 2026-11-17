@@ -3,8 +3,8 @@ name: tabs
 title: Tabs
 type: ui
 surface: site
-description: "A lilac track of 13px regular labels; a white key with Shadow/S slides under the selected tab."
-use_for: "Use to switch between views of the same thing on a page (Mailboxes, Contact rules, Custom domains). The track is as wide as its tabs and wraps when it runs out of room. Pass full to TabsList for two equal choices that fill a form's width (Login, Sign up)."
-never: [Underlined tabs, A purple selected tab, Bold or medium tab labels, A key that animates on first paint or on resize]
-source: "Console src/components/ui/tabs.tsx and the Tabs theme (segmented, the sliding key)"
+description: "Segmented choices: an outlined hexagon holding 32px tabs, the chosen one a filled ink hexagon that slides to it (the pricing period switch), or joined square boxes with the chosen one filled ink (the changelog filter)."
+use_for: "Use Tabs to switch between views of the same content (Monthly and Yearly prices, Desktop and Phone previews). Use the default variant for two to four short choices and variant=\"boxed\" for a filter row (All, Features, Fixes). Put each view in TabsContent; controlled tabs take value and onValueChange."
+never: [Underlined tabs, A rounded track, More than one chosen tab, Panels that slide or fade in]
+source: "The Hoplite website's pricing period switch (.pr-period: Monthly, Yearly, save 17%) and changelog filter (.cl-filter)"
 ---

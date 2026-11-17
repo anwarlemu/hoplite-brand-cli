@@ -47,8 +47,7 @@ npx hoplite-ds guide
 
 `init` does not convert existing components. The bare command does; see "Update an existing interface" below.
 
-`init` and `add` install what the library's components need: brand tokens, the Tailwind theme, fonts and the
-provider they render in. The components render fully styled (the brand font and type inside them), and the app's
+`init` and `add` install what the library's components need: brand tokens, the Tailwind theme and fonts. The components render fully styled (the brand font and type inside them), and the app's
 existing pages keep their look. The base layer (the page's type, colors, headings, links and focus on every element)
 comes only with a decision to brand the whole app: `apply` with no targets, `create`, or `init` in an app with no
 pages yet. An app set up with the base layer keeps it on every later `add` or selection.
@@ -151,7 +150,7 @@ be a route, a file, or, in an app that routes without a router, its page compone
 library component also restyles a component the app built on its own cva (shadcn's `button.tsx`), in its own file.
 
 Nothing outside the selection changes apart from the shared setup (brand tokens, theme and fonts, without the base
-layer, and the provider the library's components render in): pages outside it render as before. A name that matches
+layer): pages outside it render as before. A name that matches
 nothing stops the run with the closest names. The selection is recorded in `.ds/state.json`: `apply --redo` repeats
 it, a later `apply <more>` adds to it, and a bare `apply` takes the whole app. The checks, hooks and pre-commit
 enforce the brand only inside the selection; `check --all` checks every file.

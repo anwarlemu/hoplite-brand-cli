@@ -47,13 +47,13 @@ export function FramePreview({ src, label }: { src: string; label: string }) {
               <TabsTrigger value="phone">Phone</TabsTrigger>
             </TabsList>
           </Tabs>
-          <a href={src} target="_blank" rel="noreferrer" aria-label={`Open ${label} alone`} className="inline-flex size-8 items-center justify-center rounded-pill text-icon-secondary outline-none transition-colors duration-150 ease-out hover:bg-subtle hover:text-fg focus-visible:outline-2 focus-visible:outline-focus-ring motion-reduce:transition-none">
-            <ArrowSquareOutIcon className="size-5" />
+          <a href={src} target="_blank" rel="noreferrer" aria-label={`Open ${label} alone`} className="ds-hex-frame-s inline-flex size-8 items-center justify-center text-fg-muted transition-colors duration-base ease-out hover:text-fg hover:before:bg-subtle-hover focus-visible:outline-2 focus-visible:outline-focus-ring motion-reduce:transition-none">
+            <ArrowSquareOutIcon className="size-4" />
           </a>
         </div>
       }
     >
-      <div className={cn("flex justify-center", device === "phone" && "bg-subtle")}>
+      <div className={cn("flex justify-center", device === "phone" && "bg-subtle-hover")}>
         <MeasuredFrame key={device} src={src} label={label} width={device === "phone" ? PHONE : "100%"} height={height} onHeightChange={setHeight} />
       </div>
     </PreviewPanel>

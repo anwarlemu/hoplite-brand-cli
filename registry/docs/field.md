@@ -3,8 +3,9 @@ name: field
 title: Field
 type: ui
 surface: site
-description: "A field's label 4px above its control, a 14px muted description 8px under it and a 12px red error 4px under it; fields 12px apart, with the 'or' between two hairlines."
-use_for: "Wrap every form control in Field with a FieldLabel above it; add FieldDescription for a hint (Enter a vault key or generate a random one) and FieldError, with data-invalid on the Field and aria-invalid on the control, when the value is rejected. Group fields in FieldGroup, related choices in FieldSet with a FieldLegend. Put an action beside the label (Forgot password?) in a row with justify-between. Use orientation horizontal for a label beside its control, and FieldSeparator with \"or\" between a form and other ways in."
-never: [A red label on an invalid field, A placeholder as the only label, Errors larger than 12px, Fields closer than 12px]
-source: "Figma 427:2715: Login (Email address, Password, Forgot password?, or), Vault (Vault key and its description), Create Agent Identity (is not available, Will be displayed as)"
+kinds: [input]
+description: "Form layout on Base UI's Field and Fieldset: a 14px medium label 8px above the control, 14px quiet help and 14px orange errors below, fields 24px apart, Chakra Petch 20px set legends, choice cards framed in the quiet rule that turn ink when chosen, and an \"or\" between two quiet rules."
+use_for: "Wrap every form control in a Field with a FieldLabel, an optional FieldDescription and a FieldError; group fields in FieldGroup and related choices in FieldSet with a FieldLegend. Use orientation=\"horizontal\" for a check, radio or switch beside its label, FieldContent with FieldTitle and FieldDescription for a setting row, and a FieldLabel wrapping a Field for a choice card. Pass invalid (or data-invalid) to mark the control and show the error."
+never: [Errors in any color but the orange, An orange label, Boxed or shaded field groups, Rounded choice cards, Help text above the control]
+source: "Extrapolated from the Hoplite website: its 14px type, the quiet and 32 percent lines (--line-quiet, --line-margin), its Chakra Petch group heads (.pr-table) and the principles for fields"
 ---

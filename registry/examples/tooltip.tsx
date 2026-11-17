@@ -1,53 +1,63 @@
-import { ArrowsClockwiseIcon, GearSixIcon, InfoIcon, PencilSimpleIcon } from "@phosphor-icons/react/ssr";
+"use client";
+
+import { ArchiveIcon, GitBranchIcon, PlusIcon, ShareNetworkIcon, TerminalWindowIcon } from "@phosphor-icons/react/ssr";
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function Preview() {
   return (
+    <Tooltip>
+      <TooltipTrigger render={<Button variant="outline" size="icon" aria-label="New thread" />}>
+        <PlusIcon />
+      </TooltipTrigger>
+      <TooltipContent>New thread</TooltipContent>
+    </Tooltip>
+  );
+}
+
+export function Open() {
+  return (
+    <div className="flex min-h-32 items-end justify-center">
+      <Tooltip defaultOpen>
+        <TooltipTrigger render={<Button variant="outline" size="icon" aria-label="Open in terminal" />}>
+          <TerminalWindowIcon />
+        </TooltipTrigger>
+        <TooltipContent>Open in terminal</TooltipContent>
+      </Tooltip>
+    </div>
+  );
+}
+
+const TOOLS = [
+  { label: "Open in terminal", icon: TerminalWindowIcon },
+  { label: "Branch from here", icon: GitBranchIcon },
+  { label: "Share thread", icon: ShareNetworkIcon },
+  { label: "Archive", icon: ArchiveIcon },
+];
+
+export function Toolbar() {
+  return (
     <TooltipProvider>
-      <div className="flex items-center gap-1">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Edit mailbox">
-              <PencilSimpleIcon weight="fill" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Edit mailbox</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Refresh">
-              <ArrowsClockwiseIcon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Refresh</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Mailbox settings">
-              <GearSixIcon weight="fill" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Mailbox settings</TooltipContent>
-        </Tooltip>
+      <div className="flex w-fit items-center gap-1 border border-line p-1">
+        {TOOLS.map(({ label, icon: Icon }) => (
+          <Tooltip key={label}>
+            <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label={label} />}>
+              <Icon />
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{label}</TooltipContent>
+          </Tooltip>
+        ))}
       </div>
     </TooltipProvider>
   );
 }
 
-export function Info() {
+export function Long() {
   return (
-    <div className="flex min-h-40 items-start justify-center pt-14">
-      <p className="flex items-center gap-1.5 text-body text-fg">
-        Tunnel TLS mode
-        <Tooltip defaultOpen>
-          <TooltipTrigger className="rounded-pill text-fg-label outline-none focus-visible:outline-2 focus-visible:outline-focus-ring" aria-label="About TLS modes">
-            <InfoIcon weight="fill" className="size-4.5" />
-          </TooltipTrigger>
-          <TooltipContent side="top">Edge ends TLS at Hoplite. Passthrough sends it to your agent.</TooltipContent>
-        </Tooltip>
-      </p>
-    </div>
+    <Tooltip>
+      <TooltipTrigger render={<Button variant="link" />}>Why is this check queued?</TooltipTrigger>
+      <TooltipContent>Your plan runs two sandboxes at once. This check starts when the end-to-end run on acme-web finishes.</TooltipContent>
+    </Tooltip>
   );
 }

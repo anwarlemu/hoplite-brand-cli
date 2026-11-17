@@ -1,41 +1,49 @@
-import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select";
 
 export function Preview() {
   return (
-    <div className="grid w-full max-w-114.5 gap-1">
-      <Label htmlFor="state">Phone number state</Label>
-      <NativeSelect id="state" defaultValue="any" className="w-full">
-        <NativeSelectOption value="any">Any State</NativeSelectOption>
-        <NativeSelectOptGroup label="West">
-          <NativeSelectOption value="ca">California</NativeSelectOption>
-          <NativeSelectOption value="or">Oregon</NativeSelectOption>
-          <NativeSelectOption value="wa">Washington</NativeSelectOption>
-        </NativeSelectOptGroup>
-        <NativeSelectOptGroup label="East">
-          <NativeSelectOption value="ny">New York</NativeSelectOption>
-          <NativeSelectOption value="ma">Massachusetts</NativeSelectOption>
-        </NativeSelectOptGroup>
+    <div className="grid w-full max-w-xs gap-2">
+      <label htmlFor="native-size" className="font-sans text-body-sm font-medium text-fg">
+        Sandbox size
+      </label>
+      <NativeSelect id="native-size" defaultValue="standard" className="w-full">
+        <NativeSelectOption value="small">Small, 1 vCPU, 4 GiB</NativeSelectOption>
+        <NativeSelectOption value="standard">Standard, 2 vCPU, 8 GiB</NativeSelectOption>
+        <NativeSelectOption value="large">Large, 8 vCPU, 32 GiB</NativeSelectOption>
       </NativeSelect>
     </div>
+  );
+}
+
+export function Groups() {
+  return (
+    <NativeSelect defaultValue="sonnet" aria-label="Model">
+      <NativeSelectOptGroup label="Fast">
+        <NativeSelectOption value="haiku">Haiku</NativeSelectOption>
+      </NativeSelectOptGroup>
+      <NativeSelectOptGroup label="Balanced">
+        <NativeSelectOption value="sonnet">Sonnet</NativeSelectOption>
+      </NativeSelectOptGroup>
+      <NativeSelectOptGroup label="Deep">
+        <NativeSelectOption value="opus">Opus</NativeSelectOption>
+      </NativeSelectOptGroup>
+    </NativeSelect>
   );
 }
 
 export function States() {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <NativeSelect aria-label="Line" size="sm" defaultValue="shared">
-        <NativeSelectOption value="shared">Shared</NativeSelectOption>
-        <NativeSelectOption value="dedicated">Dedicated</NativeSelectOption>
+      <NativeSelect size="sm" defaultValue="main" aria-label="Base branch">
+        <NativeSelectOption value="main">main</NativeSelectOption>
+        <NativeSelectOption value="develop">develop</NativeSelectOption>
       </NativeSelect>
-      <NativeSelect aria-label="Disabled" disabled defaultValue="shared">
-        <NativeSelectOption value="shared">Shared</NativeSelectOption>
+      <NativeSelect aria-invalid defaultValue="" aria-label="Region">
+        <NativeSelectOption value="">Choose a region</NativeSelectOption>
+        <NativeSelectOption value="us">US East</NativeSelectOption>
       </NativeSelect>
-      <NativeSelect aria-label="Invalid" aria-invalid defaultValue="">
-        <NativeSelectOption value="" disabled>
-          Choose a mode
-        </NativeSelectOption>
-        <NativeSelectOption value="edge">Edge</NativeSelectOption>
+      <NativeSelect disabled defaultValue="team" aria-label="Plan">
+        <NativeSelectOption value="team">Team plan</NativeSelectOption>
       </NativeSelect>
     </div>
   );

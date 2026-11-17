@@ -70,7 +70,7 @@ confident, with one orange mark where something matters.
 
 - Rare things may be generous; things that happen tens of times a day are subtle; things that happen a hundred times
   a day (keyboard shortcuts, the command palette) do not animate.
-- Feedback lands on pointer-down: a key fills and presses in to 0.97 the instant it is pressed.
+- Feedback lands on pointer-down: a key takes its pressed fill the instant it is pressed. State changes never move or resize anything (no press scale, no bolder label): color, fill and edge only.
 - One treatment per family: every key hovers the same way, every row the same way, every popup opens the same way.
 - Colors and fills change in 120 to 160ms; popups open in 240ms on the strong ease-out and leave in 200ms; frames that
   slide use the dock curve; a hexagon turns in 240ms. Never ease-in, never `transition: all`, nothing from scale(0).

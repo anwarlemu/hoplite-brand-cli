@@ -105,7 +105,7 @@ export function classify(tag: string, classes: string, attrs: string, surface: S
 	const ownEdge = /(^|\s)!?border(?=\s|$|-(?!0\b|none\b|transparent\b))/.test(classes);
 	const site = brand().variants.site;
 	const unfilled = item === 'button' && utilities && !ownFill ? (ownEdge ? site.outlined : site.quiet ?? site.outlined) : undefined;
-	const selected = variant ? aliases[variant] ?? variant : item === 'button' ? unfilled ?? (kind === 'button-secondary' ? 'outline' : kind === 'header-action' ? 'soft' : 'default') : component === 'badge' ? 'default' : 'blue';
+	const selected = variant ? aliases[variant] ?? variant : item === 'button' ? unfilled ?? (kind === 'button-secondary' ? 'outline' : kind === 'header-action' ? site.filled : 'default') : component === 'badge' ? 'default' : 'blue';
 	return { kind, item, variant: selected, explicit: !!variant };
 }
 

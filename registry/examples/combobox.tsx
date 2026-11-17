@@ -1,193 +1,160 @@
 "use client";
 
 import * as React from "react";
-import { PlusIcon, RobotIcon } from "@phosphor-icons/react/ssr";
+import { GitBranchIcon, RobotIcon } from "@phosphor-icons/react/ssr";
 
 import {
   Combobox,
   ComboboxChip,
   ComboboxChips,
   ComboboxChipsInput,
-  ComboboxClear,
+  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
+  ComboboxLabel,
   ComboboxList,
-  ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,
-  useCombobox,
+  useComboboxAnchor,
 } from "@/components/ui/combobox";
-import { Label } from "@/components/ui/label";
 
-const AGENTS = [
-  { value: "acme", label: "@acme" },
-  { value: "acme-support", label: "@acme-support" },
-  { value: "support-desk", label: "@support-desk" },
-  { value: "ops-runner", label: "@ops-runner" },
-  { value: "test-agent-233", label: "@test-agent-233" },
-  { value: "billing-bot", label: "@billing-bot", disabled: true },
-];
-
-const EVENTS = ["message.received", "message.sent", "message.delivered", "message.bounced", "call.started", "call.ended", "imessage.received", "tunnel.connected", "tunnel.disconnected"];
+const REPOS = ["acme/api", "acme/web", "acme/storefront", "acme/mobile", "acme/infra", "acme/docs", "acme/billing", "acme/search", "acme/design-system", "acme/data-pipeline"];
 
 export function Preview() {
-  const [agent, setAgent] = React.useState<string | null>("acme");
+  const id = React.useId();
   return (
-    <div className="grid w-full max-w-80 gap-1">
-      <Label id="agent-label">Agent</Label>
+    <div className="grid w-full max-w-sm gap-2">
+      <label htmlFor={id} className="text-body-sm font-medium text-fg">
+        Repository
+      </label>
+      <Combobox items={REPOS} defaultValue="acme/api">
+        <ComboboxInput id={id} placeholder="Search repositories" showClear />
+        <ComboboxContent>
+          <ComboboxEmpty>No repository by that name.</ComboboxEmpty>
+          <ComboboxList>
+            {(repo: string) => (
+              <ComboboxItem key={repo} value={repo}>
+                <GitBranchIcon />
+                {repo}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </div>
+  );
+}
+
+type Agent = { value: string; label: string };
+const AGENTS: Agent[] = [
+  { value: "claude", label: "Claude Code" },
+  { value: "codex", label: "Codex" },
+  { value: "amp", label: "Amp" },
+  { value: "gemini", label: "Gemini CLI" },
+  { value: "cursor", label: "Cursor agent" },
+  { value: "opencode", label: "OpenCode" },
+];
+
+export function WithTrigger() {
+  const [agent, setAgent] = React.useState<Agent | null>(AGENTS[0]);
+  return (
+    <div className="grid w-full max-w-sm gap-2">
+      <span id="agent-label" className="text-body-sm font-medium text-fg">
+        Agent for new threads
+      </span>
       <Combobox items={AGENTS} value={agent} onValueChange={setAgent}>
         <ComboboxTrigger aria-labelledby="agent-label">
           <ComboboxValue placeholder="Choose an agent" />
         </ComboboxTrigger>
         <ComboboxContent>
           <ComboboxInput placeholder="Search agents" />
+          <ComboboxEmpty>No agent with that name.</ComboboxEmpty>
           <ComboboxList>
-            <ComboboxEmpty>No agent with that handle.</ComboboxEmpty>
-            {AGENTS.map((a) => (
-              <ComboboxItem key={a.value} value={a.value} label={a.label} disabled={a.disabled}>
-                <RobotIcon weight="fill" />
+            {(a: Agent) => (
+              <ComboboxItem key={a.value} value={a}>
+                <RobotIcon />
                 {a.label}
-              </ComboboxItem>
-            ))}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
-    </div>
-  );
-}
-
-export function Multiple() {
-  const [events, setEvents] = React.useState<string[]>(["message.received", "message.delivered"]);
-  return (
-    <div className="grid w-full max-w-100 gap-1">
-      <Label htmlFor="events">Events</Label>
-      <Combobox multiple items={EVENTS} value={events} onValueChange={setEvents} name="events">
-        <ComboboxChips>
-          {events.map((e) => (
-            <ComboboxChip key={e} value={e} className="font-mono text-body-sm" />
-          ))}
-          <ComboboxChipsInput id="events" placeholder={events.length ? "" : "Add events"} />
-          <ComboboxClear />
-        </ComboboxChips>
-        <ComboboxContent>
-          <ComboboxList>
-            {(item) => (
-              <ComboboxItem value={item.value} className="font-mono text-body-sm">
-                {item.label}
               </ComboboxItem>
             )}
           </ComboboxList>
-          <ComboboxEmpty>No such event.</ComboboxEmpty>
         </ComboboxContent>
       </Combobox>
     </div>
   );
 }
 
-// The "Create" row reads the search from the combobox and offers it as a new value; choosing it calls onValueChange.
-function CreateRow({ known }: { known: string[] }) {
-  const { search } = useCombobox();
-  const value = search.trim().toLowerCase();
-  if (!value || known.includes(value)) return null;
-  return (
-    <>
-      <ComboboxSeparator />
-      <ComboboxItem value={value} label={value}>
-        <PlusIcon weight="bold" className="size-4" />
-        Create &ldquo;{value}&rdquo;
-      </ComboboxItem>
-    </>
-  );
-}
+const CHECKS = ["typecheck", "lint", "unit tests", "e2e tests", "build", "preview deploy", "bundle size", "license scan"];
 
-export function Creatable() {
-  const [tags, setTags] = React.useState(["vip", "customer", "vendor"]);
-  const [tag, setTag] = React.useState<string | null>(null);
+export function Multiple() {
+  const id = React.useId();
+  const anchor = useComboboxAnchor();
   return (
-    <div className="grid w-full max-w-80 gap-1">
-      <Label id="tag-label">Contact tag</Label>
-      <Combobox items={tags} value={tag} onValueChange={(v) => {
-        if (v && !tags.includes(v)) setTags((t) => [...t, v]);
-        setTag(v);
-      }}>
-        <ComboboxTrigger aria-labelledby="tag-label">
-          <ComboboxValue placeholder="Add a tag" />
-        </ComboboxTrigger>
-        <ComboboxContent>
-          <ComboboxInput placeholder="Search or create a tag" />
+    <div className="grid w-full max-w-md gap-2">
+      <label htmlFor={id} className="text-body-sm font-medium text-fg">
+        Required checks
+      </label>
+      <Combobox items={CHECKS} multiple defaultValue={["typecheck", "unit tests"]}>
+        <ComboboxChips ref={anchor}>
+          <ComboboxValue>
+            {(values: string[]) => (
+              <>
+                {values.map((v) => (
+                  <ComboboxChip key={v} aria-label={v}>
+                    {v}
+                  </ComboboxChip>
+                ))}
+                <ComboboxChipsInput id={id} placeholder={values.length ? "" : "Add checks"} />
+              </>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+        <ComboboxContent anchor={anchor}>
+          <ComboboxEmpty>No check by that name.</ComboboxEmpty>
           <ComboboxList>
-            {tags.map((t) => (
-              <ComboboxItem key={t} value={t}>
-                {t}
+            {(check: string) => (
+              <ComboboxItem key={check} value={check}>
+                {check}
               </ComboboxItem>
-            ))}
-            <CreateRow known={tags} />
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
+      <p className="text-body-sm text-fg-muted">A pull request merges once these pass.</p>
     </div>
   );
 }
 
-export function Groups() {
-  const [line, setLine] = React.useState<string | null>(null);
+const GROUPS = [
+  { value: "Branches", items: ["main", "develop", "release/1.4"] },
+  { value: "Pull requests", items: ["PR 4820: Fix flaky checkout test", "PR 4791: Migrate auth to sessions", "PR 4710: Bump Next to 16.1"] },
+];
+
+export function Grouped() {
   return (
-    <div className="grid w-full max-w-80 gap-1">
-      <Label id="line-label">Route to</Label>
-      <Combobox
-        value={line}
-        onValueChange={setLine}
-        items={[
-          { value: "+16504749720", label: "+1 650 474 9720" },
-          { value: "+14155550134", label: "+1 415 555 0134" },
-          { value: "shared", label: "Shared iMessage line" },
-        ]}
-      >
-        <ComboboxTrigger aria-labelledby="line-label">
-          <ComboboxValue placeholder="Choose a line" />
-        </ComboboxTrigger>
+    <div className="grid w-full max-w-sm gap-2">
+      <Combobox items={GROUPS}>
+        <ComboboxInput aria-label="Base for the sandbox" placeholder="Branch or pull request" />
         <ComboboxContent>
-          <ComboboxInput placeholder="Search lines" />
+          <ComboboxEmpty>Nothing matches.</ComboboxEmpty>
           <ComboboxList>
-            <ComboboxEmpty />
-            <ComboboxGroup heading="Phone">
-              <ComboboxItem value="+16504749720">+1 650 474 9720</ComboboxItem>
-              <ComboboxItem value="+14155550134">+1 415 555 0134</ComboboxItem>
-            </ComboboxGroup>
-            <ComboboxSeparator />
-            <ComboboxGroup heading="iMessage">
-              <ComboboxItem value="shared">Shared iMessage line</ComboboxItem>
-            </ComboboxGroup>
+            {(group: (typeof GROUPS)[number]) => (
+              <ComboboxGroup key={group.value} items={group.items}>
+                <ComboboxLabel>{group.value}</ComboboxLabel>
+                <ComboboxCollection>
+                  {(item: string) => (
+                    <ComboboxItem key={item} value={item}>
+                      {item}
+                    </ComboboxItem>
+                  )}
+                </ComboboxCollection>
+              </ComboboxGroup>
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-    </div>
-  );
-}
-
-export function States() {
-  return (
-    <div className="grid w-full max-w-80 gap-3">
-      <Combobox items={AGENTS} defaultValue="acme" disabled>
-        <ComboboxTrigger aria-label="Disabled agent" />
-      </Combobox>
-      <div className="grid gap-1">
-        <Combobox items={AGENTS}>
-          <ComboboxTrigger aria-label="Required agent" aria-invalid>
-            <ComboboxValue placeholder="Choose an agent" />
-          </ComboboxTrigger>
-          <ComboboxContent>
-            <ComboboxInput placeholder="Search agents" />
-            <ComboboxList>
-              {(a) => <ComboboxItem value={a.value}>{a.label}</ComboboxItem>}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
-        <p className="text-caption leading-body text-danger">Choose the agent that owns this mailbox.</p>
-      </div>
     </div>
   );
 }

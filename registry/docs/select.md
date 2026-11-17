@@ -3,8 +3,9 @@ name: select
 title: Select
 type: ui
 surface: site
-description: "A white 40px pill with the Shadow/S ring and a bold caret that turns over while it opens the console's white menu: 36px rows with 12px corners and a filled purple check circle at the end."
-use_for: "Use to choose one value from a list of five or more (Any State for a phone number, Shared or Dedicated for an iMessage line). Give it a Label or an aria-label, a placeholder when nothing is chosen, and group long lists with SelectGroup and SelectLabel. Control it with value and onValueChange (values are non-empty strings), and give the root a name so a form submits the value with FormData."
-never: [A field edge instead of the Shadow/S ring, A dark or purple list, Checkmarks at the left of the items, Animating items as they are highlighted, A hover change on the trigger]
-source: "The Hoplite console's Select (src/components/ui/select.tsx) and menu theme; Figma 427:2715: Any State and Shared in Create Agent Identity"
+kinds: [input, menu-panel, menu-item]
+description: "The square 40px field with a caret, opening the site's popup: a square panel of the ground with a hairline and a long soft cast, 36px rows, the highlighted row on the hover wash and a check at the end of the chosen one."
+use_for: "Use to choose one value from five to about fifteen (a model, a sandbox size, a base branch). Give it a label or aria-label and a placeholder when nothing is chosen; group long lists with SelectGroup and SelectLabel. Pass items (value and label) to Select, or write SelectItems as children and the trigger shows the chosen label. Give it a name to submit with a form; size=\"sm\" is the 32px toolbar field. Built on Base UI Select."
+never: [Rounded corners on the trigger or the list, A check at the start of a row, Animating the highlight between rows, An orange chosen row, A white list on the gray ground]
+source: "Extrapolated from the Hoplite website: the field lines and 14px controls, and the nav popup (.hn__panel, .hn__item: rows on the hover wash, the quiet hairline)"
 ---

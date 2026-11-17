@@ -3,8 +3,9 @@ name: combobox
 title: Combobox
 type: ui
 surface: site
-description: "A pill trigger for one value, or a field with 24px corners for multiple lilac pill chips, opening a searchable menu with 16px corners: 36px rows with 12px corners and a filled purple check circle at the end."
-use_for: "Use instead of Select when there are more than about ten choices or people know what they are looking for (an agent, a contact, webhook events). Wrap ComboboxTrigger (or ComboboxChips with ComboboxChip and ComboboxChipsInput for several values) and ComboboxContent with ComboboxInput, ComboboxList, ComboboxItem rows and ComboboxEmpty in a Combobox with value and onValueChange (multiple for several). Pass items so the closed field can show labels. To let people add a new value, render an extra item for the search text from useCombobox()."
-never: [A combobox for five or fewer choices (use Select or a radio group), Animating the highlight between rows, A list without an empty state, Chips in the purple]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): the select trigger (Any State), the command menu and the lilac handle chip"
+kinds: [input, menu-panel, menu-item]
+description: "A searchable choice: the square 40px field you type into (or a field button whose list holds its own search row), opening the site's square popup with 36px rows, the highlighted row on the hover wash and a check at the end of each chosen row; several values sit in the field as outlined hexagon chips."
+use_for: "Use instead of Select when there are more than about fifteen choices or people know what they want (a repository, an agent, a branch or pull request). Pass items to Combobox and render rows with a function in ComboboxList; put ComboboxEmpty beside it. Type in ComboboxInput (showClear adds a clear key), or use ComboboxTrigger with ComboboxValue and put ComboboxInput inside ComboboxContent for a search row. For several values use multiple with ComboboxChips, ComboboxChip and ComboboxChipsInput, and pass useComboboxAnchor's ref to ComboboxContent. Group with ComboboxGroup, ComboboxLabel and ComboboxCollection. Built on Base UI Combobox."
+never: [A combobox for five or fewer choices (use Select or a radio group), Rounded fields or chips, Animating the highlight between rows, A list without an empty state, Orange chips]
+source: "Extrapolated from the Hoplite website: the field lines and 14px controls, the nav popup (.hn__panel, .hn__item) and the outlined tag hexagon (.tag)"
 ---

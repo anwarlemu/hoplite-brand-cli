@@ -3,8 +3,8 @@ name: sheet
 title: Sheet
 type: ui
 surface: site
-description: "A white panel that slides from an edge over the blurred, ink-tinted page, with the dialog's title and 36px close key."
-use_for: "Use for a task beside the page that keeps its context, such as editing a mailbox or reading a call's details. Use side=\"right\" by default and side=\"left\" for the rail on phones. Put the title in SheetHeader and the one action in SheetFooter as a full-width secondary Button; the close key and Escape dismiss it."
-never: [A sheet that opens another sheet, A dark scrim, A sheet for a short confirmation (use Alert Dialog)]
-source: "The Hoplite console's Chakra modal and drawer themes and its close key (src/theme/index.ts, src/components/ui/chakra-controls.tsx)"
+description: "A square full-height panel of the ground, 384px wide, ruled off by the quiet line and casting the long soft shadow over the page under the ink at 32 percent, with a Chakra Petch light 20px title, a 14px graphite description, footer keys at the end and a compact ghost X. It slides its own width on the dock curve."
+use_for: "Use for detail or settings that sit beside the page (a pull request's checks, sandbox settings) without leaving it. Open from the right by default; side=\"left\" for navigation, \"top\" or \"bottom\" for a band. Put the title in SheetHeader and the actions in SheetFooter with one ink Button. On phones use Drawer for a swipeable bottom sheet."
+never: [Rounded corners, A white panel, A sheet wider than half the screen on desktop, A sheet that opens another sheet, Easing in]
+source: "Extrapolated from the Hoplite website: the square ground panel and quiet line of its popups (.hn__sheet), the dock curve its frames slide on (--dock) and its long soft cast."
 ---

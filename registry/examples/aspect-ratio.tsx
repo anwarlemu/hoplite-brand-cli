@@ -2,19 +2,26 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export function Preview() {
   return (
-    <div className="w-full max-w-120">
-      <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-control bg-subtle">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/octopus.png" alt="The Hoplite octopus" className="size-full object-contain p-6" />
+    <div className="w-full max-w-md">
+      <AspectRatio ratio={16 / 9} className="ds-corners grid place-items-center">
+        <span className="ds-label">16:9 product shot</span>
       </AspectRatio>
     </div>
   );
 }
 
-export function Square() {
+export function Ratios() {
   return (
-    <div className="w-40">
-      <AspectRatio ratio={1} className="flex items-center justify-center rounded-control border border-line-field bg-surface text-body text-fg-muted">1:1</AspectRatio>
+    <div className="grid w-full max-w-xl grid-cols-3 items-start gap-4">
+      {[
+        [1, "1:1"],
+        [4 / 3, "4:3"],
+        [3 / 4, "3:4"],
+      ].map(([ratio, label]) => (
+        <AspectRatio key={label} ratio={ratio as number} className="grid place-items-center border border-line-frame">
+          <span className="ds-label">{label}</span>
+        </AspectRatio>
+      ))}
     </div>
   );
 }

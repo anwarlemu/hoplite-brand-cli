@@ -3,8 +3,8 @@ name: aspect-ratio
 title: Aspect Ratio
 type: ui
 surface: site
-description: "A frame that holds media at a fixed shape."
-use_for: "Wrap a screenshot, an attachment preview or a video in AspectRatio with ratio={16 / 9} (or 4 / 3, 1) so it keeps its shape at every width. Round and clip it with rounded-control and overflow-hidden."
-never: [Stretching an image to fill without object-cover, Corners other than the card's 8px on media inside cards]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): the 8px corners of its cards and wells"
+description: "Holds media at a fixed shape with square corners; an image inside fills it."
+use_for: "Use AspectRatio for product shots, video stills and figures so the page does not jump while they load. Give it the ratio as a number (16 / 9) and put it in a Card with corners for the site's framed art."
+never: [Rounded media, A drop shadow around media]
+source: "Extrapolated from the Hoplite website: its fixed-shape frames (.how__frame at 4:3, .band__frame)"
 ---

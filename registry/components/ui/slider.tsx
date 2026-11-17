@@ -1,52 +1,59 @@
 "use client";
 
 import * as React from "react";
-import { Slider as ChakraSlider } from "@chakra-ui/react";
+import { Slider as BaseSlider } from "@base-ui/react/slider";
 
 import { cn } from "@/lib/utils";
 
-// Extrapolated from the console's switch (Figma "Toggle"): a 6px pill track in the field's lilac-gray, filled with the
-// action purple up to the value, and a 20px white knob with the switch knob's soft drop. Under the pointer it takes a soft purple
-// halo and on keyboard focus the soft ring; it never animates its position (it follows the pointer). Pass two values for
-// a range.
-type SliderProps = Omit<React.ComponentProps<typeof ChakraSlider.Root>, "onValueChange" | "aria-label" | "aria-labelledby"> & { onValueChange?: (value: number[]) => void; "aria-label"?: string | string[]; "aria-labelledby"?: string | string[] };
-function Slider({ className, defaultValue, value, min = 0, max = 100, onValueChange, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, ...props }: SliderProps) {
-  const values = React.useMemo(() => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]), [value, defaultValue, min, max]);
+// Extrapolated from the site's lines and marks (the site has no slider): a 1px track of the strong line, with the
+// chosen range drawn over it as a 2px line of the ink, and a 16px point-up hexagon of the ink as the thumb (the
+// site's hexagonal mark). The thumb follows the pointer without easing and never changes size or shape while dragged;
+// under the pointer it turns graphite. Its box stays square, so keyboard focus is the 2px ink outline 2px out. Disabled,
+// the range and thumb turn the off gray. Pass two values for a range; it reports every value as an array.
+type SliderProps = Omit<React.ComponentProps<typeof BaseSlider.Root>, "onValueChange" | "onValueCommitted"> & {
+  onValueChange?: (value: number[]) => void;
+  onValueCommitted?: (value: number[]) => void;
+};
+
+const asArray = (value: number | readonly number[]) => (Array.isArray(value) ? [...value] : [value as number]);
+
+function Slider({ className, defaultValue, value, min = 0, max = 100, onValueChange, onValueCommitted, "aria-label": ariaLabel, ...props }: SliderProps) {
+  const values = React.useMemo(() => (value !== undefined ? asArray(value) : defaultValue !== undefined ? asArray(defaultValue) : [min]), [value, defaultValue, min]);
   return (
-    <ChakraSlider.Root
-      unstyled
+    <BaseSlider.Root
       data-slot="slider"
       defaultValue={defaultValue}
       value={value}
-      onValueChange={(details) => onValueChange?.(details.value)}
-      aria-label={ariaLabel === undefined ? undefined : Array.isArray(ariaLabel) ? ariaLabel : [ariaLabel]}
-      aria-labelledby={ariaLabelledBy === undefined ? undefined : Array.isArray(ariaLabelledBy) ? ariaLabelledBy : [ariaLabelledBy]}
       min={min}
       max={max}
-      className={cn(
-        "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-40 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
-        className,
-      )}
+      onValueChange={onValueChange ? (next) => onValueChange(asArray(next)) : undefined}
+      onValueCommitted={onValueCommitted ? (next) => onValueCommitted(asArray(next)) : undefined}
+      className={cn("group/slider relative w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-40 data-[orientation=vertical]:w-auto", className)}
       {...props}
     >
-      <ChakraSlider.Control>
-      <ChakraSlider.Track
-        data-slot="slider-track"
-        className="relative grow overflow-hidden rounded-pill bg-line-field data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
+      <BaseSlider.Control
+        data-slot="slider-control"
+        className="relative flex w-full touch-none items-center py-2 select-none data-disabled:cursor-not-allowed data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:px-2 data-[orientation=vertical]:py-0"
       >
-        <ChakraSlider.Range data-slot="slider-range" className="absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full" />
-      </ChakraSlider.Track>
-      {Array.from({ length: values.length }, (_, index) => (
-        <ChakraSlider.Thumb
-          data-slot="slider-thumb"
-          index={index}
-          key={index}
-          aria-label={Array.isArray(ariaLabel) ? ariaLabel[index] : ariaLabel ?? (values.length > 1 ? (index === 0 ? "Minimum" : "Maximum") : undefined)}
-          className="block size-5 shrink-0 cursor-grab rounded-pill bg-surface shadow-knob outline-none transition-[box-shadow] duration-fast ease-out hover:shadow-[var(--ds-shadow-knob),0_0_0_4px_var(--ds-color-ring-tint)] focus-visible:shadow-[var(--ds-shadow-knob),var(--ds-shadow-focus)] active:cursor-grabbing disabled:pointer-events-none motion-reduce:transition-none"
-        ><ChakraSlider.HiddenInput /></ChakraSlider.Thumb>
-      ))}
-      </ChakraSlider.Control>
-    </ChakraSlider.Root>
+        <BaseSlider.Track
+          data-slot="slider-track"
+          className="relative before:absolute before:bg-line-strong data-[orientation=horizontal]:h-[2px] data-[orientation=horizontal]:w-full data-[orientation=horizontal]:before:inset-x-0 data-[orientation=horizontal]:before:bottom-0 data-[orientation=horizontal]:before:h-px data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[2px] data-[orientation=vertical]:before:inset-y-0 data-[orientation=vertical]:before:left-0 data-[orientation=vertical]:before:w-px"
+        >
+          <BaseSlider.Indicator data-slot="slider-range" className="bg-primary data-disabled:bg-off" />
+          {values.map((_, index) => (
+            <BaseSlider.Thumb
+              data-slot="slider-thumb"
+              key={index}
+              index={index}
+              aria-label={ariaLabel ?? (values.length > 1 ? (index === 0 ? "Minimum" : "Maximum") : undefined)}
+              className="group/thumb grid size-4 cursor-grab place-items-center select-none has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus-ring data-dragging:cursor-grabbing data-disabled:cursor-not-allowed"
+            >
+              <span aria-hidden className="ds-hex-mark h-4 w-3.5 bg-primary transition-[background-color] duration-fast ease-out group-hover/thumb:bg-primary-hover group-data-disabled/thumb:bg-off motion-reduce:transition-none" />
+            </BaseSlider.Thumb>
+          ))}
+        </BaseSlider.Track>
+      </BaseSlider.Control>
+    </BaseSlider.Root>
   );
 }
 

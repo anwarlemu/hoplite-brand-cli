@@ -3,8 +3,9 @@ name: input-otp
 title: Input OTP
 type: ui
 surface: site
-description: "Joined 40px slots in the field's edge with a purple active slot, the soft ring and a blinking caret."
-use_for: "Use for one-time codes from email or SMS (a login code, a vault unlock code). Set maxLength to the code's length and pattern to REGEXP_ONLY_DIGITS for numbers; split long codes into groups with InputOTPSeparator. Paste and SMS autofill fill every slot at once; onComplete fires when the code is full."
-never: [Separate inputs per digit, Auto-submitting without a visible result, Hiding the characters of a one-time code]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): Form- Input's 40px, edge and focus"
+kinds: [input]
+description: "A one-time code on Base UI's OTP field: joined square 40px cells on the quiet rule, a 16px Kode Mono character in each, the cell with the caret on the strong edge; orange edges when invalid."
+use_for: "Use InputOTP for a short verification or pairing code. Set maxLength and lay out InputOTPSlot cells in one or two InputOTPGroup rows with an InputOTPSeparator between. Digits are the default; pass pattern=REGEXP_ONLY_DIGITS_AND_CHARS for letters too. Label it with a visible label and htmlFor on the id."
+never: [Rounded cells, Satoshi or display type in the cells, An orange active cell, Cells that grow when focused]
+source: "Extrapolated from the Hoplite website: the joined boxes of its changelog filter (.cl-filter), its quiet and strong lines, and Kode Mono for codes"
 ---

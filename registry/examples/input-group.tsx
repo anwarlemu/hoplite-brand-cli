@@ -1,114 +1,69 @@
-"use client";
-
-import * as React from "react";
-import { CheckCircleIcon, CopyIcon, EyeIcon, EyeSlashIcon, MagnifyingGlassIcon, SpinnerIcon, XCircleIcon } from "@phosphor-icons/react/ssr";
+import { ArrowUpIcon, CopyIcon, GitBranchIcon, MagnifyingGlassIcon, PaperclipIcon } from "@phosphor-icons/react/ssr";
 
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from "@/components/ui/input-group";
-import { Kbd } from "@/components/ui/kbd";
-import { Label } from "@/components/ui/label";
 
 export function Preview() {
-  const [handle, setHandle] = React.useState("acme-support");
   return (
-    <div className="grid w-full max-w-114.5 gap-1">
-      <Label htmlFor="mailbox">Mailbox</Label>
-      <InputGroup>
-        <InputGroupInput id="mailbox" value={handle} onChange={(e) => setHandle(e.target.value)} />
-        <InputGroupAddon align="inline-end" variant="segment">
-          @inboxmail.com
-        </InputGroupAddon>
-      </InputGroup>
-    </div>
-  );
-}
-
-export function HandleCheck() {
-  return (
-    <div className="grid w-full max-w-100.5 gap-3">
-      <InputGroup>
-        <InputGroupInput aria-label="Checking handle" defaultValue="acme-support" />
-        <InputGroupAddon align="inline-end">
-          <SpinnerIcon className="animate-spin-steady text-fg-faint" aria-label="Checking" />
-        </InputGroupAddon>
-      </InputGroup>
-      <div className="grid gap-1">
-        <InputGroup>
-          <InputGroupInput aria-label="Available handle" defaultValue="acme-support" />
-          <InputGroupAddon align="inline-end">
-            <CheckCircleIcon weight="fill" className="text-success" aria-label="Available" />
-          </InputGroupAddon>
-        </InputGroup>
-        <p className="flex items-center gap-2 text-caption text-fg-secondary">
-          Will be displayed as <span className="rounded-pill bg-subtle px-2 py-1 text-fg">@acme-support</span>
-        </p>
-      </div>
-      <div className="grid gap-1">
-        <InputGroup>
-          <InputGroupInput aria-label="Taken handle" defaultValue="acme-support" aria-invalid aria-describedby="taken" />
-          <InputGroupAddon align="inline-end">
-            <XCircleIcon weight="fill" className="text-danger-strong" aria-hidden />
-          </InputGroupAddon>
-        </InputGroup>
-        <p id="taken" className="flex items-center gap-2 text-caption text-fg-secondary">
-          Will be displayed as <span className="rounded-pill bg-subtle px-2 py-1 text-fg">@acme-support</span>
-          <span className="text-danger">(is not available)</span>
-        </p>
-      </div>
-    </div>
+    <InputGroup className="max-w-sm">
+      <InputGroupAddon>
+        <MagnifyingGlassIcon />
+      </InputGroupAddon>
+      <InputGroupInput placeholder="Search threads" aria-label="Search threads" />
+      <InputGroupAddon align="inline-end">
+        <InputGroupText>12 results</InputGroupText>
+      </InputGroupAddon>
+    </InputGroup>
   );
 }
 
 export function Addons() {
-  const [shown, setShown] = React.useState(false);
   return (
-    <div className="grid w-full max-w-100.5 gap-3">
+    <div className="grid w-full max-w-sm gap-4">
       <InputGroup>
         <InputGroupAddon>
-          <MagnifyingGlassIcon className="size-4" />
+          <InputGroupText>github.com/</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput aria-label="Search mailboxes" placeholder="Search mailboxes" />
-        <InputGroupAddon align="inline-end">
-          <Kbd>⌘K</Kbd>
-        </InputGroupAddon>
+        <InputGroupInput placeholder="acme/payments-api" aria-label="Repository" />
       </InputGroup>
       <InputGroup>
-        <InputGroupInput aria-label="Vault key" type={shown ? "text" : "password"} defaultValue="correct-horse-battery" />
+        <InputGroupAddon>
+          <GitBranchIcon />
+        </InputGroupAddon>
+        <InputGroupInput defaultValue="agent/upgrade-node-22" aria-label="Branch" readOnly />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="icon-xs" aria-label={shown ? "Hide the key" : "Show the key"} onClick={() => setShown((s) => !s)} className="text-fg-brand">
-            {shown ? <EyeSlashIcon weight="fill" /> : <EyeIcon weight="fill" />}
+          <InputGroupButton size="icon-sm" aria-label="Copy branch name">
+            <CopyIcon />
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupAddon>
-          <InputGroupText>https://</InputGroupText>
-        </InputGroupAddon>
-        <InputGroupInput aria-label="Webhook URL" placeholder="api.example.com/hoplite" className="pl-1" />
+        <InputGroupInput aria-invalid defaultValue="payments api" aria-label="Sandbox name" />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="sm" variant="secondary">
-            <CopyIcon weight="duotone" /> Copy
-          </InputGroupButton>
+          <InputGroupText className="text-danger">No spaces</InputGroupText>
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput aria-label="Read-only mailbox" readOnly defaultValue="acme-support" />
-        <InputGroupAddon align="inline-end" variant="segment">
-          @inboxmail.com
+        <InputGroupAddon>
+          <MagnifyingGlassIcon />
         </InputGroupAddon>
+        <InputGroupInput disabled placeholder="Search is off while indexing" aria-label="Search" />
       </InputGroup>
     </div>
   );
 }
 
-export function WithTextarea() {
-  const [text, setText] = React.useState("");
+export function Composer() {
   return (
-    <InputGroup className="max-w-100.5">
-      <InputGroupTextarea aria-label="Reply" placeholder="Write a reply to Ray Liao" value={text} onChange={(e) => setText(e.target.value.slice(0, 280))} />
-      <InputGroupAddon align="block-end" className="justify-between">
-        <InputGroupText className="text-caption">{text.length}/280</InputGroupText>
-        <InputGroupButton size="sm" variant="default" className="rounded-pill" disabled={!text}>
-          Send
+    <InputGroup className="max-w-md">
+      <InputGroupTextarea placeholder="Ask an agent to fix the failing check" aria-label="Message" />
+      <InputGroupAddon align="block-end">
+        <InputGroupButton size="sm">
+          <PaperclipIcon />
+          Attach
+        </InputGroupButton>
+        <InputGroupText className="ml-auto">Sonnet, 2 sandboxes</InputGroupText>
+        <InputGroupButton size="icon-sm" variant="default" aria-label="Send">
+          <ArrowUpIcon />
         </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>

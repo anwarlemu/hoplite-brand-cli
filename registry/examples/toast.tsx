@@ -12,29 +12,41 @@ export function Preview() {
         variant="outline"
         onClick={() =>
           toast({
-            title: "Mailbox archived",
-            description: "support@inkboxmail.com no longer receives mail.",
+            title: "Thread archived",
+            description: "Fix the null check in billing moved to the archive.",
             action: <ToastAction altText="Undo the archive">Undo</ToastAction>,
           })
         }
       >
-        Archive mailbox
+        Archive thread
+      </Button>
+    </div>
+  );
+}
+
+export function Variants() {
+  const { toast } = useToast();
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Toaster />
+      <Button variant="outline" onClick={() => toast({ title: "Automation saved" })}>
+        Title only
+      </Button>
+      <Button variant="outline" onClick={() => toast({ type: "success", title: "Checks passed", description: "4 of 4 checks passed on sbx-91c2." })}>
+        Success
       </Button>
       <Button
         variant="outline"
         onClick={() =>
           toast({
             variant: "destructive",
-            title: "Delivery failed",
-            description: "api.acme.dev answered 500 three times.",
-            action: <ToastAction altText="Retry the delivery">Retry</ToastAction>,
+            title: "Run failed",
+            description: "The agent could not install dependencies in sbx-04de.",
+            action: <ToastAction altText="Retry the run">Retry</ToastAction>,
           })
         }
       >
         Destructive
-      </Button>
-      <Button variant="outline" onClick={() => toast({ title: "Contact rule saved" })}>
-        Title only
       </Button>
     </div>
   );

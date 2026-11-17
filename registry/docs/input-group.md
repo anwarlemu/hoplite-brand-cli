@@ -1,10 +1,11 @@
 ---
 name: input-group
-title: Input Group
+title: Input group
 type: ui
 surface: site
-description: "The console's field with addons inside it: glyphs, text, a lilac suffix segment, buttons, or the handle check's state glyph."
-use_for: "Use to attach context to a field: a fixed suffix (@inboxmail.com as a segment), a search glyph, a show or copy button, a character count under a textarea, or the live state of a check (spinner, green check-circle, red x-circle). Put InputGroupInput or InputGroupTextarea inside, then InputGroupAddon at inline-start, inline-end, block-start or block-end."
-never: [Putting a separate Input inside the group, More than one action at each end, A suffix that people can edit]
-source: "Figma 427:2715: the Email card's handle field with @inboxmail.com and the handle check states (checking, Available, Not Available) in Modal States"
+kinds: [input]
+description: "The square field with things inside it: a 16px Phosphor glyph, quiet text, or a compact ghost hexagon key at either end, or a row of actions above or below a textarea; hover, focus and invalid belong to the whole frame."
+use_for: "Use InputGroup when a field needs a glyph (search), a fixed prefix or suffix (github.com/), or an action inside it (copy, send). Put InputGroupInput or InputGroupTextarea inside with InputGroupAddon on the side given by align; use InputGroupButton for keys and InputGroupText for words."
+never: [A rounded frame, A main ink key inside a plain search field, Addons in the ink, Icons that move on hover]
+source: "Derived from the Hoplite website's lines, type and nav keys (.hn__top), as Input is (the site has no fields)"
 ---

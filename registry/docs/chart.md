@@ -3,8 +3,8 @@ name: chart
 title: Chart
 type: ui
 surface: site
-description: "Line, area, bar and pie charts in SVG with lilac rules, 12px muted labels and a white floating tooltip."
-use_for: "Use to show volume over time (messages sent, calls, webhook deliveries) or a share (deliveries by status). Name and color each series in a ChartConfig, wrap the chart in ChartContainer, and add ChartTooltip and ChartLegend. Keep to five series; the colors follow the series order."
-never: [Gradients other than the area fade, 3D or shadowed marks, More than five series, Colors outside the series tokens]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): muted labels, lilac rules, floating panels and the status colors"
+description: "SVG bar, line, area and pie charts: series in the ink first, the orange second and the gray steps after, a quiet hairline grid, Kode Mono axis labels, square bars and keys, and a small square tooltip panel with a Kode Mono label."
+use_for: "Use for usage and activity over time (threads opened, pull requests merged, sandbox minutes) or a share (runs by agent). Wrap BarChart, LineChart, AreaChart or PieChart in ChartContainer with a config that labels each series (color is optional; the series tokens are the default), and add ChartTooltip with ChartTooltipContent and ChartLegend with ChartLegendContent. Give every chart an aria-label. Dependency free: no chart library."
+never: [Rounded bars, Gradient fills beyond a faint area wash, More than five series, Orange for anything but the series that matters, An entrance animation on scroll]
+source: "Extrapolated from the Hoplite website: its lines (the 16 and 32 percent rules), Kode Mono labels, the orange mark and the nav popup (.hn__panel) for the tooltip"
 ---

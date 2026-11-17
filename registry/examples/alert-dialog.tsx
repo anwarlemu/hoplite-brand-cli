@@ -1,75 +1,68 @@
 "use client";
 
-import { KeyIcon, TrashIcon } from "@phosphor-icons/react/ssr";
+import { WarningIcon } from "@phosphor-icons/react/ssr";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-function DeleteAgent() {
+function DeleteSandbox({ defaultOpen }: { defaultOpen?: boolean }) {
   return (
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>Delete @acme?</AlertDialogTitle>
-        <AlertDialogDescription>Its mailbox, phone line and tunnel are deleted with it. Messages it sent stay with their recipients. This cannot be undone.</AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction variant="destructive">Delete agent</AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
+    <AlertDialog defaultOpen={defaultOpen}>
+      <AlertDialogTrigger render={<Button variant="outline" />}>Delete sandbox</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete this sandbox?</AlertDialogTitle>
+          <AlertDialogDescription>The acme-web sandbox and its uncommitted changes are removed. Threads that used it keep their history.</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction variant="destructive">Delete sandbox</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
 export function Preview() {
+  return <DeleteSandbox />;
+}
+
+export function Open() {
   return (
-    <div className="flex justify-center">
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="destructive">
-            <TrashIcon weight="fill" />
-            Delete agent
-          </Button>
-        </AlertDialogTrigger>
-        <DeleteAgent />
-      </AlertDialog>
+    <div className="min-h-96">
+      <DeleteSandbox defaultOpen />
     </div>
   );
 }
 
 export function Small() {
   return (
-    <div className="flex justify-center">
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="outline">
-            <KeyIcon weight="fill" />
-            Rotate API key
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent size="sm">
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <KeyIcon weight="fill" />
-            </AlertDialogMedia>
-            <AlertDialogTitle>Rotate the API key?</AlertDialogTitle>
-            <AlertDialogDescription>Agents using the old key stop working until you give them the new one.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Rotate</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-  );
-}
-
-export function Open() {
-  return (
-    <div className="min-h-100">
-      <AlertDialog defaultOpen>
-        <DeleteAgent />
-      </AlertDialog>
-    </div>
+    <AlertDialog>
+      <AlertDialogTrigger render={<Button variant="outline" />}>Leave the team</AlertDialogTrigger>
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader>
+          <AlertDialogMedia>
+            <WarningIcon />
+          </AlertDialogMedia>
+          <AlertDialogTitle>Leave Acme?</AlertDialogTitle>
+          <AlertDialogDescription>You lose access to its threads, repositories and automations. Your seat goes back to the plan.</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Stay</AlertDialogCancel>
+          <AlertDialogAction>Leave team</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

@@ -3,8 +3,9 @@ name: table
 title: Table
 type: ui
 surface: site
-description: "The console's table: a lilac head with muted labels, then a white body outlined by the ring line with 12px corners and 64px rows; or the borderless open list table."
-use_for: "Use for rows of records people scan and act on (mailboxes, agents and lines, webhooks). Put labels in TableHeader, rows in TableBody, totals in a TableFooter and Pagination with bar under the table; row actions are ghost icon buttons in the last cell. Pass variant open for a list that sits on its own (a clear head and rows that wash on hover). Keep cells to one line; truncate long values."
-never: [Zebra striping, Vertical rules between cells, A dark or purple head row, Bold cell text]
-source: "Console src/components/table/PaginatedTable.tsx (TABLE_SX and the open table)"
+kinds: [table]
+description: "Ruled, not boxed: Kode Mono column heads over the strong rule and 48px rows of 14px ink with a quiet rule between them; the compare variant is the pricing table (Chakra Petch 20px plan heads, group rows, a filled ink hexagon for yes and a slate dash for no) and the prose variant the blog's 16px table."
+use_for: "Use Table for records people read across (threads, seats, runs) and variant=\"compare\" for a plan or feature comparison: TableGroup opens each section, row names are TableHead with scope=\"row\", and TableYes and TableNo mark what is included. Use variant=\"prose\" inside an article. Keep the shadcn parts (TableHeader, TableBody, TableRow, TableHead, TableCell, TableFooter, TableCaption); mark a chosen row with data-state=\"selected\". For sorting, selection and pages use DataTable."
+never: [A boxed or rounded frame, Zebra stripes or filled head rows, Bold heads, A check icon or an orange mark for yes, Rows that move under the pointer]
+source: "The Hoplite website's pricing comparison (.pr-table, .pr-table__group, .pr-yes, .pr-no on /pricing) and the blog table (.bp-table)"
 ---

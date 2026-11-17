@@ -3,8 +3,8 @@ name: dialog
 title: Dialog
 type: ui
 surface: site
-description: "A centered white panel with 16px corners over the blurred page under the ink at 32 percent; it fills the screen on phones."
-use_for: "Use for a short task that needs the person's full attention (Create Agent Identity) or a result they must read before moving on (the new API key). Put the title in DialogHeader, the content in DialogBody and the one action at the end of the body as a full-width Button with no glyph: variant=\"secondary\" to create or confirm, variant=\"destructive\" to delete. Leave out a Cancel key: the close key and Escape dismiss it."
-never: [A dark scrim, A dialog that opens another dialog, A drop shadow under the panel, Scaling from zero, A Cancel key beside the action, A glyph on the action]
-source: "The Hoplite console's BaseModal and Chakra modal theme (src/components/modals/base-modal.tsx, src/theme/index.ts); Figma 427:2715 Modal - Create Agent"
+description: "A square 512px panel of the ground with 24px of air, a quiet hairline and a deep soft cast, centered over the ink at 32 percent: a Chakra Petch light 20px title, a 14px graphite description, hexagon keys at the end of the footer and a compact ghost X in the corner. It opens in place from 0.96 with a fade."
+use_for: "Use for a short task that needs full attention (New automation) or a result to read before moving on (a new API key). Put the title and description in DialogHeader, fields in DialogBody, and the actions in DialogFooter: one ink Button for the main action, an outline DialogClose for Cancel. Use asChild or render on DialogTrigger to open it from a Button."
+never: [Rounded corners, A white panel, A blurred page behind it, Two ink keys in the footer, Scaling from zero, A dialog that opens another dialog]
+source: "Extrapolated from the Hoplite website's popups and keys: the square ground panel and quiet line (.hn__sheet), the ink at 32 percent from the brand principles, Chakra Petch light titles and the hexagon keys (.button, .button--line)."
 ---

@@ -1,17 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { chakra } from "@chakra-ui/react";
 import { Controller, FormProvider, useFormContext, useFormState, type ControllerProps, type FieldPath, type FieldValues } from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-// A react-hook-form form laid out as the console's (Figma 427:2715, Create Agent Identity, Login, Vault). Each FormItem
-// is a field: its 14px regular ink label on a 24px line, 4px above the control; fields sit 12px apart in the form. A
-// FormDescription is 14px muted 8px under the control; a FormMessage is the 12px red line 4px under it ("(is not
-// available)"). A field
-// that fails keeps its label ink: only the control (aria-invalid, the red edge) and the message turn red.
+// A react-hook-form form laid out as Field lays out a field (extrapolated from the site's type and lines: it has no
+// forms). Each FormItem is its 14px medium ink label 8px above the control; a FormDescription is 14px quiet gray 8px
+// under it and a FormMessage the 14px orange line. A field that fails keeps its label ink: only the control (through
+// aria-invalid, the orange edge) and the message take the orange. Items stack 24px apart in a `grid gap-6` form.
 const Form = FormProvider;
 
 type FormFieldContextValue<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = { name: TName };
@@ -47,7 +45,7 @@ function FormItem({ className, ...props }: React.ComponentProps<"div">) {
   const id = React.useId();
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div data-slot="form-item" className={cn("grid min-w-0 gap-1", className)} {...props} />
+      <div data-slot="form-item" className={cn("grid min-w-0 gap-2", className)} {...props} />
     </FormItemContext.Provider>
   );
 }
@@ -57,15 +55,22 @@ function FormLabel({ className, ...props }: React.ComponentProps<typeof Label>) 
   return <Label data-slot="form-label" data-error={!!error} htmlFor={formItemId} className={cn("w-fit", className)} {...props} />;
 }
 
+type ControlProps = { id?: string; "aria-describedby"?: string; "aria-invalid"?: boolean };
+
 /** Hands the field's id, its description and message ids and aria-invalid to the one control inside it. */
-function FormControl(props: React.ComponentProps<typeof chakra.div>) {
+function FormControl({ children }: { children: React.ReactElement<ControlProps> }) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
-  return <chakra.div data-slot="form-control" id={formItemId} aria-describedby={!error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`} aria-invalid={!!error} {...props} />;
+  const child = React.Children.only(children);
+  return React.cloneElement(child, {
+    id: formItemId,
+    "aria-describedby": !error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`,
+    "aria-invalid": !!error,
+  });
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   const { formDescriptionId } = useFormField();
-  return <p data-slot="form-description" id={formDescriptionId} className={cn("m-0 mt-1 font-sans text-body leading-line-body text-fg-muted", className)} {...props} />;
+  return <p data-slot="form-description" id={formDescriptionId} className={cn("m-0 font-sans text-body-sm leading-line-body-sm text-fg-muted", className)} {...props} />;
 }
 
 function FormMessage({ className, children, ...props }: React.ComponentProps<"p">) {
@@ -73,7 +78,7 @@ function FormMessage({ className, children, ...props }: React.ComponentProps<"p"
   const body = error ? String(error.message ?? "") : children;
   if (!body) return null;
   return (
-    <p data-slot="form-message" id={formMessageId} role={error ? "alert" : undefined} className={cn("m-0 font-sans text-caption leading-line-caption text-danger", className)} {...props}>
+    <p data-slot="form-message" id={formMessageId} role={error ? "alert" : undefined} className={cn("m-0 font-sans text-body-sm leading-line-body-sm text-danger", className)} {...props}>
       {body}
     </p>
   );

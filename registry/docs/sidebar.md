@@ -3,8 +3,9 @@ name: sidebar
 title: Sidebar
 type: ui
 surface: site
-description: "The console's rail on the lilac: the lockup, 36px pill rows with 18px filled glyphs and medium labels in the secondary purple, purple group labels, a red unread count and a ruled foot; the second rail for an agent's workspace."
-use_for: "Use for an app's main navigation. Wrap the app in SidebarProvider; put the lockup in SidebarHeader, groups of SidebarMenuButton rows (isActive on the current page, a filled Phosphor glyph first) in SidebarContent, and Help, the organization (SidebarMenuBadge with ADMIN) and the account in SidebarFooter; an unread number is SidebarMenuBadge variant count. The page goes in SidebarInset, under a page head (a 20px regular title, a muted line, actions at the right, a hairline below). Use variant secondary for a second rail beside it (an agent's workspace), collapsible icon to let it narrow to its glyphs (rows then show their tooltip), and SidebarTrigger or Cmd B to toggle. On phones it opens in a sheet."
-never: [A dark or purple rail, Line glyphs in the rows, Bold or purple row labels, A purple pill for the current row, Animating the rail when the keyboard shortcut toggles it]
-source: "Console src/components/layout (sidebar-metrics.ts, sidebar-nav-button.tsx, left-menu-panel.tsx, page-head.tsx)"
+kinds: [nav-link]
+description: "The app's rail: 288px of the ground with a quiet rule on its inner edge, Kode Mono group labels, 36px rows of a 20px glyph and a 14px graphite label that take the hover wash and turn ink under the pointer or when current, Kode Mono counts, nested rows on a quiet rule, and a ruled foot. It narrows to its glyphs or slides away, and becomes a sheet on a phone."
+use_for: "Wrap the app in SidebarProvider; put Sidebar (SidebarHeader, SidebarContent with SidebarGroup, SidebarGroupLabel and SidebarMenu rows, SidebarFooter, SidebarRail) beside SidebarInset holding the page and its SidebarTrigger. Mark the current row with isActive, give rows a tooltip for the icon rail (collapsible=\"icon\"), and use SidebarMenuBadge for a count. Cmd or Ctrl and B toggles it."
+never: [A dark or white rail on the gray ground, Pill or rounded rows, Bold or caps row labels, Icons that move on hover, An orange current row, Animating the keyboard toggle]
+source: "The Hoplite website's blog post rail (.bp-rail, .bp-rail__label, .bp-rail__link), changelog rail (.cl-rail, .cl-rail__label) and nav items (.hn__top: graphite label turning ink on the hover wash)"
 ---

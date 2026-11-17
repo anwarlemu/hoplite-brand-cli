@@ -1,22 +1,25 @@
 "use client";
 
 import * as React from "react";
-import { ArrowDownIcon, ArrowUpIcon, CaretLeftIcon, CaretRightIcon, CaretUpDownIcon, ColumnsIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
+import { Menu as BaseMenu } from "@base-ui/react/menu";
+import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, CaretUpDownIcon, CheckIcon, ColumnsIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { usePortalContainer } from "@/lib/surface";
 import { cn } from "@/lib/utils";
 
-// A table of records people sort, filter, select and page through (the console's Mailboxes table, Figma 427:2715,
-// Email). It keeps the table's three panels: the 48px lilac head with 14px muted labels (a sortable label is a ghost key
-// with an arrow for its direction), the white Shadow/S body with 64px rows (a selected row on the lilac) and, 8px below,
-// the 42px lilac pagination bar with the selection count at its left and the pages at its right. Above it, a toolbar:
-// a 40px filter field with a magnifying glass and the outline Columns key that opens a menu of checkboxes. Sorting,
-// filtering and paging are instant (no motion): they are repeated many times in a row.
+// A table of records people sort, filter, select and page through, built on Table (the site's ruled list: Kode Mono
+// heads over the strong rule, 48px rows of 14px ink on quiet rules, no box). A sortable head is its label as a key: it
+// turns ink under the pointer and while sorted, with a 12px arrow for the direction (both carets while unsorted). The
+// first column can hold square checks (Checkbox); a chosen row takes the hover wash. Above, a toolbar: a 40px filter
+// field with a magnifier and the compact outlined hexagon Columns key, whose popup (the site's square panel, 36px rows,
+// a check at the end of each shown column) turns columns on and off. Below, on the quiet rule, a 48px footer: the
+// selection count and rows per page at the left, the page and two compact ghost hexagon keys with arrows at the right.
+// Sorting, filtering and paging are instant (no motion): they are repeated many times in a row.
 
 type Value = string | number | Date | boolean | null | undefined;
 
@@ -49,7 +52,7 @@ function compare(a: Value, b: Value) {
   return text(a).localeCompare(text(b), undefined, { numeric: true, sensitivity: "base" });
 }
 
-/** A sortable head label: a ghost key whose arrow shows the direction (both carets while unsorted). */
+/** A sortable head label: the head's label as a key, with an arrow for the direction (both carets while unsorted). */
 function DataTableColumnHeader({ title, sorted, onSort, className }: { title: React.ReactNode; sorted: false | "asc" | "desc"; onSort?: () => void; className?: string }) {
   if (!onSort) return <span className={className}>{title}</span>;
   const Icon = sorted === "asc" ? ArrowUpIcon : sorted === "desc" ? ArrowDownIcon : CaretUpDownIcon;
@@ -57,59 +60,74 @@ function DataTableColumnHeader({ title, sorted, onSort, className }: { title: Re
     <button
       type="button"
       data-slot="data-table-column-header"
-      onClick={onSort}
-      className={cn("-mx-2 inline-flex h-8 items-center gap-1.5 rounded-pill px-2 font-sans text-body leading-tight font-normal text-fg-muted outline-none transition-[background-color,color] duration-fast ease-out hover:bg-subtle-hover hover:text-fg focus-visible:shadow-focus active:shadow-[inset_0_0_0_9996px_var(--ds-color-wash-pressed)] active:transition-none data-[sorted=true]:text-fg motion-reduce:transition-none", className)}
       data-sorted={!!sorted}
+      onClick={onSort}
+      className={cn("inline-flex h-8 cursor-pointer items-center gap-1 [text-transform:inherit] transition-colors duration-fast ease-out hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-[sorted=true]:text-fg motion-reduce:transition-none", className)}
     >
       {title}
-      <Icon aria-hidden weight={sorted ? "bold" : "regular"} className="size-4" />
+      <Icon aria-hidden className="size-3 shrink-0" />
     </button>
   );
 }
 
-/** The Columns key and its menu of checkboxes, one per column that can be hidden. */
+const POPUP =
+  "max-h-(--available-height) min-w-52 origin-(--transform-origin) overflow-y-auto bg-surface p-1 text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]";
+
+/** The Columns key and its popup of checks, one per column that can be hidden. */
 function DataTableViewOptions({ columns, visible, onVisibleChange }: { columns: { id: string; header: React.ReactNode }[]; visible: Record<string, boolean>; onVisibleChange: (id: string, on: boolean) => void }) {
+  const container = usePortalContainer();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-10 shrink-0">
-          <ColumnsIcon weight="fill" />
-          Columns
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuLabel>Show columns</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {columns.map((c) => (
-          <DropdownMenuCheckboxItem key={c.id} checked={visible[c.id] !== false} onCheckedChange={(on) => onVisibleChange(c.id, on === true)} onSelect={(e) => e.preventDefault()}>
-            {c.header}
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <BaseMenu.Root>
+      <BaseMenu.Trigger data-slot="data-table-view-options" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0")}>
+        <ColumnsIcon />
+        Columns
+      </BaseMenu.Trigger>
+      <BaseMenu.Portal container={container}>
+        <BaseMenu.Positioner side="bottom" align="end" sideOffset={4} className="z-50 outline-none">
+          <BaseMenu.Popup className={POPUP}>
+            <BaseMenu.Group>
+              <BaseMenu.GroupLabel className="ds-label flex h-8 items-center px-3">Show columns</BaseMenu.GroupLabel>
+              {columns.map((c) => (
+                <BaseMenu.CheckboxItem
+                  key={c.id}
+                  checked={visible[c.id] !== false}
+                  onCheckedChange={(on) => onVisibleChange(c.id, on)}
+                  closeOnClick={false}
+                  className="flex h-9 cursor-default items-center gap-2 px-3 font-sans text-body-sm leading-line-body-sm text-fg outline-none select-none data-highlighted:bg-subtle-hover pointer-coarse:h-11"
+                >
+                  <span className="min-w-0 flex-1 truncate">{c.header}</span>
+                  <BaseMenu.CheckboxItemIndicator className="flex shrink-0">
+                    <CheckIcon className="size-4" />
+                  </BaseMenu.CheckboxItemIndicator>
+                </BaseMenu.CheckboxItem>
+              ))}
+            </BaseMenu.Group>
+          </BaseMenu.Popup>
+        </BaseMenu.Positioner>
+      </BaseMenu.Portal>
+    </BaseMenu.Root>
   );
 }
 
-/** The pager under the table, as the console draws it: ghost 28px keys with 16px carets around the page number (14px,
- * the secondary purple, at least 32px wide), centered in a row at least 44px tall. The selection count and rows per
- * page sit at its left. */
+/** The footer under the table: the selection count and rows per page at the left, the page and its keys at the right. */
 function DataTablePagination({ page, pageCount, onPageChange, pageSize, pageSizes, onPageSizeChange, selected, total, className }: { page: number; pageCount: number; onPageChange: (page: number) => void; pageSize?: number; pageSizes?: number[]; onPageSizeChange?: (size: number) => void; selected?: number; total?: number; className?: string }) {
   const go = (p: number) => () => {
     if (p >= 0 && p < pageCount) onPageChange(p);
   };
+  const sizeLabel = React.useId();
   return (
-    <nav aria-label="Pagination" data-slot="data-table-pagination" className={cn("grid min-h-11 grid-cols-1 items-center gap-x-4 gap-y-1 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]", className)}>
-      <div className="flex min-h-7 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-body leading-tight text-fg-muted sm:justify-start">
+    <nav aria-label="Pagination" data-slot="data-table-pagination" className={cn("flex min-h-12 flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line py-2 font-sans text-body-sm leading-line-body-sm text-fg-muted", className)}>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
         {selected !== undefined && total !== undefined && (
-          <span aria-live="polite">
+          <span aria-live="polite" className="tabular-nums">
             {selected} of {total} selected
           </span>
         )}
         {pageSizes && pageSize && onPageSizeChange && (
           <span className="flex items-center gap-2">
-            <span id="data-table-page-size">Rows per page</span>
-            <Select value={String(pageSize)} onValueChange={(v) => onPageSizeChange(Number(v))}>
-              <SelectTrigger size="sm" aria-labelledby="data-table-page-size" className="w-20">
+            <span id={sizeLabel}>Rows per page</span>
+            <Select value={String(pageSize)} onValueChange={(v) => v && onPageSizeChange(Number(v))}>
+              <SelectTrigger size="sm" aria-labelledby={sizeLabel} className="w-20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -123,16 +141,18 @@ function DataTablePagination({ page, pageCount, onPageChange, pageSize, pageSize
           </span>
         )}
       </div>
-      <div className="flex items-center justify-center gap-1">
-        <Button variant="ghost" size="icon-sm" aria-label="Previous page" onClick={go(page - 1)} disabled={page === 0}>
-          <CaretLeftIcon className="size-4" />
-        </Button>
-        <span aria-current="page" className="min-w-8 text-center text-body leading-tight text-fg-secondary tabular-nums">
-          {page + 1}
+      <div className="flex items-center gap-2">
+        <span aria-current="page" className="tabular-nums">
+          Page {page + 1} of {pageCount}
         </span>
-        <Button variant="ghost" size="icon-sm" aria-label="Next page" onClick={go(page + 1)} disabled={page >= pageCount - 1}>
-          <CaretRightIcon className="size-4" />
-        </Button>
+        <span className="flex items-center gap-1">
+          <Button variant="ghost" size="icon-sm" aria-label="Previous page" onClick={go(page - 1)} disabled={page === 0}>
+            <ArrowLeftIcon />
+          </Button>
+          <Button variant="ghost" size="icon-sm" aria-label="Next page" onClick={go(page + 1)} disabled={page >= pageCount - 1}>
+            <ArrowRightIcon />
+          </Button>
+        </span>
       </div>
     </nav>
   );
@@ -160,12 +180,10 @@ type DataTableProps<T> = {
   toolbar?: React.ReactNode;
   /** What a row is called in labels ("mailbox"). */
   rowName?: string;
-  /** The boxed table (default) or the console's borderless list table. */
-  variant?: "default" | "open";
   className?: string;
 };
 
-function DataTable<T>({ columns, data, getRowId, filter = {}, selectable = false, selection: selectionProp, onSelectionChange, hideViewOptions = false, pageSize: pageSizeProp = 10, pageSizes, defaultSort = null, empty = "No results.", toolbar, rowName = "row", variant = "default", className }: DataTableProps<T>) {
+function DataTable<T>({ columns, data, getRowId, filter = {}, selectable = false, selection: selectionProp, onSelectionChange, hideViewOptions = false, pageSize: pageSizeProp = 10, pageSizes, defaultSort = null, empty = "No results.", toolbar, rowName = "row", className }: DataTableProps<T>) {
   const [query, setQuery] = React.useState("");
   const [sort, setSort] = React.useState<SortState>(defaultSort);
   const [page, setPage] = React.useState(0);
@@ -205,7 +223,7 @@ function DataTable<T>({ columns, data, getRowId, filter = {}, selectable = false
           {filter && (
             <InputGroup className="max-w-80 min-w-48 flex-1">
               <InputGroupAddon>
-                <MagnifyingGlassIcon className="size-3.5 text-fg-subtle" />
+                <MagnifyingGlassIcon />
               </InputGroupAddon>
               <InputGroupInput
                 type="text"
@@ -232,14 +250,14 @@ function DataTable<T>({ columns, data, getRowId, filter = {}, selectable = false
         </div>
       )}
       <div>
-        <Table variant={variant}>
+        <Table>
           <TableHeader>
             <TableRow data-empty="">
               {selectable && (
                 <TableHead>
                   <Checkbox
                     aria-label={`Select every ${rowName} on this page`}
-                    checked={allOnPage ? true : someOnPage ? "indeterminate" : false}
+                    checked={allOnPage} indeterminate={someOnPage && !allOnPage}
                     onCheckedChange={(on) => setSelection(on === true ? [...new Set([...selection, ...pageIds])] : selection.filter((id) => !pageIds.includes(id)))}
                   />
                 </TableHead>
@@ -281,7 +299,6 @@ function DataTable<T>({ columns, data, getRowId, filter = {}, selectable = false
           </TableBody>
         </Table>
         <DataTablePagination
-          className="mt-1"
           page={current}
           pageCount={pageCount}
           onPageChange={setPage}

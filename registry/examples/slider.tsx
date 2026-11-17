@@ -6,40 +6,40 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
 export function Preview() {
-  const [limit, setLimit] = React.useState([250]);
+  const [value, setValue] = React.useState([8]);
   return (
-    <div className="grid w-full max-w-100 gap-3">
+    <div className="grid w-full max-w-sm gap-3">
       <div className="flex items-center justify-between">
-        <Label id="limit-label">Daily send limit</Label>
-        <span className="text-body text-fg-muted">{limit[0]} emails</span>
+        <Label>Concurrent sandboxes</Label>
+        <span className="font-mono text-body-sm text-fg-muted">{value[0]}</span>
       </div>
-      <Slider aria-labelledby="limit-label" value={limit} onValueChange={setLimit} max={1000} step={50} />
+      <Slider value={value} onValueChange={setValue} min={1} max={50} aria-label="Concurrent sandboxes" />
     </div>
   );
 }
 
 export function Range() {
-  const [hours, setHours] = React.useState([9, 17]);
+  const [value, setValue] = React.useState([4, 16]);
   return (
-    <div className="grid w-full max-w-100 gap-3">
+    <div className="grid w-full max-w-sm gap-3">
       <div className="flex items-center justify-between">
-        <Label id="hours-label">Calling hours</Label>
-        <span className="text-body text-fg-muted">
-          {hours[0]}:00 to {hours[1]}:00
+        <Label>Sandbox memory</Label>
+        <span className="font-mono text-body-sm text-fg-muted">
+          {value[0]} to {value[1]} GiB
         </span>
       </div>
-      <Slider aria-labelledby="hours-label" value={hours} onValueChange={setHours} min={0} max={24} step={1} minStepsBetweenThumbs={1} />
+      <Slider value={value} onValueChange={setValue} min={2} max={32} step={2} />
     </div>
   );
 }
 
 export function States() {
   return (
-    <div className="grid w-full max-w-100 gap-6">
-      <Slider aria-label="Disabled" defaultValue={[40]} disabled />
-      <div className="flex h-40 gap-8">
-        <Slider aria-label="Vertical" defaultValue={[60]} orientation="vertical" />
-        <Slider aria-label="Vertical range" defaultValue={[20, 70]} orientation="vertical" />
+    <div className="grid w-full max-w-sm gap-8">
+      <Slider defaultValue={[30]} aria-label="Enabled" />
+      <Slider defaultValue={[60]} disabled aria-label="Disabled" />
+      <div className="h-40">
+        <Slider defaultValue={[40]} orientation="vertical" aria-label="Vertical" />
       </div>
     </div>
   );

@@ -3,8 +3,9 @@ name: command
 title: Command
 type: ui
 surface: site
-description: "A search row over grouped 36px results with purple group headings, in a panel or a dialog with the shared 16px popup corners."
-use_for: "Use as a command palette (CommandDialog, opened with Command K) to jump to agents, mailboxes and pages, or inline as a searchable list. Give every item a filled glyph and the group a heading."
-never: [Animating the palette open or closed, A palette without an empty state, Results without groups once there are more than ten]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): the nav rows, section labels (Channels, Shared) and the dialog"
+kinds: [menu-panel, menu-item]
+description: "A command palette: the site's square popup panel with a 48px search row over the quiet rule, Kode Mono group labels, 36px rows on the hover wash when highlighted and Kode Mono shortcuts at the end; the dialog opens and closes without motion."
+use_for: "Use CommandDialog for a palette opened with Command K (new thread, open a terminal, go to pull requests), or Command inline for a searchable list of actions. Put CommandInput first, then CommandList with CommandEmpty, CommandGroup (heading), CommandItem (onSelect) and CommandSeparator; CommandShortcut shows the keys. Built on cmdk, with the dialog on Base UI Dialog."
+never: [An open or close animation, Rounded panels or rows, A highlight that slides between rows, Shortcuts in the body face, More than one palette per app]
+source: "Extrapolated from the Hoplite website: the nav popup (.hn__panel, .hn__item), Kode Mono labels (.label) and the 32 percent ink scrim"
 ---

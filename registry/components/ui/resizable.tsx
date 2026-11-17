@@ -5,12 +5,12 @@ import { DotsSixVerticalIcon } from "@phosphor-icons/react/ssr";
 
 import { cn } from "@/lib/utils";
 
-// Panels with a draggable edge between them (extrapolated from the Hoplite console, Figma 427:2715: the 1px rules
-// between its rails and the inbox list). The handle is the console's 1px lilac rule with a wide invisible grip; with
-// `withHandle` it carries a 12 by 20 white tab with 4px corners, the field edge and a grip glyph. Drag it, or focus it
-// and use the arrow keys (Home and End go to the limits). Sizes are percentages of the group; dragging follows the
-// pointer directly, with no animation.
-
+// Panels with a draggable edge between them, extrapolated from the Hoplite website's ruled frames (the quiet 16 percent
+// rule between the product window's thread and its side panel, .pa-split). The handle is that 1px rule with an 8px
+// grip on each side; under the pointer it turns to the strong line, and while dragged or focused it is the ink (120ms).
+// With `withHandle` it carries a square 16 by 24 tab of the ground with the field edge and a 12px six-dot grip in the
+// quiet gray. Drag it, or focus it and use the arrow keys (Shift for bigger steps; Home and End go to the limits).
+// Sizes are percentages of the group; the panels follow the pointer directly, with no animation.
 type Direction = "horizontal" | "vertical";
 type PanelInfo = { id: string; defaultSize?: number; minSize: number; maxSize: number; order: number };
 type GroupContext = {
@@ -153,8 +153,8 @@ function ResizableHandle({ withHandle, className, ...props }: React.ComponentPro
       data-slot="resizable-handle"
       data-panel-group-direction={direction}
       className={cn(
-        "relative flex shrink-0 touch-none items-center justify-center bg-line-subtle outline-none select-none after:absolute focus-visible:bg-line-brand focus-visible:outline-none data-[dragging]:bg-line-brand",
-        vertical ? "h-px w-full cursor-row-resize after:inset-x-0 after:-inset-y-1.5" : "w-px cursor-col-resize after:inset-y-0 after:-inset-x-1.5",
+        "relative flex shrink-0 touch-none items-center justify-center bg-line outline-none select-none transition-colors duration-fast ease-out after:absolute hover:bg-line-strong focus-visible:bg-focus-ring data-dragging:bg-focus-ring motion-reduce:transition-none",
+        vertical ? "h-px w-full cursor-row-resize after:inset-x-0 after:-inset-y-2" : "w-px cursor-col-resize after:-inset-x-2 after:inset-y-0",
         className,
       )}
       onPointerDown={(e) => {
@@ -198,8 +198,8 @@ function ResizableHandle({ withHandle, className, ...props }: React.ComponentPro
       {...props}
     >
       {withHandle && (
-        <div className={cn("z-10 flex items-center justify-center rounded-xs border border-line-field bg-surface text-icon-secondary", vertical ? "h-3 w-5" : "h-5 w-3")}>
-          <DotsSixVerticalIcon weight="bold" className={cn("size-3", vertical && "rotate-90")} />
+        <div data-slot="resizable-grip" className={cn("z-10 flex items-center justify-center border border-line-field bg-surface text-fg-muted", vertical ? "h-4 w-6" : "h-6 w-4")}>
+          <DotsSixVerticalIcon className={cn("size-3", vertical && "rotate-90")} />
         </div>
       )}
     </div>

@@ -118,8 +118,8 @@ describe('convert', () => {
 	it('converts Tailwind classes, style objects, chart literals and native colors', () => {
 		const pal = sitePalette('body { background: #fff; color: #111; }');
 		expect(convertClasses('bg-white text-gray-500 hover:bg-blue-600 border-zinc-200', pal, stats(), true)).toBe('bg-surface text-fg-muted hover:bg-surface-brand border-line-subtle');
-		expect(convertScript("const s = { color: '#ff0000', marginTop: 16 }; const series = ['#22c55e', '#f59e0b', '#8b5cf6'];", pal, stats(), {})).toMatch(/marginTop: 'var\(--ds-space-4\)'.*#74629D.*#F9B1B5/s);
-		expect(convertNative('val bg = Color(0xFF0B0B0C)\nText(color = Color(0xFFF5F5F5))', sitePalette('body{background:#0b0b0c;color:#f5f5f5}'), stats(), 'site')).toContain('Color(0xFFFFFFFF)');
+		expect(convertScript("const s = { color: '#ff0000', marginTop: 16 }; const series = ['#22c55e', '#f59e0b', '#8b5cf6'];", pal, stats(), {})).toMatch(/marginTop: 'var\(--ds-space-4\)'.*#1A1A1A.*#FF3616/s);
+		expect(convertNative('val bg = Color(0xFF0B0B0C)\nText(color = Color(0xFFF5F5F5))', sitePalette('body{background:#0b0b0c;color:#f5f5f5}'), stats(), 'site')).toContain('Color(0xFFF2F2F0)');
 	});
 	it('reads a text color by its property, not by the words in the line', () => {
 		expect(lineFamily('Text("Your cards").foregroundColor(Color(hex: "#A1A1AA"))')).toBe('text');
@@ -139,8 +139,8 @@ describe('convert', () => {
 		const dark = sitePalette('body{background:#08090a;color:#fff}');
 		const trail = "const ctx = c.getContext('2d');\nctx.fillStyle = 'rgba(255,255,255,' + a + ')';\nconst glow = 'rgba(255, 255, 255, 0.2)';\nconst sea = '#1a4fd0';";
 		const out = convertScript(trail, dark, stats(), {});
-		expect(out).toContain("'rgba(62,42,83,' + a");
-		expect(out).toContain("'rgba(62, 42, 83, 0.2)'");
+		expect(out).toContain("'rgba(26,26,26,' + a");
+		expect(out).toContain("'rgba(26, 26, 26, 0.2)'");
 		expect(out).toContain("'#1a4fd0'");
 		expect(convertMarkup('<script>const s = { color: "#ffffff" };</script>', dark, stats())).not.toContain('#ffffff');
 		expect(convertMarkup('<script type="application/ld+json">{"color":"#ffffff"}</script>', dark, stats())).toContain('#ffffff');
@@ -158,7 +158,7 @@ describe('convert', () => {
 	it('keeps style guide swatches and redraws only light one-color marks for a dark site', () => {
 		expect(convertMarkup('<div style="background:#ff6600"></div><span>#ff6600</span>', sitePalette(''), stats())).toContain('background:#ff6600');
 		const dark = sitePalette('body{background:#000;color:#fff}');
-		expect(convertSvgMark('<svg><path fill="#ffffff"/></svg>', dark)).toContain('fill="#3E2A53"');
+		expect(convertSvgMark('<svg><path fill="#ffffff"/></svg>', dark)).toContain('fill="#1A1A1A"');
 		expect(convertSvgMark('<svg><path fill="#ff0000"/><path fill="#fff"/></svg>', dark)).toContain('#ff0000');
 	});
 });
@@ -181,7 +181,7 @@ describe('project', () => {
 
 describe('check', () => {
 	it('flags raw values with the token to use, and fixes exact matches', () => {
-		const css = '.a { color: #74629d; padding: 16px; font-weight: 700; transition: all 300ms ease-in; font-family: Inter; }';
+		const css = '.a { color: #ff3616; padding: 16px; font-weight: 700; transition: all 300ms ease-in; font-family: Inter; }';
 		const r = checkText('a.css', css);
 		expect(r.findings.map((f) => f.rule)).toEqual(expect.arrayContaining(['raw-color', 'off-scale', 'font', 'motion']));
 		expect(r.findings.find((f) => f.rule === 'raw-color')?.hint).toContain('var(--ds-color-brand)');
@@ -190,7 +190,7 @@ describe('check', () => {
 		expect(fixed).toContain('padding: var(--ds-space-4)');
 	});
 	it('checks Tailwind classes, style objects and template styles, and accepts brand values', () => {
-		expect(checkText('a.tsx', 'export const A = () => <p className="text-red-500 p-[13px] font-bold text-sm">x</p>;').findings.map((f) => f.rule)).toEqual(['raw-color', 'off-scale', 'off-scale']);
+		expect(checkText('a.tsx', 'export const A = () => <p className="text-red-500 p-[13px] font-bold text-sm">x</p>;').findings.map((f) => f.rule)).toEqual(['raw-color', 'off-scale', 'font', 'off-scale']);
 		expect(checkText('a.tsx', 'export const A = () => <p style={{ color: "#ff0000" }}>x</p>;').findings[0].rule).toBe('raw-color');
 		expect(checkText('a.astro', '<p style="color: #ff0000">x</p><style>.a { gap: 13px }</style>').findings.map((f) => f.rule)).toEqual(['raw-color', 'off-scale']);
 		expect(checkText('a.tsx', 'export const A = () => <p className="bg-surface text-fg-muted p-4 rounded-control" style={{ color: "var(--ds-color-brand)" }}>x</p>;').findings).toEqual([]);
@@ -228,7 +228,7 @@ describe('element layer', () => {
 	it('styles only elements whose class says what they are, skin only, with gated hover and reduced motion', () => {
 		const css = '.btn-primary { padding: 10px; display: grid } .hw-msg-main { color: red } .plan-card { width: 300px } button { color: red } .nav-links > a { color: red }';
 		const { block, count } = elementLayer('styles.css', css, 'site');
-		expect(block).toMatch(/\.btn-primary \{[^}]*background-color: var\(--ds-color-action-primary\)/);
+		expect(block).toMatch(/\.btn-primary \{[^}]*background: linear-gradient\(var\(--ds-color-action-primary\)/);
 		expect(block).not.toContain('.hw-msg-main');
 		expect(block).toMatch(/\.plan-card \{/);
 		expect(block).not.toMatch(/^button/m);
@@ -362,7 +362,7 @@ describe('the one command', () => {
 		expect(css.startsWith('/* site */\n@import "./_hoplite-ds/brand.css";')).toBe(true);
 		expect(css).toContain("@font-face { font-family: 'Brand'; src: url(b.woff2); }");
 		expect(css).toContain('background: var(--ds-color-bg-default)');
-		expect(readFileSync(join(p, '_hoplite-ds/brand.css'), 'utf8')).toMatch(/^@import url\("https:\/\/fonts\.googleapis\.com\/css2\?family=Inter/);
+		expect(readFileSync(join(p, '_hoplite-ds/brand.css'), 'utf8')).toMatch(/^@import url\("https:\/\/fonts\.googleapis\.com\/css2\?family=Chakra\+Petch/);
 		expect(readFileSync(join(p, 'index.html'), 'utf8')).not.toContain('<script');
 		expect(readFileSync(join(p, 'AGENTS.md'), 'utf8')).toContain('ds:contract:start');
 		expect(JSON.parse(readFileSync(join(p, '.claude/settings.json'), 'utf8')).hooks.PreToolUse[0].hooks[0].command).toMatch(/hook pre-tool-use/);
@@ -477,7 +477,7 @@ export function Help({ children, ...props }: any) { return <PopoverPanel classNa
   it('styles portalled parts without replacing refs, state, handlers, placement or variant conditions', () => {
     const out = restyleOverlays(menu, 'site');
     expect(out.parts).toEqual(['dropdown-menu.Content', 'dropdown-menu.Item', 'popover.Content']);
-    expect(out.text).toContain('rounded-panel bg-surface');
+    expect(out.text).toContain('rounded-none bg-surface');
     expect(out.text).toContain('shadow-floating');
     expect(out.text).toContain('data-[highlighted]:bg-subtle');
     expect(out.text).toContain('max-h-(--radix-dropdown-menu-content-available-height)');
@@ -496,7 +496,7 @@ export function Help({ children, ...props }: any) { return <PopoverPanel classNa
 export function Picker(props: any) { return <Select.Root name="card" value={props.value} onValueChange={props.onValueChange} required><Select.Trigger ref={props.ref} className="flex h-10 rounded-xl bg-black text-white px-4"><Select.Value /></Select.Trigger><Select.Portal><Select.Content position="popper" className="w-full min-w-20 rounded-xl bg-black text-white font-display text-body-sm"><Select.Viewport><Select.Item value="travel" disabled={props.disabled} onKeyDown={props.onKeyDown} className="py-2 font-display text-body-sm focus:bg-purple-500"><Select.ItemText>Travel</Select.ItemText></Select.Item></Select.Viewport></Select.Content></Select.Portal></Select.Root>; }`;
     const out = restyleOverlays(source, 'site');
     expect(out.parts).toEqual(['select.Trigger', 'select.Content', 'select.Item']);
-    expect(out.text).toContain('rounded-control');
+    expect(out.text).toContain('rounded-none');
     expect(out.text).toContain('font-sans text-body');
     expect(out.text).toContain('w-[max(11rem,var(--radix-select-trigger-width))]');
     expect(out.text).toContain('max-w-(--radix-select-content-available-width)');

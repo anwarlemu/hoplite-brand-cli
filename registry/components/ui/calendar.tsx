@@ -3,14 +3,16 @@
 import * as React from "react";
 import { CaretDownIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/ssr";
 
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// A month grid (extrapolated from the Hoplite console, Figma 427:2715: its 8px keys, the lilac wash and the purple
-// action). The caption is 14px medium ink between two ghost caret keys; weekdays are 12px muted; days are 36px keys with
-// 8px corners and 14px ink. Today is purple and medium; a selected day is the purple key with white text; the days
-// inside a range sit on a lilac band between its two purple ends; days of the next and last month are faint. Arrow keys
-// move a day or a week, Home and End go to the week's ends, Page Up and Page Down change the month (with Shift, the
-// year), Enter or Space selects. Changing month is instant: it happens many times in a row.
+// A month grid, extrapolated from the site (it has none): the month is a Chakra Petch light title in 20px between two
+// compact ghost hexagon keys with 16px carets (the nav's keys), the weekdays are Kode Mono labels, and the days are 36px
+// squares of 14px ink that meet edge to edge. A day takes the hover wash under the pointer; today is held in a quiet
+// 32 percent frame; a chosen day is filled ink with its number in the ground color; the days inside a range sit on the
+// hover wash between its two ink ends; days of the months either side are slate. Arrow keys move a day or a week, Home
+// and End go to the week's ends, Page Up and Page Down change the month (with Shift, the year), Enter or Space chooses.
+// Changing month is instant: it happens many times in a row.
 
 type DateRange = { from: Date | undefined; to?: Date | undefined };
 type Matcher = Date | Date[] | ((date: Date) => boolean) | { before?: Date; after?: Date } | { from: Date; to: Date } | { dayOfWeek: number[] };
@@ -184,27 +186,27 @@ function Calendar(props: CalendarProps) {
 
   return (
     <div data-slot="calendar" className={cn("w-fit p-3 font-sans text-fg", className)}>
-      <div ref={grid} className="flex flex-col gap-4 sm:flex-row">
+      <div ref={grid} className="flex flex-col gap-6 sm:flex-row">
         {months.map((m, index) => (
           <div key={m.toISOString()} data-slot="calendar-month" className="flex flex-col gap-3">
             <div data-slot="calendar-caption" className="relative flex h-8 items-center justify-center">
               {index === 0 && (
-                <button type="button" aria-label="Go to the previous month" onClick={() => setMonth(addMonths(month, -1))} className={NAV_BUTTON + " absolute left-0"}>
+                <button type="button" aria-label="Go to the previous month" onClick={() => setMonth(addMonths(month, -1))} className={cn(NAV_BUTTON, "absolute left-0")}>
                   <CaretLeftIcon />
                 </button>
               )}
               {captionLayout === "dropdown" && index === 0 ? (
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                   <CaptionSelect label="Month" value={m.getMonth()} onChange={(v) => setMonth(new Date(m.getFullYear(), v, 1))} options={Array.from({ length: 12 }, (_, i) => ({ value: i, label: fmt({ month: "short" }).format(new Date(2023, i, 1)) }))} />
                   <CaptionSelect label="Year" value={m.getFullYear()} onChange={(v) => setMonth(new Date(v, m.getMonth(), 1))} options={years.map((y) => ({ value: y, label: String(y) }))} />
                 </div>
               ) : (
-                <p aria-live="polite" className="text-body leading-tight font-medium text-fg">
+                <p aria-live="polite" data-slot="calendar-title" className="font-display text-h5 leading-7 font-light text-fg">
                   {fmt({ month: "long", year: "numeric" }).format(m)}
                 </p>
               )}
               {index === months.length - 1 && (
-                <button type="button" aria-label="Go to the next month" onClick={() => setMonth(addMonths(month, 1))} className={NAV_BUTTON + " absolute right-0"}>
+                <button type="button" aria-label="Go to the next month" onClick={() => setMonth(addMonths(month, 1))} className={cn(NAV_BUTTON, "absolute right-0")}>
                   <CaretRightIcon />
                 </button>
               )}
@@ -213,7 +215,7 @@ function Calendar(props: CalendarProps) {
               <thead>
                 <tr>
                   {weekdayNames.map((w) => (
-                    <th key={w.getDay()} scope="col" aria-label={fmt({ weekday: "long" }).format(w)} className="size-9 p-0 text-caption leading-tight font-normal text-fg-muted">
+                    <th key={w.getDay()} scope="col" aria-label={fmt({ weekday: "long" }).format(w)} className="ds-label h-8 w-9 p-0 text-center font-normal">
                       {fmt({ weekday: "short" }).format(w).slice(0, 2)}
                     </th>
                   ))}
@@ -221,7 +223,7 @@ function Calendar(props: CalendarProps) {
               </thead>
               <tbody>
                 {weeksOf(m, weekStartsOn).map((week) => (
-                  <tr key={week[0].toISOString()} className="mt-0.5">
+                  <tr key={week[0].toISOString()}>
                     {week.map((d) => {
                       const outside = d.getMonth() !== m.getMonth();
                       if (outside && !showOutsideDays) return <td key={d.toISOString()} className="size-9 p-0" />;
@@ -235,7 +237,7 @@ function Calendar(props: CalendarProps) {
                           data-range-start={s.start || undefined}
                           data-range-end={s.end || undefined}
                           data-range-middle={s.middle || undefined}
-                          className="relative size-9 p-0 py-0.5 text-center data-range-end:bg-[linear-gradient(to_left,transparent_50%,var(--ds-color-bg-subtle)_50%)] data-range-middle:bg-subtle data-range-start:bg-[linear-gradient(to_right,transparent_50%,var(--ds-color-bg-subtle)_50%)] data-range-start:[background-clip:content-box] data-range-end:[background-clip:content-box] data-range-middle:[background-clip:content-box]"
+                          className="size-9 p-0 text-center data-range-middle:bg-subtle-hover"
                         >
                           <CalendarDayButton
                             date={d}
@@ -264,9 +266,9 @@ function Calendar(props: CalendarProps) {
   );
 }
 
-const NAV_BUTTON =
-  "inline-flex size-8 items-center justify-center rounded-pill text-icon-secondary outline-none transition-[background-color,color] duration-150 ease-out hover:bg-subtle active:bg-subtle hover:text-fg active:brightness-95 active:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none [&_svg]:size-4";
+const NAV_BUTTON = cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "pointer-coarse:size-11");
 
+/** The dropdown caption's month and year: a compact field with a caret (the native select keeps its own list). */
 function CaptionSelect({ label, value, options, onChange }: { label: string; value: number; options: { value: number; label: string }[]; onChange: (value: number) => void }) {
   return (
     <span className="relative inline-flex">
@@ -274,7 +276,7 @@ function CaptionSelect({ label, value, options, onChange }: { label: string; val
         aria-label={label}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-8 appearance-none rounded-pill bg-surface pr-7 pl-2.5 font-sans text-body leading-tight font-medium text-fg shadow-s outline-none focus-visible:shadow-focus"
+        className="h-8 cursor-pointer appearance-none border border-line-field bg-transparent pr-8 pl-3 font-sans text-body-sm leading-line-body-sm font-medium text-fg transition-[border-color] duration-fast ease-out hover:border-line-strong focus-visible:border-focus-ring focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -282,14 +284,14 @@ function CaptionSelect({ label, value, options, onChange }: { label: string; val
           </option>
         ))}
       </select>
-      <CaretDownIcon aria-hidden className="pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2 text-fg" />
+      <CaretDownIcon aria-hidden className="pointer-events-none absolute top-2 right-3 size-4 text-fg-muted" />
     </span>
   );
 }
 
 type DayButtonProps = Omit<React.ComponentProps<"button">, "children"> & { date: Date; label: string; today?: boolean; outside?: boolean; selected?: boolean; middle?: boolean };
 
-/** One day: a 36px key with 8px corners. Exported so an app can render a day its own way inside the same grid. */
+/** One day: a 36px square. Exported so an app can render a day its own way inside the same grid. */
 function CalendarDayButton({ date, label, today, outside, selected, middle, disabled, className, ...props }: DayButtonProps) {
   return (
     <button
@@ -305,11 +307,11 @@ function CalendarDayButton({ date, label, today, outside, selected, middle, disa
       aria-current={today ? "date" : undefined}
       disabled={disabled}
       className={cn(
-        "relative mx-auto flex size-9 items-center justify-center rounded-pill font-sans text-body leading-tight text-fg tabular-nums outline-none transition-[background-color,color] duration-150 ease-out hover:bg-subtle active:bg-subtle active:brightness-95 active:transition-none focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:text-fg-faint disabled:line-through motion-reduce:transition-none",
-        today && "font-medium text-fg-brand",
-        outside && "text-fg-faint",
-        middle && "rounded-none bg-transparent text-fg hover:bg-subtle-hover",
-        selected && "bg-primary text-on-primary hover:bg-primary-hover",
+        "relative flex size-9 cursor-pointer items-center justify-center border border-transparent font-sans text-body-sm leading-none text-fg tabular-nums transition-[background-color,border-color,color] duration-fast ease-out hover:bg-subtle-hover active:bg-pressed focus-visible:z-10 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:text-fg-faint motion-reduce:transition-none",
+        today && "border-line-field",
+        outside && "text-fg-subtle",
+        middle && "hover:bg-pressed",
+        selected && "border-primary bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-hover",
         className,
       )}
       {...props}

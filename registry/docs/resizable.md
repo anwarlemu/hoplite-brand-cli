@@ -3,8 +3,8 @@ name: resizable
 title: Resizable
 type: ui
 surface: site
-description: "Panels split by the console's 1px lilac rule, which can be dragged or moved with the arrow keys."
-use_for: "Use for a workspace whose panes people size themselves (the inbox list beside a message, a log beside its detail). Give each ResizablePanel a defaultSize in percent and sensible minSize; add withHandle when the edge needs to be found."
-never: [Thick or colored dividers, Panels that can collapse to nothing without a minSize, Animating the panes while dragging]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): the 1px rules between the rails and the inbox list"
+description: "Panels with a draggable edge: the quiet 1px rule between them turns to the strong line under the pointer and the ink while dragged or focused, with an optional square grip tab. Drag it or use the arrow keys."
+use_for: "Use ResizablePanelGroup with ResizablePanel and ResizableHandle for a split view people tune (a thread and its checks, a diff and a terminal). Give panels a defaultSize and minSize in percent; nest a vertical group inside a panel for a grid. Add withHandle when the edge should look grabbable."
+never: [A thick or colored divider, A rounded grip, Animated resizing, Panels that collapse to nothing without a minSize]
+source: "Extrapolated from the Hoplite website: the quiet rule between the product window's thread and side panel (.pa-split) made draggable"
 ---

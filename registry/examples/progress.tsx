@@ -2,32 +2,46 @@
 
 import * as React from "react";
 
-import { Progress } from "@/components/ui/progress";
+import { Progress, ProgressLabel, ProgressValue } from "@/components/ui/progress";
 
 export function Preview() {
-  const [value, setValue] = React.useState(12);
-  React.useEffect(() => {
-    // ds-latency: advances a presentation-only progress example; no user input is waiting.
-    const t = setTimeout(() => setValue(64), 600);
-    return () => clearTimeout(t);
-  }, []);
+  return <Progress value={62} aria-label="Monthly usage" className="max-w-sm" />;
+}
+
+export function WithLabel() {
   return (
-    <div className="grid w-full max-w-100 gap-2">
-      <div className="flex justify-between text-body">
-        <span className="text-fg">Mailbox storage</span>
-        <span className="text-fg-muted">{value}%</span>
-      </div>
-      <Progress value={value} aria-label="Mailbox storage used" />
+    <div className="grid max-w-sm gap-6">
+      <Progress value={84}>
+        <ProgressLabel>Usage this month</ProgressLabel>
+        <ProgressValue />
+      </Progress>
+      <Progress value={96} variant="accent">
+        <ProgressLabel>Sandbox hours</ProgressLabel>
+        <ProgressValue>{(formatted) => `${formatted} of 400 h`}</ProgressValue>
+      </Progress>
     </div>
   );
 }
 
-export function Values() {
+export function Live() {
+  const [value, setValue] = React.useState(12);
+  React.useEffect(() => {
+    // ds-latency: the demo advances a simulated clone; nothing waits on it.
+    const id = window.setInterval(() => setValue((current) => (current >= 100 ? 12 : Math.min(100, current + 11))), 900);
+    return () => window.clearInterval(id);
+  }, []);
   return (
-    <div className="grid w-full max-w-100 gap-4">
-      <Progress value={0} aria-label="Empty" />
-      <Progress value={33} aria-label="A third" />
-      <Progress value={100} aria-label="Full" />
-    </div>
+    <Progress value={value} className="max-w-sm">
+      <ProgressLabel>Cloning acme/storefront</ProgressLabel>
+      <ProgressValue />
+    </Progress>
+  );
+}
+
+export function Indeterminate() {
+  return (
+    <Progress value={null} className="max-w-sm">
+      <ProgressLabel>Waiting for a sandbox</ProgressLabel>
+    </Progress>
   );
 }

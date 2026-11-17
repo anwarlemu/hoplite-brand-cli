@@ -1,41 +1,41 @@
 import { CodeBlock, CodeBlockActions, CodeBlockContent, CodeBlockCopyButton, CodeBlockHeader, CodeBlockTitle } from "@/components/ui/code-block";
 
-const HEADERS = `{
-  "X-Hoplite-Request-ID": "b4f64d39-7cf0-4c89-b2fa-3522091e979d",
-  "X-Hoplite-Timestamp": "1764875501",
-  "X-Hoplite-Signature": "sha256=2f8d6b7f37b7d6461f7b8a91f4f495eb54f60af8f4a1f9d3edfdc7d2adf237f2"
-}`;
+const INSTALL = `brew install usehoplite/tap/hoplite
+hoplite login
+hoplite thread "Fix 500 on uploads over 10 MB" --repo notra/notra-api`;
 
-const SNIPPET = `import { Hoplite } from "@hoplite/sdk";
-
-// Send the agent's first email.
-const hoplite = new Hoplite({ apiKey: process.env.INKBOX_API_KEY });
-await hoplite.mail.send({ to: "you@example.com", subject: "Hello" });`;
+const CONFIG = `// hoplite.config.ts
+export default {
+  sandbox: { size: "8 vCPU", memory: "32 GiB" },
+  // Run the suite before opening a pull request
+  verify: ["npm test"],
+  autoMerge: true,
+};`;
 
 export function Preview() {
   return (
-    <CodeBlock>
+    <CodeBlock className="max-w-xl">
       <CodeBlockHeader>
-        <CodeBlockTitle language="json">JSON</CodeBlockTitle>
+        <CodeBlockTitle>Bash</CodeBlockTitle>
         <CodeBlockActions>
-          <CodeBlockCopyButton value={HEADERS} />
+          <CodeBlockCopyButton value={INSTALL} />
         </CodeBlockActions>
       </CodeBlockHeader>
-      <CodeBlockContent code={HEADERS} language="json" wrap />
+      <CodeBlockContent code={INSTALL} language="bash" />
     </CodeBlock>
   );
 }
 
-export function Script() {
+export function LineNumbers() {
   return (
-    <CodeBlock>
+    <CodeBlock className="max-w-xl">
       <CodeBlockHeader>
-        <CodeBlockTitle>send.ts</CodeBlockTitle>
+        <CodeBlockTitle>TypeScript</CodeBlockTitle>
         <CodeBlockActions>
-          <CodeBlockCopyButton value={SNIPPET} />
+          <CodeBlockCopyButton value={CONFIG} />
         </CodeBlockActions>
       </CodeBlockHeader>
-      <CodeBlockContent code={SNIPPET} language="ts" />
+      <CodeBlockContent code={CONFIG} language="ts" lineNumbers />
     </CodeBlock>
   );
 }

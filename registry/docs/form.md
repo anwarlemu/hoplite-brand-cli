@@ -3,8 +3,8 @@ name: form
 title: Form
 type: ui
 surface: site
-description: "react-hook-form fields laid out as the console's forms: a 14px label, the control, a muted description 8px under the control and a 12px red message."
-use_for: "Build a validated form with react-hook-form: wrap it in Form with the useForm result, give each field a FormField with a render function returning FormItem, FormLabel, FormControl around the one control, then FormDescription and FormMessage. FormControl passes the id, the described-by ids and aria-invalid to the control, so the red edge and the message appear together. Finish with one full-width default Button of type submit, showing a Spinner while it works."
-never: [A red label on an invalid field, Validating on every keystroke before the first submit, A submit button that stays enabled while the request runs, More than one purple pill in the form]
-source: "Figma 427:2715: Create Agent Identity (handle check states, Creating Agent Identity...), Login"
+description: "react-hook-form helpers laid out as Field: a 14px medium label 8px above the control, 14px quiet help and a 14px orange message below; the control alone takes the orange edge when it fails."
+use_for: "Use Form with react-hook-form's useForm: FormField for each value, FormItem around its FormLabel, FormControl (around exactly one control), FormDescription and FormMessage. Stack items in a grid with gap-6. For forms without react-hook-form use Field."
+never: [Messages in any color but the orange, An orange label, Errors above the control, Wrapping more than one element in FormControl]
+source: "Extrapolated from the Hoplite website's type and lines and the principles for fields (the site has no forms)"
 ---

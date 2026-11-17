@@ -1,53 +1,44 @@
-import { EnvelopeSimpleIcon, PhoneIcon } from "@phosphor-icons/react/ssr";
+"use client";
+
+import { GitPullRequestIcon } from "@phosphor-icons/react/ssr";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
-function AgentCard() {
+function PullRequestCard({ defaultOpen }: { defaultOpen?: boolean }) {
   return (
-    <div className="flex gap-3">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-pill bg-avatar text-body-lg font-medium text-white">A</span>
-      <div className="grid min-w-0 gap-1">
-        <p className="text-body font-medium text-fg">@acme</p>
-        <p className="text-body text-fg-muted">Support agent for Acme. Created Jul 27, 2026.</p>
-        <p className="mt-1 flex items-center gap-2 text-body text-fg">
-          <EnvelopeSimpleIcon weight="fill" className="size-4.5 text-icon-secondary" /> acme@inkboxmail.com
-        </p>
-        <p className="flex items-center gap-2 text-body text-fg">
-          <PhoneIcon weight="fill" className="size-4.5 text-icon-secondary" /> +1 650 474 9720
-        </p>
-      </div>
-    </div>
-  );
-}
-
-export function Preview() {
-  return (
-    <p className="text-body text-fg">
-      Messages to{" "}
-      <HoverCard>
-        <HoverCardTrigger href="#agent" className="text-rose underline-offset-4 hover:underline">
-          @acme
+    <p className="m-0 max-w-md text-body leading-body text-fg-secondary">
+      The agent opened{" "}
+      <HoverCard defaultOpen={defaultOpen}>
+        <HoverCardTrigger href="#pull-482" className="font-medium text-fg underline decoration-line decoration-1 underline-offset-4 transition-[text-decoration-color] duration-base ease-out hover:decoration-current motion-reduce:transition-none">
+          #482
         </HoverCardTrigger>
-        <HoverCardContent>
-          <AgentCard />
+        <HoverCardContent align="start" className="flex flex-col gap-3">
+          <div className="flex items-start gap-3">
+            <GitPullRequestIcon className="size-5 shrink-0 text-fg" />
+            <div className="flex flex-col">
+              <span className="font-medium text-fg">Fix flaky upload test</span>
+              <span className="text-fg-muted">acme/web, fix/upload-retry into main</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between border-t border-line pt-3">
+            <span className="ds-label">Checks</span>
+            <span className="text-fg">4 of 4 passed</span>
+          </div>
         </HoverCardContent>
       </HoverCard>{" "}
-      are answered within a minute.
+      after its checks passed in the sandbox.
     </p>
   );
 }
 
+export function Preview() {
+  return <PullRequestCard />;
+}
+
 export function Open() {
   return (
-    <div className="flex min-h-60 items-start justify-center">
-      <HoverCard defaultOpen>
-        <HoverCardTrigger href="#agent" className="text-rose underline-offset-4 hover:underline">
-          @acme
-        </HoverCardTrigger>
-        <HoverCardContent>
-          <AgentCard />
-        </HoverCardContent>
-      </HoverCard>
+    <div className="min-h-64">
+      <PullRequestCard defaultOpen />
     </div>
   );
 }

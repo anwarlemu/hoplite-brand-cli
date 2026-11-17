@@ -3,8 +3,9 @@ name: textarea
 title: Textarea
 type: ui
 surface: site
-description: "The field's lilac-gray edge with 12px corners around several lines of 14px text, 12px by 16px in, 72px tall to start and not resized by hand."
-use_for: "Use for free text longer than a line (Agent Description, a note, a message). Label it above like Input. It grows with its content; set rows or a min-h class to change the starting height."
-never: [A textarea without a label, A gray background for an editable value, A fixed height that hides what was typed]
-source: "Figma 427:2715: Agent Description (Form- Input, 72px) in Create Agent Identity"
+kinds: [input]
+description: "The square field for several lines: a 32 percent edge on the ground, 14px Satoshi on 20px lines, 96px tall at first and growing with its content; strong edge under the pointer, ink on focus, orange when invalid."
+use_for: "Use Textarea for free text longer than a line (a task for an agent, a review comment). Put it in a Field with a label above. For a message composer with actions inside the frame use InputGroup with InputGroupTextarea."
+never: [Rounded corners, A white or filled well, A fixed height that hides what was typed, A placeholder used as the label]
+source: "Derived from the Hoplite website's lines and type, as Input is (the site has no fields): the 32 percent line (--line-margin), the strong edge (--line), 14px controls"
 ---

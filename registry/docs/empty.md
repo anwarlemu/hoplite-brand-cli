@@ -3,8 +3,8 @@ name: empty
 title: Empty
 type: ui
 surface: site
-description: "The centered empty state: the 3D octopus under an arc of glyph circles, a 22px bold title, a short description and a purple pill."
-use_for: "Use where a list or pane has nothing yet (Create Your First Agent, No email selected). Put EmptyOrbit (up to five filled glyphs of what the area holds) and EmptyMascot in an EmptyMedia variant=\"mascot\", then the title, a one-sentence description and one default Button with a plus. For a smaller pane, use EmptyMedia variant=\"icon\" with one glyph."
-never: [More than one action, Animating the orbit, A title longer than five words, Gray stock illustrations]
-source: "Figma 427:2715: Dashboard - empty state (Create Your First Agent), Agent Workspace - Inbox - Not selected (No email selected)"
+description: "A view with nothing in it yet: centered, a 48px hexagon outline holding a glyph, a 20px Chakra Petch title, 14px quiet text and hexagonal keys below; bare, in a stone frame, or inside crop marks."
+use_for: "Use Empty for a list, table or page with no content yet (no threads, no automations) or a search with no results. Say what goes here and give the one action that fills it (an ink key), with a second outlined key or a link at most."
+never: [Illustrations or mascots, A filled hexagon or an orange glyph, More than two keys, Bold titles]
+source: "Extrapolated from the Hoplite website: its hexagonal marks (.faq__hex), square frames (.pr-plan, .how__frame corners), display type and keys"
 ---

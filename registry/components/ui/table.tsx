@@ -2,77 +2,77 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-// The console's table (PaginatedTable's TABLE_SX). A 48px lilac head with 14px regular muted labels and pill-round
-// ends (16px), an 8px gap, then the white body: 64px rows of 14px ink ruled by the row line, outlined by the 1px ring
-// line with 12px outer corners and a soft drop under the last row. A row under the pointer or selected fills the lilac
-// (the fill eases over 100ms). Cells keep 16px sides; the table scrolls sideways inside its frame on a narrow screen.
-// `open` is the console's borderless list table: a 40px clear head over the row line, rows 2px apart with 12px
-// corners, filled with 70% of the lilac under the pointer or when selected.
-const OPEN =
-  "data-[variant=open]:border-spacing-y-0.5 data-[variant=open]:[&>thead]:after:hidden data-[variant=open]:[&>thead>tr>th]:h-10 data-[variant=open]:[&>thead>tr>th]:rounded-none data-[variant=open]:[&>thead>tr>th]:border-b data-[variant=open]:[&>thead>tr>th]:border-line-row data-[variant=open]:[&>thead>tr>th]:bg-transparent data-[variant=open]:[&>tbody>tr>td]:rounded-none data-[variant=open]:[&>tbody>tr>td]:border-0 data-[variant=open]:[&>tbody>tr>td]:bg-transparent data-[variant=open]:[&>tbody>tr>td:first-child]:rounded-l-control data-[variant=open]:[&>tbody>tr>td:last-child]:rounded-r-control data-[variant=open]:[&>tbody>tr:last-child]:shadow-none data-[variant=open]:[&>tbody>tr:last-child]:[clip-path:none] data-[variant=open]:[&>tbody>tr:not([data-empty]):hover>td]:bg-subtle/70 data-[variant=open]:[&>tbody>tr[data-state=selected]>td]:bg-subtle/70";
+// The site's ruled tables: no box, no fills, a quiet 16 percent rule between rows. `default` is the list table: Kode
+// Mono column heads (12px capitals, tracked 8 percent, quiet gray) in a 40px row over the strong rule, then 48px rows of
+// 14px ink with 16px sides, the first column flush with the rules. `compare` is the pricing comparison (.pr-table):
+// 64px heads in Chakra Petch 20px over the quiet rule, 48px rows ruled at the top, row names (a TableHead with
+// scope="row") in 14px graphite and values in the ink; a TableGroup row opens each section with a Chakra Petch 20px head
+// 48px below the last row and 16px above the first. TableYes is the filled ink hexagon and TableNo the slate dash.
+// `prose` is the blog's table (.bp-table): 16px tabular text in rows 12px tall above and below, top aligned, the Kode
+// Mono heads over the strong rule. A selected row (data-state="selected") takes the hover wash at once. Nothing moves.
+type TableVariant = "default" | "compare" | "prose";
 
-function Table({ className, variant = "default", ...props }: React.ComponentProps<"table"> & { variant?: "default" | "open" }) {
+function Table({ className, variant = "default", ...props }: React.ComponentProps<"table"> & { variant?: TableVariant }) {
   return (
-    <div data-slot="table-container" className="relative w-full overflow-x-auto px-px pt-px pb-1">
-      <table data-slot="table" data-variant={variant} className={cn("w-full caption-bottom border-separate border-spacing-0 font-sans text-body leading-tight text-fg", OPEN, className)} {...props} />
+    <div data-slot="table-container" className="relative w-full overflow-x-auto">
+      <table
+        data-slot="table"
+        data-variant={variant}
+        className={cn(
+          "group/table w-full caption-bottom border-separate border-spacing-0 font-sans text-body-sm leading-line-body-sm text-fg",
+          variant === "compare" && "table-fixed",
+          variant === "prose" && "text-body leading-line-body tabular-nums",
+          className,
+        )}
+        {...props}
+      />
     </div>
   );
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
-  return (
-    <thead
-      data-slot="table-header"
-      className={cn(
-        "after:table-row after:h-2 after:content-[''] [&>tr>th]:bg-subtle [&>tr>th:first-child]:rounded-l-panel [&>tr>th:last-child]:rounded-r-panel",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <thead data-slot="table-header" className={className} {...props} />;
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
-  return (
-    <tbody
-      data-slot="table-body"
-      className={cn(
-        "[&>tr>td]:bg-surface [&>tr:not(:last-child)>td]:border-b [&>tr:not(:last-child)>td]:border-b-line-row [&>tr>td:first-child]:border-l [&>tr>td:first-child]:border-l-line-ring [&>tr>td:last-child]:border-r [&>tr>td:last-child]:border-r-line-ring [&>tr:first-child>td]:border-t [&>tr:first-child>td]:border-t-line-ring [&>tr:first-child>td:first-child]:rounded-tl-control [&>tr:first-child>td:last-child]:rounded-tr-control [&>tr:last-child>td]:border-b [&>tr:last-child>td]:border-b-line-ring [&>tr:last-child]:shadow-[0_2px_4px_-1px_var(--ds-color-shadow-drop)] [&>tr:last-child]:[clip-path:inset(0_calc(var(--ds-space-2)*-1)_calc(var(--ds-space-2)*-1)_calc(var(--ds-space-2)*-1)_round_0_0_var(--ds-radius-control)_var(--ds-radius-control))] [&>tr:last-child>td:first-child]:rounded-bl-control [&>tr:last-child>td:last-child]:rounded-br-control",
-        className,
-      )}
-      {...props}
-    />
-  );
+  // The head draws the rule above the first row, so the first row does not draw its own.
+  return <tbody data-slot="table-body" className={cn("[&>tr:first-child>*]:border-t-0", className)} {...props} />;
 }
 
 function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
-  return (
-    <tfoot
-      data-slot="table-footer"
-      className={cn(
-        "before:table-row before:h-2 before:content-[''] [&>tr>td]:h-10.5 [&>tr>td]:bg-subtle [&>tr>td]:font-medium [&>tr>td:first-child]:rounded-l-panel [&>tr>td:last-child]:rounded-r-panel [&>tr>th]:bg-subtle",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <tfoot data-slot="table-footer" className={cn("font-medium [&>tr>*]:border-t [&>tr>*]:border-line-strong", className)} {...props} />;
 }
 
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
-  return (
-    <tr
-      data-slot="table-row"
-      className={cn("[&:not([data-empty]):hover>td]:bg-subtle data-[state=selected]:[&>td]:bg-subtle", className)}
-      {...props}
-    />
-  );
+  return <tr data-slot="table-row" className={cn("data-[state=selected]:[&>*]:bg-subtle-hover", className)} {...props} />;
 }
 
-function TableHead({ className, ...props }: React.ComponentProps<"th">) {
+// A column head by default; with scope="row" it is a row's name, drawn as the site's pricing rows draw theirs.
+function TableHead({ className, scope, ...props }: React.ComponentProps<"th">) {
+  if (scope === "row") {
+    return (
+      <th
+        data-slot="table-head"
+        scope="row"
+        className={cn(
+          "h-12 border-t border-line px-4 py-3 text-left align-middle font-sans font-normal text-fg-secondary first:pl-0 last:pr-0",
+          "group-data-[variant=prose]/table:h-auto group-data-[variant=prose]/table:py-3 group-data-[variant=prose]/table:pl-0 group-data-[variant=prose]/table:align-top",
+          className,
+        )}
+        {...props}
+      />
+    );
+  }
   return (
     <th
       data-slot="table-head"
-      className={cn("h-12 px-4 text-left align-middle text-body leading-tight font-normal whitespace-nowrap text-fg-muted [&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0", className)}
+      scope={scope}
+      className={cn(
+        "ds-label h-10 border-b border-line-strong px-4 text-left align-middle font-normal whitespace-nowrap first:pl-0 last:pr-0 [&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0",
+        "group-data-[variant=compare]/table:h-16 group-data-[variant=compare]/table:border-line group-data-[variant=compare]/table:font-display group-data-[variant=compare]/table:text-h5 group-data-[variant=compare]/table:leading-7 group-data-[variant=compare]/table:tracking-normal group-data-[variant=compare]/table:text-fg group-data-[variant=compare]/table:normal-case",
+        "group-data-[variant=prose]/table:h-auto group-data-[variant=prose]/table:py-3 group-data-[variant=prose]/table:pl-0",
+        className,
+      )}
       {...props}
     />
   );
@@ -82,14 +82,47 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
   return (
     <td
       data-slot="table-cell"
-      className={cn("h-16 px-4 align-middle whitespace-nowrap transition-[background-color] duration-fast ease-out motion-reduce:transition-none [&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0", className)}
+      className={cn(
+        "h-12 border-t border-line px-4 py-3 text-left align-middle first:pl-0 last:pr-0 [&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0",
+        "group-data-[variant=prose]/table:h-auto group-data-[variant=prose]/table:pl-0 group-data-[variant=prose]/table:align-top",
+        className,
+      )}
       {...props}
     />
   );
 }
 
-function TableCaption({ className, ...props }: React.ComponentProps<"caption">) {
-  return <caption data-slot="table-caption" className={cn("mt-3 text-body-sm leading-body text-fg-muted", className)} {...props} />;
+/** A section head inside the body: Chakra Petch 20px across every column (the pricing table's Usage, Automations). */
+function TableGroup({ className, colSpan, children, ...props }: React.ComponentProps<"tr"> & { colSpan?: number }) {
+  return (
+    <tr data-slot="table-group" className={className} {...props}>
+      <th scope="colgroup" colSpan={colSpan} className="pt-12 pb-4 text-left font-display text-h5 leading-7 font-normal text-fg [tbody:first-of-type>tr:first-child>&]:pt-8">
+        {children}
+      </th>
+    </tr>
+  );
 }
 
-export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
+/** Included: the pricing table's 12px mark, a filled ink hexagon with its points at the sides. */
+function TableYes({ className, label = "Included", ...props }: React.ComponentProps<"svg"> & { label?: string }) {
+  return (
+    <svg data-slot="table-yes" viewBox="0 0 12 12" width="12" height="12" role="img" aria-label={label} className={cn("block fill-fg", className)} {...props}>
+      <path d="M11 6L8.5 10.33L3.5 10.33L1 6L3.5 1.67L8.5 1.67Z" />
+    </svg>
+  );
+}
+
+/** Not included: a 6px dash in the slate. */
+function TableNo({ className, label = "Not included", ...props }: React.ComponentProps<"svg"> & { label?: string }) {
+  return (
+    <svg data-slot="table-no" viewBox="0 0 12 12" width="12" height="12" role="img" aria-label={label} className={cn("block fill-none stroke-fg-subtle", className)} strokeWidth={1} {...props}>
+      <path d="M3 6h6" />
+    </svg>
+  );
+}
+
+function TableCaption({ className, ...props }: React.ComponentProps<"caption">) {
+  return <caption data-slot="table-caption" className={cn("mt-4 text-left font-sans text-body-sm leading-line-body-sm text-fg-muted", className)} {...props} />;
+}
+
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableGroup, TableHead, TableHeader, TableNo, TableRow, TableYes };

@@ -70,7 +70,7 @@ describe('interaction policy', () => {
  it('applies immediate, stable press feedback in the CSS restyling layer', () => {
   const {block} = elementLayer('controls.css', '.btn-primary { color: red; }', 'site');
   expect(block).toContain('.btn-primary:active');
-  expect(block).toContain('filter: brightness(0.95)');
+  expect(block).toMatch(/\.btn-primary:active \{[^}]*background: linear-gradient\(var\(--ds-color-action-primary-hover\)/);
   expect(block).toContain('transition: none');
   expect(block).not.toContain('scale(');
   expect(block).not.toContain('scale:');

@@ -1,67 +1,39 @@
-import { CheckIcon } from "@phosphor-icons/react/ssr";
-
 import { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage } from "@/components/ui/avatar";
+
+const PHOTO = "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' fill='#929291'/><circle cx='20' cy='16' r='7' fill='#C2C2C0'/><rect x='8' y='26' width='24' height='14' rx='12' fill='#C2C2C0'/></svg>");
 
 export function Preview() {
   return (
-    <div className="grid gap-3">
-      <div className="flex h-9.5 items-center gap-2.5 px-3">
-        <Avatar size="sm">
-          <AvatarFallback>J</AvatarFallback>
-        </Avatar>
-        <span className="text-body text-fg">Jordan at Acme</span>
-      </div>
-      <div className="flex h-9.5 items-center gap-2.5 px-3">
-        <Avatar size="sm">
-          <AvatarFallback>A</AvatarFallback>
-        </Avatar>
-        <span className="text-body text-fg">@acme</span>
-      </div>
+    <div className="flex items-center gap-4">
+      <Avatar>
+        <AvatarFallback>MA</AvatarFallback>
+      </Avatar>
+      <Avatar>
+        <AvatarImage src={PHOTO} alt="Maya" />
+        <AvatarFallback>MA</AvatarFallback>
+      </Avatar>
+      <Avatar shape="cut">
+        <AvatarFallback>JO</AvatarFallback>
+      </Avatar>
     </div>
   );
 }
 
 export function Sizes() {
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <div className="flex items-center gap-4">
       <Avatar size="sm">
-        <AvatarFallback>R</AvatarFallback>
+        <AvatarFallback>SR</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarFallback>R</AvatarFallback>
+        <AvatarFallback>SR</AvatarFallback>
       </Avatar>
       <Avatar size="lg">
-        <AvatarFallback>R</AvatarFallback>
+        <AvatarFallback>SR</AvatarFallback>
       </Avatar>
-      <Avatar shape="circle" size="sm">
-        <AvatarImage src="/logo-mark.png" alt="@test-agent" />
-        <AvatarFallback>T</AvatarFallback>
-      </Avatar>
-      <Avatar shape="circle">
-        <AvatarImage src="/logo-mark.png" alt="@test-agent" />
-        <AvatarFallback>T</AvatarFallback>
-      </Avatar>
-      <Avatar shape="circle" size="lg">
-        <AvatarImage src="/logo-mark.png" alt="@test-agent" />
-        <AvatarFallback>T</AvatarFallback>
-      </Avatar>
-    </div>
-  );
-}
-
-export function WithBadge() {
-  return (
-    <div className="flex items-center gap-4">
-      <Avatar>
-        <AvatarFallback>A</AvatarFallback>
-        <AvatarBadge />
-      </Avatar>
-      <Avatar size="lg" shape="circle">
-        <AvatarImage src="/logo-mark.png" alt="@test-agent" />
-        <AvatarFallback>T</AvatarFallback>
-        <AvatarBadge>
-          <CheckIcon weight="bold" />
-        </AvatarBadge>
+      <Avatar size="lg">
+        <AvatarFallback>AI</AvatarFallback>
+        <AvatarBadge className="bg-success" aria-label="Running" />
       </Avatar>
     </div>
   );
@@ -69,30 +41,31 @@ export function WithBadge() {
 
 export function Group() {
   return (
-    <AvatarGroup>
-      <Avatar>
-        <AvatarFallback>R</AvatarFallback>
-      </Avatar>
-      <Avatar>
-        <AvatarFallback>A</AvatarFallback>
-      </Avatar>
-      <Avatar>
-        <AvatarFallback>M</AvatarFallback>
-      </Avatar>
-      <AvatarGroupCount>+3</AvatarGroupCount>
-    </AvatarGroup>
-  );
-}
-
-export function Fallback() {
-  return (
-    <div className="flex items-center gap-4">
-      <Avatar size="lg" shape="circle">
-        <AvatarFallback>R</AvatarFallback>
-      </Avatar>
-      <Avatar size="lg">
-        <AvatarFallback>R</AvatarFallback>
-      </Avatar>
+    <div className="grid gap-6">
+      <AvatarGroup>
+        <Avatar>
+          <AvatarFallback>MA</AvatarFallback>
+        </Avatar>
+        <Avatar>
+          <AvatarImage src={PHOTO} alt="Jonah" />
+          <AvatarFallback>JO</AvatarFallback>
+        </Avatar>
+        <Avatar>
+          <AvatarFallback>LI</AvatarFallback>
+        </Avatar>
+        <AvatarGroupCount>+4</AvatarGroupCount>
+      </AvatarGroup>
+      <AvatarGroup>
+        <Avatar size="sm">
+          <AvatarFallback>MA</AvatarFallback>
+        </Avatar>
+        <Avatar size="sm">
+          <AvatarFallback>JO</AvatarFallback>
+        </Avatar>
+        <Avatar size="sm">
+          <AvatarFallback>LI</AvatarFallback>
+        </Avatar>
+      </AvatarGroup>
     </div>
   );
 }

@@ -3,8 +3,8 @@ name: skeleton
 title: Skeleton
 type: ui
 surface: site
-description: "A lilac placeholder with 8px corners that breathes toward the lilac hover and shows only after 300ms."
-use_for: "Use in the shape of what will load (rows of the email list, a table's rows, an avatar), matching each part's size and corners (rounded-pill for buttons, avatars and small icon tiles). It waits 300ms before it appears, so a quick load never flashes it."
-never: [Shimmer gradients, Skeletons for content already on screen, A skeleton for a single button]
-source: "Console Skeleton theme and its global skeleton delay"
+description: "A square block of the hover wash that breathes softly while content loads, and holds still with reduced motion."
+use_for: "Use Skeleton in the shape of the content that is coming (lines of text, an avatar hexagon, a key) when it takes more than a moment to load. Size each block like the real content; clip it with ds-hex-mark or ds-hex for avatars and keys."
+never: [A shimmer sweep, Rounded blocks, A skeleton for content that loads instantly]
+source: "Extrapolated from the Hoplite website: its square frames and the hover wash (--panel)"
 ---

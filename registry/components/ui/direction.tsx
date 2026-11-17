@@ -1,14 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Direction } from "radix-ui";
+import { DirectionProvider as BaseDirectionProvider, useDirection } from "@base-ui/react/direction-provider";
 
-// Sets the reading direction (ltr or rtl) for every Radix-based component inside it, so menus, sliders and tabs flip
-// for right-to-left text. It renders nothing of its own; set dir on the element you wrap too.
-function DirectionProvider({ dir, direction, children }: React.ComponentProps<typeof Direction.DirectionProvider> & { direction?: React.ComponentProps<typeof Direction.DirectionProvider>["dir"] }) {
-  return <Direction.DirectionProvider dir={direction ?? dir}>{children}</Direction.DirectionProvider>;
+// Sets the reading direction (ltr or rtl) for every Base UI part inside it, so menus, sliders, tabs and scroll areas
+// flip for right-to-left text. It draws nothing of its own; set dir on the element it wraps too. `dir` is kept beside
+// Base UI's `direction` so code written for shadcn keeps working.
+type DirectionProviderProps = React.ComponentProps<typeof BaseDirectionProvider> & { dir?: React.ComponentProps<typeof BaseDirectionProvider>["direction"] };
+
+function DirectionProvider({ dir, direction, children }: DirectionProviderProps) {
+  return <BaseDirectionProvider direction={direction ?? dir}>{children}</BaseDirectionProvider>;
 }
-
-const useDirection = Direction.useDirection;
 
 export { DirectionProvider, useDirection };

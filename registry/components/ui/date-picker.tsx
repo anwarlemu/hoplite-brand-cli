@@ -1,21 +1,26 @@
 "use client";
 
 import * as React from "react";
+import { Popover as BasePopover } from "@base-ui/react/popover";
 import { CalendarBlankIcon, CaretDownIcon } from "@phosphor-icons/react/ssr";
 
 import { Calendar, type CalendarProps, type DateRange } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { usePortalContainer } from "@/lib/surface";
 import { cn } from "@/lib/utils";
 
-// A date field (extrapolated from the Hoplite console, Figma 427:2715: the select trigger "Any State" and its menu
-// panel). The trigger is the select's white 40px key with 8px corners and the Shadow/S ring: a 24px calendar glyph in
-// the softer purple, the date in 14px ink (the placeholder in the light purple) and the bold caret at the right. The
-// calendar opens 8px under it in the popover's white panel, growing from the trigger (98 percent and a fade, 160ms).
-// Presets sit in a column of the menu's rows at the panel's left (36px, 12px corners, 4px apart, the deeper lilac under
-// the pointer with no fade), the chosen one on the deeper lilac too. A single date closes the panel when picked; a range closes once both
-// ends are set. Opening puts focus on the chosen day (or today), so the arrow keys work at once.
+// A date field, extrapolated from the site's field and popup (it has none). The trigger is the field: square, 40px, a
+// 32 percent edge on the ground, a 16px calendar glyph in the quiet gray 12px in, the date in 14px ink (the placeholder
+// in the slate) and a 16px caret at the right; the edge turns strong under the pointer and while the calendar is open,
+// the ink on focus. The calendar opens 4px under it in the site's popup, a square panel of the ground with the quiet
+// hairline and long soft cast, growing from the field (opacity and 98 percent scale, 240ms on the strong ease-out) and
+// leaving in 200ms. Presets sit in a column of the popup's 36px rows at the panel's left over a quiet rule, the chosen one
+// on the hover wash. A single date closes the panel when picked; a range closes once both ends are set. Opening puts focus
+// on the chosen day (or today), so the arrow keys work at once.
 const TRIGGER =
-  "flex h-10 w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-pill bg-surface pr-3 pl-3 font-sans text-body leading-tight whitespace-nowrap text-fg shadow-s outline-none transition-[box-shadow] duration-150 ease-out focus-visible:shadow-[var(--ds-shadow-s),var(--ds-shadow-focus)] disabled:cursor-not-allowed disabled:bg-subtle disabled:text-fg-muted aria-invalid:shadow-[0_0_0_1px_var(--ds-color-status-danger)] data-[empty=true]:text-fg-subtle motion-reduce:transition-none";
+  "group/date-picker flex h-10 w-full min-w-0 cursor-pointer items-center gap-2 border border-line-field bg-transparent px-3 font-sans text-body-sm leading-line-body-sm whitespace-nowrap text-fg select-none transition-[border-color] duration-fast ease-out hover:border-line-strong focus-visible:border-focus-ring focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-popup-open:border-line-strong aria-invalid:border-danger data-[empty=true]:text-fg-subtle disabled:cursor-not-allowed disabled:border-line disabled:text-fg-subtle pointer-coarse:h-12 motion-reduce:transition-none";
+
+const POPUP =
+  "max-w-(--available-width) origin-(--transform-origin) overflow-hidden bg-surface text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]";
 
 type Preset<T> = { label: string; value: T };
 
@@ -32,26 +37,37 @@ function formatRange(range: DateRange | undefined, locale?: string) {
 
 function DatePickerTrigger({ empty, label, className, children, ...props }: React.ComponentProps<"button"> & { empty: boolean; label?: string }) {
   return (
-    <PopoverTrigger asChild>
-      <button type="button" data-slot="date-picker-trigger" data-empty={empty} aria-label={label} className={cn(TRIGGER, className)} {...props}>
-        <CalendarBlankIcon aria-hidden weight="fill" className="size-6 shrink-0 text-icon-secondary" />
-        <span className="min-w-0 flex-1 truncate text-left">{children}</span>
-        <CaretDownIcon aria-hidden weight="bold" className="size-4 shrink-0 text-fg" />
-      </button>
-    </PopoverTrigger>
+    <BasePopover.Trigger data-slot="date-picker-trigger" data-empty={empty} aria-label={label} className={cn(TRIGGER, className)} {...props}>
+      <CalendarBlankIcon aria-hidden className="size-4 shrink-0 text-fg-muted" />
+      <span className="min-w-0 flex-1 truncate text-left">{children}</span>
+      <CaretDownIcon aria-hidden className="size-4 shrink-0 text-fg-muted" />
+    </BasePopover.Trigger>
+  );
+}
+
+function Content({ slot, children }: { slot: string; children: React.ReactNode }) {
+  const container = usePortalContainer();
+  return (
+    <BasePopover.Portal container={container}>
+      <BasePopover.Positioner side="bottom" align="start" sideOffset={4} collisionPadding={8} className="z-50 outline-none">
+        <BasePopover.Popup data-slot={slot} initialFocus={false} className={POPUP}>
+          {children}
+        </BasePopover.Popup>
+      </BasePopover.Positioner>
+    </BasePopover.Portal>
   );
 }
 
 function Presets<T>({ presets, isActive, onPick }: { presets: Preset<T>[]; isActive: (p: Preset<T>) => boolean; onPick: (value: T) => void }) {
   return (
-    <div data-slot="date-picker-presets" role="group" aria-label="Presets" className="flex gap-1 overflow-x-auto border-line-subtle p-1 max-sm:border-b sm:w-40 sm:flex-col sm:border-r">
+    <div data-slot="date-picker-presets" role="group" aria-label="Presets" className="flex gap-1 overflow-x-auto border-line p-1 max-sm:border-b sm:w-40 sm:flex-col sm:border-r">
       {presets.map((p) => (
         <button
           key={p.label}
           type="button"
           aria-pressed={isActive(p)}
           onClick={() => onPick(p.value)}
-          className="flex h-9 shrink-0 items-center rounded-control px-3 text-left font-sans text-body leading-tight font-normal whitespace-nowrap text-fg outline-none hover:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-pressed:bg-subtle-hover"
+          className="flex h-9 shrink-0 cursor-pointer items-center px-3 text-left font-sans text-body-sm leading-line-body-sm font-normal whitespace-nowrap text-fg hover:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-pressed:bg-subtle-hover"
         >
           {p.label}
         </button>
@@ -91,12 +107,12 @@ function DatePicker({ value: valueProp, defaultValue, onValueChange, placeholder
     onValueChange?.(d);
   };
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <BasePopover.Root open={open} onOpenChange={(next) => setOpen(next)}>
       <DatePickerTrigger id={id} empty={!value} disabled={disabled} className={className} aria-invalid={aria["aria-invalid"]} label={aria["aria-label"]}>
         {value ? formatDate(value, locale) : placeholder}
       </DatePickerTrigger>
       {name && <input type="hidden" name={name} value={value ? value.toISOString().slice(0, 10) : ""} />}
-      <PopoverContent data-slot="date-picker-content" align="start" onOpenAutoFocus={(e) => e.preventDefault()} className="w-auto gap-0 overflow-hidden p-0">
+      <Content slot="date-picker-content">
         <div className="flex flex-col sm:flex-row">
           {presets && (
             <Presets
@@ -121,8 +137,8 @@ function DatePicker({ value: valueProp, defaultValue, onValueChange, placeholder
             }}
           />
         </div>
-      </PopoverContent>
-    </Popover>
+      </Content>
+    </BasePopover.Root>
   );
 }
 
@@ -153,7 +169,7 @@ function DateRangePicker({ value: valueProp, defaultValue, onValueChange, placeh
   }, []);
   const label = formatRange(value, locale);
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <BasePopover.Root open={open} onOpenChange={(next) => setOpen(next)}>
       <DatePickerTrigger id={id} empty={!label} disabled={disabled} className={className} aria-invalid={aria["aria-invalid"]} label={aria["aria-label"]}>
         {label ?? placeholder}
       </DatePickerTrigger>
@@ -163,7 +179,7 @@ function DateRangePicker({ value: valueProp, defaultValue, onValueChange, placeh
           <input type="hidden" name={`${name}To`} value={value?.to ? value.to.toISOString().slice(0, 10) : ""} />
         </>
       )}
-      <PopoverContent data-slot="date-range-picker-content" align="start" onOpenAutoFocus={(e) => e.preventDefault()} className="w-auto max-w-[calc(100vw-2rem)] gap-0 overflow-hidden p-0">
+      <Content slot="date-range-picker-content">
         <div className="flex flex-col sm:flex-row">
           {presets && (
             <Presets
@@ -189,8 +205,8 @@ function DateRangePicker({ value: valueProp, defaultValue, onValueChange, placeh
             }}
           />
         </div>
-      </PopoverContent>
-    </Popover>
+      </Content>
+    </BasePopover.Root>
   );
 }
 

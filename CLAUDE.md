@@ -2,7 +2,8 @@
 
 This repo is the CLI that applies the Hoplite design system to any project and keeps agents on it. `README.md` says how
 it is used. Apps that install it get a different contract, written from `brand/contract.md`. Hoplite has one look, the
-console's (`"surfaces": ["site"]` in `brand/brand.json` is the engine's single-look mode): every project gets it.
+website's (`"surfaces": ["site"]` in `brand/brand.json` is the engine's single-look mode), with a dark theme in
+`brand/site.css`.
 
 ## Loop
 
@@ -15,26 +16,33 @@ npm run ci           # build, limits, registry, tests; must pass before you push
 ## Where things are
 
 - `registry/`: the component library, one item per shadcn/ui component (every one of them, rebuilt in the Hoplite
-  style, no shadcn code): `components/ui`, `lib/` (cn, surface), `hooks/`, `docs/<item>.md` (frontmatter: type,
+  style, no shadcn code): `components/ui`, `lib/` (cn, slot, surface), `hooks/`, `docs/<item>.md` (frontmatter: type,
   surface, kinds, files...) and `examples/<item>.tsx` (exports `Preview` first, then named states).
   `scripts/build-registry.ts` (`npm run registry`) validates every item, derives files and dependencies from imports,
   adds the theme item from the brand tokens, writes one JSON file per item and an index into `apps/www/public/r`,
-  type-checks the library and runs the value check over it. Primitives: `radix-ui`, `cmdk`, `sonner`; icons are
-  Phosphor (`@phosphor-icons/react/ssr`, the `...Icon` names, fill weight for the console's glyphs).
-- `apps/www/`: the docs site (Next.js), laid out as the console (a rail and page heads), deployed to the Vercel project
-  `hoplite-ds` (Agencidev team, root apps/www, install `cd ../.. && npm install`, toolbar off: its script breaks the sandboxed
-  preview frames) with `vercel deploy --prod --scope agencidev-dev` from the repo root; it renders every item from
-  source. Browser checks: `DOCS_URL=<url> npm run test:docs`, `test:library`, `test:reference` (against the Figma
-  measurements in `test/fixtures/reference-styles.json`). In `next dev`, use localhost: Next blocks 127.0.0.1.
+  type-checks the library and runs the value check over it. Primitives: `@base-ui/react` only (Hoplite's rule: never
+  Radix, Chakra or Headless UI), plus `cmdk` and `sonner`; icons are Phosphor (`@phosphor-icons/react/ssr`, the
+  `...Icon` names, regular weight). `asChild` maps onto Base UI's `render` through `slot()` in `lib/utils`.
+- Shapes live in `brand/site.css` as utilities: `ds-hex-frame` / `ds-hex-frame-s` (a hexagon drawn on ::before/::after,
+  colored with `before:` / `after:` classes, so the element keeps its focus outline), `ds-hex` / `ds-hex-s`,
+  `ds-hex-mark`, `ds-corners`, `ds-rule-x` / `ds-rule-y`, `ds-label`, `ds-link`, `ds-grain`.
+- `apps/www/`: the docs site (Next.js), laid out like the other brand sites (one rail, page heads), in Hoplite's style;
+  deployed to the Vercel project `hoplite-ds` (Agencidev team, root apps/www, install `cd ../.. && npm install`, toolbar
+  off: its script breaks the sandboxed preview frames) with `vercel deploy --prod --scope agencidev-dev` from the repo
+  root; it renders every item from source. Browser checks: `DOCS_URL=<url> npm run test:docs`, `test:library`. In
+  `next dev`, use localhost: Next blocks 127.0.0.1.
 - `src/library/`: loading registry items (`registry.ts`) and swap mode (`swap.ts`); `src/commands/add.ts` (add, list).
-- `brand/`: the only brand-specific content. `tokens.css` is the single source of values (`:root`). `site.css` is the
-  base layer (type defaults). `elements.json` holds how each kind of element is styled, with `match` data for
-  detection and a `source`. `reference/` holds the console's screens from the design (used by `review`). `brand.json`
-  holds names, fonts and the library's variant names. `logo/` holds the octopus mark, the octopus art and the wordmark.
-- Reference for the look: the Figma file "Hoplite (Copy) (Copy)" (`KtJhYsxU4hqtBzqqbFuMWy`), section "New" (node
-  427:2715): the console's screens. Values were measured from its 1x renders and layer geometry (the Figma MCP was
-  rate limited on the Starter plan, so colors are sampled, type is fitted to text layer widths, radii and sizes come
-  from the geometry). When the design changes, re-measure, update `brand/`, and recapture `brand/reference/`.
+- `brand/`: the only brand-specific content. `tokens.css` is the single source of values (`:root`, light). `site.css` is
+  the base layer, the dark theme and the shape utilities. `elements.json` holds how each kind of element is styled, with
+  `match` data for detection and a `source`. `reference/` holds the website's pages (used by `review`) and its
+  stylesheets (`reference/site-css/`, for re-measuring). `brand.json` holds names, fonts (Chakra Petch and Kode Mono
+  from Google, Satoshi from Fontshare via `fonts.always`) and the library's variant names. `logo/` holds the lockup,
+  the horse mark and the app icon.
+- Reference for the look: the Hoplite website as rendered, https://hoplite-website-fawn.vercel.app (a Next.js build
+  whose source is not in any repo we can read; `~/Desktop/TRIAGE/Work/Agencidev/hoplite-website` is an older Vite
+  extract, read-only, outside the anwarlemu account). Values come from its stylesheet variables and computed styles.
+  When the site changes, re-download its CSS into `brand/reference/site-css/`, re-measure, update `brand/`, and
+  recapture `brand/reference/*.jpg`.
 - `src/project/`: stack detection, main stylesheet and layouts, screens and the files each is drawn from.
 - `src/convert/`: converts style values by role in every file type (CSS, templates, scripts, Tailwind, native).
 - `src/install/`: the brand stylesheet and fonts, contract, hooks (Claude Code, Codex, Cursor), pre-commit.
@@ -46,21 +54,19 @@ npm run ci           # build, limits, registry, tests; must pass before you push
 
 - No brand strings in `src/` (read `brand/brand.json`); `scripts/ci-limits.mjs` enforces it.
 - No em dashes; American spelling; sentence case.
-- Element styles use only brand tokens and follow the animation rules (no ease-in, no `transition: all`, 100 to 300ms);
-  the tests check every value.
-- Restyle only: nothing the CLI writes may change a project's copy, elements or structure. The only markup it asks for
-  is none: Hoplite has no markup touches.
+- Element styles use only brand tokens and follow the animation rules (no ease-in, no `transition: all`, 120 to 240ms,
+  no geometry change on hover or press); the tests check every value.
+- Restyle only: nothing the CLI writes may change a project's copy, elements or structure. Hoplite has no markup
+  touches.
 - Library items use only brand token classes (the value check runs over `registry/` in CI), follow the animation
   rules, take data through props (no Next imports, auth or analytics), and have a docs entry and an example.
 - Apps install the `release` branch: a compiled tree (no source, intake or dev dependencies) so installs take
-  seconds. `npm run release` runs the checks, builds it and pushes it; nothing reaches apps until then. CI and the
-  release workflow are in `scripts/ci.workflow.yml` and `scripts/release.workflow.yml`: copy them to
-  `.github/workflows/` with a token that has the workflow scope (`gh auth refresh -s workflow`).
+  seconds. `npm run release` runs the checks, builds it and pushes it; nothing reaches apps until then.
 - Test changes on real projects (copies in a scratch folder, never the originals): a site, a plain HTML site, a dark
   site, a Tailwind app and a native sample.
 
 ## Do not
 
 - Kill processes by pattern (`pkill -f "next dev"`): the owner's other dev servers run on :3000.
-- Modify any other brand's repo (agentcard, opencommerce, context-dev) or the Figma file.
+- Modify any other brand's repo or the hoplite-website checkout.
 - Commit `build`, `dist` or `node_modules`.

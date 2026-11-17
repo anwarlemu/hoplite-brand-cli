@@ -1,94 +1,159 @@
 "use client";
 
-
-import { ChatCircleTextIcon, EnvelopeSimpleIcon, LockKeyIcon, PhoneIcon, ArrowsLeftRightIcon, WebhooksLogoIcon } from "@phosphor-icons/react/ssr";
-
+import * as React from "react";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+  ArrowCircleRightIcon,
+  ArrowsClockwiseIcon,
+  BugIcon,
+  ChatCircleIcon,
+  ClockIcon,
+  CodeIcon,
+  DownloadSimpleIcon,
+  FileTextIcon,
+  GitBranchIcon,
+  ListBulletsIcon,
+  PackageIcon,
+  PencilSimpleIcon,
+  PulseIcon,
+  SealCheckIcon,
+  ShieldCheckIcon,
+  TerminalWindowIcon,
+  TestTubeIcon,
+  UsersThreeIcon,
+} from "@phosphor-icons/react/ssr";
 
-const CHANNELS = [
-  { title: "Email", body: "A mailbox for every agent, on inkboxmail.com or your domain.", icon: EnvelopeSimpleIcon },
-  { title: "Phone", body: "Calls and texts on a number the agent owns.", icon: PhoneIcon },
-  { title: "iMessage", body: "Shared or dedicated lines that also handle calls.", icon: ChatCircleTextIcon },
-  { title: "Agent2Agent", body: "Publish an Agent Card and take tasks from other agents.", icon: ArrowsLeftRightIcon },
+import { Button } from "@/components/ui/button";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+
+type Link = { title: string; body: string; icon: React.ComponentType<{ className?: string }> };
+
+const PRODUCT: { heading: string; links: Link[] }[] = [
+  {
+    heading: "Run agents",
+    links: [
+      { title: "Multiplayer", body: "Every thread is shared with your team.", icon: UsersThreeIcon },
+      { title: "Slack agent", body: "Your coding agent, right in Slack.", icon: ChatCircleIcon },
+      { title: "Automations", body: "Coding agents that start before you ask.", icon: ClockIcon },
+      { title: "PR auto-fix", body: "Review comments and red checks, handled.", icon: ArrowsClockwiseIcon },
+    ],
+  },
+  {
+    heading: "Build and ship",
+    links: [
+      { title: "Repositories", body: "Agents clone it and work on their own branches.", icon: GitBranchIcon },
+      { title: "Import your setup", body: "Bring your skills and MCP servers from other tools.", icon: DownloadSimpleIcon },
+      { title: "Verify and merge", body: "It tests its work and opens the PR for review.", icon: SealCheckIcon },
+      { title: "Platform API", body: "Put coding agents inside your own product.", icon: CodeIcon },
+    ],
+  },
 ];
 
-function Menu({ defaultValue }: { defaultValue?: string }) {
+const USE_CASES: Link[] = [
+  { title: "Bug triage", body: "New issues reproduced and fixed overnight.", icon: BugIcon },
+  { title: "Test coverage", body: "Agents write the tests nobody had time for.", icon: TestTubeIcon },
+  { title: "Dependency updates", body: "Upgrades that pass CI before you look.", icon: PackageIcon },
+  { title: "Code review", body: "A first pass on every pull request.", icon: SealCheckIcon },
+  { title: "Migrations", body: "Large refactors split across many agents.", icon: ArrowsClockwiseIcon },
+  { title: "Security fixes", body: "Advisories patched in their own branches.", icon: ShieldCheckIcon },
+];
+
+const RESOURCES: { heading: string; links: Link[] }[] = [
+  {
+    heading: "Learn",
+    links: [
+      { title: "Docs", body: "Guides for setup, threads and the API.", icon: FileTextIcon },
+      { title: "Quickstart", body: "Your first agent thread, step by step.", icon: ArrowCircleRightIcon },
+      { title: "CLI", body: "Start and steer threads from your terminal.", icon: TerminalWindowIcon },
+    ],
+  },
+  {
+    heading: "Updates",
+    links: [
+      { title: "Changelog", body: "Everything shipped, newest first.", icon: ListBulletsIcon },
+      { title: "Blog", body: "Releases, deep dives and field notes.", icon: PencilSimpleIcon },
+      { title: "Status", body: "Uptime and incidents.", icon: PulseIcon },
+    ],
+  },
+];
+
+function Row({ title, body, icon: Icon }: Link) {
   return (
-    <NavigationMenu defaultValue={defaultValue}>
+    <li>
+      <NavigationMenuLink href={`#${title.toLowerCase().replace(/\W+/g, "-")}`}>
+        <Icon />
+        <span className="grid">
+          <span className="font-medium text-fg">{title}</span>
+          <span className="text-fg-muted">{body}</span>
+        </span>
+      </NavigationMenuLink>
+    </li>
+  );
+}
+
+function Groups({ groups }: { groups: { heading: string; links: Link[] }[] }) {
+  return (
+    <div className="flex">
+      {groups.map((group, i) => (
+        <div key={group.heading} className={i > 0 ? "ds-rule-y ml-8 max-w-96 min-w-0 flex-1 pl-8" : "max-w-96 min-w-0 flex-1"}>
+          <p className="ds-label m-0 mb-3">{group.heading}</p>
+          <ul className="-mx-3 m-0 list-none p-0">
+            {group.links.map((link) => (
+              <Row key={link.title} {...link} />
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Header({ defaultValue }: { defaultValue?: string }) {
+  return (
+    <NavigationMenu defaultValue={defaultValue} className="h-16 w-full border-b border-line px-6">
       <NavigationMenuList>
-        <NavigationMenuItem value="channels">
-          <NavigationMenuTrigger>Channels</NavigationMenuTrigger>
+        <NavigationMenuItem value="product">
+          <NavigationMenuTrigger>Product</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[min(34rem,calc(100vw-2rem))] gap-1 sm:grid-cols-2">
-              {CHANNELS.map(({ title, body, icon: Icon }) => (
-                <li key={title}>
-                  <NavigationMenuLink href={`#${title.toLowerCase()}`}>
-                    <span className="flex items-center gap-2.5 font-medium">
-                      <Icon weight="fill" />
-                      {title}
-                    </span>
-                    <span className="text-fg-muted">{body}</span>
-                  </NavigationMenuLink>
-                </li>
+            <Groups groups={PRODUCT} />
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem value="use-cases">
+          <NavigationMenuTrigger>Use cases</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="-mx-3 m-0 grid list-none grid-cols-1 gap-x-8 p-0 md:grid-cols-3">
+              {USE_CASES.map((link) => (
+                <Row key={link.title} {...link} />
               ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem value="shared">
-          <NavigationMenuTrigger>Shared</NavigationMenuTrigger>
+        <NavigationMenuItem value="resources">
+          <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[min(16rem,calc(100vw-2rem))] gap-1">
-              <li>
-                <NavigationMenuLink href="#vault">
-                  <span className="flex items-center gap-2.5 font-medium">
-                    <LockKeyIcon weight="fill" />
-                    Vault
-                  </span>
-                  <span className="text-fg-muted">Zero-knowledge secrets for your agents.</span>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink href="#webhooks">
-                  <span className="flex items-center gap-2.5 font-medium">
-                    <WebhooksLogoIcon weight="fill" />
-                    Webhooks
-                  </span>
-                  <span className="text-fg-muted">Event payloads, signed and delivered.</span>
-                </NavigationMenuLink>
-              </li>
-            </ul>
+            <Groups groups={RESOURCES} />
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink href="#docs" className={navigationMenuTriggerStyle()}>
-            Docs
+          <NavigationMenuLink href="#pricing" className={navigationMenuTriggerStyle()}>
+            Pricing
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
+      <Button size="sm" className="ml-auto">
+        Start building
+      </Button>
     </NavigationMenu>
   );
 }
 
 export function Preview() {
-  return (
-    <div className="flex justify-center">
-      <Menu />
-    </div>
-  );
+  return <Header />;
 }
 
 export function Open() {
   return (
-    <div className="flex min-h-80 items-start justify-center">
-      <Menu defaultValue="channels" />
+    <div className="min-h-120">
+      <Header defaultValue="product" />
     </div>
   );
 }

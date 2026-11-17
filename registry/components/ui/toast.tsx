@@ -1,53 +1,92 @@
 "use client";
 
 import * as React from "react";
-import { Toast as ToastPrimitive } from "radix-ui";
-import { cva, type VariantProps } from "class-variance-authority";
-import { XIcon } from "@phosphor-icons/react/ssr";
+import { Toast as BaseToast } from "@base-ui/react/toast";
+import { CheckCircleIcon, InfoIcon, SpinnerGapIcon, WarningCircleIcon, WarningIcon, XIcon } from "@phosphor-icons/react/ssr";
 
 import { cn } from "@/lib/utils";
+import { usePortalContainer } from "@/lib/surface";
 
-// The Radix toast (shadcn's older toast API; prefer Sonner for new work). Same look as the Sonner toasts (extrapolated
-// from the Hoplite console, Figma 427:2715): a white panel with 16px corners, the floating shadow and 16px of padding, a
-// 14px medium ink title over a 14px muted description, an outline action key and the console's toast close key (a 32px squircle, a bold 16px X in the faint purple that
-// takes the lilac under the pointer). `destructive`
-// edges it in red with a red title. It slides in from the right edge it lives on (160ms, the drawer curve) and fades
-// out faster; a swipe to the right drags it with the finger and lets it go.
-const ToastProvider = ToastPrimitive.Provider;
+// The Base UI toast behind shadcn's older toast API (prefer Sonner for new work), with the same look as the Sonner
+// toasts, extrapolated from the Hoplite website's popups: a square 360px panel of the ground with the floating shadow
+// and 16px of padding, an optional 16px Phosphor status glyph, the 14px medium ink title over the 14px quiet
+// description, the action as the compact outlined hexagon (32px, 8px cuts) and the close key a ghost glyph whose
+// compact hexagon of the hover wash appears under the pointer. `destructive` leads with the orange warning glyph and
+// makes its action orange. Toasts stack 12px apart at the bottom right, the ones behind tucked under the front one
+// until the pointer or focus opens the stack; they rise from the bottom edge in 240ms on the strong ease-out and leave
+// the same way in 200ms (a swipe right or down throws them out). Reduced motion keeps only the fade.
+const toastManager = BaseToast.createToastManager();
 
-function ToastViewport({ className, ...props }: React.ComponentProps<typeof ToastPrimitive.Viewport>) {
+type ToastVariant = "default" | "destructive";
+type ToastType = ToastVariant | "success" | "error" | "warning" | "info" | "loading";
+type ToastActionElement = React.ReactElement<React.ComponentProps<typeof ToastAction>>;
+type ToastData = { action?: ToastActionElement };
+type ToastInput = { title?: React.ReactNode; description?: React.ReactNode; action?: ToastActionElement; variant?: ToastVariant; type?: ToastType; duration?: number; onOpenChange?: (open: boolean) => void };
+
+const GLYPHS: Partial<Record<ToastType, React.ReactNode>> = {
+  destructive: <WarningCircleIcon className="size-4 text-danger" />,
+  error: <WarningCircleIcon className="size-4 text-danger" />,
+  success: <CheckCircleIcon className="size-4 text-success" />,
+  warning: <WarningIcon className="size-4 text-warning" />,
+  info: <InfoIcon className="size-4 text-fg-muted" />,
+  loading: <SpinnerGapIcon className="size-4 animate-spin text-fg-muted motion-reduce:animate-none" />,
+};
+
+/** Holds the toasts. The Toaster brings its own; mount one yourself only to build a custom viewport. */
+function ToastProvider({ toastManager: manager = toastManager, ...props }: React.ComponentProps<typeof BaseToast.Provider>) {
+  return <BaseToast.Provider toastManager={manager} {...props} />;
+}
+
+function ToastViewport({ className, ...props }: React.ComponentProps<typeof BaseToast.Viewport>) {
   return (
-    <ToastPrimitive.Viewport
-      data-slot="toast-viewport"
-      className={cn("fixed right-0 bottom-0 z-[100] flex max-h-dvh w-full flex-col-reverse gap-2 p-4 outline-none sm:max-w-sm sm:flex-col", className)}
-      {...props}
-    />
+    <BaseToast.Portal container={usePortalContainer()}>
+      <BaseToast.Viewport
+        data-slot="toast-viewport"
+        className={cn("fixed right-4 bottom-4 z-50 w-[calc(100vw-2rem)] outline-none sm:right-6 sm:bottom-6 sm:w-90", className)}
+        {...props}
+      />
+    </BaseToast.Portal>
   );
 }
 
-const toastVariants = cva(
-  "group/toast pointer-events-auto relative flex w-full items-start justify-between gap-3 overflow-hidden rounded-panel bg-surface p-4 pr-10 font-sans text-fg shadow-floating data-[state=closed]:animate-fade-out data-[state=open]:animate-sheet-in-right data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:transition-[translate] data-[swipe=cancel]:duration-200 data-[swipe=cancel]:ease-out data-[swipe=end]:translate-x-(--radix-toast-swipe-end-x) data-[swipe=end]:animate-fade-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=move]:transition-none motion-reduce:data-[swipe=cancel]:transition-none",
-  {
-    variants: {
-      variant: {
-        default: "",
-        destructive: "border border-danger [&_[data-slot=toast-title]]:text-danger-strong",
-      },
-    },
-    defaultVariants: { variant: "default" },
-  },
-);
+const ROOT =
+  "[--gap:12px] [--peek:12px] [--scale:calc(max(0,1-(var(--toast-index)*0.06)))] [--shrink:calc(1-var(--scale))] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] " +
+  "absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] h-(--height) w-full origin-bottom bg-surface font-sans text-fg shadow-floating select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring " +
+  "[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] " +
+  "data-expanded:h-(--toast-height) data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))] " +
+  "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-[''] " +
+  "data-starting-style:opacity-0 data-starting-style:[transform:translateY(150%)] data-limited:opacity-0 data-ending-style:opacity-0 " +
+  "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)] " +
+  "data-ending-style:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))] " +
+  "data-ending-style:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))] " +
+  "transition-[transform,opacity,height] duration-slow ease-out data-ending-style:duration-moderate motion-reduce:transition-opacity";
 
-function Toast({ className, variant, ...props }: React.ComponentProps<typeof ToastPrimitive.Root> & VariantProps<typeof toastVariants>) {
-  return <ToastPrimitive.Root data-slot="toast" data-variant={variant ?? "default"} className={cn(toastVariants({ variant }), className)} {...props} />;
+function Toast({ className, variant, children, ...props }: React.ComponentProps<typeof BaseToast.Root> & { variant?: ToastVariant }) {
+  return (
+    <BaseToast.Root data-slot="toast" data-variant={variant ?? props.toast.type ?? "default"} swipeDirection={["down", "right"]} className={cn("group/toast", ROOT, className)} {...props}>
+      <BaseToast.Content data-slot="toast-content" className="flex h-full items-start gap-3 overflow-hidden p-4 transition-opacity duration-slow ease-out data-behind:opacity-0 data-expanded:opacity-100 motion-reduce:transition-none">
+        {children}
+      </BaseToast.Content>
+    </BaseToast.Root>
+  );
 }
 
-function ToastAction({ className, ...props }: React.ComponentProps<typeof ToastPrimitive.Action>) {
+function ToastTitle({ className, ...props }: React.ComponentProps<typeof BaseToast.Title>) {
+  return <BaseToast.Title data-slot="toast-title" className={cn("m-0 text-body-sm leading-line-body-sm font-medium text-fg", className)} {...props} />;
+}
+
+function ToastDescription({ className, ...props }: React.ComponentProps<typeof BaseToast.Description>) {
+  return <BaseToast.Description data-slot="toast-description" className={cn("m-0 text-body-sm leading-line-body-sm text-fg-muted", className)} {...props} />;
+}
+
+/** The toast's action: the compact outlined hexagon. `altText` names it for screen readers, as in shadcn's API. */
+function ToastAction({ className, altText, ...props }: React.ComponentProps<typeof BaseToast.Action> & { altText?: string }) {
   return (
-    <ToastPrimitive.Action
+    <BaseToast.Action
       data-slot="toast-action"
+      aria-label={altText}
       className={cn(
-        "inline-flex h-8 shrink-0 items-center justify-center self-center rounded-pill border border-line-field bg-surface px-2.5 font-sans text-body leading-tight font-medium text-fg-brand outline-none transition-[background-color] duration-150 ease-out hover:bg-subtle active:shadow-[inset_0_0_0_9996px_var(--ds-color-wash-pressed)] active:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-50 group-data-[variant=destructive]/toast:text-danger-strong motion-reduce:transition-none",
+        "ds-hex-frame-s inline-flex h-8 shrink-0 cursor-pointer items-center justify-center self-center px-4 font-sans text-body-sm leading-none font-medium whitespace-nowrap text-fg transition-colors duration-base ease-out before:bg-line-strong after:bg-surface hover:after:bg-subtle-hover active:after:bg-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring group-data-[variant=destructive]/toast:text-danger motion-reduce:transition-none",
         className,
       )}
       {...props}
@@ -55,102 +94,71 @@ function ToastAction({ className, ...props }: React.ComponentProps<typeof ToastP
   );
 }
 
-function ToastClose({ className, ...props }: React.ComponentProps<typeof ToastPrimitive.Close>) {
+function ToastClose({ className, ...props }: React.ComponentProps<typeof BaseToast.Close>) {
   return (
-    <ToastPrimitive.Close
+    <BaseToast.Close
       data-slot="toast-close"
       aria-label="Close"
-      className={cn("absolute top-2.5 right-2 inline-flex size-8 items-center justify-center rounded-control text-fg-faint outline-none transition-colors duration-fast ease-out hover:bg-subtle hover:text-fg-muted active:bg-subtle-hover active:transition-none focus-visible:shadow-focus motion-reduce:transition-none", className)}
+      className={cn(
+        "ds-hex-frame-s -my-1 -mr-2 inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-fg-muted transition-colors duration-base ease-out hover:text-fg hover:before:bg-subtle-hover active:before:bg-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none",
+        className,
+      )}
       {...props}
     >
-      <XIcon weight="bold" className="size-4" />
-    </ToastPrimitive.Close>
+      <XIcon className="size-4" />
+    </BaseToast.Close>
   );
 }
 
-function ToastTitle({ className, ...props }: React.ComponentProps<typeof ToastPrimitive.Title>) {
-  return <ToastPrimitive.Title data-slot="toast-title" className={cn("text-body leading-body font-medium text-fg", className)} {...props} />;
-}
-
-function ToastDescription({ className, ...props }: React.ComponentProps<typeof ToastPrimitive.Description>) {
-  return <ToastPrimitive.Description data-slot="toast-description" className={cn("text-body leading-body text-fg-muted", className)} {...props} />;
-}
-
-type ToastProps = React.ComponentProps<typeof Toast>;
-type ToastActionElement = React.ReactElement<React.ComponentProps<typeof ToastAction>>;
-
-// The toast queue: a tiny store any part of the app can push to with toast(), read by useToast() and <Toaster />.
-const TOAST_LIMIT = 3;
-const REMOVE_DELAY = 1000;
-
-type ToasterToast = ToastProps & { id: string; title?: React.ReactNode; description?: React.ReactNode; action?: ToastActionElement };
-type State = { toasts: ToasterToast[] };
-
-let count = 0;
-const nextId = () => String((count = (count + 1) % Number.MAX_SAFE_INTEGER));
-const listeners: Array<(state: State) => void> = [];
-let memory: State = { toasts: [] };
-const timeouts = new Map<string, ReturnType<typeof setTimeout>>();
-
-function setState(update: (state: State) => State) {
-  memory = update(memory);
-  listeners.forEach((l) => l(memory));
-}
-
-function scheduleRemove(id: string) {
-  if (timeouts.has(id)) return;
-  // ds-latency: removes an already dismissed toast from memory; dismissal and input stay immediate.
-  timeouts.set(id, setTimeout(() => {
-    timeouts.delete(id);
-    setState((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }));
-  }, REMOVE_DELAY));
+/** Shows a toast from anywhere, inside or outside React. Returns its id, `dismiss` and `update`. */
+function toast({ title, description, action, variant, type, duration, onOpenChange }: ToastInput) {
+  const id = toastManager.add<ToastData>({ title, description, type: type ?? variant, timeout: duration, data: { action }, onClose: onOpenChange ? () => onOpenChange(false) : undefined });
+  return {
+    id,
+    dismiss: () => toastManager.close(id),
+    update: (next: Omit<ToastInput, "onOpenChange">) => toastManager.update<ToastData>(id, { title: next.title, description: next.description, type: next.type ?? next.variant, data: next.action ? { action: next.action } : undefined }),
+  };
 }
 
 function dismiss(id?: string) {
-  setState((s) => ({ toasts: s.toasts.map((t) => (id === undefined || t.id === id ? { ...t, open: false } : t)) }));
-  memory.toasts.filter((t) => id === undefined || t.id === id).forEach((t) => scheduleRemove(t.id));
-}
-
-function toast(props: Omit<ToasterToast, "id">) {
-  const id = nextId();
-  const update = (next: Partial<ToasterToast>) => setState((s) => ({ toasts: s.toasts.map((t) => (t.id === id ? { ...t, ...next } : t)) }));
-  setState((s) => ({
-    toasts: [{ ...props, id, open: true, onOpenChange: (open: boolean) => { if (!open) dismiss(id); props.onOpenChange?.(open); } }, ...s.toasts].slice(0, TOAST_LIMIT),
-  }));
-  return { id, dismiss: () => dismiss(id), update };
+  toastManager.close(id);
 }
 
 function useToast() {
-  const [state, setLocal] = React.useState(memory);
-  React.useEffect(() => {
-    listeners.push(setLocal);
-    return () => {
-      const i = listeners.indexOf(setLocal);
-      if (i > -1) listeners.splice(i, 1);
-    };
-  }, []);
-  return { ...state, toast, dismiss };
+  return { toast, dismiss };
 }
 
-/** Renders the queue. Mount it once, near the root. */
-function Toaster() {
-  const { toasts } = useToast();
+function ToastList() {
+  const { toasts } = BaseToast.useToastManager();
+  return toasts.map((item) => {
+    const glyph = item.type ? GLYPHS[item.type as ToastType] : undefined;
+    const action = (item.data as ToastData | undefined)?.action;
+    return (
+      <Toast key={item.id} toast={item}>
+        {glyph && <span className="flex h-5 w-4 shrink-0 items-center justify-center">{glyph}</span>}
+        <div className="grid min-w-0 flex-1 gap-1">
+          <ToastTitle />
+          <ToastDescription />
+        </div>
+        {action}
+        <ToastClose />
+      </Toast>
+    );
+  });
+}
+
+/** Renders the queue. Mount it once, near the root; call toast() from anywhere. */
+function Toaster({ limit = 3, timeout = 5000 }: { limit?: number; timeout?: number }) {
   return (
-    <ToastProvider swipeDirection="right">
-      {toasts.map(({ id, title, description, action, ...props }) => (
-        <Toast key={id} {...props}>
-          <div className="grid min-w-0 gap-0.5">
-            {title && <ToastTitle>{title}</ToastTitle>}
-            {description && <ToastDescription>{description}</ToastDescription>}
-          </div>
-          {action}
-          <ToastClose />
-        </Toast>
-      ))}
-      <ToastViewport />
+    <ToastProvider limit={limit} timeout={timeout}>
+      <ToastViewport>
+        <ToastList />
+      </ToastViewport>
     </ToastProvider>
   );
 }
 
-export { Toast, ToastAction, ToastClose, ToastDescription, Toaster, ToastProvider, ToastTitle, ToastViewport, toast, useToast };
+type ToastProps = React.ComponentProps<typeof Toast>;
+
+export { Toast, ToastAction, ToastClose, ToastDescription, Toaster, ToastProvider, ToastTitle, ToastViewport, dismiss, toast, useToast };
 export type { ToastActionElement, ToastProps };

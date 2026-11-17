@@ -1,69 +1,60 @@
 "use client";
 
-import * as React from "react";
-import { PencilSimpleIcon } from "@phosphor-icons/react/ssr";
+import { CaretDownIcon, InfoIcon } from "@phosphor-icons/react/ssr";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 
-function RenameForm({ onDone }: { onDone?: () => void }) {
-  const [name, setName] = React.useState("Acme support");
+function Seats({ defaultOpen }: { defaultOpen?: boolean }) {
   return (
-    <form
-      className="grid gap-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        onDone?.();
-      }}
-    >
-      <PopoverHeader>
-        <PopoverTitle>Display name</PopoverTitle>
-        <PopoverDescription>Shown as the sender on acme@inkboxmail.com.</PopoverDescription>
-      </PopoverHeader>
-      <div className="grid gap-1">
-        <Label htmlFor="display-name">Name</Label>
-        <Input id="display-name" value={name} onChange={(e) => setName(e.target.value)} />
-      </div>
-      <Button type="submit" className="w-full">
-        Save
-      </Button>
-    </form>
+    <Popover defaultOpen={defaultOpen}>
+      <PopoverTrigger render={<Button variant="outline" />}>
+        Add seats
+        <CaretDownIcon />
+      </PopoverTrigger>
+      <PopoverContent align="start" className="flex flex-col gap-4">
+        <PopoverHeader>
+          <PopoverTitle>Seats on the Team plan</PopoverTitle>
+          <PopoverDescription>$20 per seat a month, prorated from today.</PopoverDescription>
+        </PopoverHeader>
+        <label className="flex flex-col gap-2">
+          <span className="text-body-sm leading-line-body-sm font-medium text-fg">Seats</span>
+          <Input type="number" defaultValue={8} min={1} />
+        </label>
+        <Button size="sm" className="self-end">
+          Update plan
+        </Button>
+      </PopoverContent>
+    </Popover>
   );
 }
 
 export function Preview() {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <div className="flex justify-center">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button variant="outline">
-            <PencilSimpleIcon weight="fill" />
-            Rename mailbox
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start">
-          <RenameForm onDone={() => setOpen(false)} />
-        </PopoverContent>
-      </Popover>
-    </div>
-  );
+  return <Seats />;
 }
 
 export function Open() {
   return (
-    <div className="flex min-h-80 items-start justify-center">
-      <Popover defaultOpen>
-        <PopoverTrigger asChild>
-          <Button variant="outline">
-            <PencilSimpleIcon weight="fill" />
-            Rename mailbox
-          </Button>
+    <div className="min-h-80">
+      <Seats defaultOpen />
+    </div>
+  );
+}
+
+export function Info() {
+  return (
+    <div className="flex items-center gap-2 text-body-sm leading-line-body-sm text-fg-secondary">
+      Sandbox minutes
+      <Popover>
+        <PopoverTrigger render={<Button variant="ghost" size="icon-sm" aria-label="About sandbox minutes" />}>
+          <InfoIcon />
         </PopoverTrigger>
-        <PopoverContent>
-          <RenameForm />
+        <PopoverContent side="top">
+          <PopoverHeader>
+            <PopoverTitle>Sandbox minutes</PopoverTitle>
+            <PopoverDescription>Counted while a sandbox is running a thread. Idle sandboxes stop after 30 minutes and are not counted.</PopoverDescription>
+          </PopoverHeader>
         </PopoverContent>
       </Popover>
     </div>

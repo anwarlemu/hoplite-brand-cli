@@ -3,8 +3,8 @@ name: kbd
 title: Kbd
 type: ui
 surface: site
-description: "A 20px lilac key cap with 6px corners and 12px medium text, as in the console's search."
-use_for: "Use to show a keyboard shortcut in a menu, a tooltip or help text (Kbd for one key, KbdGroup for a combination). Write the keys as people see them on the keyboard (⌘, Shift, K)."
-never: [A shortcut written in caps tracking, A dark key cap on white, Long words inside a key]
-source: "The Hoplite console's search keys (console-search.tsx Kbd: 20px, radius xs, bg-subtle, Line/S, caption medium)"
+description: "A square 20px key cap with a quiet edge and a 12px Kode Mono label; caps in a group sit 4px apart, and on an ink tooltip they follow its light ink."
+use_for: "Use Kbd to show a keyboard shortcut in a menu row, a tooltip or help text (N, Cmd K). Group the keys of one shortcut in KbdGroup. Use the symbol glyph for modifier keys where the platform is known."
+never: [Rounded or pill caps, A filled or raised cap, A shortcut written in body type]
+source: "Extrapolated from the Hoplite website: the nav's shortcut caps (drawn square, as the brand draws every frame) in Kode Mono"
 ---

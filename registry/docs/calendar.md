@@ -3,8 +3,8 @@ name: calendar
 title: Calendar
 type: ui
 surface: site
-description: "A month grid of 36px keys: today in purple, selected days as purple keys, a range on a lilac band."
-use_for: "Use to pick a day, several days or a range (a delivery log window, a report period) when the month view helps. Set mode to single, multiple or range, pass selected and onSelect, and disable days that cannot be picked. For a field that opens a calendar, use Date Picker."
-never: [Round day keys, A dark selected day, Animating between months]
-source: "Extrapolated from the Hoplite console (Figma 427:2715): 8px keys, the lilac wash and the purple action"
+description: "A month grid: a Chakra Petch month title between compact ghost hexagon keys, Kode Mono weekday labels and 36px square days that meet edge to edge; today in a quiet frame, a chosen day filled ink, the days of a range on the hover wash between two ink ends."
+use_for: "Use for choosing a day, several days or a range in place (scheduling an automation, a usage report's period). mode is single, multiple or range, with selected and onSelect; disabled takes dates, ranges, before or after, days of the week or a function; numberOfMonths shows months side by side; captionLayout=\"dropdown\" adds month and year selects for far dates. In a form field use DatePicker. Dependency free; dates are local Date objects."
+never: [Round or rounded day keys, An orange chosen day, Animating the change of month, Gaps between days in a range]
+source: "Extrapolated from the Hoplite website: the Chakra Petch title, Kode Mono labels (.label), the compact ghost keys (.hn__top), the hover wash and the 32 percent line"
 ---

@@ -3,8 +3,9 @@ name: card
 title: Card
 type: ui
 surface: site
-description: "White cards with the field edge, white cards on the card shadow, and lilac cards, all with 24px corners."
-use_for: "Use default (outline) for a small fact block in a grid (Trigger, Delivery, Response contract): a glyph-led 14px title and a muted description. Use raised (elevated) for a white panel lifted off the page. Use muted (filled) for a grouped setting inside a dialog (a channel with its toggle in CardAction). Put a button or toggle in CardAction at the top right."
-never: [Drop shadows on default cards, Corners other than rounded-dialog, A colored header bar, Nesting cards more than one level]
-source: "Console Card theme; Figma 427:2715: Webhooks - Event catalog, Create Agent Identity (channel cards)"
+kinds: [card]
+description: "The site's frames: a square stone frame 32px in (a plan card), crop-mark corners (a feature frame), or a quiet rule above. Titles are Chakra Petch 24px (20px small); text is 16px light graphite; an action at the top right and keys in the footer."
+use_for: "Use Card for a plan, a feature or a resource that sits beside others. Use the default frame for plans and settings groups, variant=\"corners\" around product art or a figure, and variant=\"ruled\" for a row of short features. size=\"sm\" for dense grids (24px in, 20px titles). One ink key per card at most."
+never: [A white or filled card on the ground, Rounded corners, A drop shadow, Bold titles, A card inside a card]
+source: "The Hoplite website's plan cards (.pr-plan, .pr-plan__name, .pr-plan__body), bands (.band__frame, .band__title) and feature frames (.how__frame with its corners)"
 ---

@@ -77,7 +77,8 @@ export function scales() {
 	scaleCache = {
 		text: pick(/^--ds-text-/, px),
 		space: pick(/^--ds-space-/, px),
-		radius: pick(/^--ds-radius-(?!pill$)/, px),
+		// A square brand (every radius 0) still has a step to snap to: the first zero-valued radius.
+		radius: pick(/^--ds-radius-(?!pill$)/, px).length ? pick(/^--ds-radius-(?!pill$)/, px) : Object.entries(t).filter(([k, v]) => /^--ds-radius-(?!pill$)/.test(k) && Number.parseFloat(v) === 0).slice(0, 1).map(([k]) => [k, 0] as [string, number]),
 		duration: pick(/^--ds-duration-/, (v) => Number.parseFloat(v)),
 	};
 	return scaleCache;

@@ -1,74 +1,78 @@
 "use client";
 
 import * as React from "react";
-import { Avatar as ChakraAvatar } from "@chakra-ui/react";
+import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
 
 import { cn } from "@/lib/utils";
 
-// The console's avatar (src/components/ui/avatar.tsx): a circle in the avatar blue with one white initial (pass it uppercase) in
-// 14px regular (16px at lg). Sizes: sm 24px, default 32px, lg 40px. `square` rounds 6px at sm, 8px by default and 12px at
-// lg. The fallback shows until the image has loaded.
-function Avatar({ className, size = "default", shape = "circle", ...props }: React.ComponentProps<typeof ChakraAvatar.Root> & { size?: "sm" | "default" | "lg"; shape?: "square" | "circle" }) {
+// The site's avatar (.trust__avatar, .chat__people): a 40px hexagon holding the photo, or 12px Kode Mono initials in the
+// ink on the hover wash while there is no photo. `shape="hex"` (the default) is the point-up hexagon the site uses for
+// marks and people; `shape="cut"` is the trust strip's box with its ends cut 8px. Sizes are 32px (sm), 40px and 48px
+// (lg). A status dot (round, like the site's dots) sits at the lower right on a ground ring. In a group the hexagons
+// overlap 8px, each cut out of the ground by a 2px margin; the count is a hexagon of the wash with a quiet label.
+const SHAPES = {
+  hex: "ds-hex-mark",
+  cut: "ds-hex-s",
+} as const;
+
+type Shape = keyof typeof SHAPES;
+const ShapeContext = React.createContext<Shape>("hex");
+
+function Avatar({ className, size = "default", shape = "hex", children, ...props }: React.ComponentProps<typeof BaseAvatar.Root> & { size?: "sm" | "default" | "lg"; shape?: Shape }) {
   return (
-    <ChakraAvatar.Root
-      unstyled
-      data-slot="avatar"
-      data-size={size}
-      data-shape={shape}
-      className={cn(
-        "group/avatar relative flex size-8 shrink-0 select-none data-[size=lg]:size-10 data-[size=sm]:size-6",
-        shape === "circle" ? "rounded-pill" : "rounded-sm data-[size=lg]:rounded-control data-[size=sm]:rounded-xs",
-        className,
-      )}
-      {...props}
-    />
+    <ShapeContext.Provider value={shape}>
+      <BaseAvatar.Root
+        data-slot="avatar"
+        data-size={size}
+        data-shape={shape}
+        className={cn("group/avatar relative inline-flex size-10 shrink-0 select-none data-[size=lg]:size-12 data-[size=sm]:size-8", className)}
+        {...props}
+      >
+        {children}
+      </BaseAvatar.Root>
+    </ShapeContext.Provider>
   );
 }
 
-function AvatarImage({ className, ...props }: React.ComponentProps<typeof ChakraAvatar.Image>) {
-  return <ChakraAvatar.Image data-slot="avatar-image" className={cn("aspect-square size-full rounded-[inherit] object-cover", className)} {...props} />;
+function AvatarImage({ className, ...props }: React.ComponentProps<typeof BaseAvatar.Image>) {
+  const shape = React.useContext(ShapeContext);
+  return <BaseAvatar.Image data-slot="avatar-image" className={cn(SHAPES[shape], "size-full object-cover", className)} {...props} />;
 }
 
-function AvatarFallback({ className, ...props }: React.ComponentProps<typeof ChakraAvatar.Fallback>) {
+function AvatarFallback({ className, ...props }: React.ComponentProps<typeof BaseAvatar.Fallback>) {
+  const shape = React.useContext(ShapeContext);
   return (
-    <ChakraAvatar.Fallback
+    <BaseAvatar.Fallback
       data-slot="avatar-fallback"
-      className={cn("flex size-full items-center justify-center rounded-[inherit] bg-avatar font-sans text-body leading-none font-normal text-white group-data-[size=lg]/avatar:text-body-lg group-data-[size=sm]/avatar:text-body", className)}
+      className={cn(SHAPES[shape], "flex size-full items-center justify-center bg-subtle-hover font-mono text-caption leading-none tracking-code text-fg group-data-[size=lg]/avatar:text-body-sm", className)}
       {...props}
     />
   );
 }
 
-/** A status dot at the avatar's lower right (an agent online), ringed in white. */
+/** A status dot at the lower right: the ink by default; color it with a class (bg-success, bg-brand). */
 function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="avatar-badge"
-      className={cn(
-        "absolute -right-0.5 -bottom-0.5 z-10 inline-flex size-2.5 items-center justify-center rounded-pill bg-success text-white ring-2 ring-surface select-none group-data-[size=lg]/avatar:size-3 group-data-[size=sm]/avatar:size-2 [&>svg]:hidden group-data-[size=lg]/avatar:[&>svg]:block group-data-[size=lg]/avatar:[&>svg]:size-2",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <span data-slot="avatar-badge" className={cn("absolute right-0 bottom-0 size-2 rounded-pill bg-primary ring-2 ring-surface group-data-[size=lg]/avatar:size-3", className)} {...props} />;
 }
 
-/** Avatars overlapped by 8px, each ringed in white. */
 function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="avatar-group" className={cn("group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-surface", className)} {...props} />;
-}
-
-/** The count of avatars not shown (+3), on the lilac. */
-function AvatarGroupCount({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="avatar-group-count"
+      data-slot="avatar-group"
       className={cn(
-        "relative flex size-8 shrink-0 items-center justify-center rounded-pill bg-subtle font-sans text-caption leading-none text-fg-secondary ring-2 ring-surface group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4",
+        "flex items-center -space-x-2 *:data-[slot=avatar]:box-content *:data-[slot=avatar]:bg-surface *:data-[slot=avatar]:p-0.5 *:data-[slot=avatar]:data-[shape=hex]:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] *:data-[slot=avatar]:data-[shape=cut]:[clip-path:polygon(var(--ds-hex-chamfer-s)_0,calc(100%_-_var(--ds-hex-chamfer-s))_0,100%_50%,calc(100%_-_var(--ds-hex-chamfer-s))_100%,var(--ds-hex-chamfer-s)_100%,0_50%)]",
         className,
       )}
       {...props}
     />
+  );
+}
+
+function AvatarGroupCount({ className, children, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div data-slot="avatar-group-count" className={cn("ds-hex-mark relative box-content flex size-10 shrink-0 items-center justify-center bg-surface p-0.5", className)} {...props}>
+      <span className="ds-hex-mark flex size-full items-center justify-center bg-subtle-hover font-mono text-caption leading-none tracking-code text-fg-muted">{children}</span>
+    </div>
   );
 }
 

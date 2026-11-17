@@ -1,123 +1,88 @@
 "use client";
 
 import * as React from "react";
-import { ContextMenu as ContextMenuPrimitive } from "radix-ui";
-import { CaretRightIcon, CheckCircleIcon } from "@phosphor-icons/react/ssr";
+import { ContextMenu as BaseContextMenu } from "@base-ui/react/context-menu";
 
-import { usePortalContainer } from "@/lib/surface";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "@/components/ui/dropdown-menu";
 
-// A right-click menu, drawn as the console's menu (its Chakra menu theme):
-// the panel is white with no edge, 16px corners, the floating shadow and 4px of padding; items are rows of at least
-// 36px (12px sides, 8px above and below) with 12px corners and a 14px regular ink label after a 16px glyph in the
-// label's color, 4px apart, with the deeper lilac under the highlighted row and no fade (menus are used by keyboard and
-// many times a day). Check and radio marks sit at the end of the row: a bold 16px check in the brand purple. Section
-// labels are 12px regular in the brand purple, separators the subtle hairline, shortcuts 12px muted, destructive items
-// red. The panel grows out of its trigger from 98 percent with a fade (160ms) and leaves in 100ms.
-const CONTENT =
-  "z-50 max-h-(--radix-context-menu-content-available-height) min-w-48 overflow-x-hidden overflow-y-auto rounded-panel bg-surface p-1 text-fg shadow-floating outline-none data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in [&_[role^=menuitem]+[role^=menuitem]]:mt-1";
-const ITEM =
-  "relative flex min-h-9 cursor-default items-center gap-3 rounded-control px-3 py-2 font-sans text-body leading-line-body font-normal text-fg outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-subtle-hover data-[inset]:pl-10 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
-
-function ContextMenu(props: React.ComponentProps<typeof ContextMenuPrimitive.Root>) {
-  return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />;
+// The dropdown menu's panel, opened at the pointer on a right click or a long press: a square panel of the ground with
+// a quiet hairline and a long soft cast, 36px rows of 14px Satoshi, the row under the pointer in the hover wash, Kode
+// Mono shortcuts at the end, an ink check or a small ink hexagon on chosen rows, destructive rows in the orange. The
+// trigger is the area that answers the click; it has no look of its own. The panel opens in 240ms (fade and 0.98 scale
+// from the pointer, strong ease-out) and leaves in 200ms.
+function ContextMenu(props: React.ComponentProps<typeof BaseContextMenu.Root>) {
+  return <BaseContextMenu.Root data-slot="context-menu" {...props} />;
 }
 
-function ContextMenuPortal(props: React.ComponentProps<typeof ContextMenuPrimitive.Portal>) {
-  const container = usePortalContainer();
-  return <ContextMenuPrimitive.Portal data-slot="context-menu-portal" container={container} {...props} />;
+function ContextMenuTrigger({ className, ...props }: Omit<React.ComponentProps<typeof BaseContextMenu.Trigger>, "className"> & { className?: string }) {
+  return <BaseContextMenu.Trigger data-slot="context-menu-trigger" className={cn("select-none", className)} {...props} />;
 }
 
-function ContextMenuTrigger({ className, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Trigger>) {
-  return <ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" className={cn("select-none", className)} {...props} />;
+function ContextMenuPortal(props: React.ComponentProps<typeof DropdownMenuPortal>) {
+  return <DropdownMenuPortal data-slot="context-menu-portal" {...props} />;
 }
 
-function ContextMenuContent({ className, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Content>) {
-  return (
-    <ContextMenuPortal>
-      <ContextMenuPrimitive.Content data-slot="context-menu-content" className={cn(CONTENT, "origin-(--radix-context-menu-content-transform-origin)", className)} {...props} />
-    </ContextMenuPortal>
-  );
+function ContextMenuContent({ sideOffset = 0, align = "start", ...props }: React.ComponentProps<typeof DropdownMenuContent>) {
+  return <DropdownMenuContent data-slot="context-menu-content" sideOffset={sideOffset} align={align} {...props} />;
 }
 
-function ContextMenuGroup(props: React.ComponentProps<typeof ContextMenuPrimitive.Group>) {
-  return <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />;
+function ContextMenuGroup(props: React.ComponentProps<typeof DropdownMenuGroup>) {
+  return <DropdownMenuGroup data-slot="context-menu-group" {...props} />;
 }
 
-function ContextMenuItem({ className, inset, variant = "default", ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Item> & { inset?: boolean; variant?: "default" | "destructive" }) {
-  return (
-    <ContextMenuPrimitive.Item
-      data-slot="context-menu-item"
-      data-inset={inset || undefined}
-      data-variant={variant}
-      className={cn(ITEM, "data-[variant=destructive]:text-danger data-[variant=destructive]:[&_svg]:text-danger", className)}
-      {...props}
-    />
-  );
+function ContextMenuItem(props: React.ComponentProps<typeof DropdownMenuItem>) {
+  return <DropdownMenuItem data-slot="context-menu-item" {...props} />;
 }
 
-function ContextMenuCheckboxItem({ className, children, checked, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem>) {
-  return (
-    <ContextMenuPrimitive.CheckboxItem data-slot="context-menu-checkbox-item" checked={checked} className={cn(ITEM, className)} {...props}>
-      {children}
-      <span className="pointer-events-none ml-auto flex size-5 shrink-0 items-center justify-center">
-        <ContextMenuPrimitive.ItemIndicator>
-          <CheckCircleIcon weight="fill" className="size-5 text-fg-brand" />
-        </ContextMenuPrimitive.ItemIndicator>
-      </span>
-    </ContextMenuPrimitive.CheckboxItem>
-  );
+function ContextMenuCheckboxItem(props: React.ComponentProps<typeof DropdownMenuCheckboxItem>) {
+  return <DropdownMenuCheckboxItem data-slot="context-menu-checkbox-item" {...props} />;
 }
 
-function ContextMenuRadioGroup(props: React.ComponentProps<typeof ContextMenuPrimitive.RadioGroup>) {
-  return <ContextMenuPrimitive.RadioGroup data-slot="context-menu-radio-group" {...props} />;
+function ContextMenuRadioGroup(props: React.ComponentProps<typeof DropdownMenuRadioGroup>) {
+  return <DropdownMenuRadioGroup data-slot="context-menu-radio-group" {...props} />;
 }
 
-// The selected choice takes the same end check as a checkbox item (the console's menu option).
-function ContextMenuRadioItem({ className, children, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem>) {
-  return (
-    <ContextMenuPrimitive.RadioItem data-slot="context-menu-radio-item" className={cn(ITEM, className)} {...props}>
-      {children}
-      <span className="pointer-events-none ml-auto flex size-5 shrink-0 items-center justify-center">
-        <ContextMenuPrimitive.ItemIndicator>
-          <CheckCircleIcon weight="fill" className="size-5 text-fg-brand" />
-        </ContextMenuPrimitive.ItemIndicator>
-      </span>
-    </ContextMenuPrimitive.RadioItem>
-  );
+function ContextMenuRadioItem(props: React.ComponentProps<typeof DropdownMenuRadioItem>) {
+  return <DropdownMenuRadioItem data-slot="context-menu-radio-item" {...props} />;
 }
 
-function ContextMenuLabel({ className, inset, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Label> & { inset?: boolean }) {
-  return <ContextMenuPrimitive.Label data-slot="context-menu-label" data-inset={inset || undefined} className={cn("mx-3 my-2 font-sans text-caption leading-line-caption font-normal text-fg-brand data-[inset]:pl-7", className)} {...props} />;
+function ContextMenuLabel(props: React.ComponentProps<typeof DropdownMenuLabel>) {
+  return <DropdownMenuLabel data-slot="context-menu-label" {...props} />;
 }
 
-function ContextMenuSeparator({ className, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) {
-  return <ContextMenuPrimitive.Separator data-slot="context-menu-separator" className={cn("my-2 h-px border-0 bg-line-subtle", className)} {...props} />;
+function ContextMenuSeparator(props: React.ComponentProps<typeof DropdownMenuSeparator>) {
+  return <DropdownMenuSeparator data-slot="context-menu-separator" {...props} />;
 }
 
-function ContextMenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
-  return <span data-slot="context-menu-shortcut" className={cn("ml-auto pl-4 font-sans text-caption text-fg-muted", className)} {...props} />;
+function ContextMenuShortcut(props: React.ComponentProps<typeof DropdownMenuShortcut>) {
+  return <DropdownMenuShortcut data-slot="context-menu-shortcut" {...props} />;
 }
 
-function ContextMenuSub(props: React.ComponentProps<typeof ContextMenuPrimitive.Sub>) {
-  return <ContextMenuPrimitive.Sub data-slot="context-menu-sub" {...props} />;
+function ContextMenuSub(props: React.ComponentProps<typeof DropdownMenuSub>) {
+  return <DropdownMenuSub data-slot="context-menu-sub" {...props} />;
 }
 
-function ContextMenuSubTrigger({ className, inset, children, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & { inset?: boolean }) {
-  return (
-    <ContextMenuPrimitive.SubTrigger data-slot="context-menu-sub-trigger" data-inset={inset || undefined} className={cn(ITEM, "data-[state=open]:bg-subtle-hover", className)} {...props}>
-      {children}
-      <CaretRightIcon weight="bold" className="ml-auto size-4 text-fg-muted" />
-    </ContextMenuPrimitive.SubTrigger>
-  );
+function ContextMenuSubTrigger(props: React.ComponentProps<typeof DropdownMenuSubTrigger>) {
+  return <DropdownMenuSubTrigger data-slot="context-menu-sub-trigger" {...props} />;
 }
 
-function ContextMenuSubContent({ className, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.SubContent>) {
-  return (
-    <ContextMenuPortal>
-      <ContextMenuPrimitive.SubContent data-slot="context-menu-sub-content" className={cn(CONTENT, "max-h-(--radix-context-menu-content-available-height) origin-(--radix-context-menu-content-transform-origin)", className)} {...props} />
-    </ContextMenuPortal>
-  );
+function ContextMenuSubContent(props: React.ComponentProps<typeof DropdownMenuSubContent>) {
+  return <DropdownMenuSubContent data-slot="context-menu-sub-content" {...props} />;
 }
 
 export {

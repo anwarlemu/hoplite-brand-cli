@@ -1,22 +1,25 @@
-import { Label } from "@/components/ui/label";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 
 export function Preview() {
   return (
-    <div className="grid w-full max-w-100.5 gap-1">
-      <Label htmlFor="description">Agent description</Label>
-      <Textarea id="description" placeholder="Agent Description" />
-    </div>
+    <Field className="max-w-md">
+      <FieldLabel>Task</FieldLabel>
+      <Textarea placeholder="Describe what the agent should do, and how you will know it is done." />
+      <FieldDescription>Agents read this before they open a sandbox.</FieldDescription>
+    </Field>
   );
 }
 
 export function States() {
   return (
-    <div className="grid w-full max-w-100.5 gap-3">
-      <Textarea aria-label="Note" defaultValue="Answers billing questions for Acme and forwards anything about refunds to the finance agent." />
-      <Textarea aria-label="Invalid note" defaultValue="" placeholder="Required" aria-invalid />
-      <Textarea aria-label="Read-only" readOnly defaultValue="Created by the Hoplite CLI on Jul 27, 2026." />
-      <Textarea aria-label="Disabled" disabled placeholder="Disabled" />
+    <div className="grid w-full max-w-md gap-4">
+      <Textarea defaultValue="Upgrade the payments service to Node 22 and fix any failing tests." />
+      <Field invalid>
+        <Textarea defaultValue="" placeholder="Task" />
+        <FieldError>Describe the task before starting the thread.</FieldError>
+      </Field>
+      <Textarea disabled placeholder="Threads are read-only once merged" />
     </div>
   );
 }

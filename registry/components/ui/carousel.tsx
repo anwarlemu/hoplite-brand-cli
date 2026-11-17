@@ -1,15 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react/ssr";
+import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@phosphor-icons/react/ssr";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// A row of slides that snap into place (extrapolated from the Hoplite console, Figma 427:2715: its white keys with
-// Shadow/S and 8px corners). Slides scroll natively (touch, trackpad and wheel) and snap; the previous and next keys
-// are 32px white circles with Shadow/S and an ink arrow, outside the row. Arrow keys move a slide when the carousel has
-// focus. The scroll is smooth (the browser's own easing) unless reduced motion is set.
-
+// A row of slides that snap into place, extrapolated from the Hoplite website's keys and marks: slides scroll natively
+// (touch, trackpad and wheel) and snap; the previous and next keys are 32px outlined hexagons (the outline icon key,
+// a 1px strong edge around the ground that fills with the hover wash) holding a 16px arrow, 48px outside the row, and
+// they turn the quiet line and slate when there is nowhere to go. CarouselDots is the row of point-up hexagon marks
+// (the site's bullets): 8px marks in the field line, the current one ink, each in a 24px target that turns the strong
+// line under the pointer (160ms). Arrow keys move a slide when the carousel has focus. The scroll is smooth (the
+// browser's own easing) unless reduced motion is set, then it jumps.
 type CarouselEvent = "select" | "reInit";
 type CarouselApi = {
   scrollPrev: () => void;
@@ -38,6 +41,9 @@ type CarouselContextProps = {
   scrollNext: () => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
+  index: number;
+  count: number;
+  scrollTo: (index: number) => void;
   update: () => void;
 };
 
@@ -51,7 +57,7 @@ function useCarousel() {
 
 function Carousel({ orientation = "horizontal", opts, setApi, className, children, ...props }: React.ComponentProps<"div"> & CarouselProps) {
   const viewport = React.useRef<HTMLDivElement | null>(null);
-  const [edges, setEdges] = React.useState({ prev: false, next: false, index: 0 });
+  const [edges, setEdges] = React.useState({ prev: false, next: false, index: 0, count: 0 });
   const listeners = React.useRef<Record<CarouselEvent, Set<(api: CarouselApi) => void>>>({ select: new Set(), reInit: new Set() });
   const vertical = orientation === "vertical";
   const loop = !!opts?.loop;
@@ -102,12 +108,12 @@ function Carousel({ orientation = "horizontal", opts, setApi, className, childre
   }, [current, loop, scrollTo, slides, vertical]);
 
   const update = React.useCallback(() => {
-    const next = { prev: api.canScrollPrev(), next: api.canScrollNext(), index: api.selectedScrollSnap() };
+    const next = { prev: api.canScrollPrev(), next: api.canScrollNext(), index: api.selectedScrollSnap(), count: slides().length };
     setEdges((e) => {
       if (e.index !== next.index) listeners.current.select.forEach((cb) => cb(api));
-      return e.prev === next.prev && e.next === next.next && e.index === next.index ? e : next;
+      return e.prev === next.prev && e.next === next.next && e.index === next.index && e.count === next.count ? e : next;
     });
-  }, [api]);
+  }, [api, slides]);
 
   React.useEffect(() => {
     setApi?.(api);
@@ -139,7 +145,7 @@ function Carousel({ orientation = "horizontal", opts, setApi, className, childre
   };
 
   return (
-    <CarouselContext.Provider value={{ viewport, orientation, align: opts?.align ?? "start", scrollPrev: api.scrollPrev, scrollNext: api.scrollNext, canScrollPrev: edges.prev, canScrollNext: edges.next, update }}>
+    <CarouselContext.Provider value={{ viewport, orientation, align: opts?.align ?? "start", scrollPrev: api.scrollPrev, scrollNext: api.scrollNext, canScrollPrev: edges.prev, canScrollNext: edges.next, index: edges.index, count: edges.count, scrollTo, update }}>
       <div onKeyDownCapture={onKeyDown} className={cn("relative", className)} role="region" aria-roledescription="carousel" data-slot="carousel" data-orientation={orientation} {...props}>
         {children}
       </div>
@@ -154,9 +160,9 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       ref={viewport}
       data-slot="carousel-viewport"
-      className={cn("overflow-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", vertical ? "h-full snap-y snap-mandatory" : "snap-x snap-mandatory")}
+      className={cn("relative overflow-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", vertical ? "h-full snap-y snap-mandatory" : "snap-x snap-mandatory")}
     >
-      <div data-slot="carousel-content" className={cn("flex", vertical ? "-mt-4 flex-col" : "-ml-4", className)} {...props} />
+      <div data-slot="carousel-content" className={cn("flex", vertical ? "-mb-4 flex-col" : "-mr-4", className)} {...props} />
     </div>
   );
 }
@@ -168,48 +174,70 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"
-      className={cn("min-w-0 shrink-0 grow-0 basis-full", orientation === "horizontal" ? "pl-4" : "pt-4", align === "center" ? "snap-center" : align === "end" ? "snap-end" : "snap-start", className)}
+      className={cn("min-w-0 shrink-0 grow-0 basis-full", orientation === "horizontal" ? "pr-4" : "pb-4", align === "center" ? "snap-center" : align === "end" ? "snap-end" : "snap-start", className)}
       {...props}
     />
   );
 }
 
-const ARROW =
-  "absolute inline-flex size-8 items-center justify-center rounded-pill bg-surface text-fg shadow-s outline-none transition-[background-color,opacity] duration-150 ease-out hover:bg-subtle active:bg-subtle active:brightness-95 active:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-40 motion-reduce:transition-none [&_svg]:size-4";
-
-function CarouselPrevious({ className, ...props }: React.ComponentProps<"button">) {
+function CarouselPrevious({ className, ...props }: Omit<React.ComponentProps<typeof Button>, "variant" | "size">) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
   return (
-    <button
-      type="button"
+    <Button
       data-slot="carousel-previous"
+      variant="outline"
+      size="icon-sm"
       disabled={!canScrollPrev}
       onClick={scrollPrev}
-      className={cn(ARROW, orientation === "horizontal" ? "top-1/2 -left-12 -translate-y-1/2" : "-top-12 left-1/2 -translate-x-1/2 rotate-90", className)}
+      className={cn("absolute", orientation === "horizontal" ? "top-1/2 -left-12 -translate-y-1/2" : "-top-12 left-1/2 -translate-x-1/2", className)}
       {...props}
     >
-      <ArrowLeftIcon />
+      {orientation === "horizontal" ? <ArrowLeftIcon /> : <ArrowUpIcon />}
       <span className="sr-only">Previous slide</span>
-    </button>
+    </Button>
   );
 }
 
-function CarouselNext({ className, ...props }: React.ComponentProps<"button">) {
+function CarouselNext({ className, ...props }: Omit<React.ComponentProps<typeof Button>, "variant" | "size">) {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
   return (
-    <button
-      type="button"
+    <Button
       data-slot="carousel-next"
+      variant="outline"
+      size="icon-sm"
       disabled={!canScrollNext}
       onClick={scrollNext}
-      className={cn(ARROW, orientation === "horizontal" ? "top-1/2 -right-12 -translate-y-1/2" : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90", className)}
+      className={cn("absolute", orientation === "horizontal" ? "top-1/2 -right-12 -translate-y-1/2" : "-bottom-12 left-1/2 -translate-x-1/2", className)}
       {...props}
     >
-      <ArrowRightIcon />
+      {orientation === "horizontal" ? <ArrowRightIcon /> : <ArrowDownIcon />}
       <span className="sr-only">Next slide</span>
-    </button>
+    </Button>
   );
 }
 
-export { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, useCarousel };
+/** One point-up hexagon mark per slide; the current slide's is ink. Each mark is a button that scrolls to its slide. */
+function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
+  const { index, count, scrollTo } = useCarousel();
+  return (
+    <div data-slot="carousel-dots" className={cn("flex items-center justify-center gap-1 pt-4", className)} {...props}>
+      {Array.from({ length: count }, (_, i) => (
+        <button
+          key={i}
+          type="button"
+          data-slot="carousel-dot"
+          data-active={i === index || undefined}
+          aria-label={`Go to slide ${i + 1}`}
+          aria-current={i === index ? "true" : undefined}
+          onClick={() => scrollTo(i)}
+          className="group/dot grid size-6 cursor-pointer place-items-center focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-active:cursor-default"
+        >
+          <span className="ds-hex-mark size-2 bg-line-field transition-colors duration-base ease-out group-hover/dot:bg-line-strong group-data-active/dot:bg-primary motion-reduce:transition-none" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export { Carousel, CarouselContent, CarouselDots, CarouselItem, CarouselNext, CarouselPrevious, useCarousel };
 export type { CarouselApi };

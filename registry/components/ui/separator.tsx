@@ -1,20 +1,28 @@
 "use client";
 
 import * as React from "react";
-import { Separator as ChakraSeparator } from "@chakra-ui/react";
+import { Separator as BaseSeparator } from "@base-ui/react/separator";
 
 import { cn } from "@/lib/utils";
 
-// The console's rules: a 1px line in the faint lilac (#F3F1F5) under a page head, at the rail's edge, between list
-// items and above the rail's footer. Decorative by default.
-function Separator({ className, orientation = "horizontal", decorative = true, ...props }: Omit<React.ComponentProps<typeof ChakraSeparator>, "orientation"> & { orientation?: "horizontal" | "vertical"; decorative?: boolean }) {
+// The site's rules: a quiet 16 percent 1px line between rows and under the header, or (`dashed`) the section guide's
+// dashes, 10px on an 18px period (ds-rule-x across, ds-rule-y down). Horizontal by default; vertical rules stretch to
+// the row. Decorative rules are hidden from assistive tech, as shadcn's are.
+type SeparatorProps = Omit<React.ComponentProps<typeof BaseSeparator>, "orientation"> & { orientation?: "horizontal" | "vertical"; decorative?: boolean; variant?: "solid" | "dashed" };
+
+function Separator({ className, orientation = "horizontal", decorative = true, variant = "solid", ...props }: SeparatorProps) {
   return (
-    <ChakraSeparator
-      unstyled
+    <BaseSeparator
       data-slot="separator"
-      aria-hidden={decorative || undefined}
+      data-variant={variant}
       orientation={orientation}
-      className={cn("shrink-0 bg-line-subtle data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px", className)}
+      role={decorative ? "none" : undefined}
+      className={cn(
+        "shrink-0",
+        orientation === "horizontal" ? "h-px w-full" : "w-px self-stretch",
+        variant === "solid" ? "bg-line" : orientation === "horizontal" ? "ds-rule-x" : "ds-rule-y",
+        className,
+      )}
       {...props}
     />
   );

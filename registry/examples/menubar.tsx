@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { CopyIcon, FileTextIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react/ssr";
 
 import {
   Menubar,
@@ -22,65 +21,82 @@ import {
 } from "@/components/ui/menubar";
 
 function Bar({ open }: { open?: boolean }) {
-  const [wrap, setWrap] = React.useState(true);
-  const [format, setFormat] = React.useState("markdown");
+  const [diffs, setDiffs] = React.useState(true);
+  const [terminal, setTerminal] = React.useState(false);
+  const [layout, setLayout] = React.useState("split");
   return (
-    <Menubar defaultValue={open ? "note" : undefined}>
-      <MenubarMenu value="note">
-        <MenubarTrigger>Note</MenubarTrigger>
+    <Menubar>
+      <MenubarMenu defaultOpen={open}>
+        <MenubarTrigger>Thread</MenubarTrigger>
+        <MenubarContent className="w-60">
+          <MenubarItem>
+            New thread
+            <MenubarShortcut>⌘N</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem>
+            New thread in sandbox
+            <MenubarShortcut>⇧⌘N</MenubarShortcut>
+          </MenubarItem>
+          <MenubarSub>
+            <MenubarSubTrigger>Import setup from</MenubarSubTrigger>
+            <MenubarSubContent>
+              <MenubarItem>Claude Code</MenubarItem>
+              <MenubarItem>Codex</MenubarItem>
+              <MenubarItem>Cursor</MenubarItem>
+            </MenubarSubContent>
+          </MenubarSub>
+          <MenubarSeparator />
+          <MenubarItem>
+            Archive
+            <MenubarShortcut>⌘E</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem variant="destructive">Delete thread</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>Edit</MenubarTrigger>
+        <MenubarContent className="w-56">
+          <MenubarItem>
+            Undo
+            <MenubarShortcut>⌘Z</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem>
+            Redo
+            <MenubarShortcut>⇧⌘Z</MenubarShortcut>
+          </MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>
+            Find in thread
+            <MenubarShortcut>⌘F</MenubarShortcut>
+          </MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent className="w-56">
           <MenubarGroup>
-            <MenubarItem>
-              <PlusIcon />
-              New note
-              <MenubarShortcut>⌘N</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem>
-              <CopyIcon weight="duotone" />
-              Duplicate
-              <MenubarShortcut>⌘D</MenubarShortcut>
-            </MenubarItem>
-            <MenubarSub>
-              <MenubarSubTrigger>
-                <FileTextIcon weight="fill" />
-                Export as
-              </MenubarSubTrigger>
-              <MenubarSubContent className="w-40">
-                <MenubarItem>Markdown</MenubarItem>
-                <MenubarItem>Plain text</MenubarItem>
-              </MenubarSubContent>
-            </MenubarSub>
+            <MenubarLabel>Panels</MenubarLabel>
+            <MenubarCheckboxItem checked={diffs} onCheckedChange={setDiffs}>
+              Changes
+            </MenubarCheckboxItem>
+            <MenubarCheckboxItem checked={terminal} onCheckedChange={setTerminal}>
+              Terminal
+            </MenubarCheckboxItem>
           </MenubarGroup>
           <MenubarSeparator />
-          <MenubarItem variant="destructive">
-            <TrashIcon weight="fill" />
-            Delete note
-          </MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
-      <MenubarMenu value="edit">
-        <MenubarTrigger>Edit</MenubarTrigger>
-        <MenubarContent className="w-52">
-          <MenubarItem>
-            Undo <MenubarShortcut>⌘Z</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem disabled>
-            Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
-          </MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
-      <MenubarMenu value="view">
-        <MenubarTrigger>View</MenubarTrigger>
-        <MenubarContent className="w-52">
-          <MenubarCheckboxItem checked={wrap} onCheckedChange={(v) => setWrap(v === true)}>
-            Wrap lines
-          </MenubarCheckboxItem>
-          <MenubarSeparator />
-          <MenubarLabel>Show as</MenubarLabel>
-          <MenubarRadioGroup value={format} onValueChange={setFormat}>
-            <MenubarRadioItem value="markdown">Markdown</MenubarRadioItem>
-            <MenubarRadioItem value="formatted">Formatted</MenubarRadioItem>
+          <MenubarRadioGroup value={layout} onValueChange={(value) => setLayout(String(value))}>
+            <MenubarLabel>Layout</MenubarLabel>
+            <MenubarRadioItem value="split">Split</MenubarRadioItem>
+            <MenubarRadioItem value="stacked">Stacked</MenubarRadioItem>
           </MenubarRadioGroup>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>Help</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>Docs</MenubarItem>
+          <MenubarItem>Changelog</MenubarItem>
+          <MenubarItem disabled>Contact support</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
@@ -93,7 +109,7 @@ export function Preview() {
 
 export function Open() {
   return (
-    <div className="min-h-80">
+    <div className="min-h-96">
       <Bar open />
     </div>
   );

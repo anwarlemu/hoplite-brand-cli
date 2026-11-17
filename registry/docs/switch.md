@@ -3,8 +3,8 @@ name: switch
 title: Switch
 type: ui
 surface: site
-description: "A 52 by 32 pill: off gray, purple when on, with a 24px white knob that slides 20px across in 120ms."
-use_for: "Use to turn a setting or a channel on and off immediately (Phone Number, iMessage, Agent2Agent in Create Agent Identity). Put the label at the left and the switch at the right of the row, and give the switch an accessible name with aria-label or a Label. Use size sm (44 by 28) in dense lists."
-never: [A switch that needs a save button to apply, A label inside the track, A colored track other than purple when on, A knob that bounces]
-source: "The Hoplite console's Switch theme (a 44 by 24 track inside 4px of padding); Figma 427:2715: Toggle in the channel cards of Create Agent Identity"
+description: "The product's switch from the site's app demo: a 28 by 16 rounded track in the off gray that turns orange when on, with a 12px knob of the ground that slides 12px. sm is the 20 by 12 switch."
+use_for: "Use Switch for a setting that applies at once (auto-merge, notifications). Put it at the end of a setting row with the setting's name, or wrap it with its label in a Label. For a choice saved with a form use Checkbox."
+never: [A square or hexagonal track, A track in any on color but the orange, A knob with a drop shadow, A switch that applies only on submit]
+source: "The Hoplite website's app demo switches (.pa-sw: 28 by 16, radius 8px, a 12px --day knob 2px in, --orange when on; .tt-sw: 20 by 12 with an 8px knob)"
 ---

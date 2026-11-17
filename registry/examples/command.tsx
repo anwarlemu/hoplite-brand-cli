@@ -1,83 +1,71 @@
 "use client";
 
 import * as React from "react";
-import { BookOpenTextIcon, EnvelopeSimpleIcon, GearSixIcon, KeyIcon, LockKeyIcon, PhoneIcon, PlusIcon, RobotIcon, WebhooksLogoIcon } from "@phosphor-icons/react/ssr";
+import { ChatsCircleIcon, CubeIcon, GearSixIcon, GitPullRequestIcon, LightningIcon, PlusIcon, TerminalWindowIcon } from "@phosphor-icons/react/ssr";
 
 import { Button } from "@/components/ui/button";
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/command";
 
-function Items({ onRun }: { onRun?: () => void }) {
+function Items({ onRun }: { onRun?: (label: string) => void }) {
+  const run = (label: string) => () => onRun?.(label);
   return (
     <>
-      <CommandInput placeholder="Search agents, mailboxes and pages" />
-      <CommandList>
-        <CommandEmpty>No results.</CommandEmpty>
-        <CommandGroup heading="Agents">
-          <CommandItem onSelect={onRun}>
-            <RobotIcon weight="fill" />
-            @acme
-          </CommandItem>
-          <CommandItem onSelect={onRun}>
-            <RobotIcon weight="fill" />
-            @acme-support
-          </CommandItem>
-          <CommandItem onSelect={onRun}>
-            <PlusIcon />
-            Create Agent
-            <CommandShortcut>⌘N</CommandShortcut>
-          </CommandItem>
-        </CommandGroup>
-        <CommandSeparator />
-        <CommandGroup heading="Channels">
-          <CommandItem onSelect={onRun}>
-            <EnvelopeSimpleIcon weight="fill" />
-            Email
-          </CommandItem>
-          <CommandItem onSelect={onRun}>
-            <PhoneIcon weight="fill" />
-            Phone
-          </CommandItem>
-          <CommandItem disabled>
-            <WebhooksLogoIcon weight="fill" />
-            Agent2Agent (beta)
-          </CommandItem>
-        </CommandGroup>
-        <CommandSeparator />
-        <CommandGroup heading="Shared">
-          <CommandItem onSelect={onRun}>
-            <LockKeyIcon weight="fill" />
-            Vault
-          </CommandItem>
-          <CommandItem onSelect={onRun}>
-            <KeyIcon weight="fill" />
-            API Keys
-            <CommandShortcut>⌘K</CommandShortcut>
-          </CommandItem>
-          <CommandItem onSelect={onRun}>
-            <GearSixIcon weight="fill" />
-            Settings
-            <CommandShortcut>⌘,</CommandShortcut>
-          </CommandItem>
-          <CommandItem onSelect={onRun}>
-            <BookOpenTextIcon weight="fill" />
-            Read the docs
-          </CommandItem>
-        </CommandGroup>
-      </CommandList>
+      <CommandEmpty>No command by that name.</CommandEmpty>
+      <CommandGroup heading="Actions">
+        <CommandItem onSelect={run("New thread")}>
+          <PlusIcon />
+          New thread
+          <CommandShortcut>⌘N</CommandShortcut>
+        </CommandItem>
+        <CommandItem onSelect={run("Open a sandbox terminal")}>
+          <TerminalWindowIcon />
+          Open a sandbox terminal
+          <CommandShortcut>⌘T</CommandShortcut>
+        </CommandItem>
+        <CommandItem onSelect={run("Run automation")}>
+          <LightningIcon />
+          Run automation
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Go to">
+        <CommandItem onSelect={run("Threads")}>
+          <ChatsCircleIcon />
+          Threads
+          <CommandShortcut>G T</CommandShortcut>
+        </CommandItem>
+        <CommandItem onSelect={run("Pull requests")}>
+          <GitPullRequestIcon />
+          Pull requests
+          <CommandShortcut>G P</CommandShortcut>
+        </CommandItem>
+        <CommandItem onSelect={run("Sandboxes")}>
+          <CubeIcon />
+          Sandboxes
+        </CommandItem>
+        <CommandItem disabled>
+          <GearSixIcon />
+          Workspace settings (admins only)
+        </CommandItem>
+      </CommandGroup>
     </>
   );
 }
 
 export function Preview() {
   return (
-    <Command className="mx-auto max-w-112 shadow-s">
-      <Items />
+    <Command className="max-w-120 shadow-floating">
+      <CommandInput placeholder="Type a command or search" />
+      <CommandList>
+        <Items />
+      </CommandList>
     </Command>
   );
 }
 
 export function Dialog() {
   const [open, setOpen] = React.useState(false);
+  const [ran, setRan] = React.useState<string>();
   React.useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "k" && (event.metaKey || event.ctrlKey)) {
@@ -89,25 +77,24 @@ export function Dialog() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
   return (
-    <div className="grid justify-items-center gap-3">
+    <div className="flex flex-wrap items-center gap-4">
       <Button variant="outline" onClick={() => setOpen(true)}>
-        Open the command menu
+        Open the palette
+        <span className="font-code text-caption tracking-code text-fg-muted">⌘K</span>
       </Button>
-      <p className="text-body text-fg-muted">
-        Or press <kbd className="rounded-xs bg-subtle px-1.5 font-sans text-caption text-fg">⌘K</kbd>
+      <p aria-live="polite" className="text-body-sm text-fg-muted">
+        {ran ? `Ran: ${ran}` : "Or press Command K."}
       </p>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <Items onRun={() => setOpen(false)} />
-      </CommandDialog>
-    </div>
-  );
-}
-
-export function Open() {
-  return (
-    <div className="min-h-120">
-      <CommandDialog defaultOpen>
-        <Items />
+        <CommandInput placeholder="Type a command or search" />
+        <CommandList>
+          <Items
+            onRun={(label) => {
+              setRan(label);
+              setOpen(false);
+            }}
+          />
+        </CommandList>
       </CommandDialog>
     </div>
   );
