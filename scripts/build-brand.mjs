@@ -373,5 +373,7 @@ write('tokens.css', `${header}:root {${root.body}}\n${hasProduct ? `\n.ds-produc
 write('product.css', productCss);
 write('theme.css', themeCss);
 write('fonts.css', fonts);
-write('tokens.json', `${JSON.stringify({ site: t, product: { ...t, ...vars(product.body) }, dark: vars(dark.body), theme: color }, null, 1)}\n`);
+// The site's own dark theme (site.css, for a brand whose night lives there): the asset commands draw in it.
+const siteDarkBlock = [...read('site.css').matchAll(/([^{}]+)\{([^{}]*)\}/g)].find((m) => /:root:is\(\.dark/.test(m[1]));
+write('tokens.json', `${JSON.stringify({ site: t, product: { ...t, ...vars(product.body) }, dark: vars(dark.body), siteDark: { ...t, ...vars(siteDarkBlock?.[2] ?? '') }, theme: color }, null, 1)}\n`);
 console.log(`brand: ${Object.keys(t).length} tokens, site.css${hasProduct ? ', product.css' : ''}, theme.css, fonts.css, tokens.json`);

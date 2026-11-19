@@ -27,3 +27,9 @@ export function suggest(target: string, pool: string[]) {
 		.map((x) => x.p);
 }
 
+
+/** The error for a name that is not in `pool`: the closest names, then every name. */
+export function unknownName(what: string, typed: string, pool: string[]): Error {
+	const near = suggest(typed, pool);
+	return Object.assign(new Error(`Unknown ${what} \`${typed}\`.${near.length ? ` Did you mean ${near.map((n) => `\`${n}\``).join(' or ')}?` : ''} Choose from: ${pool.join(', ')}.`), { suggestions: near, choices: pool });
+}

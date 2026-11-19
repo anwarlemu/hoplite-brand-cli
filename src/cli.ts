@@ -5,6 +5,7 @@ import { review, snapshot } from './commands/review.js';
 import { run } from './commands/run.js';
 import { guide } from './commands/guide.js';
 import { workflow } from './commands/workflow.js';
+import { assets } from './commands/assets.js';
 import { approve, check, done, look, skip, tokensCommand } from './commands/small.js';
 import { type HookResult, cursorPreToolUse, cursorStop, preToolUse, sessionStart, stop, userPromptSubmit } from './hooks/handlers.js';
 import { readHookInput } from './hooks/payload.js';
@@ -68,6 +69,7 @@ program
 	});
 
 workflow(program);
+assets(program);
 
 program.parseAsync().catch((error: Error) => {
 	if (program.opts().json || process.argv.includes('--json')) process.stdout.write(`${JSON.stringify({ ok: false, error: error.message })}\n`);

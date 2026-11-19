@@ -1,0 +1,14 @@
+{
+	"$comment": "Manifest entries for `illustrate`, read by src/lib/manifest-parts.ts (and by `manifest --json`). Names resolve from the files they point to, so the list cannot drift.",
+	"commands": [
+		{
+			"name": "illustrate",
+			"usage": "illustrate [subject] [--image <file>] [--palette <name>] [--size WxH] [--seed <n>] [--format svg,png] [--json]",
+			"summary": "The brand's own drawing style as code: the globe, its dome, the cube cut into cells, the cog node, the loader, or a picture framed in a window. Writes SVG (every line and node a vector shape) and PNG. Same subject, settings and seed give the same bytes.",
+			"flags": ["image", "palette", "size", "seed", "nodes", "tilt", "progress", "label", "shade", "format", "scale", "out", "list", "json"],
+			"names": { "subject": "brand/illustrate.json#subjects", "palette": "brand/illustrate.json#palettes" },
+			"unknownName": "exits 1 and names the nearest choices",
+			"rules": "brand/illustration.md"
+		}
+	]
+}

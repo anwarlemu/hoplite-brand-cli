@@ -1,0 +1,18 @@
+{
+	"$comment": "Short motion pieces drawn on the canvas, each frame a pure function of its time, moving the way the Hoplite website moves (its stylesheets in brand/reference/site-css/, 29p0rb2sqf0_1.css): the globe's and the rules' dashes march along their lines at a constant speed (hero-globe-march and hero-orbit-march, 8s linear), the cog nodes turn a sixth of a turn and rest (hs-odin: 60deg in the first 15% of 4s on cubic-bezier(.45,0,.2,1)), a bar fills from 4% (hdp-upload: 1.2s on cubic-bezier(.3,0,.2,1)), and a lockup arrives from 92% scale and no opacity (ag-pop: .48s on cubic-bezier(.23,1,.32,1)) while the rules draw in (ag-draw: 1s on cubic-bezier(.45,0,.2,1)). No ease-in, nothing from zero scale; the loops meet their first frame.",
+	"fps": 30,
+	"sizes": { "square": [1080, 1080], "vertical": [1080, 1920], "landscape": [1920, 1080] },
+	"curves": {
+		"turn": [0.45, 0, 0.2, 1],
+		"fill": [0.3, 0, 0.2, 1],
+		"pop": [0.23, 1, 0.32, 1],
+		"draw": [0.45, 0, 0.2, 1]
+	},
+	"templates": {
+		"globe": { "name": "Globe", "from": "globe", "seconds": 8, "loop": true, "description": "The globe template with its dashes marching and its nodes turning a sixth of a turn every 4 seconds; seamless loop." },
+		"cube": { "name": "Cube", "from": "cube", "seconds": 8, "loop": true, "description": "The cube template with its dashes marching and its nodes turning; seamless loop." },
+		"horizon": { "name": "Horizon", "from": "horizon", "seconds": 8, "loop": true, "description": "The centered headline over the marching dome, its pole node turning; seamless loop." },
+		"loader": { "name": "Loader", "from": "loader", "seconds": 4, "loop": false, "description": "The bar fills from 4% to the progress on the site's upload curve, then holds while its dashes march." },
+		"logo": { "name": "Logo", "from": "logo", "seconds": 6, "loop": false, "description": "The lockup arrives (92% scale and no opacity to rest) over the dome, then the dome's dashes march and its nodes turn." }
+	}
+}

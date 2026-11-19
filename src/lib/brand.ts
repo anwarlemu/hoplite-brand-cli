@@ -54,7 +54,7 @@ export const cli = () => `npx ${brand().bin}`;
 /** The files the CLI writes into a project (its folder may share a name with a project's own route, so match files). */
 export const isOwnFile = (rel: string) => new RegExp(`(^|/)_?${brand().bin}/(brand\\.css|theme\\.css|[\\w-]+\\.js)$|(^|/)ds-fonts\\.[jt]s$`).test(rel);
 
-type TokenFile = { site: Record<string, string>; product: Record<string, string>; dark: Record<string, string>; theme: Record<string, string> };
+type TokenFile = { site: Record<string, string>; product: Record<string, string>; dark: Record<string, string>; siteDark?: Record<string, string>; theme: Record<string, string> };
 let tokenFile: TokenFile | undefined;
 export function tokens(): TokenFile {
 	tokenFile ??= JSON.parse(readFileSync(pkgPath('build', 'tokens.json'), 'utf8'));
@@ -86,12 +86,12 @@ export function scales() {
 
 export const nearest = (list: Scale, value: number) => list.reduce((a, b) => (Math.abs(b[1] - value) < Math.abs(a[1] - value) ? b : a))[0];
 
-export type BrandTheme = 'site' | 'product' | 'product-dark';
+export type BrandTheme = 'site' | 'site-dark' | 'product' | 'product-dark';
 
 /** A brand color's literal hex in a theme, for code that cannot read CSS variables (native apps, chart configs, SVG files). */
 export function colorHex(name: string, theme: BrandTheme = 'site'): string | undefined {
 	const t = tokens();
-	const table = theme === 'site' ? t.site : theme === 'product' ? t.product : { ...t.product, ...t.dark };
+	const table = theme === 'site' ? t.site : theme === 'site-dark' ? (t.siteDark ?? t.site) : theme === 'product' ? t.product : { ...t.product, ...t.dark };
 	const raw = table[`--ds-color-${name}`];
 	if (!raw) return undefined;
 	if (raw.startsWith('#')) return raw.toUpperCase();
