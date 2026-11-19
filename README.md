@@ -116,6 +116,15 @@ Run these commands with `npx hoplite-ds` after installing the CLI.
 | `approve` | Approve a `ds-override` comment in a human-operated terminal. |
 | `done <screen>` | Mark a native screen task complete. Web screen tasks use `review`. |
 | `skip <screen> --reason "..."` | Record why a tracked screen was left unchanged. |
+| `manifest --json` | Every command, asset template, size, slot, theme, slide, video, merch item, subject, lockup and rule (alias `describe`). |
+| `image <template>` | Share images and social posts (globe, cube, horizon, banner, loader, logo, partner) at every size of the brand's social tool and the social set, as PNG and SVG. |
+| `deck` | Slides at 1920 by 1080 from a JSON file: a PNG per slide and one PDF. |
+| `video <template>` | Motion pieces that move as the website moves, as MP4 and WebM through ffmpeg, or one `--still` frame. |
+| `merch <item>` | Print files at real size with bleed and safe area (tees, hoodie, cap, tote, mug wrap, sticker with die line, poster). |
+| `illustrate <subject>` | The brand's line drawings as code (globe, dome, cube, node, loader, or a picture in a window): SVG and PNG. Rules: `brand/illustration.md`. |
+| `figma <action>` | Tokens as Figma variables, push, pull and check: writes files and prints the Figma MCP calls in order. |
+
+Asset commands draw with the brand social tool's templates (agd-playground hoplite-og), the tokens and the lockup; the same inputs write the same bytes. The renderer is importable as `dist/assets/index.js`. `node scripts/build-assets-docs.mjs` regenerates the docs site's gallery.
 
 ## Update an existing interface
 
