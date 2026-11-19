@@ -36,6 +36,7 @@ const root = path.join(process.cwd(), "../../registry");
 export const sourceOf = (rel: string) => readFileSync(path.join(root, rel), "utf8");
 export const exampleSource = (name: string) => sourceOf(`examples/${name}.tsx`);
 
-// These demos open overlays, lock scrolling or take the whole viewport. Keep those effects inside a frame.
+// These demos open overlays, lock scrolling or take the whole viewport. Keep those effects inside a frame. Section blocks
+// and page templates also render in a frame, so their breakpoints follow the frame's width (desktop or phone).
 const FRAMED = new Set(["alert-dialog", "combobox", "command", "context-menu", "date-picker", "dialog", "drawer", "dropdown-menu", "hover-card", "menubar", "navigation-menu", "popover", "select", "sheet", "sidebar", "sonner", "toast", "tooltip"]);
-export const needsPreviewFrame = (item: Pick<Item, "name">) => FRAMED.has(item.name);
+export const needsPreviewFrame = (item: Pick<Item, "name" | "type">) => FRAMED.has(item.name) || item.type === "block";

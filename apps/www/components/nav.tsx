@@ -9,7 +9,14 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Lockup } from "@www/components/logo";
 
-type Entry = { name: string; title: string };
+type Entry = { name: string; title: string; type?: string };
+
+// Components, then the section blocks, then the page templates (blocks whose name ends in -page).
+const GROUPS: { label: string; test: (e: Entry) => boolean }[] = [
+  { label: "Components", test: (e) => e.type !== "block" },
+  { label: "Blocks", test: (e) => e.type === "block" && !e.name.endsWith("-page") },
+  { label: "Pages", test: (e) => e.type === "block" && e.name.endsWith("-page") },
+];
 
 // A rail row, as the site's nav items (.hn__top): a 32px 14px label in graphite; under the pointer, and on the current
 // page, a compact hexagon of the hover wash appears behind it and the label turns ink. Colors only, no motion.
@@ -40,25 +47,31 @@ function Groups({ entries, query, onNavigate }: { entries: Entry[]; query: strin
           ))}
         </ul>
       )}
-      <div>
-        <p className="ds-label mb-3 px-3">Components</p>
-        {shown.length ? (
-          <ul className="grid gap-1">
-            {shown.map((e) => {
-              const href = `/components/${e.name}`;
-              return (
-                <li key={e.name}>
-                  <Link href={href} scroll={false} onNavigate={onNavigate} data-item={e.name} aria-current={pathname === href ? "page" : undefined} className={ROW}>
-                    {e.title}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p className="px-3 text-body-sm text-fg-muted">Nothing matches.</p>
-        )}
-      </div>
+      {GROUPS.map((g) => {
+        const group = shown.filter(g.test);
+        if (!group.length && !(g.label === "Components" && !shown.length)) return null;
+        return (
+          <div key={g.label}>
+            <p className="ds-label mb-3 px-3">{g.label}</p>
+            {group.length ? (
+              <ul className="grid gap-1">
+                {group.map((e) => {
+                  const href = `/components/${e.name}`;
+                  return (
+                    <li key={e.name}>
+                      <Link href={href} scroll={false} onNavigate={onNavigate} data-item={e.name} aria-current={pathname === href ? "page" : undefined} className={ROW}>
+                        {e.title}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="px-3 text-body-sm text-fg-muted">Nothing matches.</p>
+            )}
+          </div>
+        );
+      })}
     </>
   );
 }
