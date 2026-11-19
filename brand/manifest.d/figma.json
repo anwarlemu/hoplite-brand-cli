@@ -1,0 +1,31 @@
+{
+	"$comment": "Manifest entries for `figma`, read by src/lib/manifest-parts.ts. The CLI never calls Figma: each action writes files and prints the Figma MCP tool calls to make, in order.",
+	"commands": [
+		{
+			"name": "figma tokens",
+			"usage": "figma tokens [--out <dir>] [--file <key>] [--json]",
+			"summary": "The brand tokens as Figma variables (one collection, modes Light and Dark; one collection per mode on a one-mode plan) and shadows as effect styles: tokens.json plus use_figma scripts, safe to rerun.",
+			"flags": ["out", "file", "json"]
+		},
+		{
+			"name": "figma push",
+			"usage": "figma push <illustration|image|asset|slide|component|page> [target] [--out <dir>] [--json]",
+			"summary": "Figma-ready output: an illustration as SVG with a createNodeFromSvg script when it fits (else upload_assets); an image, slide or any SVG or picture for upload_assets (small SVGs also as a script); a component preview or a page as self-contained HTML for html_to_figma.",
+			"flags": ["out", "file", "image", "palette", "size", "seed", "example", "url", "width", "json"],
+			"names": { "kind": ["illustration", "asset", "image", "slide", "component", "page"], "subject": "brand/illustrate.json#subjects", "component": "registry index" }
+		},
+		{
+			"name": "figma pull",
+			"usage": "figma pull <figma url with node-id> [saved responses...] [--json]",
+			"summary": "The read steps for a Figma node (create_session, get_variable_defs, get_design_context) and where to save each result; given the saved results, maps every value the frame uses to its brand token and Tailwind class (exact or nearest) and writes tokens-<node>.json.",
+			"flags": ["out", "json"]
+		},
+		{
+			"name": "figma check",
+			"usage": "figma check <saved responses...> [--json]",
+			"summary": "Checks saved get_variable_defs JSON and get_design_context code against the brand tokens: colors, fonts, text sizes, radii and spacing. Off-brand values are listed with the nearest token; exits 1 when there are any.",
+			"flags": ["json"]
+		}
+	],
+	"unknownName": "exits 1 and names the nearest choices"
+}

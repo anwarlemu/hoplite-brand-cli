@@ -76,6 +76,18 @@ The component reference states its source. `{{registryHost}}/r/audit.json` recor
 - `check` reports UI timers for review. Remove artificial waits. For an essential nonblocking timer, put `// ds-latency: <specific reason>` immediately above the call, explaining what it delays and why typing/actions remain immediate. This documents an audit, not a general exemption for delayed input.
 - Verify in a browser with motion enabled and reduced motion: hold a pointer down before release, type rapidly, toggle the command palette and shortcuts repeatedly, compare bounds and font weight before/after hover and press, and check consistent section/component padding. Static checks cannot establish actual usage frequency or timing by themselves.
 
+## Make brand assets
+
+Start with `{{cli}} manifest --json` (alias `describe`): it lists every asset command, template, size, slot, theme, slide, video, merch item, illustration subject, lockup and rule. An unknown name exits 1 and names the closest one; nothing substitutes a nearby value. Every command takes `--list` and `--json`, and the same inputs always write the same bytes.
+
+- Share images and social posts: `{{cli}} image <globe|cube|horizon|banner|loader|logo|partner>` with copy by slot (`--headline`, `--note`, `--note2`, `--foot-left`, `--foot-right`, `--partner-name`, `--progress`) or an `--input` JSON file. `--size` takes any of the brand tool's sizes, `custom` with `--width` and `--height`, or `social` for the whole social set (og, square, portrait, story, landscape, X and LinkedIn banners). `--theme light|night|black`. `*A phrase*` in the headline takes the orange. `--image` puts the user's picture in the drawing's place. PNG and SVG.
+- Slides: `{{cli}} deck --input deck.json` (`{ "slides": [ { "type": "cover", "title": "..." } ] }`) writes a PNG per slide and one PDF; types are cover, section, statement, bullets, stat, quote, image and end.
+- Motion: `{{cli}} video <globe|cube|horizon|loader|logo> --size square|vertical|landscape` writes MP4 and WebM through ffmpeg (PNG frames without it); `--still <seconds>` writes one frame for a poster or reduced motion.
+- Print: `{{cli}} merch <item> --variant <id>` writes print files at real size with bleed and safe area; sizes are vendor conventions to confirm. Only the approved lockups and token colors are used.
+- Illustrations: `{{cli}} illustrate <globe|dome|cube|node|loader>` or `--image <file>`; the rules are in `brand/illustration.md`. SVG keeps every line a vector path.
+- Figma: `{{cli}} figma tokens | push | pull | check` writes files and prints the Figma MCP calls in order; the CLI never calls Figma itself.
+- Never put third-party logos, real people's names or real testimonials in an asset: use Acme and a role ("Head of engineering, Acme"), or the user's own files through `--image` and `--partner`.
+
 ## Verify before finishing
 
 1. Run the consuming project's type checks, tests and production build.

@@ -1,0 +1,260 @@
+{
+	"image": [
+		{
+			"id": "globe",
+			"command": "image globe --theme night",
+			"src": "/assets-examples/image-globe.png",
+			"width": 1200,
+			"height": 630
+		},
+		{
+			"id": "cube",
+			"command": "image cube --theme light",
+			"src": "/assets-examples/image-cube.png",
+			"width": 1200,
+			"height": 630
+		},
+		{
+			"id": "horizon",
+			"command": "image horizon --theme night",
+			"src": "/assets-examples/image-horizon.png",
+			"width": 1200,
+			"height": 630
+		},
+		{
+			"id": "banner",
+			"command": "image banner --theme black",
+			"src": "/assets-examples/image-banner.png",
+			"width": 1200,
+			"height": 630
+		},
+		{
+			"id": "loader",
+			"command": "image loader --theme light",
+			"src": "/assets-examples/image-loader.png",
+			"width": 1200,
+			"height": 630
+		},
+		{
+			"id": "logo",
+			"command": "image logo --theme night",
+			"src": "/assets-examples/image-logo.png",
+			"width": 1200,
+			"height": 630
+		},
+		{
+			"id": "partner",
+			"command": "image partner --theme light",
+			"src": "/assets-examples/image-partner.png",
+			"width": 1200,
+			"height": 630
+		}
+	],
+	"social": [
+		{
+			"id": "square",
+			"command": "image globe --size square --theme night",
+			"src": "/assets-examples/social-square.png",
+			"width": 1080,
+			"height": 1080
+		},
+		{
+			"id": "portrait",
+			"command": "image cube --size portrait --theme night",
+			"src": "/assets-examples/social-portrait.png",
+			"width": 1080,
+			"height": 1350
+		},
+		{
+			"id": "story",
+			"command": "image horizon --size story --theme night",
+			"src": "/assets-examples/social-story.png",
+			"width": 1080,
+			"height": 1920
+		},
+		{
+			"id": "x-banner",
+			"command": "image banner --size x-banner --theme night",
+			"src": "/assets-examples/social-x-banner.png",
+			"width": 1500,
+			"height": 500
+		},
+		{
+			"id": "linkedin-banner",
+			"command": "image globe --size linkedin-banner --theme night",
+			"src": "/assets-examples/social-linkedin-banner.png",
+			"width": 1584,
+			"height": 396
+		}
+	],
+	"deck": [
+		{
+			"id": "cover",
+			"command": "deck cover",
+			"src": "/assets-examples/deck/slide-01-cover.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "section",
+			"command": "deck section",
+			"src": "/assets-examples/deck/slide-01-section.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "statement",
+			"command": "deck statement",
+			"src": "/assets-examples/deck/slide-01-statement.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "bullets",
+			"command": "deck bullets",
+			"src": "/assets-examples/deck/slide-01-bullets.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "stat",
+			"command": "deck stat",
+			"src": "/assets-examples/deck/slide-01-stat.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "quote",
+			"command": "deck quote",
+			"src": "/assets-examples/deck/slide-01-quote.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "image",
+			"command": "deck image",
+			"src": "/assets-examples/deck/slide-01-image.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "end",
+			"command": "deck end",
+			"src": "/assets-examples/deck/slide-01-end.png",
+			"width": 1920,
+			"height": 1080
+		}
+	],
+	"merch": [
+		{
+			"id": "tee-front",
+			"command": "merch tee-front --variant accent",
+			"src": "/assets-examples/merch/tee-front-accent.png",
+			"width": 864,
+			"height": 1152
+		},
+		{
+			"id": "tee-back",
+			"command": "merch tee-back --variant accent",
+			"src": "/assets-examples/merch/tee-back-accent.png",
+			"width": 864,
+			"height": 1152
+		},
+		{
+			"id": "poster",
+			"command": "merch poster --variant night",
+			"src": "/assets-examples/merch/poster-night.png",
+			"width": 1314,
+			"height": 1746
+		},
+		{
+			"id": "mug-wrap",
+			"command": "merch mug-wrap --variant night",
+			"src": "/assets-examples/merch/mug-wrap-night.png",
+			"width": 666,
+			"height": 270
+		},
+		{
+			"id": "sticker",
+			"command": "merch sticker --variant light",
+			"src": "/assets-examples/merch/sticker-light.png",
+			"width": 234,
+			"height": 144
+		},
+		{
+			"id": "tote",
+			"command": "merch tote --variant ink",
+			"src": "/assets-examples/merch/tote-ink.png",
+			"width": 864,
+			"height": 1008
+		}
+	],
+	"illustrate": [
+		{
+			"id": "globe",
+			"command": "illustrate globe --palette night",
+			"src": "/assets-examples/illustrate/globe.svg",
+			"width": 1200,
+			"height": 1200
+		},
+		{
+			"id": "dome",
+			"command": "illustrate dome --palette light",
+			"src": "/assets-examples/illustrate/dome.svg",
+			"width": 1600,
+			"height": 900
+		},
+		{
+			"id": "cube",
+			"command": "illustrate cube --palette light",
+			"src": "/assets-examples/illustrate/cube.svg",
+			"width": 1200,
+			"height": 1200
+		},
+		{
+			"id": "node",
+			"command": "illustrate node --palette night",
+			"src": "/assets-examples/illustrate/node.svg",
+			"width": 600,
+			"height": 600
+		},
+		{
+			"id": "loader",
+			"command": "illustrate loader --palette light",
+			"src": "/assets-examples/illustrate/loader.svg",
+			"width": 1600,
+			"height": 400
+		}
+	],
+	"video": [
+		{
+			"id": "globe",
+			"command": "video globe --size landscape --theme night",
+			"src": "/assets-examples/video-globe.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "cube",
+			"command": "video cube --size landscape --theme light",
+			"src": "/assets-examples/video-cube.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "loader",
+			"command": "video loader --size landscape --theme light",
+			"src": "/assets-examples/video-loader.png",
+			"width": 1920,
+			"height": 1080
+		},
+		{
+			"id": "logo",
+			"command": "video logo --size landscape --theme night",
+			"src": "/assets-examples/video-logo.png",
+			"width": 1920,
+			"height": 1080
+		}
+	],
+	"loopVideo": "/assets-examples/globe-landscape-night.mp4"
+}

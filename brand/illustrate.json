@@ -1,0 +1,17 @@
+{
+	"$comment": "Subjects and palettes for `illustrate`, the brand's own drawing style as code (rules and sources in brand/illustration.md). Every subject is drawn by the same functions as the share images (src/assets/scene.ts, ported from agd-playground hoplite-og scene.ts). Palettes are the image themes plus a transparent one; colors resolve from tokens.",
+	"subjects": {
+		"globe": { "kind": "drawing", "$source": "agd-playground hoplite-og scene.ts drawGlobe; the Header template's whole globe", "size": [1200, 1200], "picture": false },
+		"dome": { "kind": "drawing", "$source": "agd-playground hoplite-og layoutFor horizon: the globe's dome rising from the foot, with a solid ring and a large node on its pole", "size": [1600, 900], "picture": false },
+		"cube": { "kind": "drawing", "$source": "agd-playground hoplite-og scene.ts drawCube: the wireframe cube cut into cells with its dotted ghost", "size": [1200, 1200], "picture": false },
+		"node": { "kind": "mark", "$source": "agd-playground hoplite-og scene.ts drawNode: the cog node, a hexagon with a hexagon cut from its middle (also the website's cog, cl-cog)", "size": [600, 600], "picture": false },
+		"loader": { "kind": "drawing", "$source": "agd-playground hoplite-og scene.ts drawLoader: the loading bar with its node", "size": [1600, 400], "picture": false },
+		"window": { "kind": "picture", "$source": "agd-playground hoplite-og drawWindow (a picture darkened as the brand's aerials are) framed with the website's corner ticks (.ds-corners) inside the dashed rules (scene.ts drawRules)", "size": [1200, 900], "picture": true }
+	},
+	"palettes": {
+		"light": { "theme": "light", "$source": "image.json theme light" },
+		"night": { "theme": "night", "$source": "image.json theme night" },
+		"black": { "theme": "black", "$source": "image.json theme black" },
+		"transparent": { "theme": "light", "transparent": true, "$source": "the light theme's lines and nodes on no ground" }
+	}
+}
