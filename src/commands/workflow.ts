@@ -6,7 +6,7 @@ import { add } from './add.js';
 import { init } from './init.js';
 import { run } from './run.js';
 import { search, view, docs, info } from './catalog.js';
-import { chakra, create, shadcn } from './interop.js';
+import { create, shadcn } from './interop.js';
 
 const forwarded = (name: string) => process.argv.slice(process.argv.indexOf(name) + 1).filter((arg, index, all) => !['--cwd', '-c'].includes(arg) && !(index > 0 && ['--cwd', '-c'].includes(all[index - 1])) && !arg.startsWith('--cwd='));
 
@@ -49,5 +49,4 @@ Targets (each resolves in order: a route, a file or glob, a library component, a
 	program.command('diff <items...>').description('Compare installed components with the registry without writing').action((names, _opts, cmd) => add(names, { ...cmd.optsWithGlobals(), diff: true }));
 	for (const name of ['mcp', 'registry', 'preset', 'migrate', 'eject', 'build']) program.command(`${name} [args...]`).description(`Use shadcn's ${name} implementation with the configured brand registry`).helpOption(false).allowUnknownOption().allowExcessArguments().action(() => shadcn([name, ...forwarded(name)]));
 	program.command('shadcn [args...]').description('Run the pinned upstream CLI for workspace installs, smart merges and ecosystem operations').helpOption(false).allowUnknownOption().allowExcessArguments().action(() => shadcn(forwarded('shadcn')));
-	program.command('chakra [args...]').description('Run Chakra UI CLI 3.37.0 for snippets and theme type generation').helpOption(false).allowUnknownOption().allowExcessArguments().action(() => chakra(forwarded('chakra')));
 }

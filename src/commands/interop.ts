@@ -9,16 +9,10 @@ import { add } from './add.js';
 
 // Advanced ecosystem operations use the upstream implementation, pinned to the validated version.
 export const SHADCN_VERSION = '4.22.1';
-export const CHAKRA_VERSION = '3.37.0';
 
 export function shadcn(args: string[], cwd = findProjectRoot(), progressToStderr = false) {
 	const result = spawnSync('npx', ['--yes', `shadcn@${SHADCN_VERSION}`, ...args], { cwd, stdio: ['inherit', progressToStderr ? 2 : 'inherit', 'inherit'] });
 	if (result.status !== 0) throw new Error(`shadcn ${args[0] ?? ''} failed (${result.status ?? result.error?.message}). Review its output above.`);
-}
-
-export function chakra(args: string[], cwd = findProjectRoot()) {
-	const result = spawnSync('npx', ['--yes', `@chakra-ui/cli@${CHAKRA_VERSION}`, ...args], { cwd, stdio: 'inherit' });
-	if (result.status !== 0) throw new Error(`Chakra CLI ${args[0] ?? ''} failed (${result.status ?? result.error?.message}). Review its output above.`);
 }
 
 export async function create(opts: { template?: string; name?: string; surface?: string; dryRun?: boolean; json?: boolean; monorepo?: boolean }, items: string[] = ['button']) {

@@ -397,6 +397,9 @@ describe('the one command', () => {
 		expect(readState(p)?.reviews['/about.html']).toMatchObject({ passed: true, by: 'self' });
 		rmSync(p, { recursive: true });
 	});
+	it('offers no Chakra command (the library is Base UI only)', () => {
+		expect(execFileSync(process.execPath, [BIN, '--help'], { encoding: 'utf8' })).not.toMatch(/chakra \[/i);
+	});
 	it('every command answers --help', () => {
 		for (const c of ['review', 'look', 'check', 'tokens', 'approve', 'done', 'skip', 'snapshot', 'hook']) expect(execFileSync(process.execPath, [BIN, c, '--help'], { encoding: 'utf8' })).toMatch(/Usage/);
 	});
