@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "name": "accordion",
+  "useFor": "Use Accordion for questions and answers (a pricing FAQ, setup help) and for long lists people scan by title. type=\"single\" (the default) keeps one item open; type=\"multiple\" lets several stay open. Use variant=\"compact\" for a changelog or an activity list (the mark first, 14px titles, no rules). Keep answers short; link out for more.",
+  "constraints": [
+    "A caret or chevron in place of the hexagon",
+    "Boxed or filled rows",
+    "Bold questions",
+    "Panels that slide sideways or fade in",
+    "An orange mark"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's pricing FAQ (.faq__item, .faq__icon, .faq__hex, .faq__bar) and changelog entries (.cl-entry, .cl-entry__icon, .cl-entry__body)",
+  "exports": [
+    "Accordion",
+    "AccordionContent",
+    "AccordionItem",
+    "AccordionTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/accordion",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/accordion.md",
+  "examples": [
+    {
+      "path": "examples/accordion.tsx",
+      "content": "\"use client\";\n\nimport { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from \"@/components/ui/accordion\";\n\nexport function Preview() {\n  return (\n    <Accordion defaultValue=\"usage\" className=\"max-w-3xl\">\n      <AccordionItem value=\"usage\">\n        <AccordionTrigger>What counts as usage?</AccordionTrigger>\n        <AccordionContent>\n          Model tokens and sandbox time. Every plan includes some each month, per seat on paid plans. Beyond that, runs draw on prepaid credits you buy in Billing.\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"limit\">\n        <AccordionTrigger>What happens when I reach a limit?</AccordionTrigger>\n        <AccordionContent>Running threads finish their current step and pause. Add credits or move to a bigger plan and they pick up where they stopped.</AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"agents\">\n        <AccordionTrigger>How many agents run at once?</AccordionTrigger>\n        <AccordionContent>Five concurrent cloud sessions on Free, twenty per seat on Team, and as many as you need on Enterprise.</AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"cancel\">\n        <AccordionTrigger>Can I switch plans or cancel?</AccordionTrigger>\n        <AccordionContent>Any time, from Billing. Changes take effect at the next billing date, and unused credits stay on the workspace.</AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}\n\nexport function Multiple() {\n  return (\n    <Accordion type=\"multiple\" defaultValue={[\"sandboxes\", \"models\"]} className=\"max-w-3xl\">\n      <AccordionItem value=\"sandboxes\">\n        <AccordionTrigger>Which sandbox sizes are there?</AccordionTrigger>\n        <AccordionContent>From 2 vCPU with 8 GiB of memory up to 16 vCPU with 64 GiB, billed by the second.</AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"models\">\n        <AccordionTrigger>Which models can agents use?</AccordionTrigger>\n        <AccordionContent>Every platform model on every plan. Bring your own subscription to run on your own limits.</AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"api\" disabled>\n        <AccordionTrigger>Does the Platform API cost extra?</AccordionTrigger>\n        <AccordionContent>No. API runs draw on the same usage as threads started in the app.</AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}\n\nexport function Compact() {\n  return (\n    <Accordion variant=\"compact\" defaultValue=\"subagents\" className=\"max-w-2xl\">\n      <AccordionItem value=\"subagents\">\n        <AccordionTrigger>Steer running subagents from your phone</AccordionTrigger>\n        <AccordionContent>\n          <p>Open a thread on mobile to see each subagent's step, send it a message, or stop it before it opens a pull request.</p>\n          <p className=\"font-mono text-caption leading-line-caption font-normal tracking-code text-fg-muted\">Oct 28 · Mobile</p>\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"checks\">\n        <AccordionTrigger>Checks rerun when a sandbox restarts</AccordionTrigger>\n        <AccordionContent>\n          <p>A restarted sandbox now replays the last failing check before the agent continues, so the run never resumes on a stale result.</p>\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"seats\">\n        <AccordionTrigger>Seats can be moved between workspaces</AccordionTrigger>\n        <AccordionContent>\n          <p>Admins can move a seat from Billing without losing the member's threads or automations.</p>\n        </AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Multiple",
+        "Compact"
+      ],
+      "requires": [
+        "accordion"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/accordion/Preview"
+        },
+        {
+          "name": "Multiple",
+          "url": "https://hoplite-ds.vercel.app/preview/accordion/Multiple"
+        },
+        {
+          "name": "Compact",
+          "url": "https://hoplite-ds.vercel.app/preview/accordion/Compact"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Accordion",
+  "description": "The pricing FAQ: ruled rows of 18px questions, each with a 20px outlined hexagon holding a plus at the end; open, the hexagon turns 30 degrees, the plus becomes a minus and the 16px light graphite answer opens with its height. A compact variant is the changelog entry.",
+  "surface": "site",
+  "kinds": [
+    "faq"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/accordion.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Accordion as BaseAccordion } from \"@base-ui/react/accordion\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The pricing FAQ (.faq__item, .faq__icon, .faq__hex, .faq__bar): ruled rows, a quiet rule above the first and below\n// each, 18px questions (16px on a phone) 24px from each rule, and at the end a 20px outlined hexagon of the strong edge\n// holding a 2px ink plus. Open, the hexagon turns 30 degrees and the plus's upright bar folds to nothing, leaving a minus\n// (240ms). Under the pointer the question turns graphite. The answer is 16px light graphite, stopping at 600px, and the\n// panel opens with its height (240ms, ease-out; it closes in 200ms). `compact` is the changelog entry (.cl-entry): the\n// hexagon first, a 14px graphite title that turns ink when open, no rules, and the body indented under the title.\ntype Variant = \"default\" | \"compact\";\nconst VariantContext = React.createContext<Variant>(\"default\");\n\ntype BaseRootProps = React.ComponentProps<typeof BaseAccordion.Root>;\ntype Single = { type?: \"single\"; value?: string; defaultValue?: string; onValueChange?: (value: string) => void; /** Whether the open item can be closed again (false keeps one open). */ collapsible?: boolean };\ntype Multiple = { type: \"multiple\"; value?: string[]; defaultValue?: string[]; onValueChange?: (value: string[]) => void; collapsible?: never };\ntype AccordionProps = Omit<BaseRootProps, \"value\" | \"defaultValue\" | \"onValueChange\" | \"multiple\"> & (Single | Multiple) & { variant?: Variant };\n\nconst toArray = (value: string | string[] | undefined) => (value === undefined ? undefined : Array.isArray(value) ? value : value === \"\" ? [] : [value]);\n\nfunction Accordion({ type = \"single\", collapsible = true, value, defaultValue, onValueChange, variant = \"default\", className, ...props }: AccordionProps) {\n  const multiple = type === \"multiple\";\n  const notify = onValueChange as ((value: string | string[]) => void) | undefined;\n  const [inner, setInner] = React.useState<string[]>(() => toArray(defaultValue) ?? []);\n  const current = toArray(value) ?? inner;\n  const handleChange = (next: unknown[]) => {\n    const list = next.map(String);\n    if (!multiple && !collapsible && list.length === 0) return;\n    if (value === undefined) setInner(list);\n    notify?.(multiple ? list : (list[0] ?? \"\"));\n  };\n  return (\n    <VariantContext.Provider value={variant}>\n      <BaseAccordion.Root\n        data-slot=\"accordion\"\n        data-variant={variant}\n        multiple={multiple}\n        value={current}\n        onValueChange={handleChange}\n        className={cn(\"flex w-full flex-col\", variant === \"compact\" && \"gap-1\", className)}\n        {...props}\n      />\n    </VariantContext.Provider>\n  );\n}\n\nfunction AccordionItem({ className, ...props }: React.ComponentProps<typeof BaseAccordion.Item>) {\n  const variant = React.useContext(VariantContext);\n  return <BaseAccordion.Item data-slot=\"accordion-item\" className={cn(variant === \"default\" && \"border-b border-line first:border-t\", className)} {...props} />;\n}\n\n/** The FAQ's mark: a 20px hexagon outline holding a 2px plus; open, it turns 30 degrees and the plus becomes a minus. */\nfunction AccordionIcon({ className, variant }: { className?: string; variant: Variant }) {\n  return (\n    <svg data-slot=\"accordion-icon\" viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden className={cn(\"size-5 shrink-0\", className)}>\n      <path\n        d=\"M19 10L14.5 17.79L5.5 17.79L1 10L5.5 2.21L14.5 2.21Z\"\n        className=\"fill-none stroke-line-strong [transform-box:fill-box] origin-center transition-[rotate] duration-slow ease-out group-data-panel-open/accordion-trigger:rotate-30 motion-reduce:transition-none\"\n        strokeWidth={1}\n      />\n      <g className={cn(\"transition-[stroke] duration-base ease-out motion-reduce:transition-none\", variant === \"compact\" ? \"stroke-fg-muted group-hover/accordion-trigger:stroke-fg group-data-panel-open/accordion-trigger:stroke-fg\" : \"stroke-fg\")} strokeWidth={2}>\n        <path d=\"M6.5 10h7\" />\n        <path d=\"M10 6.5v7\" className=\"[transform-box:fill-box] origin-center transition-[scale] duration-slow ease-out group-data-panel-open/accordion-trigger:scale-y-0 motion-reduce:transition-none\" />\n      </g>\n    </svg>\n  );\n}\n\nfunction AccordionTrigger({ className, children, ...props }: React.ComponentProps<typeof BaseAccordion.Trigger>) {\n  const variant = React.useContext(VariantContext);\n  return (\n    <BaseAccordion.Header data-slot=\"accordion-header\" className=\"m-0 font-sans font-normal\">\n      <BaseAccordion.Trigger\n        data-slot=\"accordion-trigger\"\n        className={cn(\n          \"group/accordion-trigger flex w-full cursor-pointer text-left font-sans transition-colors duration-base ease-out focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-disabled:cursor-default data-disabled:text-fg-subtle motion-reduce:transition-none\",\n          variant === \"default\"\n            ? \"items-center justify-between gap-4 py-6 text-body leading-line-body text-fg hover:text-fg-secondary md:text-body-lg\"\n            : \"items-start gap-3 py-1 text-body-sm leading-line-body-sm text-fg-secondary hover:text-fg data-panel-open:text-fg\",\n          className,\n        )}\n        {...props}\n      >\n        {variant === \"compact\" && <AccordionIcon variant={variant} />}\n        <span className=\"min-w-0 flex-1 text-pretty\">{children}</span>\n        {variant === \"default\" && <AccordionIcon variant={variant} />}\n      </BaseAccordion.Trigger>\n    </BaseAccordion.Header>\n  );\n}\n\nfunction AccordionContent({ className, children, ...props }: React.ComponentProps<typeof BaseAccordion.Panel>) {\n  const variant = React.useContext(VariantContext);\n  return (\n    <BaseAccordion.Panel\n      data-slot=\"accordion-content\"\n      className=\"h-(--accordion-panel-height) overflow-hidden transition-[height] duration-slow ease-out data-starting-style:h-0 data-ending-style:h-0 data-ending-style:duration-moderate motion-reduce:transition-none\"\n      {...props}\n    >\n      <div\n        className={cn(\n          \"font-sans text-body leading-line-body font-light text-pretty text-fg-secondary\",\n          variant === \"default\" ? \"max-w-150 pb-6\" : \"flex max-w-168 flex-col gap-3 pt-1 pb-5 pl-8\",\n          className,\n        )}\n      >\n        {children}\n      </div>\n    </BaseAccordion.Panel>\n  );\n}\n\nexport { Accordion, AccordionContent, AccordionItem, AccordionTrigger };\n"
+    }
+  ]
+}

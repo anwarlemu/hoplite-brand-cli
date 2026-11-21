@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "name": "card",
+  "useFor": "Use Card for a plan, a feature or a resource that sits beside others. Use the default frame for plans and settings groups, variant=\"corners\" around product art or a figure, and variant=\"ruled\" for a row of short features. size=\"sm\" for dense grids (24px in, 20px titles). One ink key per card at most.",
+  "constraints": [
+    "A white or filled card on the ground",
+    "Rounded corners",
+    "A drop shadow",
+    "Bold titles",
+    "A card inside a card"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's plan cards (.pr-plan, .pr-plan__name, .pr-plan__body), bands (.band__frame, .band__title) and feature frames (.how__frame with its corners)",
+  "exports": [
+    "Card",
+    "CardAction",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle",
+    "cardVariants"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/card",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/card.md",
+  "examples": [
+    {
+      "path": "examples/card.tsx",
+      "content": "import { CheckIcon, DotsThreeIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from \"@/components/ui/card\";\n\nexport function Preview() {\n  return (\n    <Card className=\"max-w-sm\">\n      <CardHeader>\n        <CardTitle>Team</CardTitle>\n        <CardDescription>For teams shipping with agents every day. Shared threads, seats and automations.</CardDescription>\n        <CardAction>\n          <Badge variant=\"accent\">Most popular</Badge>\n        </CardAction>\n      </CardHeader>\n      <CardContent className=\"grid gap-1\">\n        <span className=\"font-display text-h2 leading-heading font-light text-fg\">$20</span>\n        <span className=\"text-body-sm leading-line-body-sm font-normal text-fg-muted\">per seat a month</span>\n      </CardContent>\n      <CardFooter>\n        <Button className=\"w-full\">Start team</Button>\n      </CardFooter>\n    </Card>\n  );\n}\n\nconst FEATURES = [\"20 concurrent cloud sessions\", \"Sandboxes up to 8 vCPU, 32 GiB\", \"Unlimited projects\"];\n\nexport function Variants() {\n  return (\n    <div className=\"grid gap-6 md:grid-cols-2\">\n      <Card>\n        <CardHeader>\n          <CardTitle>Free</CardTitle>\n          <CardDescription>Run agents yourself, with a monthly usage allowance.</CardDescription>\n        </CardHeader>\n        <CardContent>\n          <ul className=\"grid gap-3 border-t border-line pt-6\">\n            {FEATURES.map((feature) => (\n              <li key={feature} className=\"flex items-center gap-3 text-body-sm leading-line-body-sm font-normal text-fg\">\n                <CheckIcon className=\"size-4 text-fg-muted\" />\n                {feature}\n              </li>\n            ))}\n          </ul>\n        </CardContent>\n      </Card>\n      <Card variant=\"corners\">\n        <CardHeader>\n          <CardTitle>Every agent in one place</CardTitle>\n          <CardDescription>Watch threads run side by side, step in when one needs you, and merge when checks pass.</CardDescription>\n        </CardHeader>\n        <div className=\"grid aspect-4/3 w-full place-items-center border border-line\">\n          <span className=\"ds-label\">Product art</span>\n        </div>\n      </Card>\n    </div>\n  );\n}\n\nexport function Small() {\n  return (\n    <Card size=\"sm\" className=\"max-w-sm\">\n      <CardHeader>\n        <CardTitle>Nightly dependency bump</CardTitle>\n        <CardDescription>Automation · runs at 02:00 on acme/storefront</CardDescription>\n        <CardAction>\n          <Button variant=\"ghost\" size=\"icon-sm\" aria-label=\"More\">\n            <DotsThreeIcon />\n          </Button>\n        </CardAction>\n      </CardHeader>\n      <CardFooter>\n        <Button size=\"sm\" variant=\"outline\">\n          Run now\n        </Button>\n        <Button size=\"sm\" variant=\"ghost\">\n          Edit\n        </Button>\n      </CardFooter>\n    </Card>\n  );\n}\n\nexport function Ruled() {\n  return (\n    <div className=\"grid gap-8 md:grid-cols-3\">\n      {[\n        [\"Parallel threads\", \"Start as many agents as the work needs, each in its own sandbox.\"],\n        [\"Checks first\", \"Nothing reaches review until tests pass in the sandbox.\"],\n        [\"Yours to steer\", \"Message a running agent from the desktop or your phone.\"],\n      ].map(([title, body]) => (\n        <Card key={title} variant=\"ruled\" size=\"sm\">\n          <CardHeader>\n            <CardTitle>{title}</CardTitle>\n            <CardDescription>{body}</CardDescription>\n          </CardHeader>\n        </Card>\n      ))}\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Variants",
+        "Small",
+        "Ruled"
+      ],
+      "requires": [
+        "card",
+        "badge",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/card/Preview"
+        },
+        {
+          "name": "Variants",
+          "url": "https://hoplite-ds.vercel.app/preview/card/Variants"
+        },
+        {
+          "name": "Small",
+          "url": "https://hoplite-ds.vercel.app/preview/card/Small"
+        },
+        {
+          "name": "Ruled",
+          "url": "https://hoplite-ds.vercel.app/preview/card/Ruled"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Card",
+  "description": "The site's frames: a square stone frame 32px in (a plan card), crop-mark corners (a feature frame), or a quiet rule above. Titles are Chakra Petch 24px (20px small); text is 16px light graphite; an action at the top right and keys in the footer.",
+  "surface": "site",
+  "kinds": [
+    "card"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/card.tsx",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The site's frames. `default` is a plan card or a band (.pr-plan, .band__frame): a square frame of the stone line on\n// the same ground, 32px in (24px at size sm), never a fill or a shadow. `corners` is the feature frame (.how__frame,\n// .band__frame on the home page): four 16px slate crop marks at the corners over a transparent edge. `ruled` drops the\n// frame for a quiet rule above, for cards that sit in a row of their own. Titles are Chakra Petch 24px (20px at size sm)\n// in the ink (.band__title, .pr-plan__name); the description and body are 16px light graphite (.pr-plan__body); an\n// action sits at the top right and the footer holds the keys.\nconst cardVariants = cva(\"group/card flex min-w-0 flex-col gap-6 font-sans text-fg data-[size=sm]:gap-4\", {\n  variants: {\n    variant: {\n      default: \"border border-line-frame p-8 data-[size=sm]:p-6\",\n      corners: \"ds-corners p-8 data-[size=sm]:p-6\",\n      ruled: \"border-t border-line pt-8 data-[size=sm]:pt-6\",\n    },\n  },\n  defaultVariants: { variant: \"default\" },\n});\n\nfunction Card({ className, variant, size = \"default\", ...props }: React.ComponentProps<\"div\"> & VariantProps<typeof cardVariants> & { size?: \"default\" | \"sm\" }) {\n  return <div data-slot=\"card\" data-variant={variant ?? \"default\"} data-size={size} className={cn(cardVariants({ variant }), className)} {...props} />;\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-header\" className={cn(\"grid auto-rows-min items-start gap-2 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-action]:gap-x-4 has-data-[slot=card-action]:*:data-[slot=card-description]:col-span-2\", className)} {...props} />;\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-title\" className={cn(\"font-display text-h4 leading-8 font-normal text-balance text-fg group-data-[size=sm]/card:text-h5 group-data-[size=sm]/card:leading-7\", className)} {...props} />;\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-description\" className={cn(\"text-body leading-line-body font-light text-pretty text-fg-secondary\", className)} {...props} />;\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-action\" className={cn(\"col-start-2 row-start-1 self-start justify-self-end\", className)} {...props} />;\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-content\" className={cn(\"text-body leading-line-body font-light text-fg-secondary\", className)} {...props} />;\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-footer\" className={cn(\"mt-auto flex flex-wrap items-center gap-3\", className)} {...props} />;\n}\n\nexport { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, cardVariants };\n"
+    }
+  ]
+}

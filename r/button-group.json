@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "name": "button-group",
+  "useFor": "Use a ButtonGroup for a split action (Squash and merge with a caret for the other merge methods: Button, ButtonGroupSeparator, an icon Button), for two to four related outlined actions, for a stepper (minus, ButtonGroupText with the count, plus), or for a field with its action (Input then an outline Button). Keep every key in a group the same variant and size. orientation=\"vertical\" stacks whole keys 4px apart.",
+  "constraints": [
+    "Mixing ink and outlined keys in one group",
+    "Two ink groups in a view",
+    "Hexagon points between joined keys",
+    "Square or rounded segments at the ends"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's product window split key (.pa-merge, .pa-merge__main, .pa-merge__more: Squash and merge) redrawn on its hexagonal keys (.button, .button--primary, .button--line), and its segmented choice (.pr-period)",
+  "exports": [
+    "ButtonGroup",
+    "ButtonGroupSeparator",
+    "ButtonGroupText",
+    "buttonGroupVariants"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/button-group",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/button-group.md",
+  "examples": [
+    {
+      "path": "examples/button-group.tsx",
+      "content": "import { CaretDownIcon, CopyIcon, DotsThreeIcon, GitMergeIcon, MinusIcon, PlusIcon, TerminalWindowIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from \"@/components/ui/button-group\";\nimport { Input } from \"@/components/ui/input\";\n\nexport function Preview() {\n  return (\n    <ButtonGroup aria-label=\"Merge the pull request\">\n      <Button className=\"pl-8\">\n        <GitMergeIcon />\n        Squash and merge\n      </Button>\n      <ButtonGroupSeparator />\n      <Button size=\"icon\" className=\"w-12\" aria-label=\"More merge options\">\n        <CaretDownIcon />\n      </Button>\n    </ButtonGroup>\n  );\n}\n\nexport function Outline() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-6\">\n      <ButtonGroup aria-label=\"Branch actions\">\n        <Button variant=\"outline\">\n          <CopyIcon />\n          Copy branch\n        </Button>\n        <Button variant=\"outline\">\n          <TerminalWindowIcon />\n          Terminal\n        </Button>\n        <Button variant=\"outline\" size=\"icon\" aria-label=\"More branch actions\">\n          <DotsThreeIcon />\n        </Button>\n      </ButtonGroup>\n      <ButtonGroup aria-label=\"Seats\">\n        <Button variant=\"outline\" size=\"icon\" aria-label=\"Remove a seat\">\n          <MinusIcon />\n        </Button>\n        <ButtonGroupText className=\"min-w-24 justify-center text-fg\">4 seats</ButtonGroupText>\n        <Button variant=\"outline\" size=\"icon\" aria-label=\"Add a seat\">\n          <PlusIcon />\n        </Button>\n      </ButtonGroup>\n    </div>\n  );\n}\n\nexport function WithField() {\n  return (\n    <ButtonGroup className=\"w-full max-w-md\">\n      <Input aria-label=\"Email to invite\" placeholder=\"maya@acme.dev\" />\n      <Button variant=\"outline\">Invite</Button>\n    </ButtonGroup>\n  );\n}\n\nexport function Sizes() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-6\">\n      <ButtonGroup aria-label=\"Run the agent\">\n        <Button size=\"sm\">Run agent</Button>\n        <ButtonGroupSeparator />\n        <Button size=\"icon-sm\" className=\"w-10\" aria-label=\"More run options\">\n          <CaretDownIcon />\n        </Button>\n      </ButtonGroup>\n      <ButtonGroup aria-label=\"Zoom\">\n        <Button variant=\"outline\" size=\"icon-sm\" aria-label=\"Zoom out\">\n          <MinusIcon />\n        </Button>\n        <Button variant=\"outline\" size=\"icon-sm\" aria-label=\"Zoom in\">\n          <PlusIcon />\n        </Button>\n      </ButtonGroup>\n      <ButtonGroup orientation=\"vertical\" aria-label=\"Sandbox actions\">\n        <Button variant=\"outline\" size=\"sm\">Restart sandbox</Button>\n        <Button variant=\"outline\" size=\"sm\">Open logs</Button>\n      </ButtonGroup>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Outline",
+        "WithField",
+        "Sizes"
+      ],
+      "requires": [
+        "button-group",
+        "button",
+        "input"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/button-group/Preview"
+        },
+        {
+          "name": "Outline",
+          "url": "https://hoplite-ds.vercel.app/preview/button-group/Outline"
+        },
+        {
+          "name": "WithField",
+          "url": "https://hoplite-ds.vercel.app/preview/button-group/WithField"
+        },
+        {
+          "name": "Sizes",
+          "url": "https://hoplite-ds.vercel.app/preview/button-group/Sizes"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Button Group",
+  "description": "Keys joined into one control: one hexagon cut into segments with square joins. The split key is one ink hexagon with a hairline between the action and its caret; outlined keys share their strong edges like a segmented choice; a field can open a group and the key after it squares off to meet it.",
+  "surface": "site",
+  "kinds": [
+    "button-primary",
+    "button-secondary"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/button-group.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn, slot } from \"@/lib/utils\";\n\n// Keys joined into one control. Hexagons cannot butt, so a group is one hexagon cut into segments: the first segment\n// keeps the left point, the last the right point, and the joins between them are square. This is the product window's\n// split key (.pa-merge: Squash and merge with its caret) redrawn as a Hoplite key: one ink hexagon, the main label and\n// a caret segment parted by a hairline of the ground color at 16 percent (ButtonGroupSeparator). Outlined keys overlap\n// their 1px edges, so the joins read as a strong hairline inside one outlined hexagon, like the site's segmented\n// choices (.pr-period). A field can open a group (its edge squares off into the key after it), and ButtonGroupText is\n// an outlined segment of quiet 14px text (a unit, a count). Each segment keeps its own hover and pressed fill; a\n// focused segment rises over its neighbors so the ink outline is never covered. `vertical` stacks whole keys 4px\n// apart, because a hexagon's points sit at its ends and cannot be joined top to bottom.\n// Each segment redraws the key's hexagon with its left and right cuts scaled by --seg-l and --seg-r (1 keeps the point, 0\n// squares the end).\nconst buttonGroupVariants = cva(\"group/button-group isolate flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>input]:min-w-0 [&>input]:flex-1\", {\n  variants: {\n    orientation: {\n      horizontal: cn(\n        \"[&>*]:before:[clip-path:polygon(calc(var(--hex-cut)_*_var(--seg-l,1))_0,calc(100%_-_var(--hex-cut)_*_var(--seg-r,1))_0,100%_50%,calc(100%_-_var(--hex-cut)_*_var(--seg-r,1))_100%,calc(var(--hex-cut)_*_var(--seg-l,1))_100%,0_50%)] [&>*]:after:[clip-path:polygon(calc(var(--hex-cut)_*_var(--seg-l,1))_0,calc(100%_-_var(--hex-cut)_*_var(--seg-r,1))_0,100%_50%,calc(100%_-_var(--hex-cut)_*_var(--seg-r,1))_100%,calc(var(--hex-cut)_*_var(--seg-l,1))_100%,0_50%)]\",\n        \"[&>*:not(:first-child)]:[--seg-l:0] [&>*:not(:last-child)]:[--seg-r:0] [&>*:not(:first-child)]:-ml-px\",\n      ),\n      vertical: \"flex-col gap-1\",\n    },\n  },\n  defaultVariants: { orientation: \"horizontal\" },\n});\n\nfunction ButtonGroup({ className, orientation, ...props }: React.ComponentProps<\"div\"> & VariantProps<typeof buttonGroupVariants>) {\n  return <div role=\"group\" data-slot=\"button-group\" data-orientation={orientation ?? \"horizontal\"} className={cn(buttonGroupVariants({ orientation }), className)} {...props} />;\n}\n\ntype ButtonGroupTextProps = useRender.ComponentProps<\"div\"> & { asChild?: boolean };\n\nfunction ButtonGroupText({ asChild, render, children, className, ...props }: ButtonGroupTextProps) {\n  const parts = slot(asChild, children, render);\n  return useRender({\n    defaultTagName: \"div\",\n    render: parts.render,\n    props: {\n      \"data-slot\": \"button-group-text\",\n      className: cn(\n        \"ds-hex-frame flex h-10 shrink-0 items-center gap-2 px-4 font-sans text-body-sm leading-none whitespace-nowrap text-fg-muted before:bg-line-strong after:bg-surface [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4\",\n        className,\n      ),\n      ...props,\n      children: parts.children,\n    },\n  });\n}\n\n// The hairline sits on the ink between two filled segments: an ink 1px column carrying the ground color at 16 percent.\nfunction ButtonGroupSeparator({ className, orientation = \"vertical\", ...props }: React.ComponentProps<\"div\"> & { orientation?: \"horizontal\" | \"vertical\" }) {\n  return (\n    <div\n      role=\"separator\"\n      aria-orientation={orientation}\n      data-slot=\"button-group-separator\"\n      data-orientation={orientation}\n      className={cn(\n        \"relative z-20 shrink-0 self-stretch bg-primary after:absolute after:inset-0 after:bg-on-primary/16\",\n        orientation === \"vertical\" ? \"w-px\" : \"h-px\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants };\n"
+    }
+  ]
+}

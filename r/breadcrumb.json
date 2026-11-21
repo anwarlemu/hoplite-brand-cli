@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "name": "breadcrumb",
+  "useFor": "Use Breadcrumb at the top of a page that sits inside a hierarchy (a workspace, a repository, a pull request), or for a single back link (All posts). Use the default slash, or pass a CaretRightIcon as the separator's child. Link items with BreadcrumbLink (asChild or render for a router link) and end with BreadcrumbPage.",
+  "constraints": [
+    "A link on the current page",
+    "Kode Mono or caps crumbs",
+    "Underlined crumbs",
+    "An arrow that moves on hover"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's blog post back link (.bp-back: All posts) and the product window's crumb (.pa-crumb, .pa-crumb__project, .pa-crumb__sep)",
+  "exports": [
+    "Breadcrumb",
+    "BreadcrumbEllipsis",
+    "BreadcrumbItem",
+    "BreadcrumbLink",
+    "BreadcrumbList",
+    "BreadcrumbPage",
+    "BreadcrumbSeparator"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/breadcrumb",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/breadcrumb.md",
+  "examples": [
+    {
+      "path": "examples/breadcrumb.tsx",
+      "content": "import { ArrowLeftIcon, CaretRightIcon, FolderSimpleIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from \"@/components/ui/breadcrumb\";\n\nexport function Preview() {\n  return (\n    <Breadcrumb>\n      <BreadcrumbList>\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">acme/web</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">Pull requests</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbPage>Fix the null check in billing</BreadcrumbPage>\n        </BreadcrumbItem>\n      </BreadcrumbList>\n    </Breadcrumb>\n  );\n}\n\nexport function Carets() {\n  return (\n    <Breadcrumb>\n      <BreadcrumbList>\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">\n            <FolderSimpleIcon />\n            Automations\n          </BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator>\n          <CaretRightIcon />\n        </BreadcrumbSeparator>\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">Sentry triage</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator>\n          <CaretRightIcon />\n        </BreadcrumbSeparator>\n        <BreadcrumbItem>\n          <BreadcrumbPage>Run 41</BreadcrumbPage>\n        </BreadcrumbItem>\n      </BreadcrumbList>\n    </Breadcrumb>\n  );\n}\n\nexport function Collapsed() {\n  return (\n    <Breadcrumb>\n      <BreadcrumbList>\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">Acme</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbEllipsis />\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">Sandboxes</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbPage>sbx-7f3a</BreadcrumbPage>\n        </BreadcrumbItem>\n      </BreadcrumbList>\n    </Breadcrumb>\n  );\n}\n\nexport function BackLink() {\n  return (\n    <Breadcrumb>\n      <BreadcrumbList>\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">\n            <ArrowLeftIcon />\n            All posts\n          </BreadcrumbLink>\n        </BreadcrumbItem>\n      </BreadcrumbList>\n    </Breadcrumb>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Carets",
+        "Collapsed",
+        "BackLink"
+      ],
+      "requires": [
+        "breadcrumb"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/breadcrumb/Preview"
+        },
+        {
+          "name": "Carets",
+          "url": "https://hoplite-ds.vercel.app/preview/breadcrumb/Carets"
+        },
+        {
+          "name": "Collapsed",
+          "url": "https://hoplite-ds.vercel.app/preview/breadcrumb/Collapsed"
+        },
+        {
+          "name": "BackLink",
+          "url": "https://hoplite-ds.vercel.app/preview/breadcrumb/BackLink"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Breadcrumb",
+  "description": "A trail of pages: 14px links in the quiet gray that turn ink under the pointer, the current page in the ink at medium weight, a slate slash (or a caret) between them, and a three-dot glyph for folded pages.",
+  "surface": "site",
+  "kinds": [
+    "link"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/breadcrumb.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { DotsThreeIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { cn, slot } from \"@/lib/utils\";\n\n// A trail of pages, drawn like the blog post's back link (.bp-back, All posts) and the product window's crumb\n// (.pa-crumb): 14px Satoshi links in the quiet gray that turn ink under the pointer (160ms), the current page in the\n// ink at medium weight, 8px apart with a slate slash between them (or a 16px caret, passed as the separator's child).\n// Folded pages are a 16px three-dot glyph in a 24px box. Links take the 2px ink focus outline.\nfunction Breadcrumb({ className, ...props }: React.ComponentProps<\"nav\">) {\n  return <nav aria-label=\"Breadcrumb\" data-slot=\"breadcrumb\" className={className} {...props} />;\n}\n\nfunction BreadcrumbList({ className, ...props }: React.ComponentProps<\"ol\">) {\n  return <ol data-slot=\"breadcrumb-list\" className={cn(\"m-0 flex list-none flex-wrap items-center gap-2 p-0 font-sans text-body-sm leading-line-body-sm break-words text-fg-muted\", className)} {...props} />;\n}\n\nfunction BreadcrumbItem({ className, ...props }: React.ComponentProps<\"li\">) {\n  return <li data-slot=\"breadcrumb-item\" className={cn(\"inline-flex min-w-0 items-center gap-2\", className)} {...props} />;\n}\n\ntype BreadcrumbLinkProps = useRender.ComponentProps<\"a\"> & { asChild?: boolean };\n\nfunction BreadcrumbLink({ asChild, render, children, className, ...props }: BreadcrumbLinkProps) {\n  const parts = slot(asChild, children, render);\n  return useRender({\n    defaultTagName: \"a\",\n    render: parts.render,\n    props: {\n      \"data-slot\": \"breadcrumb-link\",\n      className: cn(\n        \"inline-flex cursor-pointer items-center gap-2 text-fg-muted no-underline transition-colors duration-base ease-out hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        className,\n      ),\n      ...props,\n      children: parts.children,\n    },\n  });\n}\n\nfunction BreadcrumbPage({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"breadcrumb-page\" role=\"link\" aria-disabled=\"true\" aria-current=\"page\" className={cn(\"truncate font-medium text-fg\", className)} {...props} />;\n}\n\nfunction BreadcrumbSeparator({ children, className, ...props }: React.ComponentProps<\"li\">) {\n  return (\n    <li data-slot=\"breadcrumb-separator\" role=\"presentation\" aria-hidden=\"true\" className={cn(\"inline-flex items-center text-fg-subtle select-none [&>svg]:size-4\", className)} {...props}>\n      {children ?? \"/\"}\n    </li>\n  );\n}\n\nfunction BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span data-slot=\"breadcrumb-ellipsis\" role=\"presentation\" aria-hidden=\"true\" className={cn(\"flex size-6 items-center justify-center text-fg-muted\", className)} {...props}>\n      <DotsThreeIcon className=\"size-4\" />\n      <span className=\"sr-only\">More pages</span>\n    </span>\n  );\n}\n\nexport { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator };\n"
+    }
+  ]
+}

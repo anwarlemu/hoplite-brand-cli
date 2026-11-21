@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "name": "changelog-page",
+  "useFor": "Use for release notes; pass months of updates.",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's changelog (/changelog, What's new in Hoplite)",
+  "exports": [
+    "Update",
+    "Month",
+    "ChangelogPage"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/changelog-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/changelog-page.md",
+  "examples": [
+    {
+      "path": "examples/changelog-page.tsx",
+      "content": "import { ChangelogPage } from \"@/components/blocks/changelog-page\";\n\nexport function Preview() {\n  return <ChangelogPage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "changelog-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/changelog-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Changelog page",
+  "description": "The changelog template: heading and lead over a solid rule with the orange node, the Show toggle and Jump to list, and each day's headline update with its features and fixes.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "footer",
+    "site-header",
+    "brand-marks",
+    "toggle-group",
+    "typography",
+    "utils"
+  ],
+  "packages": [
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/changelog-page.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { PlusCircleIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Footer } from \"@/components/blocks/footer\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { HexNode } from \"@/components/site/brand-marks\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\nimport { TypographyH1, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type Update = { date: string; title: string; features: string[]; fixes: string[] };\nexport type Month = { month: string; updates: Update[] };\n\nconst MONTHS: Month[] = [\n  {\n    month: \"November 2026\",\n    updates: [\n      { date: \"Nov 12\", title: \"Integration account emails stay blurred until you click to reveal them\", features: [\"Name your model subscriptions in Settings\"], fixes: [\"Local agents start after switching back to an account or organization\", \"Local agents no longer wait on a stuck shell profile\", \"Remove repositories from projects that already have threads\"] },\n      { date: \"Nov 11\", title: \"Review local changes in the desktop app and send inline feedback to your agent\", features: [\"Desktop notifications for local agent runs\", \"Local runs continue after a desktop app restart\", \"Rewind local conversations in the desktop app\"], fixes: [\"Swarms open in the desktop app instead of returning to Home\", \"Agent runs keep using the selected account after model fallback\"] },\n      { date: \"Nov 10\", title: \"Pick from five new themes, including High contrast, in Appearance\", features: [\"The Mac app picks up most updates without restarting\", \"Private threads are available in every organization\"], fixes: [\"The desktop app no longer shows an error screen after you open a local thread\"] },\n    ],\n  },\n  {\n    month: \"October 2026\",\n    updates: [{ date: \"Oct 30\", title: \"Agents can answer with charts, diagrams and tables, right in the thread\", features: [\"Typing and switching tabs in the desktop app respond faster\"], fixes: [\"Home tabs keep separate drafts and composer settings\"] }],\n  },\n];\n\nfunction Entry({ text, title = false }: { text: string; title?: boolean }) {\n  return (\n    <li className=\"flex items-start gap-3\">\n      <PlusCircleIcon aria-hidden className={cn(\"shrink-0 text-fg-muted\", title ? \"mt-1.5 size-5\" : \"mt-0.5 size-4\")} />\n      <span className={title ? \"font-display text-h5 leading-8 font-normal text-fg\" : \"text-body-sm leading-line-body-sm text-fg-secondary\"}>{text}</span>\n    </li>\n  );\n}\n\n// The changelog (hoplite.sh/changelog, \"What's new\"): the heading and lead over a solid rule with the orange node at\n// its end, a left column with the Show toggle and the Jump to list (month and count on hairline rows), and the months:\n// a Chakra Petch month over a hairline, then each day with its mono date and counts beside its headline update and its\n// features and fixes under mono labels.\nfunction ChangelogPage({ title = \"What's new in Hoplite\", lead = \"Meaningful features and fixes, in plain English. Open an update for the details.\", months = MONTHS, className }: { title?: string; lead?: string; months?: Month[]; className?: string }) {\n  const [show, setShow] = React.useState(\"all\");\n  return (\n    <div data-slot=\"changelog-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main className=\"mx-auto w-full max-w-320 pb-20\">\n        <section className=\"relative grid gap-6 border-b border-line-strong pt-20 pb-12 sm:pt-32\">\n          <TypographyH1>{title}</TypographyH1>\n          <TypographyLead>{lead}</TypographyLead>\n          <HexNode active className=\"absolute right-0 -bottom-4 size-8\" />\n        </section>\n        <div className=\"grid gap-12 pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,4fr)] lg:gap-16\">\n          <aside className=\"grid content-start gap-8\">\n            <div className=\"grid gap-3\">\n              <p className=\"ds-label m-0\">Show</p>\n              <ToggleGroup variant=\"outline\" value={show} onValueChange={(v) => v && setShow(v)} aria-label=\"Show\">\n                <ToggleGroupItem value=\"all\">All</ToggleGroupItem>\n                <ToggleGroupItem value=\"features\">Features</ToggleGroupItem>\n                <ToggleGroupItem value=\"fixes\">Fixes</ToggleGroupItem>\n              </ToggleGroup>\n            </div>\n            <nav aria-label=\"Jump to\" className=\"hidden gap-3 lg:grid\">\n              <p className=\"ds-label m-0\">Jump to</p>\n              <ul className=\"m-0 grid list-none border-t border-line p-0\">\n                {months.map((m) => (\n                  <li key={m.month} className=\"border-b border-line\">\n                    <a href={`#${m.month.replace(/\\s+/g, \"-\").toLowerCase()}`} className=\"flex items-center justify-between py-2 text-body-sm leading-line-body-sm text-fg-secondary transition-colors duration-base ease-out hover:text-fg motion-reduce:transition-none\">\n                      {m.month}\n                      <span className=\"font-code text-caption tracking-code text-fg-muted\">{m.updates.reduce((n, u) => n + u.features.length + u.fixes.length, 0)}</span>\n                    </a>\n                  </li>\n                ))}\n              </ul>\n            </nav>\n          </aside>\n          <div className=\"grid gap-16\">\n            {months.map((m) => (\n              <section key={m.month} id={m.month.replace(/\\s+/g, \"-\").toLowerCase()} className=\"grid\">\n                <h2 className=\"m-0 border-b border-line-strong pb-4 font-display text-h4 leading-8 font-light text-fg\">{m.month}</h2>\n                {m.updates.map((u) => (\n                  <article key={u.date} className=\"grid gap-4 border-b border-line py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,4fr)] md:gap-8\">\n                    <div className=\"grid content-start gap-1\">\n                      <p className=\"m-0 font-code text-body-sm leading-line-body-sm tracking-code text-fg uppercase\">{u.date}</p>\n                      <p className=\"m-0 text-caption leading-line-caption text-fg-muted\">\n                        {u.features.length} {u.features.length === 1 ? \"feature\" : \"features\"}, {u.fixes.length} {u.fixes.length === 1 ? \"fix\" : \"fixes\"}\n                      </p>\n                    </div>\n                    <div className=\"grid gap-6\">\n                      <ul className=\"m-0 list-none p-0\">\n                        <Entry text={u.title} title />\n                      </ul>\n                      {show !== \"fixes\" && u.features.length > 0 && (\n                        <div className=\"grid gap-3\">\n                          <p className=\"ds-label m-0\">Features</p>\n                          <ul className=\"m-0 grid list-none gap-3 p-0\">\n                            {u.features.map((f) => (\n                              <Entry key={f} text={f} />\n                            ))}\n                          </ul>\n                        </div>\n                      )}\n                      {show !== \"features\" && u.fixes.length > 0 && (\n                        <div className=\"grid gap-3\">\n                          <p className=\"ds-label m-0\">Fixes</p>\n                          <ul className=\"m-0 grid list-none gap-3 p-0\">\n                            {u.fixes.map((f) => (\n                              <Entry key={f} text={f} />\n                            ))}\n                          </ul>\n                        </div>\n                      )}\n                    </div>\n                  </article>\n                ))}\n              </section>\n            ))}\n          </div>\n        </div>\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { ChangelogPage };\n"
+    }
+  ]
+}

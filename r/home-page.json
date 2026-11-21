@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "name": "home-page",
+  "useFor": "Start a marketing home page from this and replace the copy and the media.",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's home page (hoplite-website-fawn.vercel.app)",
+  "exports": [
+    "HomePage"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/home-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/home-page.md",
+  "examples": [
+    {
+      "path": "examples/home-page.tsx",
+      "content": "import { HomePage } from \"@/components/blocks/home-page\";\n\nexport function Preview() {\n  return <HomePage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "home-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/home-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Home page",
+  "description": "The home page template: header, hero over a drawing, the customer strip, the feature band, a quote, the closing band and the footer.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "cta",
+    "feature-grid",
+    "footer",
+    "hero",
+    "logos-strip",
+    "site-header",
+    "testimonial",
+    "brand-marks",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/home-page.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Cta } from \"@/components/blocks/cta\";\nimport { FeatureGrid } from \"@/components/blocks/feature-grid\";\nimport { Footer } from \"@/components/blocks/footer\";\nimport { Hero } from \"@/components/blocks/hero\";\nimport { LogosStrip } from \"@/components/blocks/logos-strip\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { Testimonial } from \"@/components/blocks/testimonial\";\nimport { NodeTree } from \"@/components/site/brand-marks\";\nimport { cn } from \"@/lib/utils\";\n\n// The home page (hoplite.sh): header, hero over the product drawing, the customer strip, the feature band, a quote,\n// the closing band and the footer. Pass `media` for the product window; the default is a drawing in corner ticks.\nfunction HomePage({ media, className }: { media?: React.ReactNode; className?: string }) {\n  return (\n    <div data-slot=\"home-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main>\n        <Hero\n          media={\n            media ?? (\n              <div className=\"ds-corners grid min-h-80 place-items-center p-4 sm:p-8\">\n                <NodeTree root=\"Fix uploads over 10 MB\" rootNote=\"thread 482\" leaves={[{ title: \"Sandbox one\", note: \"reproduced\" }, { title: \"Sandbox two\", note: \"tests pass\" }, { title: \"Pull request\", note: \"ready for review\", active: true }]} />\n              </div>\n            )\n          }\n        />\n        <LogosStrip />\n        <FeatureGrid />\n        <Testimonial />\n        <Cta />\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { HomePage };\n"
+    }
+  ]
+}

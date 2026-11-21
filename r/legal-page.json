@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "name": "legal-page",
+  "useFor": "Use for terms, privacy and security pages. The copy is sample text: replace it with your own.",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's blog prose (.bp-prose) and rules; the site's legal pages were not captured",
+  "exports": [
+    "LegalSection",
+    "LegalPage"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/legal-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/legal-page.md",
+  "examples": [
+    {
+      "path": "examples/legal-page.tsx",
+      "content": "import { LegalPage } from \"@/components/blocks/legal-page\";\n\nexport function Preview() {\n  return <LegalPage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "legal-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/legal-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Legal page",
+  "description": "The legal template: title and date over a solid rule, a numbered contents list, and the sections as prose.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "footer",
+    "site-header",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/legal-page.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Footer } from \"@/components/blocks/footer\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { TypographyH1, TypographyProse } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type LegalSection = { id: string; title: string; body: React.ReactNode };\n\nconst SECTIONS: LegalSection[] = [\n  { id: \"agreement\", title: \"The agreement\", body: <p>These terms govern your use of the service. By creating a workspace you accept them on behalf of yourself or your organization. This is sample text: replace it with your own terms.</p> },\n  { id: \"accounts\", title: \"Accounts and seats\", body: <p>Each seat belongs to one person. You are responsible for the activity in your workspace, including the work agents do on your behalf.</p> },\n  { id: \"code\", title: \"Your code\", body: <p>Your repositories and the changes agents make to them remain yours. Sandboxes are isolated per run and deleted when the run ends.</p> },\n  { id: \"billing\", title: \"Billing\", body: <p>Paid plans renew each period until cancelled. Usage beyond what a plan includes draws on prepaid credits.</p> },\n  { id: \"changes\", title: \"Changes to these terms\", body: <p>We will tell you about material changes before they take effect.</p> },\n];\n\n// A legal page (terms, privacy): the Chakra Petch title with its mono date over a solid rule, a contents list in the left\n// column on hairline rows, and the sections set as prose (18px on a 32px line) in the right.\nfunction LegalPage({ title = \"Terms of service\", updated = \"Last updated Nov 1, 2026\", sections = SECTIONS, className }: { title?: string; updated?: string; sections?: LegalSection[]; className?: string }) {\n  return (\n    <div data-slot=\"legal-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main className=\"mx-auto w-full max-w-320 pb-20\">\n        <header className=\"grid gap-4 border-b border-line-strong pt-20 pb-12 sm:pt-32\">\n          <p className=\"ds-label m-0\">{updated}</p>\n          <TypographyH1>{title}</TypographyH1>\n        </header>\n        <div className=\"grid gap-12 pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] lg:gap-16\">\n          <nav aria-label=\"Contents\" className=\"grid content-start gap-3\">\n            <p className=\"ds-label m-0\">Contents</p>\n            <ol className=\"m-0 grid list-none border-t border-line p-0\">\n              {sections.map((s, i) => (\n                <li key={s.id} className=\"border-b border-line\">\n                  <a href={`#${s.id}`} className=\"flex gap-3 py-2 text-body-sm leading-line-body-sm text-fg-secondary transition-colors duration-base ease-out hover:text-fg motion-reduce:transition-none\">\n                    <span className=\"font-code text-fg-muted tabular-nums\">{String(i + 1).padStart(2, \"0\")}</span>\n                    {s.title}\n                  </a>\n                </li>\n              ))}\n            </ol>\n          </nav>\n          <TypographyProse className=\"max-w-180 [&>h2:first-child]:mt-0\">\n            {sections.map((s) => (\n              <React.Fragment key={s.id}>\n                <h2 id={s.id}>{s.title}</h2>\n                {s.body}\n              </React.Fragment>\n            ))}\n          </TypographyProse>\n        </div>\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { LegalPage };\n"
+    }
+  ]
+}

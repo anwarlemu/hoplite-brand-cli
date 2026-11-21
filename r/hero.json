@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "name": "hero",
+  "useFor": "Use once per page, first after the header. Keep the headline to two lines; put the product window or a drawing in media.",
+  "constraints": [
+    "A headline in bold or capitals",
+    "An orange key",
+    "More than two keys",
+    "Centered hero copy"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's home and product heroes (.hero: A workstation for your army of coding agents, The multiplayer coding agent for your whole team)",
+  "exports": [
+    "HeroAction",
+    "Hero"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/hero",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/hero.md",
+  "examples": [
+    {
+      "path": "examples/hero.tsx",
+      "content": "import { NodeTree } from \"@/components/site/brand-marks\";\nimport { Hero } from \"@/components/blocks/hero\";\n\nexport function Preview() {\n  return <Hero />;\n}\n\nexport function WithMedia() {\n  return (\n    <Hero\n      eyebrow=\"Multiplayer\"\n      title=\"The multiplayer coding agent for your whole team\"\n      lead=\"One agent, one thread, and the whole team in it.\"\n      media={\n        <div className=\"ds-corners grid min-h-64 place-items-center p-8\">\n          <NodeTree root=\"fix-upload-500\" rootNote=\"running\" leaves={[{ title: \"Agent\", note: \"running\", active: true }, { title: \"Teammate\", note: \"steering\" }]} />\n        </div>\n      }\n    />\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "WithMedia"
+      ],
+      "requires": [
+        "hero",
+        "brand-marks"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/hero/Preview"
+        },
+        {
+          "name": "WithMedia",
+          "url": "https://hoplite-ds.vercel.app/preview/hero/WithMedia"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Hero",
+  "description": "The page opener: the 64px Chakra Petch light headline, the light lead, the ink hexagon and the outlined hexagon side by side, an optional mono eyebrow and a media slot below at full width.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "button",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/hero.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { TypographyDisplay, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type HeroAction = { label: string; href: string; icon?: React.ReactNode };\n\n// The site's hero (.hero on the home and product pages): the 64px Chakra Petch light headline at the left, stopping\n// near 640px so it breaks in two, the 18px light lead under it, then the ink hexagon and the outlined hexagon side by\n// side. `media` sits below at the full width (the product window on the site); `eyebrow` is an optional mono label.\nfunction Hero({\n  eyebrow,\n  title = \"A workstation for your army of coding agents.\",\n  lead = \"Run swarms of agents for days at a time, together with your team, from software you would happily sit in front of for twelve hours.\",\n  primary = { label: \"Start building\", href: \"#start\" },\n  secondary = { label: \"Read the docs\", href: \"#docs\" },\n  media,\n  className,\n}: {\n  eyebrow?: string;\n  title?: React.ReactNode;\n  lead?: React.ReactNode;\n  primary?: HeroAction | null;\n  secondary?: HeroAction | null;\n  media?: React.ReactNode;\n  className?: string;\n}) {\n  return (\n    <section data-slot=\"hero\" className={cn(\"w-full pt-20 pb-16 sm:pt-32\", className)}>\n      <div className=\"mx-auto grid w-full max-w-320 gap-12\">\n        <div className=\"grid max-w-180 gap-6\">\n          {eyebrow && <p className=\"ds-label\">{eyebrow}</p>}\n          <TypographyDisplay>{title}</TypographyDisplay>\n          {lead && <TypographyLead>{lead}</TypographyLead>}\n          {(primary || secondary) && (\n            <div className=\"mt-4 flex flex-wrap items-center gap-3\">\n              {primary && (\n                <Button render={<a href={primary.href} />}>\n                  {primary.icon}\n                  {primary.label}\n                </Button>\n              )}\n              {secondary && (\n                <Button variant=\"outline\" render={<a href={secondary.href} />}>\n                  {secondary.icon}\n                  {secondary.label}\n                </Button>\n              )}\n            </div>\n          )}\n        </div>\n        {media}\n      </div>\n    </section>\n  );\n}\n\nexport { Hero };\n"
+    }
+  ]
+}

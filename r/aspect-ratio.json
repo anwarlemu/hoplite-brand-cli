@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "name": "aspect-ratio",
+  "useFor": "Use AspectRatio for product shots, video stills and figures so the page does not jump while they load. Give it the ratio as a number (16 / 9) and put it in a Card with corners for the site's framed art.",
+  "constraints": [
+    "Rounded media",
+    "A drop shadow around media"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its fixed-shape frames (.how__frame at 4:3, .band__frame)",
+  "exports": [
+    "AspectRatio"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/aspect-ratio",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/aspect-ratio.md",
+  "examples": [
+    {
+      "path": "examples/aspect-ratio.tsx",
+      "content": "import { AspectRatio } from \"@/components/ui/aspect-ratio\";\n\nexport function Preview() {\n  return (\n    <div className=\"w-full max-w-md\">\n      <AspectRatio ratio={16 / 9} className=\"ds-corners grid place-items-center\">\n        <span className=\"ds-label\">16:9 product shot</span>\n      </AspectRatio>\n    </div>\n  );\n}\n\nexport function Ratios() {\n  return (\n    <div className=\"grid w-full max-w-xl grid-cols-3 items-start gap-4\">\n      {[\n        [1, \"1:1\"],\n        [4 / 3, \"4:3\"],\n        [3 / 4, \"3:4\"],\n      ].map(([ratio, label]) => (\n        <AspectRatio key={label} ratio={ratio as number} className=\"grid place-items-center border border-line-frame\">\n          <span className=\"ds-label\">{label}</span>\n        </AspectRatio>\n      ))}\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Ratios"
+      ],
+      "requires": [
+        "aspect-ratio"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/aspect-ratio/Preview"
+        },
+        {
+          "name": "Ratios",
+          "url": "https://hoplite-ds.vercel.app/preview/aspect-ratio/Ratios"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Aspect Ratio",
+  "description": "Holds media at a fixed shape with square corners; an image inside fills it.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/ui/aspect-ratio.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// Holds media at a fixed shape (a product shot in a frame, a video still). The box takes no style of its own: square\n// corners, and the media inside fills it (object-cover). Put it inside a Card with corners for the site's framed art.\nfunction AspectRatio({ ratio = 1, className, style, ...props }: React.ComponentProps<\"div\"> & { ratio?: number }) {\n  return <div data-slot=\"aspect-ratio\" className={cn(\"relative w-full overflow-hidden [&>img]:absolute [&>img]:inset-0 [&>img]:size-full [&>img]:object-cover\", className)} style={{ aspectRatio: ratio, ...style }} {...props} />;\n}\n\nexport { AspectRatio };\n"
+    }
+  ]
+}

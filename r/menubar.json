@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "name": "menubar",
+  "useFor": "Use for the app menu of a desktop-like tool (Thread, Edit, View, Help) where each menu holds commands with shortcuts. Build each with MenubarMenu, MenubarTrigger and MenubarContent, and the rows with the same parts as Dropdown Menu. For site navigation use Navigation Menu instead.",
+  "constraints": [
+    "Pill or square triggers",
+    "An ink-filled trigger",
+    "Rounded panels",
+    "More than five menus",
+    "Site navigation links in a menubar"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's header nav items (.hn__list, .hn__top: bare labels with a compact hexagon of the hover fill) and its popups (.hn__sheet, .hn__item); the bar itself is extrapolated.",
+  "exports": [
+    "Menubar",
+    "MenubarCheckboxItem",
+    "MenubarContent",
+    "MenubarGroup",
+    "MenubarItem",
+    "MenubarLabel",
+    "MenubarMenu",
+    "MenubarPortal",
+    "MenubarRadioGroup",
+    "MenubarRadioItem",
+    "MenubarSeparator",
+    "MenubarShortcut",
+    "MenubarSub",
+    "MenubarSubContent",
+    "MenubarSubTrigger",
+    "MenubarTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/menubar",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/menubar.md",
+  "examples": [
+    {
+      "path": "examples/menubar.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport {\n  Menubar,\n  MenubarCheckboxItem,\n  MenubarContent,\n  MenubarGroup,\n  MenubarItem,\n  MenubarLabel,\n  MenubarMenu,\n  MenubarRadioGroup,\n  MenubarRadioItem,\n  MenubarSeparator,\n  MenubarShortcut,\n  MenubarSub,\n  MenubarSubContent,\n  MenubarSubTrigger,\n  MenubarTrigger,\n} from \"@/components/ui/menubar\";\n\nfunction Bar({ open }: { open?: boolean }) {\n  const [diffs, setDiffs] = React.useState(true);\n  const [terminal, setTerminal] = React.useState(false);\n  const [layout, setLayout] = React.useState(\"split\");\n  return (\n    <Menubar>\n      <MenubarMenu defaultOpen={open}>\n        <MenubarTrigger>Thread</MenubarTrigger>\n        <MenubarContent className=\"w-60\">\n          <MenubarItem>\n            New thread\n            <MenubarShortcut>⌘N</MenubarShortcut>\n          </MenubarItem>\n          <MenubarItem>\n            New thread in sandbox\n            <MenubarShortcut>⇧⌘N</MenubarShortcut>\n          </MenubarItem>\n          <MenubarSub>\n            <MenubarSubTrigger>Import setup from</MenubarSubTrigger>\n            <MenubarSubContent>\n              <MenubarItem>Claude Code</MenubarItem>\n              <MenubarItem>Codex</MenubarItem>\n              <MenubarItem>Cursor</MenubarItem>\n            </MenubarSubContent>\n          </MenubarSub>\n          <MenubarSeparator />\n          <MenubarItem>\n            Archive\n            <MenubarShortcut>⌘E</MenubarShortcut>\n          </MenubarItem>\n          <MenubarItem variant=\"destructive\">Delete thread</MenubarItem>\n        </MenubarContent>\n      </MenubarMenu>\n      <MenubarMenu>\n        <MenubarTrigger>Edit</MenubarTrigger>\n        <MenubarContent className=\"w-56\">\n          <MenubarItem>\n            Undo\n            <MenubarShortcut>⌘Z</MenubarShortcut>\n          </MenubarItem>\n          <MenubarItem>\n            Redo\n            <MenubarShortcut>⇧⌘Z</MenubarShortcut>\n          </MenubarItem>\n          <MenubarSeparator />\n          <MenubarItem>\n            Find in thread\n            <MenubarShortcut>⌘F</MenubarShortcut>\n          </MenubarItem>\n        </MenubarContent>\n      </MenubarMenu>\n      <MenubarMenu>\n        <MenubarTrigger>View</MenubarTrigger>\n        <MenubarContent className=\"w-56\">\n          <MenubarGroup>\n            <MenubarLabel>Panels</MenubarLabel>\n            <MenubarCheckboxItem checked={diffs} onCheckedChange={setDiffs}>\n              Changes\n            </MenubarCheckboxItem>\n            <MenubarCheckboxItem checked={terminal} onCheckedChange={setTerminal}>\n              Terminal\n            </MenubarCheckboxItem>\n          </MenubarGroup>\n          <MenubarSeparator />\n          <MenubarRadioGroup value={layout} onValueChange={(value) => setLayout(String(value))}>\n            <MenubarLabel>Layout</MenubarLabel>\n            <MenubarRadioItem value=\"split\">Split</MenubarRadioItem>\n            <MenubarRadioItem value=\"stacked\">Stacked</MenubarRadioItem>\n          </MenubarRadioGroup>\n        </MenubarContent>\n      </MenubarMenu>\n      <MenubarMenu>\n        <MenubarTrigger>Help</MenubarTrigger>\n        <MenubarContent>\n          <MenubarItem>Docs</MenubarItem>\n          <MenubarItem>Changelog</MenubarItem>\n          <MenubarItem disabled>Contact support</MenubarItem>\n        </MenubarContent>\n      </MenubarMenu>\n    </Menubar>\n  );\n}\n\nexport function Preview() {\n  return <Bar />;\n}\n\nexport function Open() {\n  return (\n    <div className=\"min-h-96\">\n      <Bar open />\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Open"
+      ],
+      "requires": [
+        "menubar"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/menubar/Preview"
+        },
+        {
+          "name": "Open",
+          "url": "https://hoplite-ds.vercel.app/preview/menubar/Open"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Menubar",
+  "description": "A 40px bar framed by the quiet line holding bare 14px graphite labels; under the pointer or while open, a compact hexagon of the hover wash appears behind a label and it turns ink. Each label opens the dropdown menu's square ground panel aligned to its start, and moving along the bar opens the neighbors. A long menu scrolls inside the panel and fades at the edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [
+    "menu-panel",
+    "menu-item"
+  ],
+  "requires": [
+    "theme",
+    "utils",
+    "button",
+    "dropdown-menu"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/menubar.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Menu as BaseMenu } from \"@base-ui/react/menu\";\nimport { Menubar as BaseMenubar } from \"@base-ui/react/menubar\";\n\nimport { cn } from \"@/lib/utils\";\nimport { buttonVariants } from \"@/components/ui/button\";\nimport {\n  DropdownMenuCheckboxItem,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuItem,\n  DropdownMenuLabel,\n  DropdownMenuPortal,\n  DropdownMenuRadioGroup,\n  DropdownMenuRadioItem,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n  DropdownMenuSub,\n  DropdownMenuSubContent,\n  DropdownMenuSubTrigger,\n} from \"@/components/ui/dropdown-menu\";\n\n// A row of menus drawn like the site's header nav (.hn__list, .hn__top): a 40px bar framed by the quiet line, its menus\n// bare 14px labels in graphite; under the pointer or while a menu is open, a compact hexagon of the hover wash appears\n// behind the label and it turns ink. Each menu is the dropdown menu's panel (square ground, quiet hairline, long soft\n// cast, 36px rows, the hover wash under the pointer), opening under its label, aligned to its start. Once one menu is\n// open, moving along the bar opens its neighbors.\nfunction Menubar({ className, ...props }: Omit<React.ComponentProps<typeof BaseMenubar>, \"className\"> & { className?: string }) {\n  return <BaseMenubar data-slot=\"menubar\" className={cn(\"flex h-10 w-fit items-center gap-1 border border-line bg-surface px-1\", className)} {...props} />;\n}\n\nfunction MenubarMenu(props: React.ComponentProps<typeof BaseMenu.Root>) {\n  return <BaseMenu.Root data-slot=\"menubar-menu\" {...props} />;\n}\n\nfunction MenubarPortal(props: React.ComponentProps<typeof DropdownMenuPortal>) {\n  return <DropdownMenuPortal data-slot=\"menubar-portal\" {...props} />;\n}\n\nfunction MenubarTrigger({ className, ...props }: Omit<React.ComponentProps<typeof BaseMenu.Trigger>, \"className\"> & { className?: string }) {\n  return <BaseMenu.Trigger data-slot=\"menubar-trigger\" className={cn(buttonVariants({ variant: \"ghost\" }), \"pointer-coarse:h-8\", className)} {...props} />;\n}\n\nfunction MenubarContent({ align = \"start\", sideOffset = 8, alignOffset = 0, ...props }: React.ComponentProps<typeof DropdownMenuContent>) {\n  return <DropdownMenuContent data-slot=\"menubar-content\" align={align} sideOffset={sideOffset} alignOffset={alignOffset} {...props} />;\n}\n\nfunction MenubarGroup(props: React.ComponentProps<typeof DropdownMenuGroup>) {\n  return <DropdownMenuGroup data-slot=\"menubar-group\" {...props} />;\n}\n\nfunction MenubarItem(props: React.ComponentProps<typeof DropdownMenuItem>) {\n  return <DropdownMenuItem data-slot=\"menubar-item\" {...props} />;\n}\n\nfunction MenubarCheckboxItem(props: React.ComponentProps<typeof DropdownMenuCheckboxItem>) {\n  return <DropdownMenuCheckboxItem data-slot=\"menubar-checkbox-item\" {...props} />;\n}\n\nfunction MenubarRadioGroup(props: React.ComponentProps<typeof DropdownMenuRadioGroup>) {\n  return <DropdownMenuRadioGroup data-slot=\"menubar-radio-group\" {...props} />;\n}\n\nfunction MenubarRadioItem(props: React.ComponentProps<typeof DropdownMenuRadioItem>) {\n  return <DropdownMenuRadioItem data-slot=\"menubar-radio-item\" {...props} />;\n}\n\nfunction MenubarLabel(props: React.ComponentProps<typeof DropdownMenuLabel>) {\n  return <DropdownMenuLabel data-slot=\"menubar-label\" {...props} />;\n}\n\nfunction MenubarSeparator(props: React.ComponentProps<typeof DropdownMenuSeparator>) {\n  return <DropdownMenuSeparator data-slot=\"menubar-separator\" {...props} />;\n}\n\nfunction MenubarShortcut(props: React.ComponentProps<typeof DropdownMenuShortcut>) {\n  return <DropdownMenuShortcut data-slot=\"menubar-shortcut\" {...props} />;\n}\n\nfunction MenubarSub(props: React.ComponentProps<typeof DropdownMenuSub>) {\n  return <DropdownMenuSub data-slot=\"menubar-sub\" {...props} />;\n}\n\nfunction MenubarSubTrigger(props: React.ComponentProps<typeof DropdownMenuSubTrigger>) {\n  return <DropdownMenuSubTrigger data-slot=\"menubar-sub-trigger\" {...props} />;\n}\n\nfunction MenubarSubContent(props: React.ComponentProps<typeof DropdownMenuSubContent>) {\n  return <DropdownMenuSubContent data-slot=\"menubar-sub-content\" {...props} />;\n}\n\nexport {\n  Menubar,\n  MenubarCheckboxItem,\n  MenubarContent,\n  MenubarGroup,\n  MenubarItem,\n  MenubarLabel,\n  MenubarMenu,\n  MenubarPortal,\n  MenubarRadioGroup,\n  MenubarRadioItem,\n  MenubarSeparator,\n  MenubarShortcut,\n  MenubarSub,\n  MenubarSubContent,\n  MenubarSubTrigger,\n  MenubarTrigger,\n};\n"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "name": "testimonial",
+  "useFor": "Use one per page between feature sections. Quote real customers with permission; otherwise keep the Acme placeholder.",
+  "constraints": [
+    "Invented names or photos of people",
+    "Star ratings",
+    "More than one quote mark in orange"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's frames and type (.band__frame, .heading); the site carries no customer quotes of its own",
+  "exports": [
+    "Testimonial"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/testimonial",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/testimonial.md",
+  "examples": [
+    {
+      "path": "examples/testimonial.tsx",
+      "content": "import { Testimonial } from \"@/components/blocks/testimonial\";\n\nexport function Preview() {\n  return <Testimonial />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "testimonial"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/testimonial/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Testimonial",
+  "description": "A quote in Chakra Petch light inside corner ticks, an orange opening mark and the attribution as a mono label: a role and a company, never an invented person.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/testimonial.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A quote in the site's voice: set in Chakra Petch light at heading size inside a frame of corner ticks, an opening\n// quote mark in the orange (the one mark), and the attribution as a mono label under a dashed rule. The site carries no\n// customer quotes of its own: use a role and a company you have permission to name, never an invented person.\nfunction Testimonial({\n  quote = \"We hand the agents a backlog on Friday and review green pull requests on Monday. Nobody babysits a terminal anymore.\",\n  role = \"Head of platform\",\n  company = \"Acme\",\n  className,\n}: {\n  quote?: React.ReactNode;\n  role?: string;\n  company?: string;\n  className?: string;\n}) {\n  return (\n    <section data-slot=\"testimonial\" className={cn(\"w-full py-20 sm:py-32\", className)}>\n      <figure className=\"ds-corners mx-auto m-0 grid w-full max-w-320 gap-10 p-8 sm:p-16\">\n        <blockquote className=\"m-0 grid max-w-240 gap-4\">\n          <span aria-hidden className=\"font-display text-h2 leading-none font-light text-fg-accent\">“</span>\n          <p className=\"m-0 font-display text-h4 leading-8 font-light text-balance text-fg sm:text-h3 sm:leading-10\">{quote}</p>\n        </blockquote>\n        <figcaption className=\"ds-rule-x ds-label w-fit pb-2\">\n          {role}, {company}\n        </figcaption>\n      </figure>\n    </section>\n  );\n}\n\nexport { Testimonial };\n"
+    }
+  ]
+}

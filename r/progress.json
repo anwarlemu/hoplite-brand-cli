@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "name": "progress",
+  "useFor": "Use Progress for a known amount: usage against a plan, a clone or an upload. Put ProgressLabel and ProgressValue inside it to show what it measures. Use variant=\"accent\" only near a limit. value={null} shows work with no known end.",
+  "constraints": [
+    "A rounded or thick bar",
+    "A striped or glowing fill",
+    "The orange for a normal amount"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's plan usage meter (.pa-usage, .pa-usage__bar), drawn square on the quiet line",
+  "exports": [
+    "Progress",
+    "ProgressLabel",
+    "ProgressValue"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/progress",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/progress.md",
+  "examples": [
+    {
+      "path": "examples/progress.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { Progress, ProgressLabel, ProgressValue } from \"@/components/ui/progress\";\n\nexport function Preview() {\n  return <Progress value={62} aria-label=\"Monthly usage\" className=\"max-w-sm\" />;\n}\n\nexport function WithLabel() {\n  return (\n    <div className=\"grid max-w-sm gap-6\">\n      <Progress value={84}>\n        <ProgressLabel>Usage this month</ProgressLabel>\n        <ProgressValue />\n      </Progress>\n      <Progress value={96} variant=\"accent\">\n        <ProgressLabel>Sandbox hours</ProgressLabel>\n        <ProgressValue>{(formatted) => `${formatted} of 400 h`}</ProgressValue>\n      </Progress>\n    </div>\n  );\n}\n\nexport function Live() {\n  const [value, setValue] = React.useState(12);\n  React.useEffect(() => {\n    // ds-latency: the demo advances a simulated clone; nothing waits on it.\n    const id = window.setInterval(() => setValue((current) => (current >= 100 ? 12 : Math.min(100, current + 11))), 900);\n    return () => window.clearInterval(id);\n  }, []);\n  return (\n    <Progress value={value} className=\"max-w-sm\">\n      <ProgressLabel>Cloning acme/storefront</ProgressLabel>\n      <ProgressValue />\n    </Progress>\n  );\n}\n\nexport function Indeterminate() {\n  return (\n    <Progress value={null} className=\"max-w-sm\">\n      <ProgressLabel>Waiting for a sandbox</ProgressLabel>\n    </Progress>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "WithLabel",
+        "Live",
+        "Indeterminate"
+      ],
+      "requires": [
+        "progress"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/progress/Preview"
+        },
+        {
+          "name": "WithLabel",
+          "url": "https://hoplite-ds.vercel.app/preview/progress/WithLabel"
+        },
+        {
+          "name": "Live",
+          "url": "https://hoplite-ds.vercel.app/preview/progress/Live"
+        },
+        {
+          "name": "Indeterminate",
+          "url": "https://hoplite-ds.vercel.app/preview/progress/Indeterminate"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Progress",
+  "description": "A square usage bar: a 2px quiet track with the ink filling it to the value, or the orange when a limit is close; a 14px medium label and a Kode Mono value can sit above it.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/progress.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Progress as BaseProgress } from \"@base-ui/react/progress\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A usage bar, after the site's plan usage meter (.pa-usage__bar) drawn square: a 2px track of the quiet 16 percent line\n// with the ink filling it to the value (or, `accent`, the orange: a limit close at hand). The fill moves in 240ms on the\n// strong ease-out. A label and its value (Kode Mono 12px, quiet) can sit above it as children. With value={null} it\n// breathes softly across the track.\ntype ProgressProps = React.ComponentProps<typeof BaseProgress.Root> & { variant?: \"default\" | \"accent\"; indicatorClassName?: string };\n\nfunction Progress({ className, variant = \"default\", indicatorClassName, children, value = 0, ...props }: ProgressProps) {\n  return (\n    <BaseProgress.Root data-slot=\"progress\" data-variant={variant} value={value} className={cn(\"grid w-full grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2\", className)} {...props}>\n      {children}\n      <BaseProgress.Track data-slot=\"progress-track\" className=\"col-span-2 h-0.5 w-full overflow-hidden bg-line\">\n        <BaseProgress.Indicator\n          data-slot=\"progress-indicator\"\n          className={cn(\n            \"block h-full transition-[width] duration-slow ease-out data-indeterminate:w-full data-indeterminate:animate-pulse-soft motion-reduce:transition-none motion-reduce:data-indeterminate:animate-none\",\n            variant === \"accent\" ? \"bg-brand\" : \"bg-primary\",\n            indicatorClassName,\n          )}\n        />\n      </BaseProgress.Track>\n    </BaseProgress.Root>\n  );\n}\n\nfunction ProgressLabel({ className, ...props }: React.ComponentProps<typeof BaseProgress.Label>) {\n  return <BaseProgress.Label data-slot=\"progress-label\" className={cn(\"min-w-0 truncate font-sans text-body-sm leading-line-body-sm font-medium text-fg\", className)} {...props} />;\n}\n\nfunction ProgressValue({ className, ...props }: React.ComponentProps<typeof BaseProgress.Value>) {\n  return <BaseProgress.Value data-slot=\"progress-value\" className={cn(\"font-mono text-caption leading-line-caption tracking-code text-fg-muted tabular-nums\", className)} {...props} />;\n}\n\nexport { Progress, ProgressLabel, ProgressValue };\n"
+    }
+  ]
+}

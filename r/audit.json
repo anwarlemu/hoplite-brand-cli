@@ -1,0 +1,312 @@
+{
+  "checkedAt": "2026-11-17",
+  "reference": "The Hoplite website as rendered (hoplite-website-fawn.vercel.app) and its stylesheets (brand/reference/site-css)",
+  "method": "Values read from the site's own variables (--cream, --charcoal, --line, --hex-shape, --s-*, --t-*) and the computed styles of its pages; each component compared side by side with the parts of the site it comes from. Components marked extrapolated have no counterpart on the site and extend its patterns (square frames, hexagonal actions, ruled lists, the three faces).",
+  "components": [
+    {
+      "name": "accordion",
+      "basis": "design",
+      "reference": "Hoplite website: .faq__item .faq__icon .faq__hex .faq__bar; .cl-entry"
+    },
+    {
+      "name": "alert",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: square quiet frames (.hn__news), 14px notes, orange as mark"
+    },
+    {
+      "name": "alert-dialog",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .hn__sheet panel, .button/.button--line keys"
+    },
+    {
+      "name": "aspect-ratio",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .how__frame 4:3, .band__frame"
+    },
+    {
+      "name": "avatar",
+      "basis": "design",
+      "reference": "Hoplite website: .trust__avatar, .chat__people, ds-hex-mark"
+    },
+    {
+      "name": "badge",
+      "basis": "design",
+      "reference": "Hoplite website: .tag, .hn__news"
+    },
+    {
+      "name": "breadcrumb",
+      "basis": "design",
+      "reference": "Hoplite website: .bp-back, .pa-crumb"
+    },
+    {
+      "name": "button",
+      "basis": "design",
+      "reference": "Hoplite website: .button, .button--primary, .button--line, .button--s, .hn__top"
+    },
+    {
+      "name": "button-group",
+      "basis": "design",
+      "reference": "Hoplite website: .pa-merge (Squash and merge) on .button/.button--line hexagons, .pr-period"
+    },
+    {
+      "name": "calendar",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: Chakra Petch title, .label, .hn__top keys, hover wash, 32% line"
+    },
+    {
+      "name": "card",
+      "basis": "design",
+      "reference": "Hoplite website: .pr-plan, .pr-plan__name, .pr-plan__body, .band__frame, .band__title, .how__frame"
+    },
+    {
+      "name": "carousel",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .button--line icon keys, hexagon bullets"
+    },
+    {
+      "name": "chart",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: 16/32% rules, Kode Mono labels, orange mark, .hn__panel"
+    },
+    {
+      "name": "checkbox",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: strong edge (--line), ink fill (.button--primary), principles: checks are square"
+    },
+    {
+      "name": "code-block",
+      "basis": "design",
+      "reference": "Hoplite website: .bp-code, .bp-code__bar, .bp-code__lang, .bp-copy, .bp-code__pre"
+    },
+    {
+      "name": "collapsible",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .cl-entry__summary, .faq__item height motion"
+    },
+    {
+      "name": "combobox",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: field lines; .hn__panel, .hn__item; .tag"
+    },
+    {
+      "name": "command",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .hn__panel, .hn__item; Kode Mono labels; scrim"
+    },
+    {
+      "name": "context-menu",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: site popups .hn__sheet, .hn__item"
+    },
+    {
+      "name": "data-table",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .pr-table, .bp-table; .button--s, .button--line; .hn__panel"
+    },
+    {
+      "name": "date-picker",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: field lines; .hn__panel; calendar"
+    },
+    {
+      "name": "dialog",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .hn__sheet panel, .button keys, principles (ink at 32 percent)"
+    },
+    {
+      "name": "direction",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: Base UI DirectionProvider, no visual"
+    },
+    {
+      "name": "drawer",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .hn__sheet panel, --dock curve"
+    },
+    {
+      "name": "dropdown-menu",
+      "basis": "design",
+      "reference": "Hoplite website: .hn__sheet, .hn__item, .hn__heading"
+    },
+    {
+      "name": "empty",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .faq__hex, .pr-plan frames, .how__frame corners"
+    },
+    {
+      "name": "field",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: site type and lines (--line-quiet, --line-margin), .pr-table group heads"
+    },
+    {
+      "name": "form",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: principles for fields, site type and lines"
+    },
+    {
+      "name": "hover-card",
+      "basis": "design",
+      "reference": "Hoplite website: .hn__sheet, .hn__card"
+    },
+    {
+      "name": "input",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: --line-margin and --line edges, 14px controls (the site has no fields)"
+    },
+    {
+      "name": "input-group",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: input.tsx field, .hn__top keys"
+    },
+    {
+      "name": "input-otp",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .cl-filter joined boxes, Kode Mono"
+    },
+    {
+      "name": "item",
+      "basis": "design",
+      "reference": "Hoplite website: .hn__item, .hn__news, .iw-item"
+    },
+    {
+      "name": "kbd",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: nav shortcut caps, drawn square"
+    },
+    {
+      "name": "label",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: 14px medium control type (.button, .pr-period__option)"
+    },
+    {
+      "name": "menubar",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .hn__list, .hn__top, .hn__sheet"
+    },
+    {
+      "name": "native-select",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: input.tsx field"
+    },
+    {
+      "name": "navigation-menu",
+      "basis": "design",
+      "reference": "Hoplite website: .hn__list, .hn__top, .hn__chevron, .hn__sheet, .hn__panel, .hn__group, .hn__heading, .hn__item"
+    },
+    {
+      "name": "pagination",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .button--s, .button--line, .hn__top"
+    },
+    {
+      "name": "popover",
+      "basis": "design",
+      "reference": "Hoplite website: .hn__sheet, .hn__item-label, .hn__item-body"
+    },
+    {
+      "name": "progress",
+      "basis": "design",
+      "reference": "Hoplite website: .pa-usage, .pa-usage__bar (squared)"
+    },
+    {
+      "name": "radio-group",
+      "basis": "design",
+      "reference": "Hoplite website: .pr-features svg, .bp-list__mark hexagon bullets"
+    },
+    {
+      "name": "resizable",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .pa-split quiet rule"
+    },
+    {
+      "name": "scroll-area",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: quiet, field and strong line tokens"
+    },
+    {
+      "name": "select",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: field lines; .hn__panel, .hn__item"
+    },
+    {
+      "name": "separator",
+      "basis": "design",
+      "reference": "Hoplite website: --line-quiet rules, --rule-dash-y guides"
+    },
+    {
+      "name": "sheet",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .hn__sheet panel, --dock curve"
+    },
+    {
+      "name": "sidebar",
+      "basis": "design",
+      "reference": "Hoplite website: .bp-rail, .bp-rail__link, .cl-rail, .hn__top"
+    },
+    {
+      "name": "skeleton",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: square frames, hover wash"
+    },
+    {
+      "name": "slider",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: strong line, ink, hexagonal marks (.pr-features svg)"
+    },
+    {
+      "name": "sonner",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: site popups (.hn__ sheet and menus), .button--s"
+    },
+    {
+      "name": "spinner",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .faq__hex"
+    },
+    {
+      "name": "switch",
+      "basis": "design",
+      "reference": "Hoplite website: .pa-sw, .tt-sw"
+    },
+    {
+      "name": "table",
+      "basis": "design",
+      "reference": "Hoplite website: .pr-table, .pr-table__group, .pr-yes, .pr-no (/pricing); .bp-table"
+    },
+    {
+      "name": "tabs",
+      "basis": "design",
+      "reference": "Hoplite website: .pr-period, .pr-period__option, .cl-filter"
+    },
+    {
+      "name": "textarea",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: input.tsx field (--line-margin, --line)"
+    },
+    {
+      "name": "toast",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: site popups (.hn__ sheet and menus), .button--s"
+    },
+    {
+      "name": "toggle",
+      "basis": "design",
+      "reference": "Hoplite website: .hn__top, .button--line, .pr-period__option:has(:checked)"
+    },
+    {
+      "name": "toggle-group",
+      "basis": "design",
+      "reference": "Hoplite website: .pr-period, .cl-filter"
+    },
+    {
+      "name": "tooltip",
+      "basis": "extrapolated",
+      "reference": "Extrapolated from the Hoplite website: .button--primary ink, 12px labels"
+    },
+    {
+      "name": "typography",
+      "basis": "design",
+      "reference": "Hoplite website: .display, .heading, .lead, .bp-prose, .bp-list"
+    }
+  ]
+}

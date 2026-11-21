@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "name": "spinner",
+  "useFor": "Use Spinner for work that takes a few seconds with no known end (starting a thread, running checks), inside a disabled key, a tag or beside a line of text. For work with a known end, use Progress.",
+  "constraints": [
+    "A round spinner",
+    "An orange spinner",
+    "A spinner larger than 32px",
+    "A spinner for content that should show a Skeleton"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the FAQ's hexagon mark (.faq__hex) set turning",
+  "exports": [
+    "Spinner"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/spinner",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/spinner.md",
+  "examples": [
+    {
+      "path": "examples/spinner.tsx",
+      "content": "import { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Spinner } from \"@/components/ui/spinner\";\n\nexport function Preview() {\n  return (\n    <div className=\"flex items-center gap-3 text-body-sm leading-line-body-sm text-fg-secondary\">\n      <Spinner />\n      Setting up the sandbox\n    </div>\n  );\n}\n\nexport function Sizes() {\n  return (\n    <div className=\"flex items-center gap-6 text-fg\">\n      <Spinner className=\"size-3\" />\n      <Spinner />\n      <Spinner className=\"size-5\" />\n      <Spinner className=\"size-8\" />\n    </div>\n  );\n}\n\nexport function InControls() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Button disabled>\n        <Spinner />\n        Starting thread\n      </Button>\n      <Button variant=\"outline\" disabled>\n        <Spinner />\n        Running checks\n      </Button>\n      <Badge variant=\"secondary\">\n        <Spinner />\n        Queued\n      </Badge>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Sizes",
+        "InControls"
+      ],
+      "requires": [
+        "spinner",
+        "badge",
+        "button"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/spinner/Preview"
+        },
+        {
+          "name": "Sizes",
+          "url": "https://hoplite-ds.vercel.app/preview/spinner/Sizes"
+        },
+        {
+          "name": "InControls",
+          "url": "https://hoplite-ds.vercel.app/preview/spinner/InControls"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Spinner",
+  "description": "A 16px hexagon outline with a third of its edge drawn, turning steadily; it takes the color of its text and breathes in place with reduced motion.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/ui/spinner.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// Work in progress, extrapolated from the site's hexagonal marks: a 16px hexagon outline (points left and right, like\n// the FAQ's mark) in a faint line of the current color, with a third of its edge drawn in the current color, turning at\n// a steady 0.8s a turn. With reduced motion it stops turning and breathes instead. It takes the color of its text, so\n// it reads on an ink key as well as on the ground.\nfunction Spinner({ className, ...props }: React.ComponentProps<\"svg\">) {\n  return (\n    <svg\n      data-slot=\"spinner\"\n      role=\"status\"\n      aria-label=\"Loading\"\n      viewBox=\"0 0 20 20\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      className={cn(\"size-4 shrink-0 animate-spin-steady motion-reduce:animate-pulse-soft\", className)}\n      {...props}\n    >\n      <path d=\"M19 10L14.5 17.79L5.5 17.79L1 10L5.5 2.21L14.5 2.21Z\" strokeWidth={1.5} className=\"opacity-20\" />\n      <path d=\"M19 10L14.5 17.79L5.5 17.79L1 10L5.5 2.21L14.5 2.21Z\" strokeWidth={1.5} pathLength={6} strokeDasharray=\"2 4\" strokeLinejoin=\"miter\" />\n    </svg>\n  );\n}\n\nexport { Spinner };\n"
+    }
+  ]
+}

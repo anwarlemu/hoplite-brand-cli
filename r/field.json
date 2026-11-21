@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "name": "field",
+  "useFor": "Wrap every form control in a Field with a FieldLabel, an optional FieldDescription and a FieldError; group fields in FieldGroup and related choices in FieldSet with a FieldLegend. Use orientation=\"horizontal\" for a check, radio or switch beside its label, FieldContent with FieldTitle and FieldDescription for a setting row, and a FieldLabel wrapping a Field for a choice card. Pass invalid (or data-invalid) to mark the control and show the error.",
+  "constraints": [
+    "Errors in any color but the orange",
+    "An orange label",
+    "Boxed or shaded field groups",
+    "Rounded choice cards",
+    "Help text above the control"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its 14px type, the quiet and 32 percent lines (--line-quiet, --line-margin), its Chakra Petch group heads (.pr-table) and the principles for fields",
+  "exports": [
+    "Field",
+    "FieldContent",
+    "FieldDescription",
+    "FieldError",
+    "FieldGroup",
+    "FieldLabel",
+    "FieldLegend",
+    "FieldSeparator",
+    "FieldSet",
+    "FieldTitle"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/field",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/field.md",
+  "examples": [
+    {
+      "path": "examples/field.tsx",
+      "content": "import { Button } from \"@/components/ui/button\";\nimport { Checkbox } from \"@/components/ui/checkbox\";\nimport { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet, FieldTitle } from \"@/components/ui/field\";\nimport { Input } from \"@/components/ui/input\";\nimport { RadioGroup, RadioGroupItem } from \"@/components/ui/radio-group\";\nimport { Switch } from \"@/components/ui/switch\";\n\nexport function Preview() {\n  return (\n    <FieldGroup className=\"max-w-sm\">\n      <Field>\n        <FieldLabel>Repository</FieldLabel>\n        <Input placeholder=\"acme/payments-api\" />\n        <FieldDescription>Agents clone it into a fresh sandbox for every thread.</FieldDescription>\n      </Field>\n      <Field invalid>\n        <FieldLabel>Branch prefix</FieldLabel>\n        <Input defaultValue=\"agent fix/\" />\n        <FieldError>Branch names cannot contain spaces.</FieldError>\n      </Field>\n    </FieldGroup>\n  );\n}\n\nexport function Sets() {\n  return (\n    <FieldSet className=\"max-w-md\">\n      <FieldLegend>Notifications</FieldLegend>\n      <FieldDescription>Choose when you hear about agent work.</FieldDescription>\n      <FieldGroup className=\"gap-4\">\n        <Field orientation=\"horizontal\">\n          <Checkbox defaultChecked />\n          <FieldLabel>A pull request is ready for review</FieldLabel>\n        </Field>\n        <Field orientation=\"horizontal\">\n          <Checkbox defaultChecked />\n          <FieldLabel>A check fails on an agent branch</FieldLabel>\n        </Field>\n        <Field orientation=\"horizontal\">\n          <Checkbox />\n          <FieldLabel>A thread is waiting for input</FieldLabel>\n        </Field>\n      </FieldGroup>\n    </FieldSet>\n  );\n}\n\nexport function Settings() {\n  return (\n    <FieldGroup className=\"max-w-md\">\n      <Field orientation=\"horizontal\">\n        <FieldContent>\n          <FieldTitle>Auto-merge green pull requests</FieldTitle>\n          <FieldDescription>Merge once every required check passes and a reviewer approves.</FieldDescription>\n        </FieldContent>\n        <Switch defaultChecked />\n      </Field>\n      <FieldSeparator />\n      <Field orientation=\"horizontal\" disabled>\n        <FieldContent>\n          <FieldTitle>Run agents on Windows sandboxes</FieldTitle>\n          <FieldDescription>Available on the Team plan.</FieldDescription>\n        </FieldContent>\n        <Switch />\n      </Field>\n    </FieldGroup>\n  );\n}\n\nexport function ChoiceCards() {\n  return (\n    <FieldSet className=\"max-w-md\">\n      <FieldLegend variant=\"label\">Sandbox size</FieldLegend>\n      <RadioGroup defaultValue=\"standard\" className=\"gap-3\">\n        <FieldLabel>\n          <Field orientation=\"horizontal\">\n            <FieldContent>\n              <FieldTitle>Standard</FieldTitle>\n              <FieldDescription>2 vCPU, 8 GiB RAM</FieldDescription>\n            </FieldContent>\n            <RadioGroupItem value=\"standard\" />\n          </Field>\n        </FieldLabel>\n        <FieldLabel>\n          <Field orientation=\"horizontal\">\n            <FieldContent>\n              <FieldTitle>Large</FieldTitle>\n              <FieldDescription>8 vCPU, 32 GiB RAM</FieldDescription>\n            </FieldContent>\n            <RadioGroupItem value=\"large\" />\n          </Field>\n        </FieldLabel>\n      </RadioGroup>\n      <FieldSeparator>or</FieldSeparator>\n      <Button variant=\"outline\" className=\"self-start\">Bring your own runner</Button>\n    </FieldSet>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Sets",
+        "Settings",
+        "ChoiceCards"
+      ],
+      "requires": [
+        "field",
+        "button",
+        "checkbox",
+        "input",
+        "radio-group",
+        "switch"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/field/Preview"
+        },
+        {
+          "name": "Sets",
+          "url": "https://hoplite-ds.vercel.app/preview/field/Sets"
+        },
+        {
+          "name": "Settings",
+          "url": "https://hoplite-ds.vercel.app/preview/field/Settings"
+        },
+        {
+          "name": "ChoiceCards",
+          "url": "https://hoplite-ds.vercel.app/preview/field/ChoiceCards"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Field",
+  "description": "Form layout on Base UI's Field and Fieldset: a 14px medium label 8px above the control, 14px quiet help and 14px orange errors below, fields 24px apart, Chakra Petch 20px set legends, choice cards framed in the quiet rule that turn ink when chosen, and an \"or\" between two quiet rules.",
+  "surface": "site",
+  "kinds": [
+    "input"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/field.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Field as BaseField } from \"@base-ui/react/field\";\nimport { Fieldset as BaseFieldset } from \"@base-ui/react/fieldset\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A form's fields as the site's principles lay them out (the site itself has no forms, so this is extrapolated from\n// its type and lines). A field is its 14px medium ink label 8px above the control; help sits 8px below in 14px quiet\n// gray and an error in 14px orange (the orange is the error's mark, so only the message and the control's edge take it,\n// never the label). Fields stack 24px apart in a group; a check, radio or switch sits 8px from its label. A set's\n// legend is a 20px Chakra Petch light title. A label that wraps a whole field becomes a choice card: a square frame of\n// the quiet rule, 16px in, whose edge turns the 32 percent line under the pointer and the ink when its control is on.\n// \"or\" between two ways in is a 14px quiet word between two quiet rules. Built on Base UI's Field and Fieldset, so the\n// label, description and error are wired to the control and a disabled field quiets every part.\n// Base UI's Field parts must sit inside a Field.Root; outside a Field (a set's description, a choice card's label)\n// the same parts render as plain elements with the same look.\nconst InField = React.createContext(false);\n\nfunction FieldSet({ className, ...props }: React.ComponentProps<typeof BaseFieldset.Root>) {\n  return <BaseFieldset.Root data-slot=\"field-set\" className={cn(\"m-0 flex min-w-0 flex-col gap-6 border-0 p-0 has-[>[data-slot=checkbox-group]]:gap-4 has-[>[data-slot=radio-group]]:gap-4\", className)} {...props} />;\n}\n\nfunction FieldLegend({ className, variant = \"legend\", ...props }: React.ComponentProps<typeof BaseFieldset.Legend> & { variant?: \"legend\" | \"label\" }) {\n  return (\n    <BaseFieldset.Legend\n      data-slot=\"field-legend\"\n      data-variant={variant}\n      className={cn(\n        \"p-0 text-fg data-[variant=label]:font-sans data-[variant=label]:text-body-sm data-[variant=label]:leading-line-body-sm data-[variant=label]:font-medium data-[variant=legend]:font-display data-[variant=legend]:text-h5 data-[variant=legend]:leading-title data-[variant=legend]:font-light data-disabled:text-fg-subtle\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction FieldGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"field-group\" className={cn(\"group/field-group @container/field-group flex w-full flex-col gap-6 [&>[data-slot=field-group]]:gap-4\", className)} {...props} />;\n}\n\nconst fieldVariants = cva(\"group/field flex w-full gap-2\", {\n  variants: {\n    orientation: {\n      // Label over control.\n      vertical: \"flex-col [&>*]:w-full [&>.sr-only]:w-auto\",\n      // Label beside its control (a check and its label, a setting and its switch).\n      horizontal: \"flex-row items-center [&>[data-slot=field-label]]:flex-auto has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],&>[data-slot=radio-group-item],&>[data-slot=switch]]:mt-[calc(var(--ds-space-1)/2)]\",\n      // Over on a narrow form, beside from 28rem of container.\n      responsive: \"flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:gap-4 @md/field-group:[&>*]:w-auto @md/field-group:[&>[data-slot=field-label]]:flex-auto\",\n    },\n  },\n  defaultVariants: { orientation: \"vertical\" },\n});\n\ntype FieldProps = React.ComponentProps<typeof BaseField.Root> & VariantProps<typeof fieldVariants> & { \"data-invalid\"?: boolean | \"true\" | \"false\" };\n\nfunction Field({ className, orientation = \"vertical\", invalid, \"data-invalid\": dataInvalid, ...props }: FieldProps) {\n  const marked = dataInvalid === true || dataInvalid === \"true\" ? true : undefined;\n  return (\n    <InField.Provider value>\n      <BaseField.Root role=\"group\" data-slot=\"field\" data-orientation={orientation} invalid={invalid ?? marked} className={cn(fieldVariants({ orientation }), className)} {...props} />\n    </InField.Provider>\n  );\n}\n\nfunction FieldContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"field-content\" className={cn(\"group/field-content flex min-w-0 flex-1 flex-col gap-1\", className)} {...props} />;\n}\n\nfunction FieldLabel({ className, ...props }: React.ComponentProps<typeof BaseField.Label>) {\n  const inField = React.useContext(InField);\n  const Part = inField ? BaseField.Label : PlainLabel;\n  return (\n    <Part\n      data-slot=\"field-label\"\n      className={cn(\n        \"group/field-label peer/field-label flex w-fit items-center gap-2 font-sans text-body-sm leading-line-body-sm font-medium text-fg select-none data-disabled:cursor-not-allowed data-disabled:text-fg-subtle group-data-disabled/field:text-fg-subtle\",\n        \"has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:cursor-pointer has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-line has-[>[data-slot=field]]:transition-[border-color] has-[>[data-slot=field]]:duration-fast has-[>[data-slot=field]]:ease-out *:data-[slot=field]:p-4 has-[>[data-slot=field]]:hover:border-line-field has-[[data-slot=field]_[data-checked]]:border-primary has-[[data-slot=field]_[data-checked]]:hover:border-primary motion-reduce:transition-none\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction PlainLabel({ className, nativeLabel: _native, ...props }: React.ComponentProps<typeof BaseField.Label>) {\n  return <label className={typeof className === \"string\" ? className : undefined} {...(props as React.ComponentProps<\"label\">)} />;\n}\n\nfunction FieldTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"field-title\" className={cn(\"flex w-fit items-center gap-2 font-sans text-body-sm leading-line-body-sm font-medium text-fg group-data-disabled/field:text-fg-subtle\", className)} {...props} />;\n}\n\nfunction FieldDescription({ className, ...props }: React.ComponentProps<typeof BaseField.Description>) {\n  const inField = React.useContext(InField);\n  const Part = inField ? BaseField.Description : PlainDescription;\n  return (\n    <Part\n      data-slot=\"field-description\"\n      className={cn(\n        \"m-0 font-sans text-body-sm leading-line-body-sm font-normal text-fg-muted group-has-[[data-orientation=horizontal]]/field:text-balance [[data-variant=legend]+&]:-mt-4 [&>a]:font-medium [&>a]:text-fg [&>a]:underline [&>a]:decoration-line [&>a]:underline-offset-4 [&>a:hover]:decoration-current\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction PlainDescription({ className, ...props }: React.ComponentProps<typeof BaseField.Description>) {\n  return <p className={typeof className === \"string\" ? className : undefined} {...(props as React.ComponentProps<\"p\">)} />;\n}\n\n/** The \"or\" between two ways in: a 14px quiet word between two quiet rules. */\nfunction FieldSeparator({ children, className, ...props }: React.ComponentProps<\"div\"> & { children?: React.ReactNode }) {\n  return (\n    <div data-slot=\"field-separator\" data-content={!!children} className={cn(\"relative flex h-5 items-center gap-3 font-sans text-body-sm leading-line-body-sm\", className)} {...props}>\n      <div aria-hidden className=\"h-px flex-1 bg-line\" />\n      {children && (\n        <span data-slot=\"field-separator-content\" className=\"shrink-0 text-fg-muted\">\n          {children}\n        </span>\n      )}\n      {children && <div aria-hidden className=\"h-px flex-1 bg-line\" />}\n    </div>\n  );\n}\n\ntype FieldErrorProps = Omit<React.ComponentProps<typeof BaseField.Error>, \"children\"> & { children?: React.ReactNode; errors?: Array<{ message?: string } | undefined> };\n\n// With children or errors it always shows them; without, it shows the browser's own message while the field is invalid.\nfunction FieldError({ className, children, errors, match, ...props }: FieldErrorProps) {\n  const content = React.useMemo(() => {\n    if (children) return children;\n    if (!errors?.length) return null;\n    const unique = [...new Map(errors.map((error) => [error?.message, error])).values()];\n    if (unique.length === 1) return unique[0]?.message;\n    return <ul className=\"m-0 flex list-disc flex-col gap-1 pl-4\">{unique.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}</ul>;\n  }, [children, errors]);\n  const inField = React.useContext(InField);\n  const look = cn(\"font-sans text-body-sm leading-line-body-sm font-normal text-danger\", className);\n  if (!inField) {\n    if (!content) return null;\n    return (\n      <div role=\"alert\" data-slot=\"field-error\" className={look} {...(props as React.ComponentProps<\"div\">)}>\n        {content}\n      </div>\n    );\n  }\n  if (!content) return <BaseField.Error data-slot=\"field-error\" match={match} className={look} {...props} />;\n  return (\n    <BaseField.Error role=\"alert\" data-slot=\"field-error\" match={match ?? true} className={look} {...props}>\n      {content}\n    </BaseField.Error>\n  );\n}\n\nexport { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet, FieldTitle };\n"
+    }
+  ]
+}

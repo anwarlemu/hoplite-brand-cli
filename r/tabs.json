@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "name": "tabs",
+  "useFor": "Use Tabs to switch between views of the same content (Monthly and Yearly prices, Desktop and Phone previews). Use the default variant for two to four short choices and variant=\"boxed\" for a filter row (All, Features, Fixes). Put each view in TabsContent; controlled tabs take value and onValueChange.",
+  "constraints": [
+    "Underlined tabs",
+    "A rounded track",
+    "More than one chosen tab",
+    "Panels that slide or fade in"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's pricing period switch (.pr-period: Monthly, Yearly, save 17%) and changelog filter (.cl-filter)",
+  "exports": [
+    "Tabs",
+    "TabsList",
+    "TabsTrigger",
+    "TabsContent"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/tabs",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/tabs.md",
+  "examples": [
+    {
+      "path": "examples/tabs.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from \"@/components/ui/tabs\";\n\nexport function Preview() {\n  const [period, setPeriod] = React.useState(\"monthly\");\n  return (\n    <Tabs value={period} onValueChange={setPeriod}>\n      <TabsList aria-label=\"Billing period\">\n        <TabsTrigger value=\"monthly\">Monthly</TabsTrigger>\n        <TabsTrigger value=\"yearly\">Yearly, save 17%</TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"monthly\" className=\"text-body-sm text-fg-secondary\">\n        $20 per seat, billed every month.\n      </TabsContent>\n      <TabsContent value=\"yearly\" className=\"text-body-sm text-fg-secondary\">\n        $16.67 per seat a month, billed once a year.\n      </TabsContent>\n    </Tabs>\n  );\n}\n\nexport function Boxed() {\n  return (\n    <Tabs defaultValue=\"all\">\n      <TabsList variant=\"boxed\" aria-label=\"Show\">\n        <TabsTrigger value=\"all\">All</TabsTrigger>\n        <TabsTrigger value=\"features\">Features</TabsTrigger>\n        <TabsTrigger value=\"fixes\">Fixes</TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"all\" className=\"text-body-sm text-fg-secondary\">Everything shipped this month, newest first.</TabsContent>\n      <TabsContent value=\"features\" className=\"text-body-sm text-fg-secondary\">New things you can do.</TabsContent>\n      <TabsContent value=\"fixes\" className=\"text-body-sm text-fg-secondary\">Things that work better now.</TabsContent>\n    </Tabs>\n  );\n}\n\nexport function FullWidth() {\n  return (\n    <Tabs defaultValue=\"claude\" className=\"max-w-md\">\n      <TabsList full aria-label=\"Import from\">\n        <TabsTrigger value=\"claude\">Claude Code</TabsTrigger>\n        <TabsTrigger value=\"codex\">Codex</TabsTrigger>\n        <TabsTrigger value=\"cursor\">Cursor</TabsTrigger>\n      </TabsList>\n    </Tabs>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Boxed",
+        "FullWidth"
+      ],
+      "requires": [
+        "tabs"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/tabs/Preview"
+        },
+        {
+          "name": "Boxed",
+          "url": "https://hoplite-ds.vercel.app/preview/tabs/Boxed"
+        },
+        {
+          "name": "FullWidth",
+          "url": "https://hoplite-ds.vercel.app/preview/tabs/FullWidth"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Tabs",
+  "description": "Segmented choices: an outlined hexagon holding 32px tabs, the chosen one a filled ink hexagon that slides to it (the pricing period switch), or joined square boxes with the chosen one filled ink (the changelog filter).",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/tabs.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Tabs as BaseTabs } from \"@base-ui/react/tabs\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The site's two segmented choices. `default` is the pricing period switch (.pr-period): an outlined hexagon holding\n// 32px tabs with 8px cuts and 20px sides; the chosen tab is a filled ink hexagon that slides to it (240ms, in-out) with\n// its label in the ground color, the others quiet until the pointer turns them ink. `boxed` is the changelog and blog\n// filter (.cl-filter): joined 32px boxes with 12px sides on quiet edges, the chosen one filled ink. Labels are 14px\n// medium. Panels change in place, with no entrance.\ntype Variant = \"default\" | \"boxed\";\nconst VariantContext = React.createContext<Variant>(\"default\");\n\ntype TabsProps = Omit<React.ComponentProps<typeof BaseTabs.Root>, \"onValueChange\"> & { onValueChange?: (value: string) => void };\n\nfunction Tabs({ className, onValueChange, ...props }: TabsProps) {\n  return <BaseTabs.Root data-slot=\"tabs\" onValueChange={onValueChange ? (value) => onValueChange(String(value)) : undefined} className={cn(\"flex flex-col gap-6 data-[orientation=vertical]:flex-row\", className)} {...props} />;\n}\n\nfunction TabsList({ className, variant = \"default\", full = false, children, ...props }: React.ComponentProps<typeof BaseTabs.List> & { variant?: Variant; full?: boolean }) {\n  return (\n    <VariantContext.Provider value={variant}>\n      <BaseTabs.List\n        data-slot=\"tabs-list\"\n        data-variant={variant}\n        className={cn(\n          \"relative w-fit max-w-full items-center\",\n          variant === \"default\" ? \"ds-hex-frame inline-flex p-1 before:bg-line-strong after:bg-surface\" : \"inline-flex\",\n          full && \"flex w-full [&>[data-slot=tabs-trigger]]:flex-1\",\n          className,\n        )}\n        {...props}\n      >\n        {variant === \"default\" && <BaseTabs.Indicator data-slot=\"tabs-indicator\" className=\"ds-hex-frame-s absolute top-1 left-0 h-8 w-(--active-tab-width) translate-x-(--active-tab-left) transition-[translate,width] duration-slow ease-in-out before:bg-primary motion-reduce:transition-none\" />}\n        {children}\n      </BaseTabs.List>\n    </VariantContext.Provider>\n  );\n}\n\nfunction TabsTrigger({ className, ...props }: React.ComponentProps<typeof BaseTabs.Tab>) {\n  const variant = React.useContext(VariantContext);\n  return (\n    <BaseTabs.Tab\n      data-slot=\"tabs-trigger\"\n      className={cn(\n        \"relative inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-2 font-sans text-body-sm leading-none font-medium whitespace-nowrap text-fg-muted select-none transition-colors duration-base ease-out data-active:cursor-default data-disabled:pointer-events-none data-disabled:text-fg-faint motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        variant === \"default\"\n          ? \"px-5 hover:text-fg data-active:text-on-primary data-active:hover:text-on-primary\"\n          : \"-ml-px border border-line px-3 first:ml-0 hover:text-fg data-active:border-primary data-active:bg-primary data-active:text-on-primary\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TabsContent({ className, ...props }: React.ComponentProps<typeof BaseTabs.Panel>) {\n  return <BaseTabs.Panel data-slot=\"tabs-content\" className={cn(\"min-w-0 flex-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus-ring\", className)} {...props} />;\n}\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent };\n"
+    }
+  ]
+}

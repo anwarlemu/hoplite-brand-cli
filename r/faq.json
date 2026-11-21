@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "name": "faq",
+  "useFor": "Use near the end of the pricing or product page for the questions people ask before they sign up.",
+  "constraints": [
+    "Every row open at once by default",
+    "Plus icons that rotate or move"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's pricing page questions and its accordion rows",
+  "exports": [
+    "Question",
+    "Faq"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/faq",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/faq.md",
+  "examples": [
+    {
+      "path": "examples/faq.tsx",
+      "content": "import { Faq } from \"@/components/blocks/faq\";\n\nexport function Preview() {\n  return <Faq />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "faq"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/faq/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "FAQ",
+  "description": "Questions and answers: the heading and lead in the left column and the accordion in the right, rows ruled by hairlines.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "accordion",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/faq.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from \"@/components/ui/accordion\";\nimport { TypographyH2, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type Question = { question: string; answer: React.ReactNode };\n\nconst QUESTIONS: Question[] = [\n  { question: \"What counts as usage?\", answer: \"Model tokens and sandbox time. Every plan includes some each month, per seat on paid plans. Beyond that, runs draw on prepaid credits.\" },\n  { question: \"What happens when I reach a limit?\", answer: \"Running threads finish their current step and pause. Add credits or move to a bigger plan and they pick up where they stopped.\" },\n  { question: \"Can I bring my own model subscription?\", answer: \"Yes. Connect the subscription you already pay for and agents run on it, on every plan.\" },\n  { question: \"Can I switch plans or cancel?\", answer: \"Any time, from Billing. Changes take effect at the next billing date, and unused credits stay on the workspace.\" },\n];\n\n// Questions and answers as the pricing page sets them: the Chakra Petch heading and a lead in the left column, the\n// accordion in the right (one column on a phone). Rows are ruled by hairlines and open one at a time.\nfunction Faq({ title = \"Questions, answered\", lead = \"Everything else is in the docs.\", questions = QUESTIONS, className }: { title?: React.ReactNode; lead?: React.ReactNode; questions?: Question[]; className?: string }) {\n  return (\n    <section data-slot=\"faq\" className={cn(\"w-full py-20 sm:py-32\", className)}>\n      <div className=\"mx-auto grid w-full max-w-320 gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]\">\n        <div className=\"grid content-start gap-6\">\n          <TypographyH2>{title}</TypographyH2>\n          {lead && <TypographyLead>{lead}</TypographyLead>}\n        </div>\n        <Accordion defaultValue={questions[0]?.question}>\n          {questions.map((q) => (\n            <AccordionItem key={q.question} value={q.question}>\n              <AccordionTrigger>{q.question}</AccordionTrigger>\n              <AccordionContent>{q.answer}</AccordionContent>\n            </AccordionItem>\n          ))}\n        </Accordion>\n      </div>\n    </section>\n  );\n}\n\nexport { Faq };\n"
+    }
+  ]
+}

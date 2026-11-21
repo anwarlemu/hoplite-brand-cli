@@ -1,0 +1,3181 @@
+{
+  "schemaVersion": 1,
+  "name": "Hoplite",
+  "homepage": "https://hoplite-ds.vercel.app",
+  "guide": "https://hoplite-ds.vercel.app/agents.md",
+  "items": [
+    {
+      "schemaVersion": 1,
+      "name": "theme",
+      "type": "theme",
+      "title": "Hoplite theme",
+      "description": "The Hoplite tokens and the Tailwind names that read them.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [],
+      "packages": [],
+      "tokens": {
+        "site": {
+          "--ds-color-brand": "#FF3616",
+          "--ds-color-black": "#000000",
+          "--ds-color-white": "#FFFFFF",
+          "--ds-color-ink": "#1A1A1A",
+          "--ds-color-ground": "#F2F2F0",
+          "--ds-color-orange": "#FF3616",
+          "--ds-color-graphite": "#323232",
+          "--ds-color-ash": "#626261",
+          "--ds-color-slate": "#929291",
+          "--ds-color-stone": "#C2C2C0",
+          "--ds-color-paper": "#FAFAF9",
+          "--ds-color-bg-default": "#F2F2F0",
+          "--ds-color-bg-page": "#F2F2F0",
+          "--ds-color-bg-subtle": "#FAFAF9",
+          "--ds-color-bg-subtle-hover": "#E3E3E1",
+          "--ds-color-bg-pressed": "#DADAD8",
+          "--ds-color-bg-frame": "#F2F2F0",
+          "--ds-color-bg-canvas": "#F2F2F0",
+          "--ds-color-bg-tint": "#E3E3E1",
+          "--ds-color-bg-brand": "#FF3616",
+          "--ds-color-bg-inverse": "#1A1A1A",
+          "--ds-color-bg-dark": "#1A1A1A",
+          "--ds-color-bg-code": "#F2F2F0",
+          "--ds-color-bg-code-head": "#F2F2F0",
+          "--ds-color-bg-scrim": "rgb(26 26 26 / 0.32)",
+          "--ds-color-bg-sheet": "#F2F2F0",
+          "--ds-color-bg-off": "#C2C2C0",
+          "--ds-color-text-default": "#1A1A1A",
+          "--ds-color-text-secondary": "#323232",
+          "--ds-color-text-muted": "#626261",
+          "--ds-color-text-subtle": "#929291",
+          "--ds-color-text-nav": "#323232",
+          "--ds-color-text-faint": "#C2C2C0",
+          "--ds-color-text-inverse": "#F2F2F0",
+          "--ds-color-text-brand": "#1A1A1A",
+          "--ds-color-text-on-brand": "#FFFFFF",
+          "--ds-color-text-label": "#626261",
+          "--ds-color-text-accent": "#FF3616",
+          "--ds-color-icon-default": "#1A1A1A",
+          "--ds-color-icon-secondary": "#626261",
+          "--ds-color-code-text": "#1A1A1A",
+          "--ds-color-code-key": "#1A1A1A",
+          "--ds-color-code-string": "#323232",
+          "--ds-color-code-number": "#323232",
+          "--ds-color-code-keyword": "#FF3616",
+          "--ds-color-code-function": "#1A1A1A",
+          "--ds-color-code-type": "#323232",
+          "--ds-color-code-tag": "#1A1A1A",
+          "--ds-color-code-attr": "#626261",
+          "--ds-color-code-punct": "#626261",
+          "--ds-color-code-comment": "#929291",
+          "--ds-color-code-line": "#929291",
+          "--ds-color-code-line-active": "#1A1A1A",
+          "--ds-color-code-brace": "#626261",
+          "--ds-color-code-head-fg": "#626261",
+          "--ds-color-border-default": "rgb(26 26 26 / 0.16)",
+          "--ds-color-border-subtle": "rgb(26 26 26 / 0.16)",
+          "--ds-color-border-strong": "rgb(26 26 26 / 0.7)",
+          "--ds-color-border-field": "rgb(26 26 26 / 0.32)",
+          "--ds-color-border-frame": "#C2C2C0",
+          "--ds-color-border-row": "rgb(26 26 26 / 0.16)",
+          "--ds-color-border-ring": "rgb(26 26 26 / 0.16)",
+          "--ds-color-border-brand": "#FF3616",
+          "--ds-color-border-code": "rgb(26 26 26 / 0.16)",
+          "--ds-color-corner": "#929291",
+          "--ds-color-shadow-drop": "rgb(26 26 26 / 0.12)",
+          "--ds-color-wash-hover": "rgb(26 26 26 / 0.07)",
+          "--ds-color-wash-pressed": "rgb(26 26 26 / 0.11)",
+          "--ds-color-ring-tint": "rgb(26 26 26 / 0.16)",
+          "--ds-color-action-primary": "#1A1A1A",
+          "--ds-color-action-primary-hover": "#323232",
+          "--ds-color-action-primary-fg": "#F2F2F0",
+          "--ds-color-focus-ring": "#1A1A1A",
+          "--ds-color-status-success": "#299236",
+          "--ds-color-status-success-bg": "rgb(41 146 54 / 0.12)",
+          "--ds-color-status-warning": "#A15C00",
+          "--ds-color-status-warning-bg": "rgb(161 92 0 / 0.12)",
+          "--ds-color-status-warning-fg": "#1A1A1A",
+          "--ds-color-status-danger": "#FF3616",
+          "--ds-color-status-danger-strong": "#D92A0E",
+          "--ds-color-status-danger-bg": "rgb(255 54 22 / 0.1)",
+          "--ds-color-status-info": "#1A1A1A",
+          "--ds-color-status-info-bg": "rgb(26 26 26 / 0.07)",
+          "--ds-color-status-info-fg": "#1A1A1A",
+          "--ds-color-chart-series-1": "#1A1A1A",
+          "--ds-color-chart-series-2": "#FF3616",
+          "--ds-color-chart-series-3": "#626261",
+          "--ds-color-chart-series-4": "#929291",
+          "--ds-color-chart-series-5": "#C2C2C0",
+          "--ds-font-sans": "var(--font-satoshi, \"Satoshi\"), ui-sans-serif, system-ui, sans-serif",
+          "--ds-font-display": "var(--font-chakra-petch, \"Chakra Petch\"), ui-sans-serif, system-ui, sans-serif",
+          "--ds-font-mono": "var(--font-kode-mono, \"Kode Mono\"), ui-monospace, \"SF Mono\", Menlo, monospace",
+          "--ds-font-code": "var(--font-kode-mono, \"Kode Mono\"), ui-monospace, \"SF Mono\", Menlo, monospace",
+          "--ds-font-weight-light": "300",
+          "--ds-font-weight-regular": "400",
+          "--ds-font-weight-medium": "500",
+          "--ds-font-weight-semibold": "500",
+          "--ds-font-weight-bold": "500",
+          "--ds-font-weight-heading": "300",
+          "--ds-text-display": "4rem",
+          "--ds-text-h1": "3.5rem",
+          "--ds-text-h2": "2.75rem",
+          "--ds-text-h3": "2rem",
+          "--ds-text-h4": "1.5rem",
+          "--ds-text-h5": "1.25rem",
+          "--ds-text-body-lg": "1.125rem",
+          "--ds-text-body": "1rem",
+          "--ds-text-body-sm": "0.875rem",
+          "--ds-text-caption": "0.75rem",
+          "--ds-text-micro": "0.75rem",
+          "--ds-line-body": "1.5rem",
+          "--ds-line-body-sm": "1.25rem",
+          "--ds-line-caption": "1rem",
+          "--ds-leading-tight": "1",
+          "--ds-leading-display": "1.0625",
+          "--ds-leading-heading": "1.0909",
+          "--ds-leading-title": "1.3333",
+          "--ds-leading-snug": "1.25",
+          "--ds-leading-body": "1.5",
+          "--ds-leading-relaxed": "1.5556",
+          "--ds-leading-prose": "1.7778",
+          "--ds-leading-code": "1.6",
+          "--ds-tracking-normal": "0",
+          "--ds-tracking-tight": "-0.01em",
+          "--ds-tracking-caps": "0.08em",
+          "--ds-tracking-code": "0.04em",
+          "--ds-space-0": "0",
+          "--ds-space-px": "1px",
+          "--ds-space-1": "0.25rem",
+          "--ds-space-1-5": "0.375rem",
+          "--ds-space-2": "0.5rem",
+          "--ds-space-3": "0.75rem",
+          "--ds-space-4": "1rem",
+          "--ds-space-5": "1.25rem",
+          "--ds-space-6": "1.5rem",
+          "--ds-space-7": "1.75rem",
+          "--ds-space-8": "2rem",
+          "--ds-space-9": "2.25rem",
+          "--ds-space-10": "2.5rem",
+          "--ds-space-12": "3rem",
+          "--ds-space-14": "3.5rem",
+          "--ds-space-16": "4rem",
+          "--ds-space-20": "5rem",
+          "--ds-space-24": "6rem",
+          "--ds-space-32": "8rem",
+          "--ds-space-40": "10rem",
+          "--ds-section-padding": "8rem",
+          "--ds-section-head": "5rem",
+          "--ds-component-padding": "2rem",
+          "--ds-layout-column": "80rem",
+          "--ds-layout-gutter": "4rem",
+          "--ds-layout-text": "37.5rem",
+          "--ds-layout-heading": "45rem",
+          "--ds-layout-header": "4rem",
+          "--ds-layout-rail": "18rem",
+          "--ds-frame-column": "min(100% - 2 * var(--ds-layout-gutter), var(--ds-layout-column))",
+          "--ds-radius-control": "0",
+          "--ds-radius-xs": "0",
+          "--ds-radius-sm": "0",
+          "--ds-radius-panel": "0",
+          "--ds-radius-dialog": "0",
+          "--ds-radius-pill": "9999px",
+          "--ds-hex-chamfer": "12px",
+          "--ds-hex-chamfer-s": "8px",
+          "--ds-corner-length": "16px",
+          "--ds-shadow-s": "0 0 0 1px rgb(26 26 26 / 0.16)",
+          "--ds-shadow-card": "0 0 0 1px rgb(26 26 26 / 0.16)",
+          "--ds-shadow-line": "0 1px 0 rgb(26 26 26 / 0.16)",
+          "--ds-shadow-floating": "0 0 0 1px rgb(26 26 26 / 0.16), 0 24px 48px -24px rgb(26 26 26 / 0.16)",
+          "--ds-shadow-dialog": "0 0 0 1px rgb(26 26 26 / 0.16), 0 32px 80px -32px rgb(26 26 26 / 0.24)",
+          "--ds-shadow-cast": "-32px 0 80px -24px rgb(26 26 26 / 0.12), -8px 0 24px -8px rgb(26 26 26 / 0.06)",
+          "--ds-shadow-knob": "0 0 0 1px rgb(26 26 26 / 0.16)",
+          "--ds-shadow-focus": "0 0 0 2px #1A1A1A",
+          "--ds-blur-scrim": "2px",
+          "--ds-duration-fast": "120ms",
+          "--ds-duration-base": "160ms",
+          "--ds-duration-moderate": "200ms",
+          "--ds-duration-slow": "240ms",
+          "--ds-easing-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "--ds-easing-in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
+          "--ds-easing-drawer": "cubic-bezier(0.32, 0.72, 0, 1)",
+          "--ds-easing-dock": "cubic-bezier(0.2, 0, 0, 1)"
+        }
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "name": "about-page",
+      "useFor": "Use for the company page. Use real numbers only.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's type, rules and frames (hero, .band); the site has no about page of its own",
+      "exports": [
+        "Value",
+        "Stat",
+        "AboutPage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/about-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/about-page.md",
+      "type": "block",
+      "title": "About page",
+      "description": "The about template: a display headline and lead over a solid rule, numbers over mono labels split by dashed rules, values as ruled cards, and the closing band.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "cta",
+        "footer",
+        "site-header",
+        "brand-marks",
+        "card",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "accordion",
+      "useFor": "Use Accordion for questions and answers (a pricing FAQ, setup help) and for long lists people scan by title. type=\"single\" (the default) keeps one item open; type=\"multiple\" lets several stay open. Use variant=\"compact\" for a changelog or an activity list (the mark first, 14px titles, no rules). Keep answers short; link out for more.",
+      "constraints": [
+        "A caret or chevron in place of the hexagon",
+        "Boxed or filled rows",
+        "Bold questions",
+        "Panels that slide sideways or fade in",
+        "An orange mark"
+      ],
+      "source": "The Hoplite website's pricing FAQ (.faq__item, .faq__icon, .faq__hex, .faq__bar) and changelog entries (.cl-entry, .cl-entry__icon, .cl-entry__body)",
+      "exports": [
+        "Accordion",
+        "AccordionContent",
+        "AccordionItem",
+        "AccordionTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/accordion",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/accordion.md",
+      "type": "ui",
+      "title": "Accordion",
+      "description": "The pricing FAQ: ruled rows of 18px questions, each with a 20px outlined hexagon holding a plus at the end; open, the hexagon turns 30 degrees, the plus becomes a minus and the 16px light graphite answer opens with its height. A compact variant is the changelog entry.",
+      "surface": "site",
+      "kinds": [
+        "faq"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "alert-dialog",
+      "useFor": "Use to confirm an action that cannot be undone or that loses work (Delete sandbox, Leave the team). Say what happens in the description, name the action in the key (Delete sandbox, not OK), and pass variant=\"destructive\" to AlertDialogAction when it deletes. AlertDialogMedia adds a hexagon mark with a glyph above the title.",
+      "constraints": [
+        "A confirmation for an action that can be undone",
+        "OK and Cancel as labels",
+        "Rounded corners",
+        "An orange panel or title",
+        "Closing on a click outside"
+      ],
+      "source": "Extrapolated from the Hoplite website's popups and keys: the square ground panel (.hn__sheet), the hexagon keys (.button, .button--line), the orange as the mark of a destructive action from the brand principles.",
+      "exports": [
+        "AlertDialog",
+        "AlertDialogAction",
+        "AlertDialogCancel",
+        "AlertDialogContent",
+        "AlertDialogDescription",
+        "AlertDialogFooter",
+        "AlertDialogHeader",
+        "AlertDialogMedia",
+        "AlertDialogOverlay",
+        "AlertDialogPortal",
+        "AlertDialogTitle",
+        "AlertDialogTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/alert-dialog",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/alert-dialog.md",
+      "type": "ui",
+      "title": "Alert Dialog",
+      "description": "The dialog's square ground panel for a decision that a click outside cannot dismiss: 448px (384px small) with a deep soft cast over the ink at 32 percent, a Chakra Petch light 20px title, a 14px graphite description, an outlined Cancel hexagon and the action as an ink hexagon, or orange when it destroys something. A dialog taller than the screen scrolls and fades at the screen edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "surface",
+        "button"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "alert",
+      "useFor": "Use Alert for a message about the page or the workspace that stays until it is resolved (a failed check, a usage limit close at hand, a connected repository). Put one glyph first, a short title, and a sentence of detail; an action goes in AlertAction. For a passing confirmation, use a toast.",
+      "constraints": [
+        "An orange fill",
+        "A rounded or shadowed box",
+        "Bold titles",
+        "More than one action",
+        "An alert for every success"
+      ],
+      "source": "Extrapolated from the Hoplite website: its square frames on quiet lines (.hn__news), 14px notes and the orange used only as a mark",
+      "exports": [
+        "Alert",
+        "AlertAction",
+        "AlertDescription",
+        "AlertTitle",
+        "alertVariants"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/alert",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/alert.md",
+      "type": "ui",
+      "title": "Alert",
+      "description": "A ruled notice: a square block inside a quiet edge, a 16px Phosphor glyph beside a 14px medium title and 14px graphite text. Destructive takes the orange edge and glyph; success and warning a glyph in their status color.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "aspect-ratio",
+      "useFor": "Use AspectRatio for product shots, video stills and figures so the page does not jump while they load. Give it the ratio as a number (16 / 9) and put it in a Card with corners for the site's framed art.",
+      "constraints": [
+        "Rounded media",
+        "A drop shadow around media"
+      ],
+      "source": "Extrapolated from the Hoplite website: its fixed-shape frames (.how__frame at 4:3, .band__frame)",
+      "exports": [
+        "AspectRatio"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/aspect-ratio",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/aspect-ratio.md",
+      "type": "ui",
+      "title": "Aspect Ratio",
+      "description": "Holds media at a fixed shape with square corners; an image inside fills it.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "avatar",
+      "useFor": "Use Avatar for people and agents beside their names (thread owners, reviewers, seats). Always give AvatarFallback two initials. Use AvatarGroup for the people on a thread, with AvatarGroupCount for the rest. Color the AvatarBadge dot with a status class (bg-success for running).",
+      "constraints": [
+        "Round or rounded-square avatars",
+        "Colored initials backgrounds",
+        "Rings or shadows around a single avatar",
+        "Names copied from real people"
+      ],
+      "source": "The Hoplite website's .trust__avatar (40px hexagon) and .chat__people, with the point-up hexagon of its marks (ds-hex-mark)",
+      "exports": [
+        "Avatar",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "AvatarGroupCount",
+        "AvatarImage"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/avatar",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/avatar.md",
+      "type": "ui",
+      "title": "Avatar",
+      "description": "A 40px hexagon holding a photo, or Kode Mono initials on the hover wash; point-up by default or the trust strip's cut box. 32px and 48px sizes, a round status dot, and overlapping groups cut out of the ground.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "badge",
+      "useFor": "Use Badge for a short status or category beside a name (New, Team, Passed, PR #482). Use default for most tags, solid for a plan or a state that should stand out, accent once per view for the thing that matters (Most popular), success, warning and destructive for check states. asChild turns a link into a tag.",
+      "constraints": [
+        "A pill or square tag",
+        "Lowercase or sentence-case labels (the label is set in capitals by the font style)",
+        "Two accent tags in one view",
+        "Long labels",
+        "Bold type"
+      ],
+      "source": "The Hoplite website's .tag (pricing, the hero's pill) and the nav's news card (.hn__news, New)",
+      "exports": [
+        "Badge",
+        "badgeVariants"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/badge",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/badge.md",
+      "type": "ui",
+      "title": "Badge",
+      "description": "The site's tag: a 20px hexagon with 8px cuts and a 12px Kode Mono capital label. Default is the outlined tag (strong edge, ink label); solid is ink, accent the orange edge and label, plus status, outline, secondary, destructive and ghost.",
+      "surface": "site",
+      "kinds": [
+        "chip"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "blog-index-page",
+      "useFor": "Use for the blog or any list of articles; pass your posts.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's blog (/blog, Field notes and announcements)",
+      "exports": [
+        "Post",
+        "BlogIndexPage"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/blog-index-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/blog-index-page.md",
+      "type": "block",
+      "title": "Blog index page",
+      "description": "The blog template: the display heading over a solid rule, the category toggle and RSS label, the lead story beside its drawing, then three to a row split by dashed rules.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "footer",
+        "site-header",
+        "brand-marks",
+        "toggle-group",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "blog-post-page",
+      "useFor": "Use for a single article; pass the article as children.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's blog posts (.bp-prose)",
+      "exports": [
+        "BlogPostPage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/blog-post-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/blog-post-page.md",
+      "type": "block",
+      "title": "Blog post page",
+      "description": "The article template: breadcrumb, mono category and date, title, lead, byline, the drawing in corner ticks, the article as prose and the closing band.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "cta",
+        "footer",
+        "site-header",
+        "brand-marks",
+        "breadcrumb",
+        "code-block",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "brand-marks",
+      "useFor": "Use Lockup in headers and footers (24px tall, in the ink), Mark where only the horse fits, HexNode to mark a point (orange only for the one that matters), NodeCluster over a plan, and NodeTree as a section's drawing.",
+      "constraints": [
+        "A recolored or stretched lockup",
+        "More than one orange node in a small group",
+        "Nodes with rounded corners",
+        "Drawings that move on hover"
+      ],
+      "source": "The Hoplite website's header lockup (.site-header__logo), the pricing page's plan marks (.pr-plan) and the blog's branch diagrams (hoplite-website-fawn.vercel.app/blog)",
+      "exports": [
+        "HexNode",
+        "Lockup",
+        "Mark",
+        "NodeCluster",
+        "NodeTree",
+        "Leaf"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/brand-marks",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/brand-marks.md",
+      "type": "site",
+      "title": "Brand marks",
+      "description": "The lockup and horse mark from the website header, the cog node (an outlined hexagon, or the orange one with its hexagon hole), a plan's row of nodes over a dashed rule, and the blog's branch diagram of labeled nodes.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "breadcrumb",
+      "useFor": "Use Breadcrumb at the top of a page that sits inside a hierarchy (a workspace, a repository, a pull request), or for a single back link (All posts). Use the default slash, or pass a CaretRightIcon as the separator's child. Link items with BreadcrumbLink (asChild or render for a router link) and end with BreadcrumbPage.",
+      "constraints": [
+        "A link on the current page",
+        "Kode Mono or caps crumbs",
+        "Underlined crumbs",
+        "An arrow that moves on hover"
+      ],
+      "source": "The Hoplite website's blog post back link (.bp-back: All posts) and the product window's crumb (.pa-crumb, .pa-crumb__project, .pa-crumb__sep)",
+      "exports": [
+        "Breadcrumb",
+        "BreadcrumbEllipsis",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbList",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/breadcrumb",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/breadcrumb.md",
+      "type": "ui",
+      "title": "Breadcrumb",
+      "description": "A trail of pages: 14px links in the quiet gray that turn ink under the pointer, the current page in the ink at medium weight, a slate slash (or a caret) between them, and a three-dot glyph for folded pages.",
+      "surface": "site",
+      "kinds": [
+        "link"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "button-group",
+      "useFor": "Use a ButtonGroup for a split action (Squash and merge with a caret for the other merge methods: Button, ButtonGroupSeparator, an icon Button), for two to four related outlined actions, for a stepper (minus, ButtonGroupText with the count, plus), or for a field with its action (Input then an outline Button). Keep every key in a group the same variant and size. orientation=\"vertical\" stacks whole keys 4px apart.",
+      "constraints": [
+        "Mixing ink and outlined keys in one group",
+        "Two ink groups in a view",
+        "Hexagon points between joined keys",
+        "Square or rounded segments at the ends"
+      ],
+      "source": "The Hoplite website's product window split key (.pa-merge, .pa-merge__main, .pa-merge__more: Squash and merge) redrawn on its hexagonal keys (.button, .button--primary, .button--line), and its segmented choice (.pr-period)",
+      "exports": [
+        "ButtonGroup",
+        "ButtonGroupSeparator",
+        "ButtonGroupText",
+        "buttonGroupVariants"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/button-group",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/button-group.md",
+      "type": "ui",
+      "title": "Button Group",
+      "description": "Keys joined into one control: one hexagon cut into segments with square joins. The split key is one ink hexagon with a hairline between the action and its caret; outlined keys share their strong edges like a segmented choice; a field can open a group and the key after it squares off to meet it.",
+      "surface": "site",
+      "kinds": [
+        "button-primary",
+        "button-secondary"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "button",
+      "useFor": "Use one default (ink hexagon) button per view for the main action (Start building), outline for the action beside it (Download for macOS), secondary for a quieter action inside content, ghost for nav items and toolbar glyphs, and link for an inline action in text. size sm is the 32px header key. Use type=\"submit\" in forms, or asChild (or render) with a link for navigation. A glyph goes before the label at 16px (Phosphor, regular weight).",
+      "constraints": [
+        "Two ink hexagons side by side",
+        "A rounded or square key",
+        "An orange fill",
+        "Bold or caps labels",
+        "An icon that moves on hover",
+        "A half-opacity disabled key"
+      ],
+      "source": "The Hoplite website's .button, .button--primary, .button--line and .button--s (hoplite-website-fawn.vercel.app: Start building, Download for macOS, Start team, Start free) and its nav items (.hn__top)",
+      "exports": [
+        "Button",
+        "buttonVariants"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/button",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/button.md",
+      "type": "ui",
+      "title": "Button",
+      "description": "The hexagonal key: the 40px ink hexagon for the main action, the outlined hexagon for the second, a hexagon of the hover wash, a bare nav label whose compact hexagon appears under the pointer, and the underlined link. 32px keys cut their ends 8px; a key takes its pressed fill the instant it is pressed.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "calendar",
+      "useFor": "Use for choosing a day, several days or a range in place (scheduling an automation, a usage report's period). mode is single, multiple or range, with selected and onSelect; disabled takes dates, ranges, before or after, days of the week or a function; numberOfMonths shows months side by side; captionLayout=\"dropdown\" adds month and year selects for far dates. In a form field use DatePicker. Dependency free; dates are local Date objects.",
+      "constraints": [
+        "Round or rounded day keys",
+        "An orange chosen day",
+        "Animating the change of month",
+        "Gaps between days in a range"
+      ],
+      "source": "Extrapolated from the Hoplite website: the Chakra Petch title, Kode Mono labels (.label), the compact ghost keys (.hn__top), the hover wash and the 32 percent line",
+      "exports": [
+        "Calendar",
+        "CalendarDayButton",
+        "CalendarProps",
+        "DateRange"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/calendar",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/calendar.md",
+      "type": "ui",
+      "title": "Calendar",
+      "description": "A month grid: a Chakra Petch month title between compact ghost hexagon keys, Kode Mono weekday labels and 36px square days that meet edge to edge; today in a quiet frame, a chosen day filled ink, the days of a range on the hover wash between two ink ends.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "button",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "card",
+      "useFor": "Use Card for a plan, a feature or a resource that sits beside others. Use the default frame for plans and settings groups, variant=\"corners\" around product art or a figure, and variant=\"ruled\" for a row of short features. size=\"sm\" for dense grids (24px in, 20px titles). One ink key per card at most.",
+      "constraints": [
+        "A white or filled card on the ground",
+        "Rounded corners",
+        "A drop shadow",
+        "Bold titles",
+        "A card inside a card"
+      ],
+      "source": "The Hoplite website's plan cards (.pr-plan, .pr-plan__name, .pr-plan__body), bands (.band__frame, .band__title) and feature frames (.how__frame with its corners)",
+      "exports": [
+        "Card",
+        "CardAction",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardTitle",
+        "cardVariants"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/card",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/card.md",
+      "type": "ui",
+      "title": "Card",
+      "description": "The site's frames: a square stone frame 32px in (a plan card), crop-mark corners (a feature frame), or a quiet rule above. Titles are Chakra Petch 24px (20px small); text is 16px light graphite; an action at the top right and keys in the footer.",
+      "surface": "site",
+      "kinds": [
+        "card"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "carousel",
+      "useFor": "Use Carousel for a short set of peer items people browse one at a time (automation templates, plan highlights). Put each slide in CarouselItem (basis-1/2 for two at once), add CarouselPrevious and CarouselNext, and CarouselDots under the row when the count matters. Leave 48px of room at the sides for the keys.",
+      "constraints": [
+        "Autoplay",
+        "Round arrow keys or round dots",
+        "Slides that fade or scale",
+        "Hiding content that people must see in a carousel"
+      ],
+      "source": "Extrapolated from the Hoplite website: its outlined icon keys (.button--line) and hexagon bullets on a native snapping scroll",
+      "exports": [
+        "Carousel",
+        "CarouselContent",
+        "CarouselDots",
+        "CarouselItem",
+        "CarouselNext",
+        "CarouselPrevious",
+        "useCarousel",
+        "CarouselApi"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/carousel",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/carousel.md",
+      "type": "ui",
+      "title": "Carousel",
+      "description": "A row of slides that snap into place, with 32px outlined hexagon keys for previous and next outside the row and optional point-up hexagon marks for the slides, the current one ink. Native scroll, touch and arrow keys. Slides fade at the edge the track scrolls past (fade-x, or fade-y when vertical).",
+      "surface": "site",
+      "kinds": [
+        "button-secondary"
+      ],
+      "requires": [
+        "theme",
+        "button",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "changelog-page",
+      "useFor": "Use for release notes; pass months of updates.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's changelog (/changelog, What's new in Hoplite)",
+      "exports": [
+        "Update",
+        "Month",
+        "ChangelogPage"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/changelog-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/changelog-page.md",
+      "type": "block",
+      "title": "Changelog page",
+      "description": "The changelog template: heading and lead over a solid rule with the orange node, the Show toggle and Jump to list, and each day's headline update with its features and fixes.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "footer",
+        "site-header",
+        "brand-marks",
+        "toggle-group",
+        "typography",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "chart",
+      "useFor": "Use for usage and activity over time (threads opened, pull requests merged, sandbox minutes) or a share (runs by agent). Wrap BarChart, LineChart, AreaChart or PieChart in ChartContainer with a config that labels each series (color is optional; the series tokens are the default), and add ChartTooltip with ChartTooltipContent and ChartLegend with ChartLegendContent. Give every chart an aria-label. Dependency free: no chart library.",
+      "constraints": [
+        "Rounded bars",
+        "Gradient fills beyond a faint area wash",
+        "More than five series",
+        "Orange for anything but the series that matters",
+        "An entrance animation on scroll"
+      ],
+      "source": "Extrapolated from the Hoplite website: its lines (the 16 and 32 percent rules), Kode Mono labels, the orange mark and the nav popup (.hn__panel) for the tooltip",
+      "exports": [
+        "ChartConfig",
+        "AreaChart",
+        "BarChart",
+        "ChartContainer",
+        "ChartLegend",
+        "ChartLegendContent",
+        "ChartStyle",
+        "ChartTooltip",
+        "ChartTooltipContent",
+        "LineChart",
+        "PieChart",
+        "useChart"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/chart",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/chart.md",
+      "type": "ui",
+      "title": "Chart",
+      "description": "SVG bar, line, area and pie charts: series in the ink first, the orange second and the gray steps after, a quiet hairline grid, Kode Mono axis labels, square bars and keys, and a small square tooltip panel with a Kode Mono label.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "checkbox",
+      "useFor": "Use Checkbox for an on or off choice that takes effect on submit, or to pick several items from a list. Wrap it and its text in a Label, or pair them with htmlFor. Use indeterminate on a parent that controls a list. For a setting that applies at once use Switch.",
+      "constraints": [
+        "A round or hexagonal check",
+        "An orange fill",
+        "A check that scales or bounces in",
+        "A half-opacity disabled check"
+      ],
+      "source": "Extrapolated from the Hoplite website: its strong 70 percent edge (--line) and ink fills (.button--primary), and the principles (checks are square)",
+      "exports": [
+        "Checkbox"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/checkbox",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/checkbox.md",
+      "type": "ui",
+      "title": "Checkbox",
+      "description": "A square 16px check with a 1px strong edge on the ground; on, it fills with the ink and holds a ground-colored check, and a dash when some are on. Fills change in 120ms; nothing moves or grows.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "code-block",
+      "useFor": "Use CodeBlock for a command, a config file or a snippet people copy. Give CodeBlockContent the text as code and its language (bash, tsx, ts, json, css); add CodeBlockCopyButton with the same text. Use lineNumbers for a file, wrap for long prose-like lines.",
+      "constraints": [
+        "A dark editor theme",
+        "Rounded corners",
+        "Syntax colors beyond the orange keywords",
+        "A copy glyph that moves"
+      ],
+      "source": "The Hoplite website's blog code blocks (.bp-code, .bp-code__bar, .bp-copy, .bp-code__pre)",
+      "exports": [
+        "CodeBlock",
+        "CodeBlockActions",
+        "CodeBlockContent",
+        "CodeBlockCopyButton",
+        "CodeBlockHeader",
+        "CodeBlockTitle",
+        "tokenize"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/code-block",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/code-block.md",
+      "type": "ui",
+      "title": "Code Block",
+      "description": "The blog's code block: a square frame of the quiet line, a 40px bar with the language as a Kode Mono label and a ruled-off Copy action, then Kode Mono code at 14px on 24px lines with keywords in the orange and comments in the slate. A tall file or long lines fade at the edge they scroll past (fade-xy; fade-y when lines wrap).",
+      "surface": "site",
+      "kinds": [
+        "code-window"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "collapsible",
+      "useFor": "Use Collapsible for one optional section (advanced settings, the full list of checks). Use the built-in trigger for a quiet text toggle, or asChild with a Button (ghost icon-sm) beside a heading. For several sections in a column, use Accordion.",
+      "constraints": [
+        "A caret that moves on hover",
+        "A filled or boxed trigger",
+        "Content that fades or slides in sideways"
+      ],
+      "source": "Extrapolated from the Hoplite website: the changelog's quiet disclosures (.cl-entry__summary) and the FAQ's height animation (.faq__item)",
+      "exports": [
+        "Collapsible",
+        "CollapsibleContent",
+        "CollapsibleTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/collapsible",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/collapsible.md",
+      "type": "ui",
+      "title": "Collapsible",
+      "description": "A section that opens in place: a 14px medium graphite trigger with a caret that turns a quarter when open, and a panel that opens with its height.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "combobox",
+      "useFor": "Use instead of Select when there are more than about fifteen choices or people know what they want (a repository, an agent, a branch or pull request). Pass items to Combobox and render rows with a function in ComboboxList; put ComboboxEmpty beside it. Type in ComboboxInput (showClear adds a clear key), or use ComboboxTrigger with ComboboxValue and put ComboboxInput inside ComboboxContent for a search row. For several values use multiple with ComboboxChips, ComboboxChip and ComboboxChipsInput, and pass useComboboxAnchor's ref to ComboboxContent. Group with ComboboxGroup, ComboboxLabel and ComboboxCollection. Built on Base UI Combobox.",
+      "constraints": [
+        "A combobox for five or fewer choices (use Select or a radio group)",
+        "Rounded fields or chips",
+        "Animating the highlight between rows",
+        "A list without an empty state",
+        "Orange chips"
+      ],
+      "source": "Extrapolated from the Hoplite website: the field lines and 14px controls, the nav popup (.hn__panel, .hn__item) and the outlined tag hexagon (.tag)",
+      "exports": [
+        "Combobox",
+        "ComboboxChip",
+        "ComboboxChips",
+        "ComboboxChipsInput",
+        "ComboboxClear",
+        "ComboboxCollection",
+        "ComboboxContent",
+        "ComboboxEmpty",
+        "ComboboxGroup",
+        "ComboboxInput",
+        "ComboboxItem",
+        "ComboboxLabel",
+        "ComboboxList",
+        "ComboboxSeparator",
+        "ComboboxTrigger",
+        "ComboboxValue",
+        "useComboboxAnchor"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/combobox",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/combobox.md",
+      "type": "ui",
+      "title": "Combobox",
+      "description": "A searchable choice: the square 40px field you type into (or a field button whose list holds its own search row), opening the site's square popup with 36px rows, the highlighted row on the hover wash and a check at the end of each chosen row; several values sit in the field as outlined hexagon chips. A long list fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [
+        "input",
+        "menu-panel",
+        "menu-item"
+      ],
+      "requires": [
+        "theme",
+        "surface",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "command",
+      "useFor": "Use CommandDialog for a palette opened with Command K (new thread, open a terminal, go to pull requests), or Command inline for a searchable list of actions. Put CommandInput first, then CommandList with CommandEmpty, CommandGroup (heading), CommandItem (onSelect) and CommandSeparator; CommandShortcut shows the keys. Built on cmdk, with the dialog on Base UI Dialog.",
+      "constraints": [
+        "An open or close animation",
+        "Rounded panels or rows",
+        "A highlight that slides between rows",
+        "Shortcuts in the body face",
+        "More than one palette per app"
+      ],
+      "source": "Extrapolated from the Hoplite website: the nav popup (.hn__panel, .hn__item), Kode Mono labels (.label) and the 32 percent ink scrim",
+      "exports": [
+        "Command",
+        "CommandDialog",
+        "CommandEmpty",
+        "CommandGroup",
+        "CommandInput",
+        "CommandItem",
+        "CommandList",
+        "CommandSeparator",
+        "CommandShortcut"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/command",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/command.md",
+      "type": "ui",
+      "title": "Command",
+      "description": "A command palette: the site's square popup panel with a 48px search row over the quiet rule, Kode Mono group labels, 36px rows on the hover wash when highlighted and Kode Mono shortcuts at the end; the dialog opens and closes without motion. A long list fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [
+        "menu-panel",
+        "menu-item"
+      ],
+      "requires": [
+        "theme",
+        "surface",
+        "utils"
+      ],
+      "packages": [
+        "cmdk",
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "contact-page",
+      "useFor": "Use for sales and support contact; wire onSubmit to your endpoint.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's type, frames and fields; the site has no contact page of its own",
+      "exports": [
+        "Channel",
+        "ContactPage"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/contact-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/contact-page.md",
+      "type": "block",
+      "title": "Contact page",
+      "description": "The contact template: display heading, lead and channels on dashed rows at the left, the form in a stone frame at the right.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "footer",
+        "site-header",
+        "button",
+        "card",
+        "field",
+        "input",
+        "native-select",
+        "textarea",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "context-menu",
+      "useFor": "Use as a shortcut to actions on the thing under the pointer (a thread in a list, a file in a tree). Wrap that area in ContextMenuTrigger and build the panel with the same parts as Dropdown Menu. Every action in it must also be reachable another way, usually a dropdown menu on the same row.",
+      "constraints": [
+        "The only way to reach an action",
+        "Rounded corners",
+        "A white panel",
+        "An orange highlight",
+        "A styled trigger area that looks like a button"
+      ],
+      "source": "Extrapolated from the Hoplite website's popups (the header nav's sheet and rows, .hn__sheet and .hn__item); the site has no context menu.",
+      "exports": [
+        "ContextMenu",
+        "ContextMenuCheckboxItem",
+        "ContextMenuContent",
+        "ContextMenuGroup",
+        "ContextMenuItem",
+        "ContextMenuLabel",
+        "ContextMenuPortal",
+        "ContextMenuRadioGroup",
+        "ContextMenuRadioItem",
+        "ContextMenuSeparator",
+        "ContextMenuShortcut",
+        "ContextMenuSub",
+        "ContextMenuSubContent",
+        "ContextMenuSubTrigger",
+        "ContextMenuTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/context-menu",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/context-menu.md",
+      "type": "ui",
+      "title": "Context Menu",
+      "description": "The dropdown menu's panel opened at the pointer by a right click or a long press: a square ground panel with a quiet hairline and a long soft cast, 36px rows in the hover wash under the pointer, Kode Mono shortcuts, checks and hexagon marks on chosen rows, destructive rows in the orange.",
+      "surface": "site",
+      "kinds": [
+        "menu-panel",
+        "menu-item"
+      ],
+      "requires": [
+        "theme",
+        "utils",
+        "dropdown-menu"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "cta",
+      "useFor": "Use once, last before the footer.",
+      "constraints": [
+        "An orange or dark filled band",
+        "More than two keys"
+      ],
+      "source": "The Hoplite website's frames (.band__frame) and keys (.button--primary, .button--line)",
+      "exports": [
+        "Cta"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/cta",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/cta.md",
+      "type": "block",
+      "title": "Call to action",
+      "description": "The closing band: a frame of corner ticks with the orange node, a Chakra Petch heading, a light lead and the two keys.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "brand-marks",
+        "button",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "data-table",
+      "useFor": "Use for records people work through (runs, threads, seats, automations). Describe columns with id, header, accessor (the value to sort and filter by), cell (what to show), sortable, align, hidden and hideable; pass data and getRowId. selectable with selection and onSelectionChange adds the checks; pageSize and pageSizes set the pages; toolbar adds actions beside the Columns key; empty fills the body when nothing matches. For a table people only read, use Table. Dependency free: no table library.",
+      "constraints": [
+        "A boxed or rounded frame around the table",
+        "Animating rows as they sort or page",
+        "Hover-only row actions",
+        "Bold or orange heads"
+      ],
+      "source": "Extrapolated from the Hoplite website: the ruled tables (.pr-table, .bp-table), Kode Mono labels, the compact keys (.button--s, .button--line) and the nav popup (.hn__panel)",
+      "exports": [
+        "DataTable",
+        "DataTableColumnHeader",
+        "DataTablePagination",
+        "DataTableViewOptions",
+        "DataTableColumn",
+        "DataTableProps",
+        "SortState"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/data-table",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/data-table.md",
+      "type": "ui",
+      "title": "Data table",
+      "description": "Table with sorting, filtering, row checks and pages: Kode Mono heads that sort with a 12px arrow, square checks in the first column with the chosen rows on the hover wash, a filter field and a compact outlined hexagon Columns key above, and a 48px footer on the quiet rule with the count, rows per page and two ghost hexagon keys. A table wider than its frame scrolls sideways and fades at the edge it scrolls past (fade-x).",
+      "surface": "site",
+      "kinds": [
+        "table"
+      ],
+      "requires": [
+        "theme",
+        "button",
+        "checkbox",
+        "input-group",
+        "select",
+        "table",
+        "surface",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "date-picker",
+      "useFor": "Use DatePicker for one date in a form (a token's expiry, when an automation runs) and DateRangePicker for a period (usage, a log). Control them with value and onValueChange; pass presets for common choices and calendar for disabled days, the first day of the week or today. Give it a label (id) or aria-label; name submits the date as YYYY-MM-DD (a range as nameFrom and nameTo). Built on Base UI Popover and the Calendar item.",
+      "constraints": [
+        "Rounded fields or panels",
+        "A native date input beside it",
+        "An orange chosen day",
+        "A calendar that stays open after a single date is picked"
+      ],
+      "source": "Extrapolated from the Hoplite website: the field lines and 14px controls, the nav popup (.hn__panel, .hn__item) and the Calendar item",
+      "exports": [
+        "DatePicker",
+        "DateRangePicker",
+        "formatDate",
+        "formatRange",
+        "DatePickerProps",
+        "DateRangePickerProps"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/date-picker",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/date-picker.md",
+      "type": "ui",
+      "title": "Date picker",
+      "description": "The square 40px field with a calendar glyph and a caret, opening the calendar in the site's square popup; presets sit in a column of 36px rows beside it, and a range picker shows two months. On a phone the presets row scrolls sideways and fades at the edge it scrolls past (fade-x).",
+      "surface": "site",
+      "kinds": [
+        "input",
+        "popover-panel"
+      ],
+      "requires": [
+        "theme",
+        "calendar",
+        "surface",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "dialog",
+      "useFor": "Use for a short task that needs full attention (New automation) or a result to read before moving on (a new API key). Put the title and description in DialogHeader, fields in DialogBody, and the actions in DialogFooter: one ink Button for the main action, an outline DialogClose for Cancel. Use asChild or render on DialogTrigger to open it from a Button.",
+      "constraints": [
+        "Rounded corners",
+        "A white panel",
+        "A blurred page behind it",
+        "Two ink keys in the footer",
+        "Scaling from zero",
+        "A dialog that opens another dialog"
+      ],
+      "source": "Extrapolated from the Hoplite website's popups and keys: the square ground panel and quiet line (.hn__sheet), the ink at 32 percent from the brand principles, Chakra Petch light titles and the hexagon keys (.button, .button--line).",
+      "exports": [
+        "Dialog",
+        "DialogBody",
+        "DialogClose",
+        "DialogContent",
+        "DialogDescription",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogOverlay",
+        "DialogPortal",
+        "DialogTitle",
+        "DialogTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/dialog",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/dialog.md",
+      "type": "ui",
+      "title": "Dialog",
+      "description": "A square 512px panel of the ground with 24px of air, a quiet hairline and a deep soft cast, centered over the ink at 32 percent: a Chakra Petch light 20px title, a 14px graphite description, hexagon keys at the end of the footer and a compact ghost X in the corner. It opens in place from 0.96 with a fade. A dialog taller than the screen scrolls and fades at the screen edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "surface",
+        "button"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "direction",
+      "useFor": "Wrap an app or a region whose text reads right to left in DirectionProvider with dir=\"rtl\", and set dir=\"rtl\" on the element it wraps too so the page's own layout flips with it.",
+      "constraints": [
+        "Flipping layout with transforms",
+        "Setting the provider without the matching dir attribute",
+        "Mirroring icons that do not point"
+      ],
+      "source": "Extrapolated from the Hoplite website: a wrapper around Base UI's DirectionProvider with no look of its own",
+      "exports": [
+        "DirectionProvider",
+        "useDirection"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/direction",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/direction.md",
+      "type": "ui",
+      "title": "Direction",
+      "description": "Sets the reading direction (ltr or rtl) for every Base UI part inside it, so tabs, menus, sliders and scroll areas flip for right-to-left text. It draws nothing of its own.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "drawer",
+      "useFor": "Use on touch screens for a short task or a list to act on (steering running subagents) that should feel like part of the page. Put the title in DrawerHeader and stacked actions in DrawerFooter. direction=\"right\" or \"left\" makes a swipeable side panel; on desktop prefer Dialog or Sheet.",
+      "constraints": [
+        "A rounded top or handle",
+        "A white panel",
+        "Content that needs a long scroll",
+        "Nested drawers",
+        "Easing in"
+      ],
+      "source": "Extrapolated from the Hoplite website: the square ground panel of its popups (.hn__sheet), the dock curve (--dock) and the long soft cast; built on Base UI's drawer for the swipe.",
+      "exports": [
+        "Drawer",
+        "DrawerClose",
+        "DrawerContent",
+        "DrawerDescription",
+        "DrawerFooter",
+        "DrawerHeader",
+        "DrawerOverlay",
+        "DrawerPortal",
+        "DrawerTitle",
+        "DrawerTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/drawer",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/drawer.md",
+      "type": "ui",
+      "title": "Drawer",
+      "description": "A square sheet of the ground that rises from the bottom edge, ruled off by the quiet line with a long soft cast, over the ink at 32 percent: a small square handle near its top, a centered Chakra Petch light 20px title over a 14px graphite description, stacked hexagon keys. It slides its own height on the dock curve and follows a swipe down to close. A long body scrolls inside the panel and fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "surface"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "dropdown-menu",
+      "useFor": "Use for actions on one thing (a thread, a sandbox, a row) behind a trigger, usually an outline Button or a ghost icon-sm Button with three dots. Group related rows under DropdownMenuLabel, rule groups apart with DropdownMenuSeparator, put a destructive row last with variant=\"destructive\", and use DropdownMenuCheckboxItem or DropdownMenuRadioGroup for view options. Use asChild or render on the trigger to make your own Button open it.",
+      "constraints": [
+        "Rounded corners or a pill highlight",
+        "A white panel",
+        "Bold or caps row labels",
+        "An orange highlight",
+        "More than one level of submenu",
+        "Hiding the only path to an action in a menu"
+      ],
+      "source": "Drawn from the Hoplite website's popups: the header nav's sheet and rows (.hn__sheet, .hn__item: the ground panel, the quiet line, 14px rows, the hover fill) and its eyebrows (.hn__heading, .label); the row metrics, check and hexagon mark are extrapolated from the site's principles (36px rows, a radio is a hexagon that fills).",
+      "exports": [
+        "DropdownMenu",
+        "DropdownMenuCheckboxItem",
+        "DropdownMenuContent",
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuLabel",
+        "DropdownMenuPortal",
+        "DropdownMenuRadioGroup",
+        "DropdownMenuRadioItem",
+        "DropdownMenuSeparator",
+        "DropdownMenuShortcut",
+        "DropdownMenuSub",
+        "DropdownMenuSubContent",
+        "DropdownMenuSubTrigger",
+        "DropdownMenuTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/dropdown-menu",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/dropdown-menu.md",
+      "type": "ui",
+      "title": "Dropdown Menu",
+      "description": "A square panel of the ground with a quiet hairline and a long soft cast under its trigger: 36px rows of 14px Satoshi with quiet 16px glyphs, the row under the pointer in the hover wash, Kode Mono shortcuts at the end, an ink check or a small ink hexagon on chosen rows, caps eyebrows over groups and destructive rows in the orange. A long menu scrolls inside the panel and fades at the edge it scrolls past (fade-y), the panel keeping its cast.",
+      "surface": "site",
+      "kinds": [
+        "menu-panel",
+        "menu-item"
+      ],
+      "requires": [
+        "theme",
+        "utils",
+        "surface"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "empty",
+      "useFor": "Use Empty for a list, table or page with no content yet (no threads, no automations) or a search with no results. Say what goes here and give the one action that fills it (an ink key), with a second outlined key or a link at most.",
+      "constraints": [
+        "Illustrations or mascots",
+        "A filled hexagon or an orange glyph",
+        "More than two keys",
+        "Bold titles"
+      ],
+      "source": "Extrapolated from the Hoplite website: its hexagonal marks (.faq__hex), square frames (.pr-plan, .how__frame corners), display type and keys",
+      "exports": [
+        "Empty",
+        "EmptyContent",
+        "EmptyDescription",
+        "EmptyHeader",
+        "EmptyMedia",
+        "EmptyTitle"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/empty",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/empty.md",
+      "type": "ui",
+      "title": "Empty",
+      "description": "A view with nothing in it yet: centered, a 48px hexagon outline holding a glyph, a 20px Chakra Petch title, 14px quiet text and hexagonal keys below; bare, in a stone frame, or inside crop marks.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "faq",
+      "useFor": "Use near the end of the pricing or product page for the questions people ask before they sign up.",
+      "constraints": [
+        "Every row open at once by default",
+        "Plus icons that rotate or move"
+      ],
+      "source": "The Hoplite website's pricing page questions and its accordion rows",
+      "exports": [
+        "Question",
+        "Faq"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/faq",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/faq.md",
+      "type": "block",
+      "title": "FAQ",
+      "description": "Questions and answers: the heading and lead in the left column and the accordion in the right, rows ruled by hairlines.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "accordion",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "feature-grid",
+      "useFor": "Use for the product's main capabilities, two or four at a time. Give each a drawing (NodeTree or your own art) in the art slot.",
+      "constraints": [
+        "Icons in colored circles",
+        "Cards with shadows or rounded corners",
+        "Odd counts that leave a gap"
+      ],
+      "source": "The Hoplite website's home and product bands (.how, .band: Give the swarm the job, Share, hand off, and approve every run)",
+      "exports": [
+        "Feature",
+        "FeatureGrid"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/feature-grid",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/feature-grid.md",
+      "type": "block",
+      "title": "Feature grid",
+      "description": "The feature band: a Chakra Petch heading with its lead and text link, then features two to a row in stone frames, each with a title, a light line, an optional link and a drawing in corner ticks.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "brand-marks",
+        "card",
+        "typography",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "features-page",
+      "useFor": "Use for each product area (a feature, a use case).",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's product page (/product/multiplayer)",
+      "exports": [
+        "FeaturesPage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/features-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/features-page.md",
+      "type": "block",
+      "title": "Features page",
+      "description": "A product or features template: the hero with an eyebrow over a drawing, the feature band and the closing band.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "cta",
+        "feature-grid",
+        "footer",
+        "hero",
+        "site-header",
+        "brand-marks",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "field",
+      "useFor": "Wrap every form control in a Field with a FieldLabel, an optional FieldDescription and a FieldError; group fields in FieldGroup and related choices in FieldSet with a FieldLegend. Use orientation=\"horizontal\" for a check, radio or switch beside its label, FieldContent with FieldTitle and FieldDescription for a setting row, and a FieldLabel wrapping a Field for a choice card. Pass invalid (or data-invalid) to mark the control and show the error.",
+      "constraints": [
+        "Errors in any color but the orange",
+        "An orange label",
+        "Boxed or shaded field groups",
+        "Rounded choice cards",
+        "Help text above the control"
+      ],
+      "source": "Extrapolated from the Hoplite website: its 14px type, the quiet and 32 percent lines (--line-quiet, --line-margin), its Chakra Petch group heads (.pr-table) and the principles for fields",
+      "exports": [
+        "Field",
+        "FieldContent",
+        "FieldDescription",
+        "FieldError",
+        "FieldGroup",
+        "FieldLabel",
+        "FieldLegend",
+        "FieldSeparator",
+        "FieldSet",
+        "FieldTitle"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/field",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/field.md",
+      "type": "ui",
+      "title": "Field",
+      "description": "Form layout on Base UI's Field and Fieldset: a 14px medium label 8px above the control, 14px quiet help and 14px orange errors below, fields 24px apart, Chakra Petch 20px set legends, choice cards framed in the quiet rule that turn ink when chosen, and an \"or\" between two quiet rules.",
+      "surface": "site",
+      "kinds": [
+        "input"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "footer",
+      "useFor": "Use at the bottom of every marketing page. Pass your own columns.",
+      "constraints": [
+        "Social icons that move on hover",
+        "A dark footer band"
+      ],
+      "source": "The Hoplite website's type and rules (.ds-label heads, hairlines and dashed rules)",
+      "exports": [
+        "FooterColumn",
+        "Footer"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/footer",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/footer.md",
+      "type": "block",
+      "title": "Footer",
+      "description": "The site footer: the lockup and a light line, link columns under mono labels, and the copyright under a dashed rule.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "brand-marks",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "form",
+      "useFor": "Use Form with react-hook-form's useForm: FormField for each value, FormItem around its FormLabel, FormControl (around exactly one control), FormDescription and FormMessage. Stack items in a grid with gap-6. For forms without react-hook-form use Field.",
+      "constraints": [
+        "Messages in any color but the orange",
+        "An orange label",
+        "Errors above the control",
+        "Wrapping more than one element in FormControl"
+      ],
+      "source": "Extrapolated from the Hoplite website's type and lines and the principles for fields (the site has no forms)",
+      "exports": [
+        "Form",
+        "FormControl",
+        "FormDescription",
+        "FormField",
+        "FormItem",
+        "FormLabel",
+        "FormMessage",
+        "useFormField"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/form",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/form.md",
+      "type": "ui",
+      "title": "Form",
+      "description": "react-hook-form helpers laid out as Field: a 14px medium label 8px above the control, 14px quiet help and a 14px orange message below; the control alone takes the orange edge when it fails.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "label",
+        "utils"
+      ],
+      "packages": [
+        "react-hook-form"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "hero",
+      "useFor": "Use once per page, first after the header. Keep the headline to two lines; put the product window or a drawing in media.",
+      "constraints": [
+        "A headline in bold or capitals",
+        "An orange key",
+        "More than two keys",
+        "Centered hero copy"
+      ],
+      "source": "The Hoplite website's home and product heroes (.hero: A workstation for your army of coding agents, The multiplayer coding agent for your whole team)",
+      "exports": [
+        "HeroAction",
+        "Hero"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/hero",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/hero.md",
+      "type": "block",
+      "title": "Hero",
+      "description": "The page opener: the 64px Chakra Petch light headline, the light lead, the ink hexagon and the outlined hexagon side by side, an optional mono eyebrow and a media slot below at full width.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "button",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "home-page",
+      "useFor": "Start a marketing home page from this and replace the copy and the media.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's home page (hoplite-website-fawn.vercel.app)",
+      "exports": [
+        "HomePage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/home-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/home-page.md",
+      "type": "block",
+      "title": "Home page",
+      "description": "The home page template: header, hero over a drawing, the customer strip, the feature band, a quote, the closing band and the footer.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "cta",
+        "feature-grid",
+        "footer",
+        "hero",
+        "logos-strip",
+        "site-header",
+        "testimonial",
+        "brand-marks",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "hover-card",
+      "useFor": "Use to preview what a link points to (a pull request, a repository, a teammate) for people with a pointer. Keep it to a few lines; the link itself must lead to the same information, since touch and keyboard readers may never see the card.",
+      "constraints": [
+        "Actions that exist only in the card",
+        "Rounded corners",
+        "A white panel",
+        "Opening on click",
+        "Long content"
+      ],
+      "source": "The Hoplite website's popups and nav feature card (.hn__sheet, .hn__card: the ground panel, the quiet line, 16px of air).",
+      "exports": [
+        "HoverCard",
+        "HoverCardContent",
+        "HoverCardTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/hover-card",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/hover-card.md",
+      "type": "ui",
+      "title": "Hover Card",
+      "description": "A preview that opens while the pointer rests on a link: a square 320px panel of the ground with 16px of air, a quiet hairline and a long soft cast, 8px from the link. It waits 400ms to open and 150ms to close, and fades in with a slight scale from the link.",
+      "surface": "site",
+      "kinds": [
+        "popover-panel"
+      ],
+      "requires": [
+        "theme",
+        "utils",
+        "surface"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "input-group",
+      "useFor": "Use InputGroup when a field needs a glyph (search), a fixed prefix or suffix (github.com/), or an action inside it (copy, send). Put InputGroupInput or InputGroupTextarea inside with InputGroupAddon on the side given by align; use InputGroupButton for keys and InputGroupText for words.",
+      "constraints": [
+        "A rounded frame",
+        "A main ink key inside a plain search field",
+        "Addons in the ink",
+        "Icons that move on hover"
+      ],
+      "source": "Derived from the Hoplite website's lines, type and nav keys (.hn__top), as Input is (the site has no fields)",
+      "exports": [
+        "InputGroup",
+        "InputGroupAddon",
+        "InputGroupButton",
+        "InputGroupInput",
+        "InputGroupText",
+        "InputGroupTextarea"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/input-group",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/input-group.md",
+      "type": "ui",
+      "title": "Input group",
+      "description": "The square field with things inside it: a 16px Phosphor glyph, quiet text, or a compact ghost hexagon key at either end, or a row of actions above or below a textarea; hover, focus and invalid belong to the whole frame.",
+      "surface": "site",
+      "kinds": [
+        "input"
+      ],
+      "requires": [
+        "theme",
+        "button",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "input-otp",
+      "useFor": "Use InputOTP for a short verification or pairing code. Set maxLength and lay out InputOTPSlot cells in one or two InputOTPGroup rows with an InputOTPSeparator between. Digits are the default; pass pattern=REGEXP_ONLY_DIGITS_AND_CHARS for letters too. Label it with a visible label and htmlFor on the id.",
+      "constraints": [
+        "Rounded cells",
+        "Satoshi or display type in the cells",
+        "An orange active cell",
+        "Cells that grow when focused"
+      ],
+      "source": "Extrapolated from the Hoplite website: the joined boxes of its changelog filter (.cl-filter), its quiet and strong lines, and Kode Mono for codes",
+      "exports": [
+        "InputOTP",
+        "InputOTPGroup",
+        "InputOTPSeparator",
+        "InputOTPSlot",
+        "REGEXP_ONLY_CHARS",
+        "REGEXP_ONLY_DIGITS",
+        "REGEXP_ONLY_DIGITS_AND_CHARS"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/input-otp",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/input-otp.md",
+      "type": "ui",
+      "title": "Input OTP",
+      "description": "A one-time code on Base UI's OTP field: joined square 40px cells on the quiet rule, a 16px Kode Mono character in each, the cell with the caret on the strong edge; orange edges when invalid.",
+      "surface": "site",
+      "kinds": [
+        "input"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "input",
+      "useFor": "Use Input for one line of text, email, numbers or a search. Put it in a Field with a label above and help or an error below; use InputGroup for a glyph or an action inside the field. Pass aria-invalid when the value fails.",
+      "constraints": [
+        "Rounded corners",
+        "A white or filled well",
+        "A placeholder used as the label",
+        "Orange anywhere but an error"
+      ],
+      "source": "Derived from the Hoplite website's lines and type (the site has no fields): the 32 percent line (--line-margin), the strong edge (--line), 14px controls",
+      "exports": [
+        "Input",
+        "inputClassName"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/input",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/input.md",
+      "type": "ui",
+      "title": "Input",
+      "description": "A square 40px field: a 32 percent edge on the ground, 14px Satoshi with 12px sides, a slate placeholder; the edge turns strong under the pointer and ink on focus, orange when invalid.",
+      "surface": "site",
+      "kinds": [
+        "input"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "item",
+      "useFor": "Use Item for rows that pair a glyph or avatar with a title and a line of detail: menu entries, repositories, integrations, settings links. Make the row a link or button with asChild so the whole row is the target. Use variant=\"ruled\" for a feature or integration list, outline for a single highlighted entry, and ItemGroup around a list.",
+      "constraints": [
+        "Rounded rows",
+        "A filled row at rest in the default variant",
+        "Bold titles",
+        "An arrow that moves on hover"
+      ],
+      "source": "The Hoplite website's nav rows (.hn__item, .hn__item-label, .hn__item-body), news card (.hn__news) and integration list (.iw-item, Wired into your stack)",
+      "exports": [
+        "Item",
+        "ItemActions",
+        "ItemContent",
+        "ItemDescription",
+        "ItemFooter",
+        "ItemGroup",
+        "ItemHeader",
+        "ItemMedia",
+        "ItemSeparator",
+        "ItemTitle"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/item",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/item.md",
+      "type": "ui",
+      "title": "Item",
+      "description": "A row of content: the nav's menu row (a 20px glyph, a 14px medium label over a quiet description, the paper under the pointer), the news card's quiet frame, a paper row, or the home page's ruled integration row with a 20px Chakra Petch title.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "separator"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "kbd",
+      "useFor": "Use Kbd to show a keyboard shortcut in a menu row, a tooltip or help text (N, Cmd K). Group the keys of one shortcut in KbdGroup. Use the symbol glyph for modifier keys where the platform is known.",
+      "constraints": [
+        "Rounded or pill caps",
+        "A filled or raised cap",
+        "A shortcut written in body type"
+      ],
+      "source": "Extrapolated from the Hoplite website: the nav's shortcut caps (drawn square, as the brand draws every frame) in Kode Mono",
+      "exports": [
+        "Kbd",
+        "KbdGroup"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/kbd",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/kbd.md",
+      "type": "ui",
+      "title": "Kbd",
+      "description": "A square 20px key cap with a quiet edge and a 12px Kode Mono label; caps in a group sit 4px apart, and on an ink tooltip they follow its light ink.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "label",
+      "useFor": "Use Label to name a control: above an Input, or wrapping (or htmlFor-paired with) a Checkbox, RadioGroupItem or Switch. Inside a Field use FieldLabel, which wires itself to the control. Mark a required field with a span data-slot=\"label-required\".",
+      "constraints": [
+        "Caps or Kode Mono labels on fields",
+        "Bold labels",
+        "A placeholder in place of a label",
+        "An orange label on an invalid field"
+      ],
+      "source": "Extrapolated from the Hoplite website: its 14px medium control type (.button labels, .pr-period__option) and the principles' 14px medium labels above fields",
+      "exports": [
+        "Label"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/label",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/label.md",
+      "type": "ui",
+      "title": "Label",
+      "description": "A field's label: 14px Satoshi medium in the ink, above its field or 8px beside a check, radio or switch; a required mark in orange; the slate when its control is disabled.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "legal-page",
+      "useFor": "Use for terms, privacy and security pages. The copy is sample text: replace it with your own.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's blog prose (.bp-prose) and rules; the site's legal pages were not captured",
+      "exports": [
+        "LegalSection",
+        "LegalPage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/legal-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/legal-page.md",
+      "type": "block",
+      "title": "Legal page",
+      "description": "The legal template: title and date over a solid rule, a numbered contents list, and the sections as prose.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "footer",
+        "site-header",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "logos-strip",
+      "useFor": "Use under the hero to show who uses the product. Replace the Acme placeholders with real customers' marks only with their permission.",
+      "constraints": [
+        "Third-party logos without permission",
+        "Logos in color",
+        "More than one row on desktop"
+      ],
+      "source": "The Hoplite website's home page strip (USED BY BUILDERS AT)",
+      "exports": [
+        "LogoEntry",
+        "LogosStrip"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/logos-strip",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/logos-strip.md",
+      "type": "block",
+      "title": "Logos strip",
+      "description": "The customer strip: a mono label between hairlines, then names in equal columns split by dashed rules over a dashed rule. Ships Acme placeholders.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "menubar",
+      "useFor": "Use for the app menu of a desktop-like tool (Thread, Edit, View, Help) where each menu holds commands with shortcuts. Build each with MenubarMenu, MenubarTrigger and MenubarContent, and the rows with the same parts as Dropdown Menu. For site navigation use Navigation Menu instead.",
+      "constraints": [
+        "Pill or square triggers",
+        "An ink-filled trigger",
+        "Rounded panels",
+        "More than five menus",
+        "Site navigation links in a menubar"
+      ],
+      "source": "The Hoplite website's header nav items (.hn__list, .hn__top: bare labels with a compact hexagon of the hover fill) and its popups (.hn__sheet, .hn__item); the bar itself is extrapolated.",
+      "exports": [
+        "Menubar",
+        "MenubarCheckboxItem",
+        "MenubarContent",
+        "MenubarGroup",
+        "MenubarItem",
+        "MenubarLabel",
+        "MenubarMenu",
+        "MenubarPortal",
+        "MenubarRadioGroup",
+        "MenubarRadioItem",
+        "MenubarSeparator",
+        "MenubarShortcut",
+        "MenubarSub",
+        "MenubarSubContent",
+        "MenubarSubTrigger",
+        "MenubarTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/menubar",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/menubar.md",
+      "type": "ui",
+      "title": "Menubar",
+      "description": "A 40px bar framed by the quiet line holding bare 14px graphite labels; under the pointer or while open, a compact hexagon of the hover wash appears behind a label and it turns ink. Each label opens the dropdown menu's square ground panel aligned to its start, and moving along the bar opens the neighbors. A long menu scrolls inside the panel and fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [
+        "menu-panel",
+        "menu-item"
+      ],
+      "requires": [
+        "theme",
+        "utils",
+        "button",
+        "dropdown-menu"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "native-select",
+      "useFor": "Use NativeSelect where the platform picker serves best: phones, long plain lists, forms that must work without script. Use Select for the brand's popup list. size=\"sm\" is the 32px field.",
+      "constraints": [
+        "A rounded or filled select",
+        "A bold caret",
+        "Options styled to imitate the brand's popup",
+        "A caret that turns or moves"
+      ],
+      "source": "Derived from the Hoplite website's lines and type, as Input is (the site has no fields)",
+      "exports": [
+        "NativeSelect",
+        "NativeSelectOptGroup",
+        "NativeSelectOption"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/native-select",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/native-select.md",
+      "type": "ui",
+      "title": "Native select",
+      "description": "The browser's select dressed as the square field: a 32 percent edge on the ground, 14px ink and a 16px Phosphor caret in the quiet gray at the end; the open list is the platform's.",
+      "surface": "site",
+      "kinds": [
+        "input"
+      ],
+      "requires": [
+        "theme",
+        "input",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "navigation-menu",
+      "useFor": "Use for a site's main navigation when a section needs a panel of links (Product, Use cases, Resources). Give each NavigationMenuItem a value, put rows of NavigationMenuLink inside NavigationMenuContent, and divide groups with ds-rule-y under a ds-label heading. A plain link in the bar takes navigationMenuTriggerStyle(). Let the menu span the header so its sheet spans the page.",
+      "constraints": [
+        "A floating rounded panel",
+        "Pill or ink triggers",
+        "An icon that moves on hover",
+        "Panels that need scrolling on desktop",
+        "More than five triggers"
+      ],
+      "source": "The Hoplite website's header nav (.hn__list, .hn__top, .hn__chevron, .hn__sheet, .hn__panel, .hn__group, .hn__heading, .hn__item, .hn__item-label, .hn__item-body)",
+      "exports": [
+        "NavigationMenu",
+        "NavigationMenuContent",
+        "NavigationMenuIndicator",
+        "NavigationMenuItem",
+        "NavigationMenuLink",
+        "NavigationMenuList",
+        "NavigationMenuTrigger",
+        "NavigationMenuViewport",
+        "navigationMenuTriggerStyle"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/navigation-menu",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/navigation-menu.md",
+      "type": "ui",
+      "title": "Navigation Menu",
+      "description": "The site's header nav: bare 14px graphite triggers with a 12px chevron that turns over, a compact hexagon of the hover wash behind the open one, and a full-width square sheet of the ground under the bar, ruled off by the quiet line. Links are rows of a 20px glyph, a 14px medium label and a quiet line, the row under the pointer on the paper; groups sit under Kode Mono eyebrows divided by dashed rules.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "surface",
+        "button"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "not-found-page",
+      "useFor": "Use as the app's not-found route.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's type, frames and blog diagrams; the site's 404 was not captured",
+      "exports": [
+        "NotFoundPage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/not-found-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/not-found-page.md",
+      "type": "block",
+      "title": "Not found page",
+      "description": "The 404 template: mono code, display line and lead, two keys back, and a branch drawing ending at the missing page, inside corner ticks.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "footer",
+        "site-header",
+        "brand-marks",
+        "button",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "pagination",
+      "useFor": "Use under a list or table that is split into pages (the changelog, the blog, a table of runs). Show the first and last pages, one or two either side of the current one and PaginationEllipsis for the gaps. Mark the current page with isActive and a page that leads nowhere with aria-disabled. Use bar to center it in a 48px row under a table.",
+      "constraints": [
+        "A filled ink key for the current page",
+        "Round or square page keys",
+        "Arrows that nudge on hover",
+        "More than about seven page keys at once"
+      ],
+      "source": "Extrapolated from the Hoplite website's compact keys (.button--s, .button--line) and nav items (.hn__top); the site pages its changelog and blog without numbered keys",
+      "exports": [
+        "Pagination",
+        "PaginationContent",
+        "PaginationEllipsis",
+        "PaginationItem",
+        "PaginationLink",
+        "PaginationNext",
+        "PaginationPrevious"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/pagination",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/pagination.md",
+      "type": "ui",
+      "title": "Pagination",
+      "description": "32px ghost hexagon page keys whose wash hexagon appears under the pointer, the current page as the outlined hexagon, and Previous and Next with still arrows.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "button",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "popover",
+      "useFor": "Use for a little interactive content tied to a control: a short form (Add seats), an explanation behind an info glyph, a picker. Put PopoverTitle and PopoverDescription in PopoverHeader. For plain text on hover use Tooltip; for a list of actions use Dropdown Menu; for a task that needs full attention use Dialog.",
+      "constraints": [
+        "Rounded corners",
+        "A white panel",
+        "An arrow",
+        "A long form",
+        "Content that only appears on hover"
+      ],
+      "source": "The Hoplite website's popups (.hn__sheet: the ground panel and quiet line) and nav rows (.hn__item-label, .hn__item-body: 14px medium over 14px quiet).",
+      "exports": [
+        "Popover",
+        "PopoverAnchor",
+        "PopoverContent",
+        "PopoverDescription",
+        "PopoverHeader",
+        "PopoverTitle",
+        "PopoverTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/popover",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/popover.md",
+      "type": "ui",
+      "title": "Popover",
+      "description": "A square 288px panel of the ground with 16px of air, a quiet hairline and a long soft cast, 8px from its trigger: a 14px medium title over a quiet 14px line, as the nav's rows read, then any small form or detail. It opens from its trigger with a fade and a slight scale.",
+      "surface": "site",
+      "kinds": [
+        "popover-panel"
+      ],
+      "requires": [
+        "theme",
+        "utils",
+        "surface"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "pricing-page",
+      "useFor": "Start a pricing page from this; pass your plans and compare groups.",
+      "constraints": [
+        "Copy from real people or third parties",
+        "Sections reordered so two closing bands meet",
+        "Values outside the brand tokens"
+      ],
+      "source": "The Hoplite website's pricing page (/pricing)",
+      "exports": [
+        "CompareGroup",
+        "PricingPage"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/pricing-page",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/pricing-page.md",
+      "type": "block",
+      "title": "Pricing page",
+      "description": "The pricing template: the plans with the billing toggle, the compare table with filled hexagons and dashes, the questions and the closing band.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "cta",
+        "faq",
+        "footer",
+        "pricing-table",
+        "site-header",
+        "table",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "pricing-table",
+      "useFor": "Use on the pricing page. Mark one plan's key as primary (the ink hexagon); the rest are outlined. Prices take a monthly and yearly value, or one value.",
+      "constraints": [
+        "Two primary keys",
+        "A highlighted plan with a colored fill",
+        "Check marks instead of hexagons"
+      ],
+      "source": "The Hoplite website's pricing page (.pr-hero, .pr-plans: Free, Plus, Team, Enterprise)",
+      "exports": [
+        "Plan",
+        "PricingTable"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/pricing-table",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/pricing-table.md",
+      "type": "block",
+      "title": "Pricing table",
+      "description": "The pricing page's plans: heading, lead and the billing toggle, then every plan in one stone frame split by hairlines, each with its node row, name, price, note, key and features or terms.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "brand-marks",
+        "button",
+        "toggle-group",
+        "typography",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "progress",
+      "useFor": "Use Progress for a known amount: usage against a plan, a clone or an upload. Put ProgressLabel and ProgressValue inside it to show what it measures. Use variant=\"accent\" only near a limit. value={null} shows work with no known end.",
+      "constraints": [
+        "A rounded or thick bar",
+        "A striped or glowing fill",
+        "The orange for a normal amount"
+      ],
+      "source": "The Hoplite website's plan usage meter (.pa-usage, .pa-usage__bar), drawn square on the quiet line",
+      "exports": [
+        "Progress",
+        "ProgressLabel",
+        "ProgressValue"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/progress",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/progress.md",
+      "type": "ui",
+      "title": "Progress",
+      "description": "A square usage bar: a 2px quiet track with the ink filling it to the value, or the orange when a limit is close; a 14px medium label and a Kode Mono value can sit above it.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "radio-group",
+      "useFor": "Use RadioGroup for one choice from two to five visible options (what happens when an agent finishes). Wrap each RadioGroupItem with its text in a Label. For a short segmented switch use ToggleGroup or Tabs; for a long list use Select.",
+      "constraints": [
+        "Round radios",
+        "An orange chosen radio",
+        "A radio that grows or bounces when chosen",
+        "Radios with no visible label"
+      ],
+      "source": "The Hoplite website's hexagon bullets (.pr-features svg, .bp-list__mark: a regular hexagon in a 1px --line stroke) and the principles (a radio is a hexagon that fills)",
+      "exports": [
+        "RadioGroup",
+        "RadioGroupItem"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/radio-group",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/radio-group.md",
+      "type": "ui",
+      "title": "Radio group",
+      "description": "One choice from a list: each radio a point-up hexagon outlined in the strong line, like the site's hexagon bullets; chosen, it fills with the ink around a small hexagon of the ground.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "resizable",
+      "useFor": "Use ResizablePanelGroup with ResizablePanel and ResizableHandle for a split view people tune (a thread and its checks, a diff and a terminal). Give panels a defaultSize and minSize in percent; nest a vertical group inside a panel for a grid. Add withHandle when the edge should look grabbable.",
+      "constraints": [
+        "A thick or colored divider",
+        "A rounded grip",
+        "Animated resizing",
+        "Panels that collapse to nothing without a minSize"
+      ],
+      "source": "Extrapolated from the Hoplite website: the quiet rule between the product window's thread and side panel (.pa-split) made draggable",
+      "exports": [
+        "ResizableHandle",
+        "ResizablePanel",
+        "ResizablePanelGroup"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/resizable",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/resizable.md",
+      "type": "ui",
+      "title": "Resizable",
+      "description": "Panels with a draggable edge: the quiet 1px rule between them turns to the strong line under the pointer and the ink while dragged or focused, with an optional square grip tab. Drag it or use the arrow keys.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "scroll-area",
+      "useFor": "Use ScrollArea for a fixed-height list or log inside a frame (agent runs, a thread's messages, a branch row). Give it a height or max height; add ScrollBar orientation=\"horizontal\" for a row that scrolls sideways.",
+      "constraints": [
+        "A rounded or pill thumb",
+        "A thumb that grows on hover",
+        "A dark or colored track",
+        "Scroll areas nested in scroll areas"
+      ],
+      "source": "Extrapolated from the Hoplite website: its quiet and strong rules (16, 32 and 70 percent lines) applied to Base UI's scroll area",
+      "exports": [
+        "ScrollArea",
+        "ScrollBar"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/scroll-area",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/scroll-area.md",
+      "type": "ui",
+      "title": "Scroll Area",
+      "description": "A region that scrolls inside the page with a thin square bar: a 4px thumb of the field line in a 12px lane along the edge, turning to the strong line under the pointer or while it is dragged. Content past an edge fades over 24px there (fade-y; pass orientation=\"horizontal\" for fade-x on a row).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "select",
+      "useFor": "Use to choose one value from five to about fifteen (a model, a sandbox size, a base branch). Give it a label or aria-label and a placeholder when nothing is chosen; group long lists with SelectGroup and SelectLabel. Pass items (value and label) to Select, or write SelectItems as children and the trigger shows the chosen label. Give it a name so its value is in the form's FormData; size=\"sm\" is the 32px toolbar field. Built on Base UI Select.",
+      "constraints": [
+        "Rounded corners on the trigger or the list",
+        "A check at the start of a row",
+        "Animating the highlight between rows",
+        "An orange chosen row",
+        "A white list on the gray ground"
+      ],
+      "source": "Extrapolated from the Hoplite website: the field lines and 14px controls, and the nav popup (.hn__panel, .hn__item: rows on the hover wash, the quiet hairline)",
+      "exports": [
+        "Select",
+        "SelectContent",
+        "SelectGroup",
+        "SelectItem",
+        "SelectLabel",
+        "SelectScrollDownButton",
+        "SelectScrollUpButton",
+        "SelectSeparator",
+        "SelectTrigger",
+        "SelectValue"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/select",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/select.md",
+      "type": "ui",
+      "title": "Select",
+      "description": "The square 40px field with a caret, opening the site's popup: a square panel of the ground with a hairline and a long soft cast, 36px rows, the highlighted row on the hover wash and a check at the end of the chosen one. A long list fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [
+        "input",
+        "menu-panel",
+        "menu-item"
+      ],
+      "requires": [
+        "theme",
+        "surface",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "separator",
+      "useFor": "Use Separator between groups in a list, a menu or a toolbar, and the dashed variant for a guide inside a band or between plans. Rules are decorative unless decorative={false}.",
+      "constraints": [
+        "A heavy or dark rule",
+        "A colored rule",
+        "Rules around every row where a list already rules them"
+      ],
+      "source": "The Hoplite website's quiet rules (--line-quiet under the header and between FAQ rows) and dashed guides (--rule-dash-y, .pr-plan__mark)",
+      "exports": [
+        "Separator"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/separator",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/separator.md",
+      "type": "ui",
+      "title": "Separator",
+      "description": "The site's rules: a quiet 16 percent 1px line, or the section guide's dashes (10px on an 18px period), across or down.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "sheet",
+      "useFor": "Use for detail or settings that sit beside the page (a pull request's checks, sandbox settings) without leaving it. Open from the right by default; side=\"left\" for navigation, \"top\" or \"bottom\" for a band. Put the title in SheetHeader and the actions in SheetFooter with one ink Button. On phones use Drawer for a swipeable bottom sheet.",
+      "constraints": [
+        "Rounded corners",
+        "A white panel",
+        "A sheet wider than half the screen on desktop",
+        "A sheet that opens another sheet",
+        "Easing in"
+      ],
+      "source": "Extrapolated from the Hoplite website: the square ground panel and quiet line of its popups (.hn__sheet), the dock curve its frames slide on (--dock) and its long soft cast.",
+      "exports": [
+        "Sheet",
+        "SheetClose",
+        "SheetContent",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetOverlay",
+        "SheetPortal",
+        "SheetTitle",
+        "SheetTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/sheet",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/sheet.md",
+      "type": "ui",
+      "title": "Sheet",
+      "description": "A square full-height panel of the ground, 384px wide, ruled off by the quiet line and casting the long soft shadow over the page under the ink at 32 percent, with a Chakra Petch light 20px title, a 14px graphite description, footer keys at the end and a compact ghost X. It slides its own width on the dock curve. A long body scrolls inside the panel and fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "surface",
+        "button"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "sidebar",
+      "useFor": "Wrap the app in SidebarProvider; put Sidebar (SidebarHeader, SidebarContent with SidebarGroup, SidebarGroupLabel and SidebarMenu rows, SidebarFooter, SidebarRail) beside SidebarInset holding the page and its SidebarTrigger. Mark the current row with isActive, give rows a tooltip for the icon rail (collapsible=\"icon\"), and use SidebarMenuBadge for a count. Cmd or Ctrl and B toggles it.",
+      "constraints": [
+        "A dark or white rail on the gray ground",
+        "Pill or rounded rows",
+        "Bold or caps row labels",
+        "Icons that move on hover",
+        "An orange current row",
+        "Animating the keyboard toggle"
+      ],
+      "source": "The Hoplite website's blog post rail (.bp-rail, .bp-rail__label, .bp-rail__link), changelog rail (.cl-rail, .cl-rail__label) and nav items (.hn__top: graphite label turning ink on the hover wash)",
+      "exports": [
+        "Sidebar",
+        "SidebarContent",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarHeader",
+        "SidebarInput",
+        "SidebarInset",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubItem",
+        "SidebarProvider",
+        "SidebarRail",
+        "SidebarSeparator",
+        "SidebarTrigger",
+        "useSidebar"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/sidebar",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/sidebar.md",
+      "type": "ui",
+      "title": "Sidebar",
+      "description": "The app's rail: 288px of the ground with a quiet rule on its inner edge, Kode Mono group labels, 36px rows of a 20px glyph and a 14px graphite label that take the hover wash and turn ink under the pointer or when current, Kode Mono counts, nested rows on a quiet rule, and a ruled foot. It narrows to its glyphs or slides away, and becomes a sheet on a phone. The body fades at the edge it scrolls past (fade-y), so no row is cut off under the header.",
+      "surface": "site",
+      "kinds": [
+        "nav-link"
+      ],
+      "requires": [
+        "theme",
+        "button",
+        "input",
+        "surface",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "site-header",
+      "useFor": "Use at the top of every marketing page. Pass links, the sign-in link and the one action (Start building); pass null to drop either.",
+      "constraints": [
+        "Two ink hexagons in the header",
+        "A filled or shadowed header bar",
+        "Nav items in capitals"
+      ],
+      "source": "The Hoplite website's header (.site-header, every page of hoplite-website-fawn.vercel.app)",
+      "exports": [
+        "NavLink",
+        "SiteHeader"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/site-header",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/site-header.md",
+      "type": "block",
+      "title": "Site header",
+      "description": "The site's header: the lockup, the nav items as ghost keys, Sign in and the compact ink hexagon at the right; below 768px the nav folds into a sheet behind a menu key.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "brand-marks",
+        "button",
+        "sheet",
+        "utils"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "skeleton",
+      "useFor": "Use Skeleton in the shape of the content that is coming (lines of text, an avatar hexagon, a key) when it takes more than a moment to load. Size each block like the real content; clip it with ds-hex-mark or ds-hex for avatars and keys.",
+      "constraints": [
+        "A shimmer sweep",
+        "Rounded blocks",
+        "A skeleton for content that loads instantly"
+      ],
+      "source": "Extrapolated from the Hoplite website: its square frames and the hover wash (--panel)",
+      "exports": [
+        "Skeleton"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/skeleton",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/skeleton.md",
+      "type": "ui",
+      "title": "Skeleton",
+      "description": "A square block of the hover wash that breathes softly while content loads, and holds still with reduced motion.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "slider",
+      "useFor": "Use Slider to pick a number from a range where the exact value matters less than its place (concurrent sandboxes, memory). Show the value as text beside its label. Pass two values for a range. For an exact number use Input with type=\"number\".",
+      "constraints": [
+        "A thick or rounded track",
+        "A round thumb",
+        "A thumb that grows on hover or drag",
+        "An orange range"
+      ],
+      "source": "Extrapolated from the Hoplite website: its strong line (--line), ink (--charcoal on the light ground) and hexagonal marks (.pr-features svg)",
+      "exports": [
+        "Slider"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/slider",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/slider.md",
+      "type": "ui",
+      "title": "Slider",
+      "description": "A 1px track of the strong line with the chosen range drawn as a 2px ink line and a 16px point-up ink hexagon as the thumb; it follows the pointer and never changes shape while dragged.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "sonner",
+      "useFor": "Mount Toaster once near the root and call toast() from sonner anywhere: toast(\"Sandbox paused\", { description, action }), toast.success, toast.error, toast.warning, toast.info and toast.promise for work in flight. Keep titles short and say what happened; give an undo action where one exists.",
+      "constraints": [
+        "Rounded toasts",
+        "Colored toast backgrounds",
+        "More than one action",
+        "A toast for something people must act on (use a dialog)",
+        "Bouncy or slow motion"
+      ],
+      "source": "Extrapolated from the Hoplite website's popups (the nav sheet and menus, .hn__): the square ground panel with its hairline and long cast, and its compact keys (.button--s)",
+      "exports": [
+        "Toaster"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/sonner",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/sonner.md",
+      "type": "ui",
+      "title": "Sonner",
+      "description": "Toasts: square panels of the ground with the floating shadow, a 16px status glyph, a 14px medium title over a quiet description, a compact ink hexagon action and a ghost close glyph. Stacked at the bottom right; they rise in 240ms and leave in 200ms. A long description scrolls and fades at the edge it scrolls past (fade-y).",
+      "surface": "site",
+      "kinds": [
+        "popover-panel"
+      ],
+      "requires": [
+        "theme"
+      ],
+      "packages": [
+        "@phosphor-icons/react",
+        "sonner"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "spinner",
+      "useFor": "Use Spinner for work that takes a few seconds with no known end (starting a thread, running checks), inside a disabled key, a tag or beside a line of text. For work with a known end, use Progress.",
+      "constraints": [
+        "A round spinner",
+        "An orange spinner",
+        "A spinner larger than 32px",
+        "A spinner for content that should show a Skeleton"
+      ],
+      "source": "Extrapolated from the Hoplite website: the FAQ's hexagon mark (.faq__hex) set turning",
+      "exports": [
+        "Spinner"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/spinner",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/spinner.md",
+      "type": "ui",
+      "title": "Spinner",
+      "description": "A 16px hexagon outline with a third of its edge drawn, turning steadily; it takes the color of its text and breathes in place with reduced motion.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "surface",
+      "useFor": "Wrap an embedded panel or a preview in Surface so its overlays render inside it. Pick night for a dark band or a dark preview, paper for a card that needs to lift off the ground.",
+      "constraints": [],
+      "exports": [
+        "Surface",
+        "usePortalContainer"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/r/surface.md",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/surface.md",
+      "type": "lib",
+      "title": "Surface",
+      "description": "A ground (the warm gray, the paper, or the night: the dark theme scoped to one element) that also keeps the dialogs, menus and tooltips opened inside it.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "switch",
+      "useFor": "Use Switch for a setting that applies at once (auto-merge, notifications). Put it at the end of a setting row with the setting's name, or wrap it with its label in a Label. For a choice saved with a form use Checkbox.",
+      "constraints": [
+        "A square or hexagonal track",
+        "A track in any on color but the orange",
+        "A knob with a drop shadow",
+        "A switch that applies only on submit"
+      ],
+      "source": "The Hoplite website's app demo switches (.pa-sw: 28 by 16, radius 8px, a 12px --day knob 2px in, --orange when on; .tt-sw: 20 by 12 with an 8px knob)",
+      "exports": [
+        "Switch"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/switch",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/switch.md",
+      "type": "ui",
+      "title": "Switch",
+      "description": "The product's switch from the site's app demo: a 28 by 16 rounded track in the off gray that turns orange when on, with a 12px knob of the ground that slides 12px. sm is the 20 by 12 switch.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "table",
+      "useFor": "Use Table for records people read across (threads, seats, runs) and variant=\"compare\" for a plan or feature comparison: TableGroup opens each section, row names are TableHead with scope=\"row\", and TableYes and TableNo mark what is included. Use variant=\"prose\" inside an article. Keep the shadcn parts (TableHeader, TableBody, TableRow, TableHead, TableCell, TableFooter, TableCaption); mark a chosen row with data-state=\"selected\". For sorting, selection and pages use DataTable.",
+      "constraints": [
+        "A boxed or rounded frame",
+        "Zebra stripes or filled head rows",
+        "Bold heads",
+        "A check icon or an orange mark for yes",
+        "Rows that move under the pointer"
+      ],
+      "source": "The Hoplite website's pricing comparison (.pr-table, .pr-table__group, .pr-yes, .pr-no on /pricing) and the blog table (.bp-table)",
+      "exports": [
+        "Table",
+        "TableBody",
+        "TableCaption",
+        "TableCell",
+        "TableFooter",
+        "TableGroup",
+        "TableHead",
+        "TableHeader",
+        "TableNo",
+        "TableRow",
+        "TableYes"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/table",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/table.md",
+      "type": "ui",
+      "title": "Table",
+      "description": "Ruled, not boxed: Kode Mono column heads over the strong rule and 48px rows of 14px ink with a quiet rule between them; the compare variant is the pricing table (Chakra Petch 20px plan heads, group rows, a filled ink hexagon for yes and a slate dash for no) and the prose variant the blog's 16px table. A table wider than its frame scrolls sideways and fades at the edge it scrolls past (fade-x).",
+      "surface": "site",
+      "kinds": [
+        "table"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "tabs",
+      "useFor": "Use Tabs to switch between views of the same content (Monthly and Yearly prices, Desktop and Phone previews). Use the default variant for two to four short choices and variant=\"boxed\" for a filter row (All, Features, Fixes). Put each view in TabsContent; controlled tabs take value and onValueChange.",
+      "constraints": [
+        "Underlined tabs",
+        "A rounded track",
+        "More than one chosen tab",
+        "Panels that slide or fade in"
+      ],
+      "source": "The Hoplite website's pricing period switch (.pr-period: Monthly, Yearly, save 17%) and changelog filter (.cl-filter)",
+      "exports": [
+        "Tabs",
+        "TabsList",
+        "TabsTrigger",
+        "TabsContent"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/tabs",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/tabs.md",
+      "type": "ui",
+      "title": "Tabs",
+      "description": "Segmented choices: an outlined hexagon holding 32px tabs, the chosen one a filled ink hexagon that slides to it (the pricing period switch), or joined square boxes with the chosen one filled ink (the changelog filter).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "testimonial",
+      "useFor": "Use one per page between feature sections. Quote real customers with permission; otherwise keep the Acme placeholder.",
+      "constraints": [
+        "Invented names or photos of people",
+        "Star ratings",
+        "More than one quote mark in orange"
+      ],
+      "source": "The Hoplite website's frames and type (.band__frame, .heading); the site carries no customer quotes of its own",
+      "exports": [
+        "Testimonial"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/testimonial",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/testimonial.md",
+      "type": "block",
+      "title": "Testimonial",
+      "description": "A quote in Chakra Petch light inside corner ticks, an orange opening mark and the attribution as a mono label: a role and a company, never an invented person.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "textarea",
+      "useFor": "Use Textarea for free text longer than a line (a task for an agent, a review comment). Put it in a Field with a label above. For a message composer with actions inside the frame use InputGroup with InputGroupTextarea.",
+      "constraints": [
+        "Rounded corners",
+        "A white or filled well",
+        "A fixed height that hides what was typed",
+        "A placeholder used as the label"
+      ],
+      "source": "Derived from the Hoplite website's lines and type, as Input is (the site has no fields): the 32 percent line (--line-margin), the strong edge (--line), 14px controls",
+      "exports": [
+        "Textarea"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/textarea",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/textarea.md",
+      "type": "ui",
+      "title": "Textarea",
+      "description": "The square field for several lines: a 32 percent edge on the ground, 14px Satoshi on 20px lines, 96px tall at first and growing with its content; strong edge under the pointer, ink on focus, orange when invalid.",
+      "surface": "site",
+      "kinds": [
+        "input"
+      ],
+      "requires": [
+        "theme",
+        "input",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "toast",
+      "useFor": "Prefer Sonner for new work. Use this when an app already calls useToast or toast({ title, description, action }) from shadcn's toast: mount Toaster once, pass a ToastAction with altText as the action, variant=\"destructive\" for a failure, or type success, warning, info or loading for a glyph.",
+      "constraints": [
+        "Red or orange panels",
+        "Rounded toasts",
+        "More than one action",
+        "Toasts that never time out for routine news"
+      ],
+      "source": "Extrapolated from the Hoplite website's popups (the nav sheet and menus, .hn__): the square ground panel with its hairline and long cast, and its compact keys (.button--s)",
+      "exports": [
+        "Toast",
+        "ToastAction",
+        "ToastClose",
+        "ToastDescription",
+        "Toaster",
+        "ToastProvider",
+        "ToastTitle",
+        "ToastViewport",
+        "dismiss",
+        "toast",
+        "useToast",
+        "ToastActionElement",
+        "ToastProps"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/toast",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/toast.md",
+      "type": "ui",
+      "title": "Toast",
+      "description": "shadcn's older toast API on Base UI's toast, with the Sonner look: a square ground panel with the floating shadow, a 14px medium title over a quiet description, a compact outlined hexagon action and a ghost close glyph. Destructive toasts lead with the orange warning glyph.",
+      "surface": "site",
+      "kinds": [
+        "popover-panel"
+      ],
+      "requires": [
+        "theme",
+        "utils",
+        "surface"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "toggle-group",
+      "useFor": "Use ToggleGroup for a set of related toggles: type=\"single\" (the default) for one choice that changes a view in place, type=\"multiple\" for filters that combine. Use variant=\"outline\" for filter rows and icon toolbars. To switch between panels of content use Tabs.",
+      "constraints": [
+        "A rounded track",
+        "Separate floating keys in the default variant",
+        "An orange chosen state",
+        "A chosen key that grows or bolds"
+      ],
+      "source": "The Hoplite website's pricing period switch (.pr-period, .pr-period__option) and changelog filter (.cl-filter, .cl-filter__option)",
+      "exports": [
+        "ToggleGroup",
+        "ToggleGroupItem"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/toggle-group",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/toggle-group.md",
+      "type": "ui",
+      "title": "Toggle group",
+      "description": "Segmented toggles: an outlined hexagon holding compact hexagons with the chosen one filled ink (the pricing period switch), or joined square boxes with the chosen ones filled ink (the changelog filter).",
+      "surface": "site",
+      "kinds": [
+        "tabs"
+      ],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "toggle",
+      "useFor": "Use Toggle for one on or off tool in a toolbar (watch a thread, bold). Give icon-only toggles an aria-label. For a set of related toggles use ToggleGroup; for a setting use Switch.",
+      "constraints": [
+        "A square or rounded toggle",
+        "An orange pressed state",
+        "A toggle that scales on press",
+        "Bold labels when pressed"
+      ],
+      "source": "The Hoplite website's nav items (.hn__top), its outlined key (.button--line) and the chosen pricing period (.pr-period__option:has(:checked))",
+      "exports": [
+        "Toggle",
+        "toggleVariants"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/toggle",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/toggle.md",
+      "type": "ui",
+      "title": "Toggle",
+      "description": "A two-state key shaped like the site's nav item: a compact 32px hexagon whose hover wash appears under the pointer; pressed, it is a filled ink hexagon with a ground-colored label. outline is the outlined hexagon that fills with the ink.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "tooltip",
+      "useFor": "Use to name an icon-only control (New thread, Open in terminal) or add one short line about a control. Wrap a toolbar in TooltipProvider so moving along it opens each tooltip at once. Use asChild or render on TooltipTrigger to attach it to a Button.",
+      "constraints": [
+        "Information found nowhere else",
+        "Interactive content",
+        "Rounded corners or an arrow",
+        "Text over two lines",
+        "A tooltip on a disabled control"
+      ],
+      "source": "Extrapolated from the Hoplite website's ink (the main key's fill, .button--primary) and its 12px labels; the site has no tooltips.",
+      "exports": [
+        "Tooltip",
+        "TooltipContent",
+        "TooltipProvider",
+        "TooltipTrigger"
+      ],
+      "client": true,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/tooltip",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/tooltip.md",
+      "type": "ui",
+      "title": "Tooltip",
+      "description": "A small square panel of the ink with 12px Satoshi in the ground color, 8px by 12px of air, 8px from its trigger. It waits 400ms the first time, then neighbors open at once; it only fades, and not at all between tooltips.",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils",
+        "surface"
+      ],
+      "packages": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "name": "typography",
+      "useFor": "Use the Typography parts for page and section headings, leads and articles outside a component. One accent word per headline at most. Use TypographyProse around rendered Markdown (a blog post, docs), TypographyEyebrow for the label above a heading.",
+      "constraints": [
+        "Bold or semibold text",
+        "A fourth typeface",
+        "Sizes off the scale",
+        "Gradient or glowing accent words",
+        "Round list bullets"
+      ],
+      "source": "The Hoplite website's .display, .heading, .lead, .bp-prose (h2, h3, blockquote, code, a) and .bp-list (.bp-list__mark)",
+      "exports": [
+        "TypographyAccent",
+        "TypographyBlockquote",
+        "TypographyDisplay",
+        "TypographyEyebrow",
+        "TypographyH1",
+        "TypographyH2",
+        "TypographyH3",
+        "TypographyH4",
+        "TypographyInlineCode",
+        "TypographyLarge",
+        "TypographyLead",
+        "TypographyList",
+        "TypographyMuted",
+        "TypographyP",
+        "TypographyProse",
+        "TypographySmall",
+        "TypographyTable"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/components/typography",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/typography.md",
+      "type": "ui",
+      "title": "Typography",
+      "description": "The site's type: Chakra Petch light headings at 56, 44, 32 and 24px, an 18px light graphite lead, 16px body, the Kode Mono eyebrow, the flat orange accent word, dashed-rule quotes, hexagon-bulleted lists, Kode Mono inline code and a whole-article prose style. A table wider than the column scrolls sideways and fades at the edge it scrolls past (fade-x).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [
+        "theme",
+        "utils"
+      ],
+      "packages": []
+    },
+    {
+      "schemaVersion": 1,
+      "name": "utils",
+      "useFor": "Compose every component's classes with cn so a caller's className replaces the default it conflicts with.",
+      "constraints": [],
+      "exports": [
+        "cn",
+        "slot"
+      ],
+      "client": false,
+      "docsUrl": "https://hoplite-ds.vercel.app/r/utils.md",
+      "markdownUrl": "https://hoplite-ds.vercel.app/r/utils.md",
+      "type": "lib",
+      "title": "cn",
+      "description": "Merges class names and resolves conflicts between the brand's own scales (text-body-sm, rounded-control, shadow-floating).",
+      "surface": "site",
+      "kinds": [],
+      "requires": [],
+      "packages": [
+        "clsx",
+        "tailwind-merge"
+      ]
+    }
+  ]
+}

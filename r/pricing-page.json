@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "name": "pricing-page",
+  "useFor": "Start a pricing page from this; pass your plans and compare groups.",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's pricing page (/pricing)",
+  "exports": [
+    "CompareGroup",
+    "PricingPage"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/pricing-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/pricing-page.md",
+  "examples": [
+    {
+      "path": "examples/pricing-page.tsx",
+      "content": "import { PricingPage } from \"@/components/blocks/pricing-page\";\n\nexport function Preview() {\n  return <PricingPage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "pricing-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/pricing-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Pricing page",
+  "description": "The pricing template: the plans with the billing toggle, the compare table with filled hexagons and dashes, the questions and the closing band.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "cta",
+    "faq",
+    "footer",
+    "pricing-table",
+    "site-header",
+    "table",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/pricing-page.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Cta } from \"@/components/blocks/cta\";\nimport { Faq } from \"@/components/blocks/faq\";\nimport { Footer } from \"@/components/blocks/footer\";\nimport { PricingTable } from \"@/components/blocks/pricing-table\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { Table, TableBody, TableCell, TableGroup, TableHead, TableHeader, TableNo, TableRow, TableYes } from \"@/components/ui/table\";\nimport { TypographyH2, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type CompareGroup = { title: string; rows: [label: string, ...values: (string | boolean)[]][] };\n\nconst PLANS = [\"Free\", \"Plus\", \"Team\", \"Enterprise\"];\nconst GROUPS: CompareGroup[] = [\n  { title: \"Usage\", rows: [[\"Included usage\", \"Monthly, with a daily limit\", \"Generous, per seat\", \"Most, per seat\", \"Custom\"], [\"All platform models\", true, true, true, true], [\"Your own model subscription\", true, true, true, true], [\"Prepaid credits beyond that\", false, true, true, true], [\"Usage charts and analytics\", false, true, true, true]] },\n  { title: \"Agents and sandboxes\", rows: [[\"Concurrent sandboxes\", \"5 sessions\", \"50 per seat\", \"150 per seat\", \"Custom\"], [\"Largest sandbox\", \"2 vCPU, 8 GiB\", \"8 vCPU, 32 GiB\", \"16 vCPU, 64 GiB\", \"Custom\"], [\"New threads per hour\", \"50\", \"250\", \"500\", \"Custom\"], [\"Projects\", \"5\", \"Unlimited\", \"Unlimited\", \"Unlimited\"]] },\n];\n\n// The pricing page: the plans with their billing toggle, the comparison under a dashed section rule (the heading at\n// the left, its note at the right, the compare table with filled hexagons for included and dashes for not), the\n// questions and the closing band.\nfunction PricingPage({ plans = PLANS, groups = GROUPS, className }: { plans?: string[]; groups?: CompareGroup[]; className?: string }) {\n  return (\n    <div data-slot=\"pricing-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main>\n        <PricingTable />\n        <section className=\"w-full py-20 sm:py-32 [background:repeating-linear-gradient(90deg,var(--ds-color-border-default)_0_10px,transparent_0_18px)_left_top/100%_1px_no-repeat]\">\n          <div className=\"mx-auto grid w-full max-w-320 gap-12\">\n            <div className=\"grid gap-6 md:grid-cols-2 md:items-end\">\n              <TypographyH2>Compare every plan</TypographyH2>\n              <TypographyLead>The plan names stay pinned while you read down.</TypographyLead>\n            </div>\n            <div className=\"overflow-x-auto fade-x\">\n              <Table variant=\"compare\" className=\"min-w-180\">\n                <TableHeader>\n                  <TableRow>\n                    <TableHead>\n                      <span className=\"sr-only\">Feature</span>\n                    </TableHead>\n                    {plans.map((p) => (\n                      <TableHead key={p}>{p}</TableHead>\n                    ))}\n                  </TableRow>\n                </TableHeader>\n                {groups.map((g) => (\n                  <TableBody key={g.title}>\n                    <TableGroup colSpan={plans.length + 1}>{g.title}</TableGroup>\n                    {g.rows.map(([label, ...values]) => (\n                      <TableRow key={label}>\n                        <TableHead scope=\"row\">{label}</TableHead>\n                        {values.map((v, i) => (\n                          <TableCell key={i}>{v === true ? <TableYes /> : v === false ? <TableNo /> : v}</TableCell>\n                        ))}\n                      </TableRow>\n                    ))}\n                  </TableBody>\n                ))}\n              </Table>\n            </div>\n          </div>\n        </section>\n        <Faq />\n        <Cta />\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { PricingPage };\n"
+    }
+  ]
+}

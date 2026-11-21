@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "name": "direction",
+  "useFor": "Wrap an app or a region whose text reads right to left in DirectionProvider with dir=\"rtl\", and set dir=\"rtl\" on the element it wraps too so the page's own layout flips with it.",
+  "constraints": [
+    "Flipping layout with transforms",
+    "Setting the provider without the matching dir attribute",
+    "Mirroring icons that do not point"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: a wrapper around Base UI's DirectionProvider with no look of its own",
+  "exports": [
+    "DirectionProvider",
+    "useDirection"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/direction",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/direction.md",
+  "examples": [
+    {
+      "path": "examples/direction.tsx",
+      "content": "\"use client\";\n\nimport { DirectionProvider } from \"@/components/ui/direction\";\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from \"@/components/ui/tabs\";\n\nexport function Preview() {\n  return (\n    <DirectionProvider dir=\"rtl\">\n      <div dir=\"rtl\" className=\"grid gap-4\">\n        <p className=\"ds-label\">الفوترة</p>\n        <Tabs defaultValue=\"monthly\">\n          <TabsList aria-label=\"فترة الفوترة\">\n            <TabsTrigger value=\"monthly\">شهري</TabsTrigger>\n            <TabsTrigger value=\"yearly\">سنوي</TabsTrigger>\n          </TabsList>\n          <TabsContent value=\"monthly\" className=\"text-body-sm text-fg-secondary\">\n            ٢٠ دولارًا لكل مقعد، تُدفع كل شهر.\n          </TabsContent>\n          <TabsContent value=\"yearly\" className=\"text-body-sm text-fg-secondary\">\n            تُدفع مرة واحدة في السنة.\n          </TabsContent>\n        </Tabs>\n      </div>\n    </DirectionProvider>\n  );\n}\n\nexport function LeftToRight() {\n  return (\n    <DirectionProvider dir=\"ltr\">\n      <div dir=\"ltr\" className=\"grid gap-4\">\n        <p className=\"ds-label\">Billing</p>\n        <Tabs defaultValue=\"monthly\">\n          <TabsList aria-label=\"Billing period\">\n            <TabsTrigger value=\"monthly\">Monthly</TabsTrigger>\n            <TabsTrigger value=\"yearly\">Yearly</TabsTrigger>\n          </TabsList>\n        </Tabs>\n      </div>\n    </DirectionProvider>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "LeftToRight"
+      ],
+      "requires": [
+        "direction",
+        "tabs"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/direction/Preview"
+        },
+        {
+          "name": "LeftToRight",
+          "url": "https://hoplite-ds.vercel.app/preview/direction/LeftToRight"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Direction",
+  "description": "Sets the reading direction (ltr or rtl) for every Base UI part inside it, so tabs, menus, sliders and scroll areas flip for right-to-left text. It draws nothing of its own.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/direction.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { DirectionProvider as BaseDirectionProvider, useDirection } from \"@base-ui/react/direction-provider\";\n\n// Sets the reading direction (ltr or rtl) for every Base UI part inside it, so menus, sliders, tabs and scroll areas\n// flip for right-to-left text. It draws nothing of its own; set dir on the element it wraps too. `dir` is kept beside\n// Base UI's `direction` so code written for shadcn keeps working.\ntype DirectionProviderProps = React.ComponentProps<typeof BaseDirectionProvider> & { dir?: React.ComponentProps<typeof BaseDirectionProvider>[\"direction\"] };\n\nfunction DirectionProvider({ dir, direction, children }: DirectionProviderProps) {\n  return <BaseDirectionProvider direction={direction ?? dir}>{children}</BaseDirectionProvider>;\n}\n\nexport { DirectionProvider, useDirection };\n"
+    }
+  ]
+}

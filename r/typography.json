@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "name": "typography",
+  "useFor": "Use the Typography parts for page and section headings, leads and articles outside a component. One accent word per headline at most. Use TypographyProse around rendered Markdown (a blog post, docs), TypographyEyebrow for the label above a heading.",
+  "constraints": [
+    "Bold or semibold text",
+    "A fourth typeface",
+    "Sizes off the scale",
+    "Gradient or glowing accent words",
+    "Round list bullets"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's .display, .heading, .lead, .bp-prose (h2, h3, blockquote, code, a) and .bp-list (.bp-list__mark)",
+  "exports": [
+    "TypographyAccent",
+    "TypographyBlockquote",
+    "TypographyDisplay",
+    "TypographyEyebrow",
+    "TypographyH1",
+    "TypographyH2",
+    "TypographyH3",
+    "TypographyH4",
+    "TypographyInlineCode",
+    "TypographyLarge",
+    "TypographyLead",
+    "TypographyList",
+    "TypographyMuted",
+    "TypographyP",
+    "TypographyProse",
+    "TypographySmall",
+    "TypographyTable"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/typography",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/typography.md",
+  "examples": [
+    {
+      "path": "examples/typography.tsx",
+      "content": "import {\n  TypographyAccent,\n  TypographyBlockquote,\n  TypographyEyebrow,\n  TypographyH1,\n  TypographyH2,\n  TypographyH3,\n  TypographyH4,\n  TypographyInlineCode,\n  TypographyLead,\n  TypographyList,\n  TypographyMuted,\n  TypographyP,\n  TypographyProse,\n  TypographyTable,\n} from \"@/components/ui/typography\";\n\nexport function Preview() {\n  return (\n    <div className=\"grid max-w-3xl gap-6\">\n      <TypographyEyebrow>Agents</TypographyEyebrow>\n      <TypographyH1>\n        A workstation for an army of <TypographyAccent>agents</TypographyAccent>\n      </TypographyH1>\n      <TypographyLead>Run coding agents side by side, each in its own sandbox, and merge what passes.</TypographyLead>\n    </div>\n  );\n}\n\nexport function Headings() {\n  return (\n    <div className=\"grid gap-6\">\n      <TypographyH1>Heading one, 56px</TypographyH1>\n      <TypographyH2>Heading two, 44px</TypographyH2>\n      <TypographyH3>Heading three, 32px</TypographyH3>\n      <TypographyH4>Heading four, 24px</TypographyH4>\n      <TypographyMuted>Updated Oct 28 by the platform team</TypographyMuted>\n    </div>\n  );\n}\n\nexport function Text() {\n  return (\n    <div className=\"max-w-2xl\">\n      <TypographyP>\n        Each thread runs in a fresh sandbox with your repository checked out. Set the image with <TypographyInlineCode>hoplite.toml</TypographyInlineCode> and every agent starts from the same place.\n      </TypographyP>\n      <TypographyBlockquote>Take the issue affecting the most users, reproduce it with a failing test, fix it, and open a pull request.</TypographyBlockquote>\n      <TypographyList>\n        <li>A workspace with your repository connected</li>\n        <li>Setup that runs green in the sandbox</li>\n        <li>A Sentry project with alerts turned on</li>\n      </TypographyList>\n      <TypographyList ordered>\n        <li>Create the automation</li>\n        <li>Pick the trigger and the repository</li>\n        <li>Write the instructions the agent follows</li>\n      </TypographyList>\n      <TypographyTable>\n        <thead>\n          <tr>\n            <th>Plan</th>\n            <th>Sessions</th>\n            <th>Sandbox</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <td>Free</td>\n            <td>5</td>\n            <td>2 vCPU, 8 GiB</td>\n          </tr>\n          <tr>\n            <td>Team</td>\n            <td>20 per seat</td>\n            <td>8 vCPU, 32 GiB</td>\n          </tr>\n        </tbody>\n      </TypographyTable>\n    </div>\n  );\n}\n\nexport function Prose() {\n  return (\n    <TypographyProse className=\"max-w-2xl\">\n      <p>Most alerts sit in a queue until someone has time. An automation can start the fix the moment the issue appears.</p>\n      <h2>Set up the trigger</h2>\n      <p>\n        Open Automations, choose <code>Sentry issue created</code>, and pick the repository the agent should work in. <a href=\"#docs\">Read the setup guide</a> for the permissions it needs.\n      </p>\n      <blockquote>\n        <p>Look at unresolved issues that first appeared in the last hour. Skip anything already linked to an open pull request.</p>\n      </blockquote>\n      <h3>What the agent does</h3>\n      <p>It reproduces the issue with a failing test, fixes it, and opens a pull request only when <strong>every check passes</strong>.</p>\n    </TypographyProse>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Headings",
+        "Text",
+        "Prose"
+      ],
+      "requires": [
+        "typography"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/typography/Preview"
+        },
+        {
+          "name": "Headings",
+          "url": "https://hoplite-ds.vercel.app/preview/typography/Headings"
+        },
+        {
+          "name": "Text",
+          "url": "https://hoplite-ds.vercel.app/preview/typography/Text"
+        },
+        {
+          "name": "Prose",
+          "url": "https://hoplite-ds.vercel.app/preview/typography/Prose"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Typography",
+  "description": "The site's type: Chakra Petch light headings at 56, 44, 32 and 24px, an 18px light graphite lead, 16px body, the Kode Mono eyebrow, the flat orange accent word, dashed-rule quotes, hexagon-bulleted lists, Kode Mono inline code and a whole-article prose style. A table wider than the column scrolls sideways and fades at the edge it scrolls past (fade-x).",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/ui/typography.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The site's type (.display, .heading, .lead, .bp-prose, .bp-list). Headings are Chakra Petch light in the ink: 56px\n// (48px on a phone), 44px, 32px and 24px, balanced, drawn 1 percent tighter at display sizes; TypographyDisplay is the\n// hero's 64px. The lead is 18px light graphite on a 28px line, stopping at 600px. Body is 16px graphite; a quote hangs\n// 24px in behind a 2px dashed rule of the strong edge, in the ink. Lists mark each item with a 16px hexagon outline\n// (points left and right) 12px from the text, or with a quiet Kode Mono number. Inline code is Kode Mono in the ink. The\n// eyebrow is the 12px Kode Mono capital label; the accent is the one flat orange word in a headline. TypographyProse\n// styles a whole article (a blog post) at 18px on a 32px line.\nconst DISPLAY = \"font-display font-light text-balance text-fg\";\n\nfunction TypographyDisplay({ className, ...props }: React.ComponentProps<\"h1\">) {\n  return <h1 data-slot=\"typography-display\" className={cn(DISPLAY, \"text-h2 leading-12 tracking-tight sm:text-display sm:leading-display\", className)} {...props} />;\n}\n\nfunction TypographyH1({ className, ...props }: React.ComponentProps<\"h1\">) {\n  return <h1 data-slot=\"typography-h1\" className={cn(DISPLAY, \"text-h2 leading-12 tracking-tight sm:text-h1 sm:leading-15\", className)} {...props} />;\n}\n\nfunction TypographyH2({ className, ...props }: React.ComponentProps<\"h2\">) {\n  return <h2 data-slot=\"typography-h2\" className={cn(DISPLAY, \"text-h3 leading-10 sm:text-h2 sm:leading-heading\", className)} {...props} />;\n}\n\nfunction TypographyH3({ className, ...props }: React.ComponentProps<\"h3\">) {\n  return <h3 data-slot=\"typography-h3\" className={cn(DISPLAY, \"text-h3 leading-10\", className)} {...props} />;\n}\n\nfunction TypographyH4({ className, ...props }: React.ComponentProps<\"h4\">) {\n  return <h4 data-slot=\"typography-h4\" className={cn(DISPLAY, \"text-h4 leading-8\", className)} {...props} />;\n}\n\nfunction TypographyP({ className, ...props }: React.ComponentProps<\"p\">) {\n  return <p data-slot=\"typography-p\" className={cn(\"font-sans text-body leading-line-body text-pretty text-fg-secondary [&:not(:first-child)]:mt-6\", className)} {...props} />;\n}\n\nfunction TypographyLead({ className, ...props }: React.ComponentProps<\"p\">) {\n  return <p data-slot=\"typography-lead\" className={cn(\"max-w-150 font-sans text-body leading-line-body font-light text-pretty text-fg-secondary sm:text-body-lg sm:leading-7\", className)} {...props} />;\n}\n\nfunction TypographyLarge({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"typography-large\" className={cn(\"font-sans text-body-lg leading-7 font-medium text-fg\", className)} {...props} />;\n}\n\nfunction TypographySmall({ className, ...props }: React.ComponentProps<\"small\">) {\n  return <small data-slot=\"typography-small\" className={cn(\"font-sans text-body-sm leading-line-body-sm font-medium text-fg\", className)} {...props} />;\n}\n\nfunction TypographyMuted({ className, ...props }: React.ComponentProps<\"p\">) {\n  return <p data-slot=\"typography-muted\" className={cn(\"font-sans text-body-sm leading-line-body-sm text-fg-muted\", className)} {...props} />;\n}\n\n/** The eyebrow, a column head or a date: 12px Kode Mono capitals, tracked 8 percent, quiet. */\nfunction TypographyEyebrow({ className, ...props }: React.ComponentProps<\"p\">) {\n  return <p data-slot=\"typography-eyebrow\" className={cn(\"ds-label\", className)} {...props} />;\n}\n\n/** The one accent word in a headline: flat orange, nothing else. */\nfunction TypographyAccent({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"typography-accent\" className={cn(\"text-fg-accent\", className)} {...props} />;\n}\n\nconst DASH_Y = \"[background:repeating-linear-gradient(180deg,var(--ds-color-border-strong)_0_10px,transparent_0_18px)_left_top/2px_18px_no-repeat_round]\";\n\nfunction TypographyBlockquote({ className, ...props }: React.ComponentProps<\"blockquote\">) {\n  return <blockquote data-slot=\"typography-blockquote\" className={cn(\"my-8 pl-6 font-sans text-body leading-7 text-fg\", DASH_Y, className)} {...props} />;\n}\n\nfunction HexMark() {\n  return (\n    <svg data-slot=\"typography-list-mark\" viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden className=\"mt-[calc((1lh-var(--ds-space-4))/2)] size-4 fill-none stroke-line-strong\">\n      <path d=\"M14 8L11 13.2L5 13.2L2 8L5 2.8L11 2.8Z\" strokeWidth={1} />\n    </svg>\n  );\n}\n\n/** A list with hexagon bullets (or quiet numbers when ordered). Pass `li` children. */\nfunction TypographyList({ className, ordered = false, children, ...props }: Omit<React.ComponentProps<\"ul\">, \"ref\"> & { ordered?: boolean }) {\n  const items = React.Children.map(children, (child) => {\n    if (!React.isValidElement<React.ComponentProps<\"li\">>(child) || child.type !== \"li\") return child;\n    return React.cloneElement(\n      child,\n      { className: cn(\"grid items-start gap-x-3\", ordered ? \"grid-cols-[24px_minmax(0,1fr)] items-baseline [counter-increment:ds-item] before:font-mono before:text-body-sm before:text-fg-muted before:tabular-nums before:content-[counter(ds-item)]\" : \"grid-cols-[16px_minmax(0,1fr)]\", child.props.className) },\n      ordered ? null : <HexMark />,\n      <span className=\"min-w-0\">{child.props.children}</span>,\n    );\n  });\n  const Tag = ordered ? \"ol\" : \"ul\";\n  return (\n    <Tag data-slot=\"typography-list\" className={cn(\"my-6 grid list-none gap-3 p-0 font-sans text-body leading-line-body text-fg-secondary\", ordered && \"[counter-reset:ds-item]\", className)} {...props}>\n      {items}\n    </Tag>\n  );\n}\n\nfunction TypographyInlineCode({ className, ...props }: React.ComponentProps<\"code\">) {\n  return <code data-slot=\"typography-inline-code\" className={cn(\"font-code tracking-code text-fg\", className)} {...props} />;\n}\n\nfunction TypographyTable({ className, ...props }: React.ComponentProps<\"table\">) {\n  return (\n    <div data-slot=\"typography-table\" className=\"my-6 w-full overflow-x-auto fade-x\">\n      <table\n        className={cn(\n          \"w-full border-collapse font-sans text-body-sm leading-line-body-sm [&_td]:border-b [&_td]:border-line [&_td]:py-3 [&_td]:pr-6 [&_td]:text-left [&_td]:text-fg [&_th]:border-b [&_th]:border-line [&_th]:py-3 [&_th]:pr-6 [&_th]:text-left [&_th]:font-mono [&_th]:text-caption [&_th]:font-normal [&_th]:tracking-caps [&_th]:text-fg-label [&_th]:[text-transform:uppercase] [&_td:first-child]:text-fg-secondary\",\n          className,\n        )}\n        {...props}\n      />\n    </div>\n  );\n}\n\n/** A whole article (the blog's .bp-prose): 18px graphite on a 32px line (16px on a phone), headings, links, quotes. */\nfunction TypographyProse({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"typography-prose\"\n      className={cn(\n        \"min-w-0 font-sans text-body leading-7 text-fg-secondary [overflow-wrap:break-word] sm:text-body-lg sm:leading-prose\",\n        \"[&>*]:m-0 [&>*+*]:mt-5 sm:[&>*+*]:mt-6\",\n        \"[&_:is(h2,h3)]:font-display [&_:is(h2,h3)]:font-light [&_:is(h2,h3)]:text-balance [&_:is(h2,h3)]:text-fg\",\n        \"[&_h2]:text-h4 [&_h2]:leading-8 sm:[&_h2]:text-h3 sm:[&_h2]:leading-10 [&>h2]:mt-12 sm:[&>h2]:mt-16 [&>h2+*]:mt-4\",\n        \"[&_h3]:text-h5 [&_h3]:leading-7 sm:[&_h3]:text-h4 sm:[&_h3]:leading-8 [&>h3]:mt-10 sm:[&>h3]:mt-12 [&>h3+*]:mt-3\",\n        \"[&_a]:text-fg [&_a]:underline [&_a]:decoration-line-field [&_a]:decoration-1 [&_a]:underline-offset-4 [&_a]:transition-[text-decoration-color] [&_a]:duration-base [&_a]:ease-out [&_a:hover]:decoration-current motion-reduce:[&_a]:transition-none\",\n        \"[&_:is(p,li)_code]:font-code [&_:is(p,li)_code]:text-body [&_:is(p,li)_code]:leading-none [&_:is(p,li)_code]:text-fg\",\n        \"[&>blockquote]:my-8 [&>blockquote]:pl-6 [&>blockquote]:text-fg\",\n        \"[&>blockquote]:[background:repeating-linear-gradient(180deg,var(--ds-color-border-strong)_0_10px,transparent_0_18px)_left_top/2px_18px_no-repeat_round]\",\n        \"[&_strong]:font-medium [&_strong]:text-fg\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport {\n  TypographyAccent,\n  TypographyBlockquote,\n  TypographyDisplay,\n  TypographyEyebrow,\n  TypographyH1,\n  TypographyH2,\n  TypographyH3,\n  TypographyH4,\n  TypographyInlineCode,\n  TypographyLarge,\n  TypographyLead,\n  TypographyList,\n  TypographyMuted,\n  TypographyP,\n  TypographyProse,\n  TypographySmall,\n  TypographyTable,\n};\n"
+    }
+  ]
+}

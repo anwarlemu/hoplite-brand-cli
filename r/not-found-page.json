@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "name": "not-found-page",
+  "useFor": "Use as the app's not-found route.",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's type, frames and blog diagrams; the site's 404 was not captured",
+  "exports": [
+    "NotFoundPage"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/not-found-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/not-found-page.md",
+  "examples": [
+    {
+      "path": "examples/not-found-page.tsx",
+      "content": "import { NotFoundPage } from \"@/components/blocks/not-found-page\";\n\nexport function Preview() {\n  return <NotFoundPage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "not-found-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/not-found-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Not found page",
+  "description": "The 404 template: mono code, display line and lead, two keys back, and a branch drawing ending at the missing page, inside corner ticks.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "footer",
+    "site-header",
+    "brand-marks",
+    "button",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/not-found-page.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Footer } from \"@/components/blocks/footer\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { NodeTree } from \"@/components/site/brand-marks\";\nimport { Button } from \"@/components/ui/button\";\nimport { TypographyDisplay, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\n// The 404 page: the mono code, a display line and a lead, the two keys back (home and the docs), and a branch drawing\n// whose last leaf is the missing page, all inside a frame of corner ticks.\nfunction NotFoundPage({ title = \"This page is not here.\", lead = \"It may have moved, or the link may be wrong. Head back home or search the docs.\", className }: { title?: string; lead?: string; className?: string }) {\n  return (\n    <div data-slot=\"not-found-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main className=\"mx-auto w-full max-w-320 py-20 sm:py-32\">\n        <div className=\"ds-corners grid gap-12 p-8 sm:p-16 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-center\">\n          <div className=\"grid gap-6\">\n            <p className=\"ds-label m-0\">Error 404</p>\n            <TypographyDisplay>{title}</TypographyDisplay>\n            <TypographyLead>{lead}</TypographyLead>\n            <div className=\"mt-4 flex flex-wrap gap-3\">\n              <Button render={<a href=\"/\" />}>Back home</Button>\n              <Button variant=\"outline\" render={<a href=\"#docs\" />}>\n                Read the docs\n              </Button>\n            </div>\n          </div>\n          <NodeTree root=\"Request\" rootNote=\"GET /page\" leaves={[{ title: \"Router\", note: \"no match\" }, { title: \"Redirects\", note: \"none\" }, { title: \"Not found\", note: \"404\", active: true }]} />\n        </div>\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { NotFoundPage };\n"
+    }
+  ]
+}

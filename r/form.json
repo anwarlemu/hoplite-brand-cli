@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "name": "form",
+  "useFor": "Use Form with react-hook-form's useForm: FormField for each value, FormItem around its FormLabel, FormControl (around exactly one control), FormDescription and FormMessage. Stack items in a grid with gap-6. For forms without react-hook-form use Field.",
+  "constraints": [
+    "Messages in any color but the orange",
+    "An orange label",
+    "Errors above the control",
+    "Wrapping more than one element in FormControl"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website's type and lines and the principles for fields (the site has no forms)",
+  "exports": [
+    "Form",
+    "FormControl",
+    "FormDescription",
+    "FormField",
+    "FormItem",
+    "FormLabel",
+    "FormMessage",
+    "useFormField"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/form",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/form.md",
+  "examples": [
+    {
+      "path": "examples/form.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { useForm } from \"react-hook-form\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Checkbox } from \"@/components/ui/checkbox\";\nimport { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from \"@/components/ui/form\";\nimport { Input } from \"@/components/ui/input\";\nimport { Textarea } from \"@/components/ui/textarea\";\n\ntype Values = { repository: string; task: string; autoMerge: boolean };\n\nexport function Preview() {\n  const form = useForm<Values>({ defaultValues: { repository: \"\", task: \"\", autoMerge: false } });\n  const [sent, setSent] = React.useState<Values | null>(null);\n  return (\n    <Form {...form}>\n      <form onSubmit={form.handleSubmit(setSent)} className=\"grid w-full max-w-md gap-6\" noValidate>\n        <FormField\n          control={form.control}\n          name=\"repository\"\n          rules={{ required: \"Choose a repository.\", pattern: { value: /^[\\w.-]+\\/[\\w.-]+$/, message: \"Use the owner/name form, like acme/payments-api.\" } }}\n          render={({ field }) => (\n            <FormItem>\n              <FormLabel>Repository</FormLabel>\n              <FormControl>\n                <Input placeholder=\"acme/payments-api\" {...field} />\n              </FormControl>\n              <FormDescription>Agents clone it into a fresh sandbox.</FormDescription>\n              <FormMessage />\n            </FormItem>\n          )}\n        />\n        <FormField\n          control={form.control}\n          name=\"task\"\n          rules={{ required: \"Describe the task.\" }}\n          render={({ field }) => (\n            <FormItem>\n              <FormLabel>Task</FormLabel>\n              <FormControl>\n                <Textarea placeholder=\"Upgrade to Node 22 and fix failing tests\" {...field} />\n              </FormControl>\n              <FormMessage />\n            </FormItem>\n          )}\n        />\n        <FormField\n          control={form.control}\n          name=\"autoMerge\"\n          render={({ field }) => (\n            <FormItem className=\"flex items-center gap-2\">\n              <FormControl>\n                <Checkbox checked={field.value} onCheckedChange={field.onChange} />\n              </FormControl>\n              <FormLabel>Merge when checks pass</FormLabel>\n            </FormItem>\n          )}\n        />\n        <div className=\"flex items-center gap-4\">\n          <Button type=\"submit\">Start thread</Button>\n          {sent && <span className=\"text-body-sm text-fg-muted\">Started on {sent.repository}</span>}\n        </div>\n      </form>\n    </Form>\n  );\n}\n\nexport function Errors() {\n  const form = useForm<Values>({ defaultValues: { repository: \"payments api\", task: \"\", autoMerge: false } });\n  React.useEffect(() => {\n    form.setError(\"repository\", { message: \"Use the owner/name form, like acme/payments-api.\" });\n  }, [form]);\n  return (\n    <Form {...form}>\n      <form className=\"grid w-full max-w-md gap-6\" noValidate>\n        <FormField\n          control={form.control}\n          name=\"repository\"\n          render={({ field }) => (\n            <FormItem>\n              <FormLabel>Repository</FormLabel>\n              <FormControl>\n                <Input {...field} />\n              </FormControl>\n              <FormMessage />\n            </FormItem>\n          )}\n        />\n      </form>\n    </Form>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Errors"
+      ],
+      "requires": [
+        "form",
+        "button",
+        "checkbox",
+        "input",
+        "textarea"
+      ],
+      "packages": [
+        "react-hook-form"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/form/Preview"
+        },
+        {
+          "name": "Errors",
+          "url": "https://hoplite-ds.vercel.app/preview/form/Errors"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Form",
+  "description": "react-hook-form helpers laid out as Field: a 14px medium label 8px above the control, 14px quiet help and a 14px orange message below; the control alone takes the orange edge when it fails.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "label",
+    "utils"
+  ],
+  "packages": [
+    "react-hook-form"
+  ],
+  "files": [
+    {
+      "path": "components/ui/form.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Controller, FormProvider, useFormContext, useFormState, type ControllerProps, type FieldPath, type FieldValues } from \"react-hook-form\";\n\nimport { Label } from \"@/components/ui/label\";\nimport { cn } from \"@/lib/utils\";\n\n// A react-hook-form form laid out as Field lays out a field (extrapolated from the site's type and lines: it has no\n// forms). Each FormItem is its 14px medium ink label 8px above the control; a FormDescription is 14px quiet gray 8px\n// under it and a FormMessage the 14px orange line. A field that fails keeps its label ink: only the control (through\n// aria-invalid, the orange edge) and the message take the orange. Items stack 24px apart in a `grid gap-6` form.\nconst Form = FormProvider;\n\ntype FormFieldContextValue<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = { name: TName };\n\nconst FormFieldContext = React.createContext<FormFieldContextValue | null>(null);\n\nfunction FormField<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(props: ControllerProps<TFieldValues, TName>) {\n  return (\n    <FormFieldContext.Provider value={{ name: props.name }}>\n      <Controller {...props} />\n    </FormFieldContext.Provider>\n  );\n}\n\ntype FormItemContextValue = { id: string };\n\nconst FormItemContext = React.createContext<FormItemContextValue | null>(null);\n\n/** The state of the field around it: its ids for labels and messages, and react-hook-form's error, dirty and touched state. */\nfunction useFormField() {\n  const fieldContext = React.useContext(FormFieldContext);\n  const itemContext = React.useContext(FormItemContext);\n  const { getFieldState } = useFormContext();\n  if (!fieldContext) throw new Error(\"useFormField should be used within <FormField>\");\n  if (!itemContext) throw new Error(\"useFormField should be used within <FormItem>\");\n  const formState = useFormState({ name: fieldContext.name });\n  const fieldState = getFieldState(fieldContext.name, formState);\n  const { id } = itemContext;\n  return { id, name: fieldContext.name, formItemId: `${id}-form-item`, formDescriptionId: `${id}-form-item-description`, formMessageId: `${id}-form-item-message`, ...fieldState };\n}\n\nfunction FormItem({ className, ...props }: React.ComponentProps<\"div\">) {\n  const id = React.useId();\n  return (\n    <FormItemContext.Provider value={{ id }}>\n      <div data-slot=\"form-item\" className={cn(\"grid min-w-0 gap-2\", className)} {...props} />\n    </FormItemContext.Provider>\n  );\n}\n\nfunction FormLabel({ className, ...props }: React.ComponentProps<typeof Label>) {\n  const { error, formItemId } = useFormField();\n  return <Label data-slot=\"form-label\" data-error={!!error} htmlFor={formItemId} className={cn(\"w-fit\", className)} {...props} />;\n}\n\ntype ControlProps = { id?: string; \"aria-describedby\"?: string; \"aria-invalid\"?: boolean };\n\n/** Hands the field's id, its description and message ids and aria-invalid to the one control inside it. */\nfunction FormControl({ children }: { children: React.ReactElement<ControlProps> }) {\n  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();\n  const child = React.Children.only(children);\n  return React.cloneElement(child, {\n    id: formItemId,\n    \"aria-describedby\": !error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`,\n    \"aria-invalid\": !!error,\n  });\n}\n\nfunction FormDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  const { formDescriptionId } = useFormField();\n  return <p data-slot=\"form-description\" id={formDescriptionId} className={cn(\"m-0 font-sans text-body-sm leading-line-body-sm text-fg-muted\", className)} {...props} />;\n}\n\nfunction FormMessage({ className, children, ...props }: React.ComponentProps<\"p\">) {\n  const { error, formMessageId } = useFormField();\n  const body = error ? String(error.message ?? \"\") : children;\n  if (!body) return null;\n  return (\n    <p data-slot=\"form-message\" id={formMessageId} role={error ? \"alert\" : undefined} className={cn(\"m-0 font-sans text-body-sm leading-line-body-sm text-danger\", className)} {...props}>\n      {body}\n    </p>\n  );\n}\n\nexport { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField };\n"
+    }
+  ]
+}

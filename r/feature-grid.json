@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "name": "feature-grid",
+  "useFor": "Use for the product's main capabilities, two or four at a time. Give each a drawing (NodeTree or your own art) in the art slot.",
+  "constraints": [
+    "Icons in colored circles",
+    "Cards with shadows or rounded corners",
+    "Odd counts that leave a gap"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's home and product bands (.how, .band: Give the swarm the job, Share, hand off, and approve every run)",
+  "exports": [
+    "Feature",
+    "FeatureGrid"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/feature-grid",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/feature-grid.md",
+  "examples": [
+    {
+      "path": "examples/feature-grid.tsx",
+      "content": "import { FeatureGrid } from \"@/components/blocks/feature-grid\";\n\nexport function Preview() {\n  return <FeatureGrid />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "feature-grid"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/feature-grid/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Feature grid",
+  "description": "The feature band: a Chakra Petch heading with its lead and text link, then features two to a row in stone frames, each with a title, a light line, an optional link and a drawing in corner ticks.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "brand-marks",
+    "card",
+    "typography",
+    "utils"
+  ],
+  "packages": [
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/feature-grid.tsx",
+      "content": "import * as React from \"react\";\nimport { ArrowRightIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { NodeTree } from \"@/components/site/brand-marks\";\nimport { Card, CardDescription, CardHeader, CardTitle } from \"@/components/ui/card\";\nimport { TypographyH2, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type Feature = { title: string; description: string; link?: { label: string; href: string }; art?: React.ReactNode };\n\nconst FEATURES: Feature[] = [\n  {\n    title: \"Pick your agent\",\n    description: \"Run the coding agent you already use, on your own subscription or on ours.\",\n    link: { label: \"Pricing\", href: \"#pricing\" },\n    art: <NodeTree root=\"Hoplite\" rootNote=\"your plan\" leaves={[{ title: \"Agent one\", note: \"your plan\" }, { title: \"Agent two\", note: \"your plan\" }, { title: \"Agent three\", note: \"our plan\", active: true }]} />,\n  },\n  {\n    title: \"Connect once\",\n    description: \"Install the app on your repositories and bring your skills and MCP servers along.\",\n    link: { label: \"Import your setup\", href: \"#import\" },\n    art: <NodeTree root=\"Your setup\" leaves={[{ title: \"Repositories\", note: \"acme/web\" }, { title: \"Skills\", note: \"review, test\" }, { title: \"MCP servers\", note: \"importing\", active: true }]} />,\n  },\n  {\n    title: \"One thread, everyone in it\",\n    description: \"Start a task and the whole workspace can open it while it runs.\",\n    art: <NodeTree root=\"fix-upload-500\" rootNote=\"3 in the thread\" leaves={[{ title: \"Agent\", note: \"running\", active: true }, { title: \"Reviewer\", note: \"watching\" }, { title: \"Teammate\", note: \"steering\" }]} />,\n  },\n  {\n    title: \"Sensitive actions, approved by anyone\",\n    description: \"The run pauses for approval and any teammate can answer it.\",\n    art: <NodeTree root=\"Deploy\" rootNote=\"needs approval\" leaves={[{ title: \"Tests\", note: \"passed\" }, { title: \"Review\", note: \"approved\" }, { title: \"Ship\", note: \"waiting\", active: true }]} />,\n  },\n];\n\n// The site's feature band (.how and .band on the home and product pages): a Chakra Petch heading with its lead beside it\n// (or under it, with a text link), then the features two to a row, each a stone-framed card with its title, a light\n// line, an optional text link, and its drawing in a frame of corner ticks.\nfunction FeatureGrid({\n  title = \"Give the swarm the job. Review what comes back.\",\n  lead = \"Four steps from your repo to a green pull request.\",\n  link = { label: \"Read the quickstart\", href: \"#quickstart\" },\n  features = FEATURES,\n  className,\n}: {\n  title?: React.ReactNode;\n  lead?: React.ReactNode;\n  link?: { label: string; href: string } | null;\n  features?: Feature[];\n  className?: string;\n}) {\n  return (\n    <section data-slot=\"feature-grid\" className={cn(\"w-full py-20 sm:py-32\", className)}>\n      <div className=\"mx-auto grid w-full max-w-320 gap-16\">\n        <div className=\"grid max-w-180 gap-6\">\n          <TypographyH2>{title}</TypographyH2>\n          {lead && <TypographyLead>{lead}</TypographyLead>}\n          {link && (\n            <a href={link.href} className=\"ds-link w-fit\">\n              <span>{link.label}</span>\n              <ArrowRightIcon className=\"size-4\" aria-hidden />\n            </a>\n          )}\n        </div>\n        <div className=\"grid gap-8 md:grid-cols-2\">\n          {features.map((f) => (\n            <Card key={f.title} className=\"gap-10 sm:p-10\">\n              <CardHeader className=\"gap-3\">\n                <CardTitle>{f.title}</CardTitle>\n                <CardDescription>{f.description}</CardDescription>\n                {f.link && (\n                  <a href={f.link.href} className=\"ds-link mt-2 w-fit\">\n                    <span>{f.link.label}</span>\n                    <ArrowRightIcon className=\"size-4\" aria-hidden />\n                  </a>\n                )}\n              </CardHeader>\n              {f.art && <div className=\"ds-corners mt-auto grid min-h-64 place-items-center overflow-hidden p-4 sm:p-8\">{f.art}</div>}\n            </Card>\n          ))}\n        </div>\n      </div>\n    </section>\n  );\n}\n\nexport { FeatureGrid };\n"
+    }
+  ]
+}

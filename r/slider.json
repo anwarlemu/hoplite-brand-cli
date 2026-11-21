@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "name": "slider",
+  "useFor": "Use Slider to pick a number from a range where the exact value matters less than its place (concurrent sandboxes, memory). Show the value as text beside its label. Pass two values for a range. For an exact number use Input with type=\"number\".",
+  "constraints": [
+    "A thick or rounded track",
+    "A round thumb",
+    "A thumb that grows on hover or drag",
+    "An orange range"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its strong line (--line), ink (--charcoal on the light ground) and hexagonal marks (.pr-features svg)",
+  "exports": [
+    "Slider"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/slider",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/slider.md",
+  "examples": [
+    {
+      "path": "examples/slider.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { Label } from \"@/components/ui/label\";\nimport { Slider } from \"@/components/ui/slider\";\n\nexport function Preview() {\n  const [value, setValue] = React.useState([8]);\n  return (\n    <div className=\"grid w-full max-w-sm gap-3\">\n      <div className=\"flex items-center justify-between\">\n        <Label>Concurrent sandboxes</Label>\n        <span className=\"font-mono text-body-sm text-fg-muted\">{value[0]}</span>\n      </div>\n      <Slider value={value} onValueChange={setValue} min={1} max={50} aria-label=\"Concurrent sandboxes\" />\n    </div>\n  );\n}\n\nexport function Range() {\n  const [value, setValue] = React.useState([4, 16]);\n  return (\n    <div className=\"grid w-full max-w-sm gap-3\">\n      <div className=\"flex items-center justify-between\">\n        <Label>Sandbox memory</Label>\n        <span className=\"font-mono text-body-sm text-fg-muted\">\n          {value[0]} to {value[1]} GiB\n        </span>\n      </div>\n      <Slider value={value} onValueChange={setValue} min={2} max={32} step={2} />\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid w-full max-w-sm gap-8\">\n      <Slider defaultValue={[30]} aria-label=\"Enabled\" />\n      <Slider defaultValue={[60]} disabled aria-label=\"Disabled\" />\n      <div className=\"h-40\">\n        <Slider defaultValue={[40]} orientation=\"vertical\" aria-label=\"Vertical\" />\n      </div>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Range",
+        "States"
+      ],
+      "requires": [
+        "slider",
+        "label"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/slider/Preview"
+        },
+        {
+          "name": "Range",
+          "url": "https://hoplite-ds.vercel.app/preview/slider/Range"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/slider/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Slider",
+  "description": "A 1px track of the strong line with the chosen range drawn as a 2px ink line and a 16px point-up ink hexagon as the thumb; it follows the pointer and never changes shape while dragged.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/slider.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Slider as BaseSlider } from \"@base-ui/react/slider\";\n\nimport { cn } from \"@/lib/utils\";\n\n// Extrapolated from the site's lines and marks (the site has no slider): a 1px track of the strong line, with the\n// chosen range drawn over it as a 2px line of the ink, and a 16px point-up hexagon of the ink as the thumb (the\n// site's hexagonal mark). The thumb follows the pointer without easing and never changes size or shape while dragged;\n// under the pointer it turns graphite. Its box stays square, so keyboard focus is the 2px ink outline 2px out. Disabled,\n// the range and thumb turn the off gray. Pass two values for a range; it reports every value as an array.\ntype SliderProps = Omit<React.ComponentProps<typeof BaseSlider.Root>, \"onValueChange\" | \"onValueCommitted\"> & {\n  onValueChange?: (value: number[]) => void;\n  onValueCommitted?: (value: number[]) => void;\n};\n\nconst asArray = (value: number | readonly number[]) => (Array.isArray(value) ? [...value] : [value as number]);\n\nfunction Slider({ className, defaultValue, value, min = 0, max = 100, onValueChange, onValueCommitted, \"aria-label\": ariaLabel, ...props }: SliderProps) {\n  const values = React.useMemo(() => (value !== undefined ? asArray(value) : defaultValue !== undefined ? asArray(defaultValue) : [min]), [value, defaultValue, min]);\n  return (\n    <BaseSlider.Root\n      data-slot=\"slider\"\n      defaultValue={defaultValue}\n      value={value}\n      min={min}\n      max={max}\n      onValueChange={onValueChange ? (next) => onValueChange(asArray(next)) : undefined}\n      onValueCommitted={onValueCommitted ? (next) => onValueCommitted(asArray(next)) : undefined}\n      className={cn(\"group/slider relative w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-40 data-[orientation=vertical]:w-auto\", className)}\n      {...props}\n    >\n      <BaseSlider.Control\n        data-slot=\"slider-control\"\n        className=\"relative flex w-full touch-none items-center py-2 select-none data-disabled:cursor-not-allowed data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:px-2 data-[orientation=vertical]:py-0\"\n      >\n        <BaseSlider.Track\n          data-slot=\"slider-track\"\n          className=\"relative before:absolute before:bg-line-strong data-[orientation=horizontal]:h-[2px] data-[orientation=horizontal]:w-full data-[orientation=horizontal]:before:inset-x-0 data-[orientation=horizontal]:before:bottom-0 data-[orientation=horizontal]:before:h-px data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[2px] data-[orientation=vertical]:before:inset-y-0 data-[orientation=vertical]:before:left-0 data-[orientation=vertical]:before:w-px\"\n        >\n          <BaseSlider.Indicator data-slot=\"slider-range\" className=\"bg-primary data-disabled:bg-off\" />\n          {values.map((_, index) => (\n            <BaseSlider.Thumb\n              data-slot=\"slider-thumb\"\n              key={index}\n              index={index}\n              aria-label={ariaLabel ?? (values.length > 1 ? (index === 0 ? \"Minimum\" : \"Maximum\") : undefined)}\n              className=\"group/thumb grid size-4 cursor-grab place-items-center select-none has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus-ring data-dragging:cursor-grabbing data-disabled:cursor-not-allowed\"\n            >\n              <span aria-hidden className=\"ds-hex-mark h-4 w-3.5 bg-primary transition-[background-color] duration-fast ease-out group-hover/thumb:bg-primary-hover group-data-disabled/thumb:bg-off motion-reduce:transition-none\" />\n            </BaseSlider.Thumb>\n          ))}\n        </BaseSlider.Track>\n      </BaseSlider.Control>\n    </BaseSlider.Root>\n  );\n}\n\nexport { Slider };\n"
+    }
+  ]
+}

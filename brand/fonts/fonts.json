@@ -1,0 +1,5 @@
+{
+	"$comment": "Faces the asset commands draw with: static instances of the two Google Fonts families named in tokens.css (SIL Open Font License; the licenses sit beside them). display is --ds-font-display (Chakra Petch, light and regular), mono is --ds-font-mono (Kode Mono). Satoshi (--ds-font-sans) is not shipped: its Fontshare license does not cover redistributing the files, so assets set their few lines of running text in Chakra Petch, as the brand's own social tool (agd-playground hoplite-og) does.",
+	"display": { "family": "Chakra Petch", "files": { "300": "chakra-petch-300.ttf", "400": "chakra-petch-400.ttf" } },
+	"mono": { "family": "Kode Mono", "files": { "400": "kode-mono-400.ttf" } }
+}

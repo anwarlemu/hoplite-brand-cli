@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "name": "checkbox",
+  "useFor": "Use Checkbox for an on or off choice that takes effect on submit, or to pick several items from a list. Wrap it and its text in a Label, or pair them with htmlFor. Use indeterminate on a parent that controls a list. For a setting that applies at once use Switch.",
+  "constraints": [
+    "A round or hexagonal check",
+    "An orange fill",
+    "A check that scales or bounces in",
+    "A half-opacity disabled check"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its strong 70 percent edge (--line) and ink fills (.button--primary), and the principles (checks are square)",
+  "exports": [
+    "Checkbox"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/checkbox",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/checkbox.md",
+  "examples": [
+    {
+      "path": "examples/checkbox.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { Checkbox } from \"@/components/ui/checkbox\";\nimport { Label } from \"@/components/ui/label\";\n\nexport function Preview() {\n  return (\n    <div className=\"flex items-center gap-2\">\n      <Checkbox id=\"checkbox-terms\" defaultChecked />\n      <Label htmlFor=\"checkbox-terms\">Require a passing check before merge</Label>\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid gap-4\">\n      <Label>\n        <Checkbox />\n        Off\n      </Label>\n      <Label>\n        <Checkbox defaultChecked />\n        On\n      </Label>\n      <Label>\n        <Checkbox indeterminate />\n        Some\n      </Label>\n      <Label>\n        <Checkbox aria-invalid />\n        Invalid\n      </Label>\n      <Label>\n        <Checkbox disabled />\n        Disabled\n      </Label>\n      <Label>\n        <Checkbox disabled defaultChecked />\n        Disabled on\n      </Label>\n    </div>\n  );\n}\n\nconst CHECKS = [\"Typecheck\", \"Unit tests\", \"Lint\", \"Preview deploy\"];\n\nexport function Indeterminate() {\n  const [on, setOn] = React.useState<string[]>([\"Typecheck\", \"Unit tests\"]);\n  const all = on.length === CHECKS.length;\n  return (\n    <div className=\"grid gap-3\">\n      <Label>\n        <Checkbox checked={all} indeterminate={on.length > 0 && !all} onCheckedChange={(checked) => setOn(checked ? CHECKS : [])} />\n        Required checks\n      </Label>\n      <div className=\"grid gap-3 pl-6\">\n        {CHECKS.map((check) => (\n          <Label key={check} className=\"font-normal text-fg-secondary\">\n            <Checkbox checked={on.includes(check)} onCheckedChange={(checked) => setOn((current) => (checked ? [...current, check] : current.filter((item) => item !== check)))} />\n            {check}\n          </Label>\n        ))}\n      </div>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "States",
+        "Indeterminate"
+      ],
+      "requires": [
+        "checkbox",
+        "label"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/checkbox/Preview"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/checkbox/States"
+        },
+        {
+          "name": "Indeterminate",
+          "url": "https://hoplite-ds.vercel.app/preview/checkbox/Indeterminate"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Checkbox",
+  "description": "A square 16px check with a 1px strong edge on the ground; on, it fills with the ink and holds a ground-colored check, and a dash when some are on. Fills change in 120ms; nothing moves or grows.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/checkbox.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Checkbox as BaseCheckbox } from \"@base-ui/react/checkbox\";\nimport { CheckIcon, MinusIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { cn } from \"@/lib/utils\";\n\n// Checks are square, as the site's principles say (the site draws no form checks; this follows its keys' lines): a\n// 16px box with a 1px strong edge on the ground. On, it fills with the ink and holds a 12px check in the ground color;\n// when some are on (indeterminate) it holds a dash instead. The edge turns the ink under the pointer. The fill and the\n// edge change in 120ms on the ease-out and nothing moves or grows; the mark itself appears at once. Keyboard focus is\n// the 2px ink outline 2px out; an invalid check takes the orange edge; a disabled one turns the quiet line, and the off\n// gray when on. Its label sits 8px away in 14px medium ink. An invisible 8px margin around the box widens the hit area.\nfunction Checkbox({ className, ...props }: React.ComponentProps<typeof BaseCheckbox.Root>) {\n  return (\n    <BaseCheckbox.Root\n      data-slot=\"checkbox\"\n      className={cn(\n        \"peer group/checkbox relative inline-flex size-4 shrink-0 cursor-pointer items-center justify-center border border-line-strong bg-surface text-on-primary transition-[background-color,border-color] duration-fast ease-out after:absolute after:-inset-2 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-checked:border-primary data-checked:bg-primary data-indeterminate:border-primary data-indeterminate:bg-primary aria-invalid:border-danger data-invalid:border-danger data-disabled:cursor-not-allowed data-disabled:border-line data-disabled:data-checked:border-off data-disabled:data-checked:bg-off data-disabled:data-indeterminate:border-off data-disabled:data-indeterminate:bg-off motion-reduce:transition-none\",\n        className,\n      )}\n      {...props}\n    >\n      <BaseCheckbox.Indicator data-slot=\"checkbox-indicator\" className=\"flex items-center justify-center\">\n        <CheckIcon aria-hidden weight=\"bold\" className=\"size-3 group-data-indeterminate/checkbox:hidden\" />\n        <MinusIcon aria-hidden weight=\"bold\" className=\"hidden size-3 group-data-indeterminate/checkbox:block\" />\n      </BaseCheckbox.Indicator>\n    </BaseCheckbox.Root>\n  );\n}\n\nexport { Checkbox };\n"
+    }
+  ]
+}

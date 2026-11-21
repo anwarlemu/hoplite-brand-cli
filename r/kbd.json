@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "name": "kbd",
+  "useFor": "Use Kbd to show a keyboard shortcut in a menu row, a tooltip or help text (N, Cmd K). Group the keys of one shortcut in KbdGroup. Use the symbol glyph for modifier keys where the platform is known.",
+  "constraints": [
+    "Rounded or pill caps",
+    "A filled or raised cap",
+    "A shortcut written in body type"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the nav's shortcut caps (drawn square, as the brand draws every frame) in Kode Mono",
+  "exports": [
+    "Kbd",
+    "KbdGroup"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/kbd",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/kbd.md",
+  "examples": [
+    {
+      "path": "examples/kbd.tsx",
+      "content": "import { CommandIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Kbd, KbdGroup } from \"@/components/ui/kbd\";\n\nexport function Preview() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-6\">\n      <KbdGroup>\n        <Kbd>\n          <CommandIcon />\n        </Kbd>\n        <Kbd>K</Kbd>\n      </KbdGroup>\n      <KbdGroup>\n        <Kbd>Ctrl</Kbd>\n        <span>+</span>\n        <Kbd>Enter</Kbd>\n      </KbdGroup>\n      <Kbd>Esc</Kbd>\n    </div>\n  );\n}\n\nexport function InText() {\n  return (\n    <p className=\"max-w-md text-body-sm leading-line-body-sm text-fg-secondary\">\n      Press <Kbd>N</Kbd> to start a thread, or{\" \"}\n      <KbdGroup>\n        <Kbd>\n          <CommandIcon />\n        </Kbd>\n        <Kbd>Enter</Kbd>\n      </KbdGroup>{\" \"}\n      to send the message and keep the agent running.\n    </p>\n  );\n}\n\nexport function OnInk() {\n  return (\n    <div data-slot=\"tooltip-content\" className=\"inline-flex items-center gap-2 bg-primary px-2 py-1 text-caption leading-line-caption text-on-primary\">\n      Search threads\n      <KbdGroup>\n        <Kbd>\n          <CommandIcon />\n        </Kbd>\n        <Kbd>K</Kbd>\n      </KbdGroup>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "InText",
+        "OnInk"
+      ],
+      "requires": [
+        "kbd"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/kbd/Preview"
+        },
+        {
+          "name": "InText",
+          "url": "https://hoplite-ds.vercel.app/preview/kbd/InText"
+        },
+        {
+          "name": "OnInk",
+          "url": "https://hoplite-ds.vercel.app/preview/kbd/OnInk"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Kbd",
+  "description": "A square 20px key cap with a quiet edge and a 12px Kode Mono label; caps in a group sit 4px apart, and on an ink tooltip they follow its light ink.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/ui/kbd.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A key cap, extrapolated from the site's nav shortcuts: a square 20px cap with a quiet 16 percent edge, 12px Kode Mono\n// in the quiet gray, 4px in. On an ink tooltip the edge and label follow the tooltip's light ink. Caps in a group sit\n// 4px apart.\nfunction Kbd({ className, ...props }: React.ComponentProps<\"kbd\">) {\n  return (\n    <kbd\n      data-slot=\"kbd\"\n      className={cn(\n        \"pointer-events-none inline-flex h-5 w-fit min-w-5 shrink-0 items-center justify-center gap-1 border border-line px-1 font-mono text-caption leading-none font-normal tracking-code text-fg-muted select-none [&_svg:not([class*='size-'])]:size-3 in-data-[slot=tooltip-content]:border-current/30 in-data-[slot=tooltip-content]:text-on-primary\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction KbdGroup({ className, ...props }: React.ComponentProps<\"kbd\">) {\n  return <kbd data-slot=\"kbd-group\" className={cn(\"inline-flex items-center gap-1 font-mono text-caption text-fg-muted\", className)} {...props} />;\n}\n\nexport { Kbd, KbdGroup };\n"
+    }
+  ]
+}

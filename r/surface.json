@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "name": "surface",
+  "useFor": "Wrap an embedded panel or a preview in Surface so its overlays render inside it. Pick night for a dark band or a dark preview, paper for a card that needs to lift off the ground.",
+  "constraints": [],
+  "documentation": "",
+  "exports": [
+    "Surface",
+    "usePortalContainer"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/r/surface.md",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/surface.md",
+  "examples": [],
+  "type": "lib",
+  "title": "Surface",
+  "description": "A ground (the warm gray, the paper, or the night: the dark theme scoped to one element) that also keeps the dialogs, menus and tooltips opened inside it.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "lib/surface.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A ground: the warm ground (pages, dialogs, popups), the paper (a card under the pointer, a story), or the night (a\n// dark band: the dark theme scoped to this element). Dialogs, menus and tooltips opened inside a Surface render inside\n// it, so a preview or an embedded panel keeps its overlays and its theme.\nconst PortalContainer = React.createContext<HTMLElement | null>(null);\n\nconst GROUNDS = {\n  ground: \"bg-surface text-fg\",\n  paper: \"bg-subtle text-fg\",\n  night: \"ds-theme dark bg-surface text-fg\",\n} as const;\n\nexport function Surface({ ground = \"ground\", className, children, ...props }: React.ComponentProps<\"div\"> & { ground?: keyof typeof GROUNDS }) {\n  const [element, setElement] = React.useState<HTMLDivElement | null>(null);\n  return (\n    <div ref={setElement} data-ground={ground} className={cn(GROUNDS[ground], className)} {...props}>\n      <PortalContainer.Provider value={element}>{children}</PortalContainer.Provider>\n    </div>\n  );\n}\n\n/** Where overlays render: the nearest Surface, else the page body. */\nexport function usePortalContainer() {\n  return React.useContext(PortalContainer) ?? undefined;\n}\n"
+    }
+  ]
+}

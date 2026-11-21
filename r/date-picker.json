@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "name": "date-picker",
+  "useFor": "Use DatePicker for one date in a form (a token's expiry, when an automation runs) and DateRangePicker for a period (usage, a log). Control them with value and onValueChange; pass presets for common choices and calendar for disabled days, the first day of the week or today. Give it a label (id) or aria-label; name submits the date as YYYY-MM-DD (a range as nameFrom and nameTo). Built on Base UI Popover and the Calendar item.",
+  "constraints": [
+    "Rounded fields or panels",
+    "A native date input beside it",
+    "An orange chosen day",
+    "A calendar that stays open after a single date is picked"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the field lines and 14px controls, the nav popup (.hn__panel, .hn__item) and the Calendar item",
+  "exports": [
+    "DatePicker",
+    "DateRangePicker",
+    "formatDate",
+    "formatRange",
+    "DatePickerProps",
+    "DateRangePickerProps"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/date-picker",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/date-picker.md",
+  "examples": [
+    {
+      "path": "examples/date-picker.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport type { DateRange } from \"@/components/ui/calendar\";\nimport { DatePicker, DateRangePicker } from \"@/components/ui/date-picker\";\n\n// A fixed today, so the examples read the same on every visit.\nconst TODAY = new Date(2026, 10, 17);\nconst days = (n: number) => new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + n);\nconst LABEL = \"text-body-sm font-medium text-fg\";\n\nexport function Preview() {\n  const [date, setDate] = React.useState<Date | undefined>();\n  return (\n    <div className=\"grid w-full max-w-72 gap-2\">\n      <label htmlFor=\"token-expires\" className={LABEL}>\n        Token expires\n      </label>\n      <DatePicker id=\"token-expires\" value={date} onValueChange={setDate} placeholder=\"Never\" calendar={{ today: TODAY, disabled: { before: TODAY } }} />\n    </div>\n  );\n}\n\nexport function Range() {\n  const [range, setRange] = React.useState<DateRange | undefined>({ from: days(-6), to: TODAY });\n  return (\n    <div className=\"grid w-full max-w-80 gap-2\">\n      <label htmlFor=\"usage-range\" className={LABEL}>\n        Usage period\n      </label>\n      <DateRangePicker id=\"usage-range\" value={range} onValueChange={setRange} calendar={{ today: TODAY, disabled: { after: TODAY } }} />\n    </div>\n  );\n}\n\nexport function Presets() {\n  const [run, setRun] = React.useState<Date | undefined>(days(1));\n  return (\n    <div className=\"grid w-full max-w-80 gap-2\">\n      <label htmlFor=\"run-on\" className={LABEL}>\n        Run the automation on\n      </label>\n      <DatePicker\n        id=\"run-on\"\n        value={run}\n        onValueChange={setRun}\n        calendar={{ today: TODAY, disabled: { before: TODAY } }}\n        presets={[\n          { label: \"Today\", value: TODAY },\n          { label: \"Tomorrow\", value: days(1) },\n          { label: \"In a week\", value: days(7) },\n          { label: \"In a month\", value: days(30) },\n        ]}\n      />\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid w-full max-w-72 gap-3\">\n      <DatePicker aria-label=\"Release date\" aria-invalid placeholder=\"Pick a release date\" calendar={{ today: TODAY }} />\n      <DatePicker aria-label=\"Plan renews\" defaultValue={new Date(2026, 11, 1)} disabled calendar={{ today: TODAY }} />\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Range",
+        "Presets",
+        "States"
+      ],
+      "requires": [
+        "date-picker",
+        "calendar"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/date-picker/Preview"
+        },
+        {
+          "name": "Range",
+          "url": "https://hoplite-ds.vercel.app/preview/date-picker/Range"
+        },
+        {
+          "name": "Presets",
+          "url": "https://hoplite-ds.vercel.app/preview/date-picker/Presets"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/date-picker/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Date picker",
+  "description": "The square 40px field with a calendar glyph and a caret, opening the calendar in the site's square popup; presets sit in a column of 36px rows beside it, and a range picker shows two months. On a phone the presets row scrolls sideways and fades at the edge it scrolls past (fade-x).",
+  "surface": "site",
+  "kinds": [
+    "input",
+    "popover-panel"
+  ],
+  "requires": [
+    "theme",
+    "calendar",
+    "surface",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/date-picker.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Popover as BasePopover } from \"@base-ui/react/popover\";\nimport { CalendarBlankIcon, CaretDownIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Calendar, type CalendarProps, type DateRange } from \"@/components/ui/calendar\";\nimport { usePortalContainer } from \"@/lib/surface\";\nimport { cn } from \"@/lib/utils\";\n\n// A date field, extrapolated from the site's field and popup (it has none). The trigger is the field: square, 40px, a\n// 32 percent edge on the ground, a 16px calendar glyph in the quiet gray 12px in, the date in 14px ink (the placeholder\n// in the slate) and a 16px caret at the right; the edge turns strong under the pointer and while the calendar is open,\n// the ink on focus. The calendar opens 4px under it in the site's popup, a square panel of the ground with the quiet\n// hairline and long soft cast, growing from the field (opacity and 98 percent scale, 240ms on the strong ease-out) and\n// leaving in 200ms. Presets sit in a column of the popup's 36px rows at the panel's left over a quiet rule, the chosen one\n// on the hover wash. A single date closes the panel when picked; a range closes once both ends are set. Opening puts focus\n// on the chosen day (or today), so the arrow keys work at once.\nconst TRIGGER =\n  \"group/date-picker flex h-10 w-full min-w-0 cursor-pointer items-center gap-2 border border-line-field bg-transparent px-3 font-sans text-body-sm leading-line-body-sm whitespace-nowrap text-fg select-none transition-[border-color] duration-fast ease-out hover:border-line-strong focus-visible:border-focus-ring focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-popup-open:border-line-strong aria-invalid:border-danger data-[empty=true]:text-fg-subtle disabled:cursor-not-allowed disabled:border-line disabled:text-fg-subtle pointer-coarse:h-12 motion-reduce:transition-none\";\n\nconst POPUP =\n  \"max-w-(--available-width) origin-(--transform-origin) overflow-hidden bg-surface text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]\";\n\ntype Preset<T> = { label: string; value: T };\n\nfunction formatDate(date: Date, locale?: string, options: Intl.DateTimeFormatOptions = { month: \"short\", day: \"numeric\", year: \"numeric\" }) {\n  return new Intl.DateTimeFormat(locale, options).format(date);\n}\n\nfunction formatRange(range: DateRange | undefined, locale?: string) {\n  if (!range?.from) return undefined;\n  if (!range.to) return `${formatDate(range.from, locale)} -`;\n  const sameYear = range.from.getFullYear() === range.to.getFullYear();\n  return `${formatDate(range.from, locale, sameYear ? { month: \"short\", day: \"numeric\" } : undefined)} - ${formatDate(range.to, locale)}`;\n}\n\nfunction DatePickerTrigger({ empty, label, className, children, ...props }: React.ComponentProps<\"button\"> & { empty: boolean; label?: string }) {\n  return (\n    <BasePopover.Trigger data-slot=\"date-picker-trigger\" data-empty={empty} aria-label={label} className={cn(TRIGGER, className)} {...props}>\n      <CalendarBlankIcon aria-hidden className=\"size-4 shrink-0 text-fg-muted\" />\n      <span className=\"min-w-0 flex-1 truncate text-left\">{children}</span>\n      <CaretDownIcon aria-hidden className=\"size-4 shrink-0 text-fg-muted\" />\n    </BasePopover.Trigger>\n  );\n}\n\nfunction Content({ slot, children }: { slot: string; children: React.ReactNode }) {\n  const container = usePortalContainer();\n  return (\n    <BasePopover.Portal container={container}>\n      <BasePopover.Positioner side=\"bottom\" align=\"start\" sideOffset={4} collisionPadding={8} className=\"z-50 outline-none\">\n        <BasePopover.Popup data-slot={slot} initialFocus={false} className={POPUP}>\n          {children}\n        </BasePopover.Popup>\n      </BasePopover.Positioner>\n    </BasePopover.Portal>\n  );\n}\n\nfunction Presets<T>({ presets, isActive, onPick }: { presets: Preset<T>[]; isActive: (p: Preset<T>) => boolean; onPick: (value: T) => void }) {\n  return (\n    <div data-slot=\"date-picker-presets\" className=\"min-w-0 border-line max-sm:border-b sm:w-40 sm:border-r\">\n      <div role=\"group\" aria-label=\"Presets\" className=\"flex gap-1 overflow-x-auto p-1 fade-x sm:flex-col\">\n        {presets.map((p) => (\n          <button\n            key={p.label}\n            type=\"button\"\n            aria-pressed={isActive(p)}\n            onClick={() => onPick(p.value)}\n            className=\"flex h-9 shrink-0 cursor-pointer items-center px-3 text-left font-sans text-body-sm leading-line-body-sm font-normal whitespace-nowrap text-fg hover:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-pressed:bg-subtle-hover\"\n          >\n            {p.label}\n          </button>\n        ))}\n      </div>\n    </div>\n  );\n}\n\nconst sameDay = (a?: Date, b?: Date) => !!a && !!b && a.toDateString() === b.toDateString();\n\ntype CalendarPassThrough = Omit<CalendarProps, \"mode\" | \"selected\" | \"onSelect\" | \"required\" | \"min\" | \"max\">;\n\ntype DatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onValueChange?: (date: Date | undefined) => void;\n  placeholder?: string;\n  disabled?: boolean;\n  /** Shortcuts beside the calendar (Today, In a week). */\n  presets?: Preset<Date>[];\n  /** Props for the calendar inside (disabled days, the first day of the week, today). */\n  calendar?: CalendarPassThrough;\n  locale?: string;\n  id?: string;\n  name?: string;\n  className?: string;\n  \"aria-invalid\"?: boolean;\n  \"aria-label\"?: string;\n};\n\nfunction DatePicker({ value: valueProp, defaultValue, onValueChange, placeholder = \"Pick a date\", disabled, presets, calendar, locale, id, name, className, ...aria }: DatePickerProps) {\n  const [open, setOpen] = React.useState(false);\n  const [inner, setInner] = React.useState(defaultValue);\n  const value = valueProp !== undefined ? valueProp : inner;\n  const set = (d: Date | undefined) => {\n    if (valueProp === undefined) setInner(d);\n    onValueChange?.(d);\n  };\n  return (\n    <BasePopover.Root open={open} onOpenChange={(next) => setOpen(next)}>\n      <DatePickerTrigger id={id} empty={!value} disabled={disabled} className={className} aria-invalid={aria[\"aria-invalid\"]} label={aria[\"aria-label\"]}>\n        {value ? formatDate(value, locale) : placeholder}\n      </DatePickerTrigger>\n      {name && <input type=\"hidden\" name={name} value={value ? value.toISOString().slice(0, 10) : \"\"} />}\n      <Content slot=\"date-picker-content\">\n        <div className=\"flex flex-col sm:flex-row\">\n          {presets && (\n            <Presets\n              presets={presets}\n              isActive={(p) => sameDay(p.value, value)}\n              onPick={(d) => {\n                set(d);\n                setOpen(false);\n              }}\n            />\n          )}\n          <Calendar\n            {...calendar}\n            mode=\"single\"\n            selected={value}\n            defaultMonth={value ?? calendar?.defaultMonth}\n            locale={locale}\n            autoFocus\n            onSelect={(d) => {\n              set(d);\n              if (d) setOpen(false);\n            }}\n          />\n        </div>\n      </Content>\n    </BasePopover.Root>\n  );\n}\n\ntype DateRangePickerProps = Omit<DatePickerProps, \"value\" | \"defaultValue\" | \"onValueChange\" | \"presets\"> & {\n  value?: DateRange;\n  defaultValue?: DateRange;\n  onValueChange?: (range: DateRange | undefined) => void;\n  presets?: Preset<DateRange>[];\n  /** How many months show side by side (two by default; one on a phone). */\n  numberOfMonths?: number;\n};\n\nfunction DateRangePicker({ value: valueProp, defaultValue, onValueChange, placeholder = \"Pick a date range\", disabled, presets, calendar, locale, numberOfMonths = 2, id, name, className, ...aria }: DateRangePickerProps) {\n  const [open, setOpen] = React.useState(false);\n  const [inner, setInner] = React.useState(defaultValue);\n  const value = valueProp !== undefined ? valueProp : inner;\n  const set = (r: DateRange | undefined) => {\n    if (valueProp === undefined) setInner(r);\n    onValueChange?.(r);\n  };\n  const [narrow, setNarrow] = React.useState(false);\n  React.useEffect(() => {\n    const query = window.matchMedia(\"(max-width: 39.99rem)\");\n    const update = () => setNarrow(query.matches);\n    update();\n    query.addEventListener(\"change\", update);\n    return () => query.removeEventListener(\"change\", update);\n  }, []);\n  const label = formatRange(value, locale);\n  return (\n    <BasePopover.Root open={open} onOpenChange={(next) => setOpen(next)}>\n      <DatePickerTrigger id={id} empty={!label} disabled={disabled} className={className} aria-invalid={aria[\"aria-invalid\"]} label={aria[\"aria-label\"]}>\n        {label ?? placeholder}\n      </DatePickerTrigger>\n      {name && (\n        <>\n          <input type=\"hidden\" name={`${name}From`} value={value?.from ? value.from.toISOString().slice(0, 10) : \"\"} />\n          <input type=\"hidden\" name={`${name}To`} value={value?.to ? value.to.toISOString().slice(0, 10) : \"\"} />\n        </>\n      )}\n      <Content slot=\"date-range-picker-content\">\n        <div className=\"flex flex-col sm:flex-row\">\n          {presets && (\n            <Presets\n              presets={presets}\n              isActive={(p) => sameDay(p.value.from, value?.from) && sameDay(p.value.to, value?.to)}\n              onPick={(r) => {\n                set(r);\n                setOpen(false);\n              }}\n            />\n          )}\n          <Calendar\n            {...calendar}\n            mode=\"range\"\n            selected={value}\n            defaultMonth={value?.from ?? calendar?.defaultMonth}\n            numberOfMonths={narrow ? 1 : numberOfMonths}\n            locale={locale}\n            autoFocus\n            onSelect={(r) => {\n              set(r);\n              if (r?.from && r.to) setOpen(false);\n            }}\n          />\n        </div>\n      </Content>\n    </BasePopover.Root>\n  );\n}\n\nexport { DatePicker, DateRangePicker, formatDate, formatRange };\nexport type { DatePickerProps, DateRangePickerProps };\n"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "name": "pricing-table",
+  "useFor": "Use on the pricing page. Mark one plan's key as primary (the ink hexagon); the rest are outlined. Prices take a monthly and yearly value, or one value.",
+  "constraints": [
+    "Two primary keys",
+    "A highlighted plan with a colored fill",
+    "Check marks instead of hexagons"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's pricing page (.pr-hero, .pr-plans: Free, Plus, Team, Enterprise)",
+  "exports": [
+    "Plan",
+    "PricingTable"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/pricing-table",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/pricing-table.md",
+  "examples": [
+    {
+      "path": "examples/pricing-table.tsx",
+      "content": "import { PricingTable } from \"@/components/blocks/pricing-table\";\n\nexport function Preview() {\n  return <PricingTable />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "pricing-table"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/pricing-table/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Pricing table",
+  "description": "The pricing page's plans: heading, lead and the billing toggle, then every plan in one stone frame split by hairlines, each with its node row, name, price, note, key and features or terms.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "brand-marks",
+    "button",
+    "toggle-group",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/pricing-table.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { NodeCluster } from \"@/components/site/brand-marks\";\nimport { Button } from \"@/components/ui/button\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\nimport { TypographyH1, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nexport type Plan = {\n  name: string;\n  /** The price per period, or one value for both (such as Custom). */\n  price: { monthly: string; yearly: string } | string;\n  unit?: string;\n  note?: { monthly: string; yearly: string } | string;\n  description: string;\n  action: { label: string; href: string; primary?: boolean };\n  intro?: string;\n  features?: string[];\n  details?: [label: string, value: string][];\n  nodes?: { count: number; active: number; ghost?: number };\n};\n\nconst PLANS: Plan[] = [\n  { name: \"Free\", price: \"$0\", note: \"Free forever\", description: \"Run agents yourself, with a monthly usage allowance. Nothing charged.\", action: { label: \"Start free\", href: \"#free\" }, features: [\"5 concurrent cloud sessions\", \"Sandboxes up to 2 vCPU, 8 GiB RAM\", \"5 projects\", \"All platform models\"], nodes: { count: 1, active: 1 } },\n  { name: \"Plus\", price: { monthly: \"$20\", yearly: \"$16.67\" }, unit: \"per seat / month\", note: { monthly: \"$16.67 per month on yearly\", yearly: \"Billed yearly\" }, description: \"The team features with lower limits and generous included usage per seat.\", action: { label: \"Start plus\", href: \"#plus\" }, intro: \"Everything in Free, and:\", features: [\"Generous included usage\", \"50 concurrent sandboxes per seat\", \"Unlimited projects\", \"Team seats and shared organizations\"], nodes: { count: 3, active: 1 } },\n  { name: \"Team\", price: { monthly: \"$60\", yearly: \"$50\" }, unit: \"per seat / month\", note: { monthly: \"$50 per month on yearly\", yearly: \"Billed yearly\" }, description: \"The highest limits and the most included usage per seat.\", action: { label: \"Start team\", href: \"#team\", primary: true }, intro: \"Everything in Plus, and:\", features: [\"Most included usage per seat\", \"150 concurrent sandboxes per seat\", \"500 new threads per hour\", \"Usage charts and analytics\"], nodes: { count: 5, active: 3 } },\n  { name: \"Enterprise\", price: \"Custom\", note: \"Annual agreement\", description: \"For organizations with custom security, infrastructure and support requirements.\", action: { label: \"Book a call\", href: \"#call\" }, details: [[\"Sandbox capacity\", \"custom\"], [\"Security and governance\", \"advanced\"], [\"Networking and retention\", \"private\"], [\"Support\", \"contractual SLAs\"], [\"Agreement\", \"annual\"]], nodes: { count: 5, active: 3, ghost: 2 } },\n];\n\nconst per = <T,>(v: { monthly: T; yearly: T } | T, period: \"monthly\" | \"yearly\") => (v && typeof v === \"object\" && \"monthly\" in v ? v[period] : v) as T;\n\n// The pricing page (.pr-hero, .pr-plans): the heading and lead with the billing toggle at the right, then the plans in\n// one stone frame split by hairlines. Each plan opens with its row of nodes over a dashed rule, its name in Chakra Petch,\n// the price at heading size with its unit, a quiet note, the description, its key (the ink hexagon for the one to pick,\n// outlined for the rest), then a rule and its features beside outlined hexagons, or its terms on dashed rows.\nfunction PricingTable({\n  title = \"Stay at the frontier of agentic coding.\",\n  lead = \"Start free, then pay per seat for more included usage. Switch plans or cancel anytime.\",\n  plans = PLANS,\n  yearlyLabel = \"Yearly, save 17%\",\n  className,\n}: {\n  title?: React.ReactNode;\n  lead?: React.ReactNode;\n  plans?: Plan[];\n  yearlyLabel?: string;\n  className?: string;\n}) {\n  const [period, setPeriod] = React.useState<\"monthly\" | \"yearly\">(\"monthly\");\n  return (\n    <section data-slot=\"pricing-table\" className={cn(\"w-full pt-20 pb-20 sm:pt-32\", className)}>\n      <div className=\"mx-auto grid w-full max-w-320 gap-16\">\n        <div className=\"flex flex-wrap items-end justify-between gap-8\">\n          <div className=\"grid max-w-180 gap-6\">\n            <TypographyH1>{title}</TypographyH1>\n            {lead && <TypographyLead>{lead}</TypographyLead>}\n          </div>\n          <ToggleGroup value={period} onValueChange={(v) => v && setPeriod(v as \"monthly\" | \"yearly\")} aria-label=\"Billing period\">\n            <ToggleGroupItem value=\"monthly\">Monthly</ToggleGroupItem>\n            <ToggleGroupItem value=\"yearly\">{yearlyLabel}</ToggleGroupItem>\n          </ToggleGroup>\n        </div>\n        <div className=\"grid border border-line-frame md:grid-cols-2 xl:grid-cols-4\">\n          {plans.map((p, i) => (\n            <article key={p.name} className={cn(\"flex flex-col gap-6 p-8\", i > 0 && \"border-t border-line-frame md:border-t-0\", i % 2 === 1 && \"md:border-l\", i >= 2 && \"md:border-t xl:border-t-0\", i > 0 && \"xl:border-l\")}>\n              {p.nodes && <NodeCluster {...p.nodes} />}\n              <div className=\"grid gap-2\">\n                <h3 className=\"m-0 font-display text-h4 leading-8 font-normal text-fg\">{p.name}</h3>\n                <p className=\"m-0 flex flex-wrap items-baseline gap-x-2\">\n                  <span className=\"font-display text-h2 leading-heading font-light text-fg\">{per(p.price, period)}</span>\n                  {p.unit && <span className=\"text-body-sm leading-line-body-sm text-fg-secondary\">{p.unit}</span>}\n                </p>\n                {p.note && <p className=\"m-0 text-body-sm leading-line-body-sm text-fg-muted\">{per(p.note, period)}</p>}\n              </div>\n              <p className=\"m-0 min-h-18 text-body leading-line-body font-light text-pretty text-fg-secondary\">{p.description}</p>\n              <Button variant={p.action.primary ? \"default\" : \"outline\"} className=\"w-full\" render={<a href={p.action.href} />}>\n                {p.action.label}\n              </Button>\n              <div className=\"grid gap-3 border-t border-line pt-6\">\n                {p.intro && <p className=\"m-0 text-body-sm leading-line-body-sm text-fg-muted\">{p.intro}</p>}\n                {p.features && (\n                  <ul className=\"m-0 grid list-none gap-3 p-0\">\n                    {p.features.map((f) => (\n                      <li key={f} className=\"flex items-start gap-3 text-body-sm leading-line-body-sm text-fg\">\n                        <svg viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" aria-hidden className=\"mt-1 size-3 shrink-0 fill-none stroke-line-strong\">\n                          <path d=\"M11 6L8.5 10.33L3.5 10.33L1 6L3.5 1.67L8.5 1.67Z\" strokeWidth={1} />\n                        </svg>\n                        {f}\n                      </li>\n                    ))}\n                  </ul>\n                )}\n                {p.details && (\n                  <dl className=\"m-0 grid\">\n                    {p.details.map(([k, v]) => (\n                      <div key={k} className=\"ds-rule-x flex items-baseline justify-between gap-4 py-2 text-body-sm leading-line-body-sm\">\n                        <dt className=\"text-fg-secondary\">{k}</dt>\n                        <dd className=\"m-0 text-right text-fg\">{v}</dd>\n                      </div>\n                    ))}\n                  </dl>\n                )}\n              </div>\n            </article>\n          ))}\n        </div>\n      </div>\n    </section>\n  );\n}\n\nexport { PricingTable };\n"
+    }
+  ]
+}

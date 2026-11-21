@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "name": "command",
+  "useFor": "Use CommandDialog for a palette opened with Command K (new thread, open a terminal, go to pull requests), or Command inline for a searchable list of actions. Put CommandInput first, then CommandList with CommandEmpty, CommandGroup (heading), CommandItem (onSelect) and CommandSeparator; CommandShortcut shows the keys. Built on cmdk, with the dialog on Base UI Dialog.",
+  "constraints": [
+    "An open or close animation",
+    "Rounded panels or rows",
+    "A highlight that slides between rows",
+    "Shortcuts in the body face",
+    "More than one palette per app"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the nav popup (.hn__panel, .hn__item), Kode Mono labels (.label) and the 32 percent ink scrim",
+  "exports": [
+    "Command",
+    "CommandDialog",
+    "CommandEmpty",
+    "CommandGroup",
+    "CommandInput",
+    "CommandItem",
+    "CommandList",
+    "CommandSeparator",
+    "CommandShortcut"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/command",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/command.md",
+  "examples": [
+    {
+      "path": "examples/command.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { ChatsCircleIcon, CubeIcon, GearSixIcon, GitPullRequestIcon, LightningIcon, PlusIcon, TerminalWindowIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from \"@/components/ui/command\";\n\nfunction Items({ onRun }: { onRun?: (label: string) => void }) {\n  const run = (label: string) => () => onRun?.(label);\n  return (\n    <>\n      <CommandEmpty>No command by that name.</CommandEmpty>\n      <CommandGroup heading=\"Actions\">\n        <CommandItem onSelect={run(\"New thread\")}>\n          <PlusIcon />\n          New thread\n          <CommandShortcut>⌘N</CommandShortcut>\n        </CommandItem>\n        <CommandItem onSelect={run(\"Open a sandbox terminal\")}>\n          <TerminalWindowIcon />\n          Open a sandbox terminal\n          <CommandShortcut>⌘T</CommandShortcut>\n        </CommandItem>\n        <CommandItem onSelect={run(\"Run automation\")}>\n          <LightningIcon />\n          Run automation\n        </CommandItem>\n      </CommandGroup>\n      <CommandSeparator />\n      <CommandGroup heading=\"Go to\">\n        <CommandItem onSelect={run(\"Threads\")}>\n          <ChatsCircleIcon />\n          Threads\n          <CommandShortcut>G T</CommandShortcut>\n        </CommandItem>\n        <CommandItem onSelect={run(\"Pull requests\")}>\n          <GitPullRequestIcon />\n          Pull requests\n          <CommandShortcut>G P</CommandShortcut>\n        </CommandItem>\n        <CommandItem onSelect={run(\"Sandboxes\")}>\n          <CubeIcon />\n          Sandboxes\n        </CommandItem>\n        <CommandItem disabled>\n          <GearSixIcon />\n          Workspace settings (admins only)\n        </CommandItem>\n      </CommandGroup>\n    </>\n  );\n}\n\nexport function Preview() {\n  return (\n    <Command className=\"max-w-120 shadow-floating\">\n      <CommandInput placeholder=\"Type a command or search\" />\n      <CommandList>\n        <Items />\n      </CommandList>\n    </Command>\n  );\n}\n\nexport function Dialog() {\n  const [open, setOpen] = React.useState(false);\n  const [ran, setRan] = React.useState<string>();\n  React.useEffect(() => {\n    const onKey = (event: KeyboardEvent) => {\n      if (event.key === \"k\" && (event.metaKey || event.ctrlKey)) {\n        event.preventDefault();\n        setOpen((o) => !o);\n      }\n    };\n    document.addEventListener(\"keydown\", onKey);\n    return () => document.removeEventListener(\"keydown\", onKey);\n  }, []);\n  return (\n    <div className=\"flex flex-wrap items-center gap-4\">\n      <Button variant=\"outline\" onClick={() => setOpen(true)}>\n        Open the palette\n        <span className=\"font-code text-caption tracking-code text-fg-muted\">⌘K</span>\n      </Button>\n      <p aria-live=\"polite\" className=\"text-body-sm text-fg-muted\">\n        {ran ? `Ran: ${ran}` : \"Or press Command K.\"}\n      </p>\n      <CommandDialog open={open} onOpenChange={setOpen}>\n        <CommandInput placeholder=\"Type a command or search\" />\n        <CommandList>\n          <Items\n            onRun={(label) => {\n              setRan(label);\n              setOpen(false);\n            }}\n          />\n        </CommandList>\n      </CommandDialog>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Dialog"
+      ],
+      "requires": [
+        "command",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/command/Preview"
+        },
+        {
+          "name": "Dialog",
+          "url": "https://hoplite-ds.vercel.app/preview/command/Dialog"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Command",
+  "description": "A command palette: the site's square popup panel with a 48px search row over the quiet rule, Kode Mono group labels, 36px rows on the hover wash when highlighted and Kode Mono shortcuts at the end; the dialog opens and closes without motion. A long list fades at the edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [
+    "menu-panel",
+    "menu-item"
+  ],
+  "requires": [
+    "theme",
+    "surface",
+    "utils"
+  ],
+  "packages": [
+    "cmdk",
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/command.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Command as CommandPrimitive } from \"cmdk\";\nimport { Dialog as BaseDialog } from \"@base-ui/react/dialog\";\nimport { MagnifyingGlassIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { usePortalContainer } from \"@/lib/surface\";\nimport { cn } from \"@/lib/utils\";\n\n// A command palette, extrapolated from the site's popup (it has none): a square panel of the ground with the quiet\n// hairline and the long soft cast. The search row is 48px: a 16px magnifier in the quiet gray 16px in, then 16px ink text\n// (the placeholder in the slate) over the quiet rule. Groups open with Kode Mono labels; rows are the popup's, 36px with\n// 12px sides, 14px ink with a 16px glyph in the quiet gray 8px before the label, and the highlighted row on the hover\n// wash. Shortcuts sit at the row's end in 12px Kode Mono, tracked 4 percent, in the quiet gray. CommandDialog lays it\n// over the ink at 32 percent, 96px from the top, and neither opens nor closes with motion: it is summoned by keyboard\n// many times a day.\nfunction Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {\n  return <CommandPrimitive data-slot=\"command\" className={cn(\"flex size-full flex-col overflow-hidden bg-surface font-sans text-fg\", className)} {...props} />;\n}\n\nfunction CommandDialog({\n  title = \"Command palette\",\n  description = \"Search for a command to run\",\n  children,\n  className,\n  showCloseButton = false,\n  commandProps,\n  ...props\n}: Omit<React.ComponentProps<typeof BaseDialog.Root>, \"children\"> & { children?: React.ReactNode; title?: string; description?: string; className?: string; showCloseButton?: boolean; commandProps?: React.ComponentProps<typeof Command> }) {\n  const container = usePortalContainer();\n  return (\n    <BaseDialog.Root data-slot=\"command-dialog\" {...props}>\n      <BaseDialog.Portal container={container}>\n        <BaseDialog.Backdrop data-slot=\"command-dialog-backdrop\" className=\"fixed inset-0 z-50 bg-scrim\" />\n        <BaseDialog.Popup data-slot=\"command-dialog-content\" className={cn(\"fixed inset-x-4 top-24 z-50 mx-auto max-w-140 overflow-hidden bg-surface text-fg shadow-dialog outline-none\", className)}>\n          <BaseDialog.Title className=\"sr-only\">{title}</BaseDialog.Title>\n          <BaseDialog.Description className=\"sr-only\">{description}</BaseDialog.Description>\n          <Command {...commandProps} className={cn(\"[&_[data-slot=command-list]]:max-h-96\", commandProps?.className)}>\n            {children}\n          </Command>\n          {showCloseButton && <BaseDialog.Close className=\"sr-only\">Close</BaseDialog.Close>}\n        </BaseDialog.Popup>\n      </BaseDialog.Portal>\n    </BaseDialog.Root>\n  );\n}\n\nfunction CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {\n  return (\n    <div data-slot=\"command-input-wrapper\" className=\"flex h-12 shrink-0 items-center gap-3 border-b border-line px-4\">\n      <MagnifyingGlassIcon aria-hidden className=\"size-4 shrink-0 text-fg-muted\" />\n      <CommandPrimitive.Input\n        data-slot=\"command-input\"\n        className={cn(\"h-full w-full min-w-0 bg-transparent font-sans text-body leading-line-body text-fg outline-none placeholder:text-fg-subtle disabled:cursor-not-allowed disabled:text-fg-subtle\", className)}\n        {...props}\n      />\n    </div>\n  );\n}\n\nfunction CommandList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {\n  return <CommandPrimitive.List data-slot=\"command-list\" className={cn(\"max-h-80 scroll-py-1 overflow-x-hidden overflow-y-auto overscroll-contain p-1 fade-y\", className)} {...props} />;\n}\n\nfunction CommandEmpty({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {\n  return <CommandPrimitive.Empty data-slot=\"command-empty\" className={cn(\"py-8 text-center text-body-sm leading-line-body-sm text-fg-muted\", className)} {...props} />;\n}\n\nfunction CommandGroup({ className, heading, ...props }: React.ComponentProps<typeof CommandPrimitive.Group>) {\n  return (\n    <CommandPrimitive.Group\n      data-slot=\"command-group\"\n      heading={heading == null ? undefined : <span className=\"ds-label\">{heading}</span>}\n      className={cn(\"text-fg [&_[cmdk-group-heading]]:flex [&_[cmdk-group-heading]]:h-8 [&_[cmdk-group-heading]]:items-center [&_[cmdk-group-heading]]:px-3\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CommandSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {\n  return <CommandPrimitive.Separator data-slot=\"command-separator\" className={cn(\"-mx-1 my-1 h-px bg-line\", className)} {...props} />;\n}\n\nfunction CommandItem({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {\n  return (\n    <CommandPrimitive.Item\n      data-slot=\"command-item\"\n      className={cn(\n        \"relative flex h-9 cursor-default items-center gap-2 px-3 font-sans text-body-sm leading-line-body-sm font-normal text-fg outline-none select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:text-fg-subtle data-[selected=true]:bg-subtle-hover pointer-coarse:h-11 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-fg-muted\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction CommandShortcut({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"command-shortcut\" className={cn(\"ml-auto pl-4 font-code text-caption leading-line-caption tracking-code text-fg-muted\", className)} {...props} />;\n}\n\nexport { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut };\n"
+    }
+  ]
+}

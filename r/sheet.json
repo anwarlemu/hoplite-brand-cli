@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "name": "sheet",
+  "useFor": "Use for detail or settings that sit beside the page (a pull request's checks, sandbox settings) without leaving it. Open from the right by default; side=\"left\" for navigation, \"top\" or \"bottom\" for a band. Put the title in SheetHeader and the actions in SheetFooter with one ink Button. On phones use Drawer for a swipeable bottom sheet.",
+  "constraints": [
+    "Rounded corners",
+    "A white panel",
+    "A sheet wider than half the screen on desktop",
+    "A sheet that opens another sheet",
+    "Easing in"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the square ground panel and quiet line of its popups (.hn__sheet), the dock curve its frames slide on (--dock) and its long soft cast.",
+  "exports": [
+    "Sheet",
+    "SheetClose",
+    "SheetContent",
+    "SheetDescription",
+    "SheetFooter",
+    "SheetHeader",
+    "SheetOverlay",
+    "SheetPortal",
+    "SheetTitle",
+    "SheetTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/sheet",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/sheet.md",
+  "examples": [
+    {
+      "path": "examples/sheet.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Input } from \"@/components/ui/input\";\nimport { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from \"@/components/ui/sheet\";\n\nconst CHECKS = [\n  { name: \"Unit tests\", state: \"Passed\" },\n  { name: \"Type check\", state: \"Passed\" },\n  { name: \"End-to-end\", state: \"Running\" },\n  { name: \"Lint\", state: \"Passed\" },\n];\n\nfunction PullRequest({ defaultOpen, side = \"right\" }: { defaultOpen?: boolean; side?: \"right\" | \"left\" | \"top\" | \"bottom\" }) {\n  return (\n    <Sheet defaultOpen={defaultOpen}>\n      <SheetTrigger render={<Button variant=\"outline\" />}>{side === \"right\" ? \"Review pull request\" : `Open ${side}`}</SheetTrigger>\n      <SheetContent side={side}>\n        <SheetHeader>\n          <SheetTitle>Fix flaky upload test</SheetTitle>\n          <SheetDescription>#482 on acme/web, opened by the agent after its checks passed in the sandbox.</SheetDescription>\n        </SheetHeader>\n        <ul className=\"m-0 list-none px-6 py-0\">\n          {CHECKS.map((check) => (\n            <li key={check.name} className=\"flex items-center justify-between border-b border-line py-3 text-body-sm leading-line-body-sm first:border-t\">\n              <span className=\"text-fg-secondary\">{check.name}</span>\n              <span className=\"text-fg\">{check.state}</span>\n            </li>\n          ))}\n        </ul>\n        <SheetFooter>\n          <SheetClose render={<Button variant=\"outline\" />}>Close</SheetClose>\n          <Button>Merge</Button>\n        </SheetFooter>\n      </SheetContent>\n    </Sheet>\n  );\n}\n\nexport function Preview() {\n  return <PullRequest />;\n}\n\nexport function Open() {\n  return (\n    <div className=\"min-h-120\">\n      <PullRequest defaultOpen />\n    </div>\n  );\n}\n\nexport function Sides() {\n  return (\n    <div className=\"flex flex-wrap gap-3\">\n      <PullRequest side=\"left\" />\n      <PullRequest side=\"top\" />\n      <PullRequest side=\"bottom\" />\n    </div>\n  );\n}\n\nexport function Form() {\n  return (\n    <Sheet>\n      <SheetTrigger render={<Button variant=\"outline\" />}>Edit sandbox</SheetTrigger>\n      <SheetContent>\n        <SheetHeader>\n          <SheetTitle>Sandbox settings</SheetTitle>\n          <SheetDescription>Applies to new threads in acme-web.</SheetDescription>\n        </SheetHeader>\n        <div className=\"flex flex-col gap-4 px-6\">\n          <label className=\"flex flex-col gap-2\">\n            <span className=\"text-body-sm leading-line-body-sm font-medium text-fg\">Setup command</span>\n            <Input defaultValue=\"pnpm install\" />\n          </label>\n          <label className=\"flex flex-col gap-2\">\n            <span className=\"text-body-sm leading-line-body-sm font-medium text-fg\">Idle timeout, minutes</span>\n            <Input type=\"number\" defaultValue={30} />\n          </label>\n        </div>\n        <SheetFooter>\n          <SheetClose render={<Button variant=\"outline\" />}>Cancel</SheetClose>\n          <Button>Save</Button>\n        </SheetFooter>\n      </SheetContent>\n    </Sheet>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Open",
+        "Sides",
+        "Form"
+      ],
+      "requires": [
+        "sheet",
+        "button",
+        "input"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/sheet/Preview"
+        },
+        {
+          "name": "Open",
+          "url": "https://hoplite-ds.vercel.app/preview/sheet/Open"
+        },
+        {
+          "name": "Sides",
+          "url": "https://hoplite-ds.vercel.app/preview/sheet/Sides"
+        },
+        {
+          "name": "Form",
+          "url": "https://hoplite-ds.vercel.app/preview/sheet/Form"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Sheet",
+  "description": "A square full-height panel of the ground, 384px wide, ruled off by the quiet line and casting the long soft shadow over the page under the ink at 32 percent, with a Chakra Petch light 20px title, a 14px graphite description, footer keys at the end and a compact ghost X. It slides its own width on the dock curve. A long body scrolls inside the panel and fades at the edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils",
+    "surface",
+    "button"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/sheet.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Dialog as BaseDialog } from \"@base-ui/react/dialog\";\nimport { XIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { cn, slot } from \"@/lib/utils\";\nimport { usePortalContainer } from \"@/lib/surface\";\nimport { Button } from \"@/components/ui/button\";\n\n// A side panel: a square, full-height panel of the ground, 384px wide (three quarters of a phone), ruled off from the\n// page by the quiet line and casting the long soft shadow over it (shadow-cast), over the ink at 32 percent. A 24px\n// header holds a Chakra Petch light 20px title and a 14px graphite description; the footer sits at the bottom with its\n// hexagon keys at the end; the close key is a compact ghost hexagon with an X in the top right corner. The panel slides\n// its own width (or height, from the top or bottom) on the dock curve: in 240ms, out in 200ms. With reduced motion it\n// appears in place.\nconst SIDES = {\n  right: \"inset-y-0 right-0 h-full w-3/4 max-w-sm border-l border-line shadow-cast data-starting-style:translate-x-full data-ending-style:translate-x-full\",\n  left: \"inset-y-0 left-0 h-full w-3/4 max-w-sm border-r border-line shadow-floating data-starting-style:-translate-x-full data-ending-style:-translate-x-full\",\n  top: \"inset-x-0 top-0 max-h-dvh border-b border-line shadow-floating data-starting-style:-translate-y-full data-ending-style:-translate-y-full\",\n  bottom: \"inset-x-0 bottom-0 max-h-dvh border-t border-line shadow-floating data-starting-style:translate-y-full data-ending-style:translate-y-full\",\n} as const;\n\n/** A trigger renders a native button unless its `render` (or asChild child) is another tag. */\nfunction isNativeButton(render: unknown) {\n  return !React.isValidElement(render) || typeof render.type !== \"string\" || render.type === \"button\";\n}\n\ntype SheetProps = Omit<React.ComponentProps<typeof BaseDialog.Root>, \"onOpenChange\"> & { onOpenChange?: (open: boolean) => void };\n\nfunction Sheet({ onOpenChange, ...props }: SheetProps) {\n  return <BaseDialog.Root data-slot=\"sheet\" onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined} {...props} />;\n}\n\nfunction SheetTrigger({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDialog.Trigger> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseDialog.Trigger data-slot=\"sheet-trigger\" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>\n      {parts.children}\n    </BaseDialog.Trigger>\n  );\n}\n\nfunction SheetClose({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDialog.Close> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseDialog.Close data-slot=\"sheet-close\" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>\n      {parts.children}\n    </BaseDialog.Close>\n  );\n}\n\nfunction SheetPortal(props: React.ComponentProps<typeof BaseDialog.Portal>) {\n  const container = usePortalContainer();\n  return <BaseDialog.Portal data-slot=\"sheet-portal\" container={container} {...props} />;\n}\n\nfunction SheetOverlay({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Backdrop>, \"className\"> & { className?: string }) {\n  return (\n    <BaseDialog.Backdrop\n      data-slot=\"sheet-overlay\"\n      className={cn(\"fixed inset-0 z-50 bg-scrim transition-opacity duration-slow ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-none\", className)}\n      {...props}\n    />\n  );\n}\n\ntype SheetContentProps = Omit<React.ComponentProps<typeof BaseDialog.Popup>, \"className\"> & { className?: string; side?: keyof typeof SIDES; showCloseButton?: boolean; showClose?: boolean };\n\nfunction SheetContent({ className, children, side = \"right\", showCloseButton, showClose, ...props }: SheetContentProps) {\n  const close = showClose ?? showCloseButton ?? true;\n  return (\n    <SheetPortal>\n      <SheetOverlay />\n      <BaseDialog.Popup\n        data-slot=\"sheet-content\"\n        data-side={side}\n        className={cn(\n          \"fixed z-50 flex flex-col bg-surface text-fg outline-none transition-[translate] duration-slow ease-drawer data-ending-style:duration-moderate motion-reduce:transition-none\",\n          SIDES[side],\n          className,\n        )}\n        {...props}\n      >\n        {/* The body scrolls inside the panel, so a long sheet fades at its edges while the panel stays whole. */}\n        <div data-slot=\"sheet-body\" className=\"flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain fade-y\">\n          {children}\n        </div>\n        {close && (\n          <BaseDialog.Close data-slot=\"sheet-close\" render={<Button variant=\"ghost\" size=\"icon-sm\" />} className=\"absolute top-4 right-4\" aria-label=\"Close\">\n            <XIcon />\n          </BaseDialog.Close>\n        )}\n      </BaseDialog.Popup>\n    </SheetPortal>\n  );\n}\n\nfunction SheetHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"sheet-header\" className={cn(\"flex flex-col gap-2 p-6 pr-14\", className)} {...props} />;\n}\n\nfunction SheetFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"sheet-footer\" className={cn(\"mt-auto flex flex-col-reverse gap-3 p-6 sm:flex-row sm:items-center sm:justify-end\", className)} {...props} />;\n}\n\nfunction SheetTitle({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Title>, \"className\"> & { className?: string }) {\n  return <BaseDialog.Title data-slot=\"sheet-title\" className={cn(\"font-display text-h5 leading-title font-light text-balance text-fg\", className)} {...props} />;\n}\n\nfunction SheetDescription({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Description>, \"className\"> & { className?: string }) {\n  return <BaseDialog.Description data-slot=\"sheet-description\" className={cn(\"text-body-sm leading-line-body-sm text-pretty text-fg-secondary\", className)} {...props} />;\n}\n\nexport { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger };\n"
+    }
+  ]
+}

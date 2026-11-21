@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "name": "separator",
+  "useFor": "Use Separator between groups in a list, a menu or a toolbar, and the dashed variant for a guide inside a band or between plans. Rules are decorative unless decorative={false}.",
+  "constraints": [
+    "A heavy or dark rule",
+    "A colored rule",
+    "Rules around every row where a list already rules them"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's quiet rules (--line-quiet under the header and between FAQ rows) and dashed guides (--rule-dash-y, .pr-plan__mark)",
+  "exports": [
+    "Separator"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/separator",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/separator.md",
+  "examples": [
+    {
+      "path": "examples/separator.tsx",
+      "content": "import { Separator } from \"@/components/ui/separator\";\n\nexport function Preview() {\n  return (\n    <div className=\"max-w-sm\">\n      <p className=\"text-body-sm leading-line-body-sm font-medium text-fg\">acme/storefront</p>\n      <p className=\"text-body-sm leading-line-body-sm text-fg-muted\">3 threads running, 12 merged this week</p>\n      <Separator className=\"my-4\" />\n      <div className=\"flex h-5 items-center gap-4 text-body-sm leading-line-body-sm text-fg-secondary\">\n        <span>Threads</span>\n        <Separator orientation=\"vertical\" />\n        <span>Sandboxes</span>\n        <Separator orientation=\"vertical\" />\n        <span>Automations</span>\n      </div>\n    </div>\n  );\n}\n\nexport function Dashed() {\n  return (\n    <div className=\"grid max-w-md gap-6\">\n      <Separator variant=\"dashed\" />\n      <div className=\"flex h-16 items-stretch gap-6 text-body-sm leading-line-body-sm text-fg-secondary\">\n        <span className=\"self-center\">Free</span>\n        <Separator variant=\"dashed\" orientation=\"vertical\" />\n        <span className=\"self-center\">Team</span>\n        <Separator variant=\"dashed\" orientation=\"vertical\" />\n        <span className=\"self-center\">Enterprise</span>\n      </div>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Dashed"
+      ],
+      "requires": [
+        "separator"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/separator/Preview"
+        },
+        {
+          "name": "Dashed",
+          "url": "https://hoplite-ds.vercel.app/preview/separator/Dashed"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Separator",
+  "description": "The site's rules: a quiet 16 percent 1px line, or the section guide's dashes (10px on an 18px period), across or down.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/separator.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Separator as BaseSeparator } from \"@base-ui/react/separator\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The site's rules: a quiet 16 percent 1px line between rows and under the header, or (`dashed`) the section guide's\n// dashes, 10px on an 18px period (ds-rule-x across, ds-rule-y down). Horizontal by default; vertical rules stretch to\n// the row. Decorative rules are hidden from assistive tech, as shadcn's are.\ntype SeparatorProps = Omit<React.ComponentProps<typeof BaseSeparator>, \"orientation\"> & { orientation?: \"horizontal\" | \"vertical\"; decorative?: boolean; variant?: \"solid\" | \"dashed\" };\n\nfunction Separator({ className, orientation = \"horizontal\", decorative = true, variant = \"solid\", ...props }: SeparatorProps) {\n  return (\n    <BaseSeparator\n      data-slot=\"separator\"\n      data-variant={variant}\n      orientation={orientation}\n      role={decorative ? \"none\" : undefined}\n      className={cn(\n        \"shrink-0\",\n        orientation === \"horizontal\" ? \"h-px w-full\" : \"w-px self-stretch\",\n        variant === \"solid\" ? \"bg-line\" : orientation === \"horizontal\" ? \"ds-rule-x\" : \"ds-rule-y\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Separator };\n"
+    }
+  ]
+}

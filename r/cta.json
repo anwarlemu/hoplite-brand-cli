@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "name": "cta",
+  "useFor": "Use once, last before the footer.",
+  "constraints": [
+    "An orange or dark filled band",
+    "More than two keys"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's frames (.band__frame) and keys (.button--primary, .button--line)",
+  "exports": [
+    "Cta"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/cta",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/cta.md",
+  "examples": [
+    {
+      "path": "examples/cta.tsx",
+      "content": "import { Cta } from \"@/components/blocks/cta\";\n\nexport function Preview() {\n  return <Cta />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "cta"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/cta/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Call to action",
+  "description": "The closing band: a frame of corner ticks with the orange node, a Chakra Petch heading, a light lead and the two keys.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "brand-marks",
+    "button",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/cta.tsx",
+      "content": "import * as React from \"react\";\n\nimport { HexNode } from \"@/components/site/brand-marks\";\nimport { Button } from \"@/components/ui/button\";\nimport { TypographyH2, TypographyLead } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\n// The closing band: a frame of corner ticks holding the Chakra Petch heading, a light lead and the two keys (the ink\n// hexagon and the outlined one), with the orange cog node as its single mark.\nfunction Cta({\n  title = \"Put your agents to work.\",\n  lead = \"Start free. Your first swarm is a few minutes away.\",\n  primary = { label: \"Start building\", href: \"#start\" },\n  secondary = { label: \"Book a call\", href: \"#call\" },\n  className,\n}: {\n  title?: React.ReactNode;\n  lead?: React.ReactNode;\n  primary?: { label: string; href: string } | null;\n  secondary?: { label: string; href: string } | null;\n  className?: string;\n}) {\n  return (\n    <section data-slot=\"cta\" className={cn(\"w-full py-20 sm:py-32\", className)}>\n      <div className=\"ds-corners mx-auto grid w-full max-w-320 gap-6 p-8 sm:p-16\">\n        <HexNode active className=\"size-8\" />\n        <TypographyH2 className=\"max-w-180\">{title}</TypographyH2>\n        {lead && <TypographyLead>{lead}</TypographyLead>}\n        {(primary || secondary) && (\n          <div className=\"mt-4 flex flex-wrap items-center gap-3\">\n            {primary && <Button render={<a href={primary.href} />}>{primary.label}</Button>}\n            {secondary && (\n              <Button variant=\"outline\" render={<a href={secondary.href} />}>\n                {secondary.label}\n              </Button>\n            )}\n          </div>\n        )}\n      </div>\n    </section>\n  );\n}\n\nexport { Cta };\n"
+    }
+  ]
+}

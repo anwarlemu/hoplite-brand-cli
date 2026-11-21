@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "name": "radio-group",
+  "useFor": "Use RadioGroup for one choice from two to five visible options (what happens when an agent finishes). Wrap each RadioGroupItem with its text in a Label. For a short segmented switch use ToggleGroup or Tabs; for a long list use Select.",
+  "constraints": [
+    "Round radios",
+    "An orange chosen radio",
+    "A radio that grows or bounces when chosen",
+    "Radios with no visible label"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's hexagon bullets (.pr-features svg, .bp-list__mark: a regular hexagon in a 1px --line stroke) and the principles (a radio is a hexagon that fills)",
+  "exports": [
+    "RadioGroup",
+    "RadioGroupItem"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/radio-group",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/radio-group.md",
+  "examples": [
+    {
+      "path": "examples/radio-group.tsx",
+      "content": "import { Label } from \"@/components/ui/label\";\nimport { RadioGroup, RadioGroupItem } from \"@/components/ui/radio-group\";\n\nexport function Preview() {\n  return (\n    <RadioGroup defaultValue=\"review\" aria-label=\"When an agent finishes\">\n      <Label>\n        <RadioGroupItem value=\"review\" />\n        Open a pull request for review\n      </Label>\n      <Label>\n        <RadioGroupItem value=\"merge\" />\n        Merge when checks pass\n      </Label>\n      <Label>\n        <RadioGroupItem value=\"draft\" />\n        Keep the branch as a draft\n      </Label>\n    </RadioGroup>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid gap-6\">\n      <RadioGroup defaultValue=\"a\" aria-label=\"Enabled\">\n        <Label>\n          <RadioGroupItem value=\"a\" />\n          Chosen\n        </Label>\n        <Label>\n          <RadioGroupItem value=\"b\" />\n          Not chosen\n        </Label>\n        <Label>\n          <RadioGroupItem value=\"c\" aria-invalid />\n          Invalid\n        </Label>\n      </RadioGroup>\n      <RadioGroup defaultValue=\"a\" disabled aria-label=\"Disabled\">\n        <Label>\n          <RadioGroupItem value=\"a\" />\n          Disabled, chosen\n        </Label>\n        <Label>\n          <RadioGroupItem value=\"b\" />\n          Disabled\n        </Label>\n      </RadioGroup>\n    </div>\n  );\n}\n\nexport function Inline() {\n  return (\n    <RadioGroup defaultValue=\"monthly\" aria-label=\"Billing\" className=\"flex gap-6\">\n      <Label>\n        <RadioGroupItem value=\"monthly\" />\n        Monthly\n      </Label>\n      <Label>\n        <RadioGroupItem value=\"yearly\" />\n        Yearly\n      </Label>\n    </RadioGroup>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "States",
+        "Inline"
+      ],
+      "requires": [
+        "radio-group",
+        "label"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/radio-group/Preview"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/radio-group/States"
+        },
+        {
+          "name": "Inline",
+          "url": "https://hoplite-ds.vercel.app/preview/radio-group/Inline"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Radio group",
+  "description": "One choice from a list: each radio a point-up hexagon outlined in the strong line, like the site's hexagon bullets; chosen, it fills with the ink around a small hexagon of the ground.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/radio-group.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Radio as BaseRadio } from \"@base-ui/react/radio\";\nimport { RadioGroup as BaseRadioGroup } from \"@base-ui/react/radio-group\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A radio is a hexagon that fills (the site's principles), drawn as its bullets are (.pr-features svg, .bp-list__mark:\n// a regular hexagon outlined in the strong line), stood point-up like every mark: a 14 by 16 hexagon in a 16px box,\n// its 1px edge an outer hexagon of the strong line around an inner one of the ground. Chosen, the hexagon fills with\n// the ink and holds an 8px hexagon of the ground. The edge turns the ink under the pointer; fills change in 120ms on the\n// ease-out and nothing moves or grows. The box stays square so keyboard focus is the 2px ink outline 2px out. Invalid\n// radios take the orange edge; disabled ones go quiet. Options stack 12px apart, each label 8px away in 14px medium ink.\ntype RadioGroupProps = Omit<React.ComponentProps<typeof BaseRadioGroup>, \"onValueChange\"> & { onValueChange?: (value: string) => void };\n\nfunction RadioGroup({ className, onValueChange, ...props }: RadioGroupProps) {\n  return <BaseRadioGroup data-slot=\"radio-group\" className={cn(\"grid gap-3\", className)} onValueChange={onValueChange ? (value) => onValueChange(String(value)) : undefined} {...props} />;\n}\n\nfunction RadioGroupItem({ className, ...props }: React.ComponentProps<typeof BaseRadio.Root>) {\n  return (\n    <BaseRadio.Root\n      data-slot=\"radio-group-item\"\n      className={cn(\n        \"peer group/radio relative grid size-4 shrink-0 cursor-pointer place-items-center *:col-start-1 *:row-start-1 after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-disabled:cursor-not-allowed\",\n        className,\n      )}\n      {...props}\n    >\n      <span\n        aria-hidden\n        data-slot=\"radio-group-edge\"\n        className=\"ds-hex-mark h-4 w-3.5 bg-line-strong transition-[background-color] duration-fast ease-out group-hover/radio:bg-primary group-data-checked/radio:bg-primary group-aria-invalid/radio:bg-danger group-data-invalid/radio:bg-danger group-data-disabled/radio:bg-line group-data-disabled/radio:group-data-checked/radio:bg-off motion-reduce:transition-none\"\n      />\n      <span\n        aria-hidden\n        className=\"ds-hex-mark h-3.5 w-3 bg-surface transition-[background-color] duration-fast ease-out group-data-checked/radio:bg-primary group-data-disabled/radio:group-data-checked/radio:bg-off motion-reduce:transition-none\"\n      />\n      <BaseRadio.Indicator data-slot=\"radio-group-indicator\" className=\"ds-hex-mark h-2 w-[7px] bg-surface\" />\n    </BaseRadio.Root>\n  );\n}\n\nexport { RadioGroup, RadioGroupItem };\n"
+    }
+  ]
+}

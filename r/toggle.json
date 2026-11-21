@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "name": "toggle",
+  "useFor": "Use Toggle for one on or off tool in a toolbar (watch a thread, bold). Give icon-only toggles an aria-label. For a set of related toggles use ToggleGroup; for a setting use Switch.",
+  "constraints": [
+    "A square or rounded toggle",
+    "An orange pressed state",
+    "A toggle that scales on press",
+    "Bold labels when pressed"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's nav items (.hn__top), its outlined key (.button--line) and the chosen pricing period (.pr-period__option:has(:checked))",
+  "exports": [
+    "Toggle",
+    "toggleVariants"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/toggle",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/toggle.md",
+  "examples": [
+    {
+      "path": "examples/toggle.tsx",
+      "content": "import { EyeIcon, ListChecksIcon, PushPinIcon, TextBIcon, TextItalicIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Toggle } from \"@/components/ui/toggle\";\n\nexport function Preview() {\n  return (\n    <div className=\"flex items-center gap-1\">\n      <Toggle defaultPressed>\n        <EyeIcon />\n        Watch thread\n      </Toggle>\n      <Toggle>\n        <PushPinIcon />\n        Pin\n      </Toggle>\n    </div>\n  );\n}\n\nexport function Variants() {\n  return (\n    <div className=\"grid gap-4\">\n      <div className=\"flex items-center gap-1\">\n        <Toggle aria-label=\"Bold\">\n          <TextBIcon />\n        </Toggle>\n        <Toggle aria-label=\"Italic\" defaultPressed>\n          <TextItalicIcon />\n        </Toggle>\n        <Toggle>\n          <ListChecksIcon />\n          Checks only\n        </Toggle>\n      </div>\n      <div className=\"flex items-center gap-3\">\n        <Toggle variant=\"outline\">Failing only</Toggle>\n        <Toggle variant=\"outline\" defaultPressed>\n          Mine\n        </Toggle>\n      </div>\n    </div>\n  );\n}\n\nexport function Sizes() {\n  return (\n    <div className=\"flex items-center gap-3\">\n      <Toggle size=\"sm\" defaultPressed>\n        Small\n      </Toggle>\n      <Toggle defaultPressed>Default</Toggle>\n      <Toggle size=\"lg\" variant=\"outline\" defaultPressed>\n        Large\n      </Toggle>\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"flex items-center gap-3\">\n      <Toggle disabled>Disabled</Toggle>\n      <Toggle disabled defaultPressed>\n        Disabled on\n      </Toggle>\n      <Toggle variant=\"outline\" disabled>\n        Disabled\n      </Toggle>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Variants",
+        "Sizes",
+        "States"
+      ],
+      "requires": [
+        "toggle"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/toggle/Preview"
+        },
+        {
+          "name": "Variants",
+          "url": "https://hoplite-ds.vercel.app/preview/toggle/Variants"
+        },
+        {
+          "name": "Sizes",
+          "url": "https://hoplite-ds.vercel.app/preview/toggle/Sizes"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/toggle/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Toggle",
+  "description": "A two-state key shaped like the site's nav item: a compact 32px hexagon whose hover wash appears under the pointer; pressed, it is a filled ink hexagon with a ground-colored label. outline is the outlined hexagon that fills with the ink.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/toggle.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Toggle as BaseToggle } from \"@base-ui/react/toggle\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A two-state key shaped like the site's nav item (.hn__top, the ghost key): a compact 32px hexagon with 8px cuts and\n// 12px sides, its 14px medium label graphite until the pointer brings up a hexagon of the hover wash and turns it ink.\n// Pressed, it is the chosen segment of the pricing switch (.pr-period__option:has(:checked)): a filled ink hexagon with\n// the label in the ground color, graphite under the pointer. `outline` is the outlined hexagon (.button--line) that\n// fills with the ink when pressed. `lg` is the 40px key with 12px cuts. Fills change in 160ms on the ease-out and the\n// key never moves or resizes; it takes its pressed fill the instant it is pressed. Keyboard focus is the 2px ink outline\n// around the key's box. Glyphs are 16px.\nconst toggleVariants = cva(\n  \"inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 font-sans text-body-sm leading-none font-medium whitespace-nowrap select-none transition-colors duration-base ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-disabled:pointer-events-none data-disabled:text-fg-subtle motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"text-fg-secondary hover:text-fg hover:before:bg-subtle-hover active:before:bg-pressed data-pressed:text-on-primary data-pressed:before:bg-primary data-pressed:hover:text-on-primary data-pressed:hover:before:bg-primary-hover data-disabled:data-pressed:before:bg-off\",\n        outline: \"text-fg before:bg-line-strong after:bg-surface hover:after:bg-subtle-hover active:after:bg-pressed data-pressed:text-on-primary data-pressed:before:bg-primary data-pressed:after:bg-primary data-pressed:hover:before:bg-primary-hover data-pressed:hover:after:bg-primary-hover data-disabled:before:bg-line data-disabled:data-pressed:before:bg-off data-disabled:data-pressed:after:bg-off\",\n      },\n      size: {\n        default: \"ds-hex-frame-s h-8 min-w-8 px-3\",\n        sm: \"ds-hex-frame-s h-8 min-w-8 px-2\",\n        lg: \"ds-hex-frame h-10 min-w-10 px-4\",\n      },\n    },\n    defaultVariants: { variant: \"default\", size: \"default\" },\n  },\n);\n\nfunction Toggle({ className, variant, size, ...props }: React.ComponentProps<typeof BaseToggle> & VariantProps<typeof toggleVariants>) {\n  return <BaseToggle data-slot=\"toggle\" data-variant={variant ?? \"default\"} className={cn(toggleVariants({ variant, size }), className)} {...props} />;\n}\n\nexport { Toggle, toggleVariants };\n"
+    }
+  ]
+}

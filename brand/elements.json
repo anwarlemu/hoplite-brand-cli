@@ -1,0 +1,1384 @@
+{
+	"site": {
+		"page": {
+			"name": "Page",
+			"match": {
+				"tags": [
+					"html",
+					"body"
+				]
+			},
+			"css": {
+				"background-color": "var(--ds-color-bg-default)",
+				"color": "var(--ds-color-text-default)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body)",
+				"font-weight": "var(--ds-font-weight-regular)",
+				"line-height": "var(--ds-leading-body)"
+			},
+			"tailwind": "bg-surface text-fg font-sans text-body font-normal leading-body",
+			"rules": [
+				"One ground: warm gray paper with near-black ink, Satoshi at 16px on 24px lines. Never pure white, never pure black.",
+				"Structure is drawn with lines from the ink, not fills: nothing sits on white. A page may opt into the faint paper grain (ds-grain).",
+				"The dark theme swaps the ink and the ground; light is the default."
+			],
+			"source": "hoplite-website-fawn.vercel.app: body (the ground and ink), .ds-grain"
+		},
+		"column": {
+			"name": "Content column",
+			"match": {
+				"words": [
+					"container",
+					"wrapper",
+					"wrap",
+					"inner",
+					"content",
+					"max"
+				]
+			},
+			"css": {
+				"width": "100%",
+				"max-width": "var(--ds-frame-column)",
+				"margin-inline": "auto"
+			},
+			"tailwind": "w-full max-w-(--ds-frame-column) mx-auto",
+			"rules": [
+				"A 1280px column inside 64px gutters. Heads stop at 720px and leads at 600px inside it."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .wrap"
+		},
+		"section": {
+			"name": "Section",
+			"match": {
+				"tags": [
+					"section"
+				],
+				"words": [
+					"section",
+					"block",
+					"band"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"flex-direction": "column",
+				"padding-block": "var(--ds-section-padding)"
+			},
+			"tailwind": "flex flex-col py-section",
+			"rules": [
+				"128px above and below; the head (index label, title, lead) sits 80px above the content, left aligned or centered.",
+				"Sections are divided by dashed guides (ds-rule-x, 10px dashes on an 18px period) or a quiet rule, never by a fill change. No entrance on scroll."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .section, .section__head, .section__index"
+		},
+		"section-heading": {
+			"name": "Section heading",
+			"match": {
+				"tags": [
+					"h2"
+				],
+				"words": [
+					"title",
+					"heading",
+					"headline"
+				],
+				"context": [
+					"section"
+				]
+			},
+			"css": {
+				"font-family": "var(--ds-font-display)",
+				"font-size": "var(--ds-text-h2)",
+				"font-weight": "var(--ds-font-weight-heading)",
+				"line-height": "var(--ds-leading-heading)",
+				"color": "var(--ds-color-text-default)",
+				"text-wrap": "balance",
+				"max-width": "var(--ds-layout-heading)"
+			},
+			"tailwind": "font-display text-h2 font-light leading-heading text-fg text-balance max-w-(--ds-layout-heading)",
+			"rules": [
+				"Chakra Petch light at 44px (32px on 40px lines on a phone), balanced, at most 720px wide. Never bold.",
+				"One word may take the orange accent (a ds-accent span): flat orange, no gradient or glow."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .heading, .section__title"
+		},
+		"section-description": {
+			"name": "Section description",
+			"match": {
+				"tags": [
+					"p"
+				],
+				"words": [
+					"subtitle",
+					"sub",
+					"lead",
+					"description",
+					"intro",
+					"desc",
+					"lede"
+				],
+				"context": [
+					"section"
+				]
+			},
+			"css": {
+				"font-size": "var(--ds-text-body-lg)",
+				"font-weight": "var(--ds-font-weight-light)",
+				"line-height": "var(--ds-leading-relaxed)",
+				"color": "var(--ds-color-text-secondary)",
+				"text-wrap": "pretty",
+				"max-width": "var(--ds-layout-text)"
+			},
+			"tailwind": "text-body-lg font-light leading-relaxed text-fg-secondary text-pretty max-w-(--ds-layout-text)",
+			"rules": [
+				"The lead: Satoshi light at 18px on 28px lines in the graphite, 24px under the title, stopping at 600px (16px on 24px lines on a phone)."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .lead, .section__lead"
+		},
+		"hero": {
+			"name": "Page head",
+			"match": {
+				"words": [
+					"hero",
+					"masthead",
+					"jumbotron",
+					"banner-hero",
+					"splash"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"flex-direction": "column",
+				"align-items": "center",
+				"gap": "var(--ds-space-6)",
+				"padding-block": "var(--ds-space-24) var(--ds-space-16)",
+				"text-align": "center",
+				"background-color": "var(--ds-color-bg-default)"
+			},
+			"tailwind": "flex flex-col items-center gap-6 pt-24 pb-16 text-center bg-surface",
+			"rules": [
+				"A centered column at least a screen tall over line artwork drawn in the ink: a tag with a short note, the display title (32px under it), the lead (24px), the main and outlined keys side by side (40px), then a quiet note.",
+				"No photography, gradient or glow behind it: the art is ruled lines and hexagons, with orange only for what is done."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hero, .hero__inner, .hero__title, .hero__body, .hero__actions, .hero__note"
+		},
+		"hero-title": {
+			"name": "Page title",
+			"match": {
+				"tags": [
+					"h1"
+				],
+				"words": [
+					"hero-title",
+					"headline",
+					"display"
+				]
+			},
+			"css": {
+				"font-family": "var(--ds-font-display)",
+				"font-size": "var(--ds-text-h2)",
+				"font-weight": "var(--ds-font-weight-heading)",
+				"line-height": "var(--ds-leading-heading)",
+				"letter-spacing": "var(--ds-tracking-tight)",
+				"color": "var(--ds-color-text-default)",
+				"text-wrap": "balance"
+			},
+			"tailwind": "font-display text-h3 sm:text-h2 font-light leading-heading tracking-tight text-fg text-balance",
+			"rules": [
+				"Chakra Petch light at 44px (32px on a phone), the site's .heading, drawn 1 percent tighter and balanced. A page in an app keeps its proportions; the 64px display is for a marketing hero only. Never bold.",
+				"One accent word may be the flat orange (a ds-accent span)."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .display, .hero__title"
+		},
+		"hero-subtitle": {
+			"name": "Page description",
+			"match": {
+				"tags": [
+					"p"
+				],
+				"words": [
+					"hero-sub",
+					"subtitle",
+					"tagline",
+					"lead"
+				],
+				"context": [
+					"hero"
+				]
+			},
+			"css": {
+				"font-size": "var(--ds-text-body-lg)",
+				"font-weight": "var(--ds-font-weight-light)",
+				"line-height": "var(--ds-leading-relaxed)",
+				"color": "var(--ds-color-text-secondary)",
+				"text-wrap": "pretty",
+				"max-width": "var(--ds-layout-text)"
+			},
+			"tailwind": "text-body-lg font-light leading-relaxed text-fg-secondary text-pretty max-w-(--ds-layout-text)",
+			"rules": [
+				"The lead under the display title: 18px Satoshi light in the graphite, 24px below it, at most 560px wide."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hero__body, .lead"
+		},
+		"eyebrow": {
+			"name": "Label",
+			"match": {
+				"words": [
+					"eyebrow",
+					"kicker",
+					"overline",
+					"label",
+					"tag",
+					"pretitle",
+					"badge"
+				]
+			},
+			"css": {
+				"font-family": "var(--ds-font-mono)",
+				"font-size": "var(--ds-text-caption)",
+				"font-weight": "var(--ds-font-weight-regular)",
+				"line-height": "var(--ds-line-caption)",
+				"letter-spacing": "var(--ds-tracking-caps)",
+				"text-transform": "uppercase",
+				"color": "var(--ds-color-text-label)"
+			},
+			"tailwind": "font-mono text-caption font-normal leading-line-caption tracking-caps uppercase text-fg-label",
+			"rules": [
+				"A label: Kode Mono at 12px in capitals, tracked 8 percent, in the quiet gray (ds-label). Eyebrows, section indexes (the number in the ink), column heads, dates and categories."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .label, .section__index"
+		},
+		"card": {
+			"name": "Card",
+			"match": {
+				"tags": [
+					"article"
+				],
+				"words": [
+					"card",
+					"tile",
+					"panel",
+					"box",
+					"feature",
+					"item",
+					"plan"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"flex-direction": "column",
+				"gap": "var(--ds-space-4)",
+				"padding": "var(--ds-component-padding)",
+				"border": "1px solid var(--ds-color-border-default)",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)",
+				"box-shadow": "none"
+			},
+			"tailwind": "flex flex-col gap-4 p-8 border border-line rounded-none bg-surface shadow-none",
+			"rules": [
+				"A card is a square frame of the quiet line on the same ground, 32px inside: never white, never a shadow, never rounded.",
+				"A card that is a link takes the 32 percent edge under the pointer (border-color, 120ms on the strong ease-out, gated to fine pointers); a static card does not react. Nothing moves.",
+				"Cards in a row share their rules (dashed guides between them) rather than each carrying a box."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .trust__story, .bl-card, .blog__card"
+		},
+		"card-raised": {
+			"name": "Raised panel",
+			"match": {
+				"words": [
+					"feature",
+					"product",
+					"plan",
+					"offer",
+					"tile-lg",
+					"showcase"
+				]
+			},
+			"css": {
+				"border": "1px solid var(--ds-color-border-frame)",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)",
+				"box-shadow": "none"
+			},
+			"tailwind": "border border-line-frame rounded-none bg-surface shadow-none",
+			"rules": [
+				"Nothing is raised: a plan, a band of product art or a featured panel is framed in the stone line on the ground, square, with no shadow.",
+				"Plans side by side share one frame, split by the same stone rule."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .pr-plan, .band__frame"
+		},
+		"window": {
+			"name": "Frame with corner ticks",
+			"match": {
+				"words": [
+					"window",
+					"terminal",
+					"dir",
+					"case",
+					"file"
+				]
+			},
+			"css": {
+				"padding": "var(--ds-component-padding)",
+				"border": "1px solid transparent",
+				"border-radius": "var(--ds-radius-panel)",
+				"background": "linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left top / var(--ds-corner-length) 1px no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left top / 1px var(--ds-corner-length) no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right top / var(--ds-corner-length) 1px no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right top / 1px var(--ds-corner-length) no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left bottom / var(--ds-corner-length) 1px no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left bottom / 1px var(--ds-corner-length) no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right bottom / var(--ds-corner-length) 1px no-repeat border-box, linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right bottom / 1px var(--ds-corner-length) no-repeat border-box",
+				"background-color": "var(--ds-color-bg-default)"
+			},
+			"tailwind": "ds-corners p-8 rounded-none bg-surface",
+			"rules": [
+				"A frame for product art or a grouped block: square, marked at its four corners by 16px ticks in the slate like crop marks (ds-corners), on the ground."
+			],
+			"source": "hoplite-website-fawn.vercel.app: corner-ticked frames around product art (.band__frame, .visual-slot)"
+		},
+		"window-bar": {
+			"name": "Code head",
+			"match": {
+				"words": [
+					"windowbar",
+					"titlebar",
+					"window-bar",
+					"title-bar",
+					"chrome"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"align-items": "center",
+				"justify-content": "space-between",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-10)",
+				"padding-inline-start": "var(--ds-space-5)",
+				"border-bottom": "1px solid var(--ds-color-border-code)",
+				"background-color": "var(--ds-color-bg-code-head)",
+				"color": "var(--ds-color-code-head-fg)",
+				"font-family": "var(--ds-font-mono)",
+				"font-size": "var(--ds-text-caption)",
+				"line-height": "var(--ds-line-caption)",
+				"letter-spacing": "var(--ds-tracking-caps)",
+				"text-transform": "uppercase"
+			},
+			"tailwind": "flex items-center justify-between gap-2 h-10 pl-5 border-b border-line-code bg-code-head text-code-head-fg font-mono text-caption leading-line-caption tracking-caps uppercase",
+			"rules": [
+				"The 40px bar of a code block: the language as a Kode Mono label 20px in, and a Copy action at the right end ruled off by a quiet line (14px medium Satoshi, quiet until the pointer turns it ink)."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .bp-code__bar, .bp-code__lang, .bp-copy"
+		},
+		"card-title": {
+			"name": "Card title",
+			"match": {
+				"tags": [
+					"h3",
+					"h4"
+				],
+				"words": [
+					"card-title",
+					"title",
+					"name",
+					"heading"
+				],
+				"context": [
+					"card"
+				]
+			},
+			"css": {
+				"font-family": "var(--ds-font-display)",
+				"font-size": "var(--ds-text-h4)",
+				"font-weight": "var(--ds-font-weight-regular)",
+				"line-height": "var(--ds-leading-title)",
+				"color": "var(--ds-color-text-default)"
+			},
+			"tailwind": "font-display text-h4 font-normal leading-title text-fg",
+			"rules": [
+				"Chakra Petch at 24px on 32px lines in the ink (a plan or a band title); a group head in a table or a list is 20px."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .pr-plan__name, .band__title"
+		},
+		"body-text": {
+			"name": "Body text",
+			"match": {
+				"tags": [
+					"p",
+					"li"
+				],
+				"words": [
+					"text",
+					"body",
+					"copy",
+					"desc",
+					"description",
+					"summary",
+					"excerpt"
+				]
+			},
+			"css": {
+				"font-size": "var(--ds-text-body)",
+				"font-weight": "var(--ds-font-weight-light)",
+				"line-height": "var(--ds-leading-body)",
+				"color": "var(--ds-color-text-secondary)",
+				"text-wrap": "pretty"
+			},
+			"tailwind": "text-body font-light leading-body text-fg-secondary text-pretty",
+			"rules": [
+				"Copy under a title: Satoshi light at 16px on 24px lines in the graphite, pretty wrapped, at most 600px wide. Names and values stay in the ink."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .band__body, .pr-plan__body, .faq__item p"
+		},
+		"caption": {
+			"name": "Caption",
+			"match": {
+				"tags": [
+					"small",
+					"figcaption",
+					"time"
+				],
+				"words": [
+					"caption",
+					"meta",
+					"note",
+					"date",
+					"small",
+					"fine",
+					"hint"
+				]
+			},
+			"css": {
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)",
+				"color": "var(--ds-color-text-muted)"
+			},
+			"tailwind": "text-body-sm leading-line-body-sm text-fg-muted",
+			"rules": [
+				"Notes and small print: 14px on 20px lines in the quiet gray (12px in the footer). A date or a category is a Kode Mono label instead."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hero__note, .pr-plan__includes, .trust__stat-company, .site-footer__bottom"
+		},
+		"link": {
+			"name": "Link",
+			"match": {
+				"tags": [
+					"a"
+				],
+				"words": [
+					"link",
+					"more",
+					"arrow",
+					"readmore"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-1)",
+				"color": "var(--ds-color-text-default)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-medium)",
+				"text-decoration": "underline solid var(--ds-color-border-default) 1px",
+				"transition": "text-decoration-color var(--ds-duration-base) var(--ds-easing-out)"
+			},
+			"tailwind": "ds-link",
+			"rules": [
+				"A text link is the medium 14px ink label over a quiet 1px rule, with an arrow after it (Read the quickstart →). Put the label and its arrow in a span.",
+				"Under the pointer or focus the rule wipes out and a dashed rule in the strong edge wipes in and marches (ds-link). Where pseudo-elements are not available, the underline turns dashed in the strong edge instead. The arrow never moves.",
+				"A link inside copy keeps the copy color with the quiet underline."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .text-link",
+			"states": {
+				":hover": {
+					"text-decoration": "underline dashed var(--ds-color-border-strong) 1px"
+				},
+				":focus-visible": {
+					"text-decoration": "underline dashed var(--ds-color-border-strong) 1px"
+				}
+			}
+		},
+		"button-primary": {
+			"name": "Primary button",
+			"match": {
+				"tags": [
+					"button",
+					"a"
+				],
+				"words": [
+					"btn-primary",
+					"primary",
+					"cta",
+					"get-started",
+					"signup",
+					"start",
+					"solid",
+					"filled",
+					"main"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"justify-content": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-10)",
+				"padding-inline": "var(--ds-space-6)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-medium)",
+				"line-height": "var(--ds-leading-tight)",
+				"white-space": "nowrap",
+				"text-decoration": "none",
+				"transition": "color var(--ds-duration-base) var(--ds-easing-out)",
+				"background": "linear-gradient(var(--ds-color-action-primary), var(--ds-color-action-primary)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+				"color": "var(--ds-color-action-primary-fg)"
+			},
+			"tailwind": "ds-hex-frame inline-flex items-center justify-center gap-2 h-10 px-6 font-sans text-body-sm font-medium leading-none whitespace-nowrap no-underline transition-colors duration-base ease-out motion-reduce:transition-none text-on-primary before:bg-primary hover:before:bg-primary-hover active:before:bg-primary-hover disabled:pointer-events-none disabled:text-fg-subtle disabled:before:bg-off",
+			"rules": [
+				"The main action is the ink hexagon: a 40px box with both ends cut 12px to a point, a medium 14px label in the ground color 24px in from each side, a 16px icon 8px from it. Under the pointer it turns graphite (Start building). One per view.",
+				"32px with 8px cuts and 16px sides in a header or toolbar; 48px on a touch screen.",
+				"The hexagon is painted by the background (a middle band and four corner triangles, the corners left clear), not cut with clip-path: the element stays a box, so the 2px focus outline around it is never clipped. In React use the library item, which draws the same hexagon behind the label (ds-hex-frame with before: and after: fills).",
+				"A painted fill swaps at once under the pointer (a gradient cannot fade); the label color takes 160ms on the strong ease-out. A press takes its fill on pointer-down with no transition. Nothing moves or resizes: no scale, no bolder label."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .button, .button--primary",
+			"states": {
+				":hover": {
+					"background": "linear-gradient(var(--ds-color-action-primary-hover), var(--ds-color-action-primary-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat"
+				},
+				":active": {
+					"background": "linear-gradient(var(--ds-color-action-primary-hover), var(--ds-color-action-primary-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+					"transition": "none"
+				},
+				":focus-visible": {
+					"outline": "2px solid var(--ds-color-focus-ring)",
+					"outline-offset": "2px"
+				},
+				":disabled": {
+					"background": "linear-gradient(var(--ds-color-bg-off), var(--ds-color-bg-off)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-bg-off) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-bg-off) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-bg-off) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-bg-off) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+					"color": "var(--ds-color-text-subtle)"
+				}
+			}
+		},
+		"button-secondary": {
+			"name": "Outline button",
+			"match": {
+				"tags": [
+					"button",
+					"a"
+				],
+				"words": [
+					"btn-secondary",
+					"secondary",
+					"outline",
+					"ghost",
+					"btn-ghost",
+					"learn",
+					"demo",
+					"explore",
+					"btn"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"justify-content": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-10)",
+				"padding-inline": "var(--ds-space-6)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-medium)",
+				"line-height": "var(--ds-leading-tight)",
+				"white-space": "nowrap",
+				"text-decoration": "none",
+				"transition": "color var(--ds-duration-base) var(--ds-easing-out)",
+				"background": "linear-gradient(var(--ds-color-bg-default), var(--ds-color-bg-default)) center / calc(100% - 2 * var(--ds-hex-chamfer)) calc(100% - 2px) no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center top / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center bottom / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+				"color": "var(--ds-color-text-default)"
+			},
+			"tailwind": "ds-hex-frame inline-flex items-center justify-center gap-2 h-10 px-6 font-sans text-body-sm font-medium leading-none whitespace-nowrap no-underline transition-colors duration-base ease-out motion-reduce:transition-none text-fg before:bg-line-strong after:bg-surface hover:after:bg-subtle-hover active:after:bg-pressed disabled:pointer-events-none disabled:text-fg-subtle disabled:before:bg-line",
+			"rules": [
+				"The second action is the outlined hexagon: a 1px strong edge around the ground, 40px with 12px cuts, a medium 14px ink label 24px in (Download for macOS). Under the pointer the inside takes the hover wash; pressed, the press wash.",
+				"Never a pill, never a square box.",
+				"The hexagon is painted by the background (a middle band and four corner triangles, the corners left clear), not cut with clip-path: the element stays a box, so the 2px focus outline around it is never clipped. In React use the library item, which draws the same hexagon behind the label (ds-hex-frame with before: and after: fills).",
+				"A painted fill swaps at once under the pointer (a gradient cannot fade); the label color takes 160ms on the strong ease-out. A press takes its fill on pointer-down with no transition. Nothing moves or resizes: no scale, no bolder label."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .button, .button--line",
+			"states": {
+				":hover": {
+					"background": "linear-gradient(var(--ds-color-bg-subtle-hover), var(--ds-color-bg-subtle-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer)) calc(100% - 2px) no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center top / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center bottom / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-subtle-hover) calc(50% + 1px)) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-subtle-hover) calc(50% + 1px)) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-subtle-hover) calc(50% + 1px)) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-subtle-hover) calc(50% + 1px)) right bottom / var(--ds-hex-chamfer) 50% no-repeat"
+				},
+				":active": {
+					"background": "linear-gradient(var(--ds-color-bg-pressed), var(--ds-color-bg-pressed)) center / calc(100% - 2 * var(--ds-hex-chamfer)) calc(100% - 2px) no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center top / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center bottom / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-pressed) calc(50% + 1px)) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-pressed) calc(50% + 1px)) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-pressed) calc(50% + 1px)) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-pressed) calc(50% + 1px)) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+					"transition": "none"
+				},
+				":focus-visible": {
+					"outline": "2px solid var(--ds-color-focus-ring)",
+					"outline-offset": "2px"
+				},
+				":disabled": {
+					"background": "linear-gradient(var(--ds-color-bg-default), var(--ds-color-bg-default)) center / calc(100% - 2 * var(--ds-hex-chamfer)) calc(100% - 2px) no-repeat, linear-gradient(var(--ds-color-border-default), var(--ds-color-border-default)) center top / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(var(--ds-color-border-default), var(--ds-color-border-default)) center bottom / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-border-default) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-border-default) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-border-default) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-border-default) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+					"color": "var(--ds-color-text-subtle)"
+				}
+			}
+		},
+		"button-on-brand": {
+			"name": "Hexagon of the hover wash",
+			"match": {
+				"tags": [
+					"button",
+					"a"
+				],
+				"words": [
+					"btn"
+				],
+				"context": [
+					"section-blue",
+					"on-brand"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"justify-content": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-10)",
+				"padding-inline": "var(--ds-space-6)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-medium)",
+				"line-height": "var(--ds-leading-tight)",
+				"white-space": "nowrap",
+				"text-decoration": "none",
+				"transition": "color var(--ds-duration-base) var(--ds-easing-out)",
+				"background": "linear-gradient(var(--ds-color-bg-subtle-hover), var(--ds-color-bg-subtle-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-bg-subtle-hover) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-bg-subtle-hover) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-bg-subtle-hover) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-bg-subtle-hover) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+				"color": "var(--ds-color-text-default)"
+			},
+			"tailwind": "ds-hex-frame inline-flex items-center justify-center gap-2 h-10 px-6 font-sans text-body-sm font-medium leading-none whitespace-nowrap no-underline transition-colors duration-base ease-out motion-reduce:transition-none text-fg before:bg-subtle-hover hover:before:bg-pressed active:before:bg-pressed disabled:pointer-events-none disabled:text-fg-subtle disabled:before:bg-subtle",
+			"rules": [
+				"Hoplite has no colored bands: an action set apart from the main one is the hexagon of the hover wash with an ink label (the library button, secondary), taking the press wash under the pointer.",
+				"Never an orange fill.",
+				"The hexagon is painted by the background (a middle band and four corner triangles, the corners left clear), not cut with clip-path: the element stays a box, so the 2px focus outline around it is never clipped. In React use the library item, which draws the same hexagon behind the label (ds-hex-frame with before: and after: fills).",
+				"A painted fill swaps at once under the pointer (a gradient cannot fade); the label color takes 160ms on the strong ease-out. A press takes its fill on pointer-down with no transition. Nothing moves or resizes: no scale, no bolder label."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .button (the hover and press washes of .button--line)",
+			"states": {
+				":hover": {
+					"background": "linear-gradient(var(--ds-color-bg-pressed), var(--ds-color-bg-pressed)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-bg-pressed) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-bg-pressed) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-bg-pressed) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-bg-pressed) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat"
+				},
+				":active": {
+					"background": "linear-gradient(var(--ds-color-bg-pressed), var(--ds-color-bg-pressed)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-bg-pressed) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-bg-pressed) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-bg-pressed) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-bg-pressed) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+					"transition": "none"
+				},
+				":focus-visible": {
+					"outline": "2px solid var(--ds-color-focus-ring)",
+					"outline-offset": "2px"
+				},
+				":disabled": {
+					"background": "linear-gradient(var(--ds-color-bg-subtle), var(--ds-color-bg-subtle)) center / calc(100% - 2 * var(--ds-hex-chamfer)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-bg-subtle) 50%) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-bg-subtle) 50%) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-bg-subtle) 50%) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-bg-subtle) 50%) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+					"color": "var(--ds-color-text-subtle)"
+				}
+			}
+		},
+		"header": {
+			"name": "Site header",
+			"match": {
+				"tags": [
+					"header"
+				],
+				"words": [
+					"header",
+					"nav",
+					"navbar",
+					"topbar",
+					"site-header",
+					"masthead"
+				],
+				"roles": [
+					"banner"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-10)",
+				"height": "var(--ds-layout-header)",
+				"border-bottom": "1px solid var(--ds-color-border-default)",
+				"background-color": "var(--ds-color-bg-default)"
+			},
+			"tailwind": "sticky top-0 z-50 flex items-center gap-10 h-(--ds-layout-header) border-b border-line bg-surface",
+			"rules": [
+				"A 64px bar that sticks to the top on the ground: the 24px lockup at the left, bare nav items, then Sign in and the compact 32px ink hexagon at the right.",
+				"Once the page scrolls it takes the ground and a quiet rule beneath; on wide screens it docks between the section guides with quiet rules at both ends (the dock curve, 360ms).",
+				"On a phone the items fold into a sheet that opens under the bar."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .site-header, .site-header__ground, .site-header__inner"
+		},
+		"header-action": {
+			"name": "Head action",
+			"match": {
+				"tags": [
+					"a",
+					"button"
+				],
+				"words": [
+					"btn",
+					"cta",
+					"login",
+					"signin",
+					"sign-in",
+					"demo",
+					"get-started",
+					"signup"
+				],
+				"context": [
+					"header"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"justify-content": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-8)",
+				"padding-inline": "var(--ds-space-4)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-medium)",
+				"line-height": "var(--ds-leading-tight)",
+				"white-space": "nowrap",
+				"text-decoration": "none",
+				"transition": "color var(--ds-duration-base) var(--ds-easing-out)",
+				"background": "linear-gradient(var(--ds-color-action-primary), var(--ds-color-action-primary)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+				"color": "var(--ds-color-action-primary-fg)"
+			},
+			"tailwind": "ds-hex-frame-s inline-flex items-center justify-center gap-2 h-8 px-4 font-sans text-body-sm font-medium leading-none whitespace-nowrap no-underline transition-colors duration-base ease-out motion-reduce:transition-none text-on-primary before:bg-primary hover:before:bg-primary-hover active:before:bg-primary-hover",
+			"rules": [
+				"The action in the header is the compact ink hexagon: 32px, 8px cuts, 16px sides, a medium 14px ground-colored label (Start building). Sign in beside it is a bare nav item.",
+				"The hexagon is painted by the background (a middle band and four corner triangles, the corners left clear), not cut with clip-path: the element stays a box, so the 2px focus outline around it is never clipped. In React use the library item, which draws the same hexagon behind the label (ds-hex-frame with before: and after: fills).",
+				"A painted fill swaps at once under the pointer (a gradient cannot fade); the label color takes 160ms on the strong ease-out. A press takes its fill on pointer-down with no transition. Nothing moves or resizes: no scale, no bolder label."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .button--s, .button--primary, .hn__signin",
+			"states": {
+				":hover": {
+					"background": "linear-gradient(var(--ds-color-action-primary-hover), var(--ds-color-action-primary-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat"
+				},
+				":active": {
+					"background": "linear-gradient(var(--ds-color-action-primary-hover), var(--ds-color-action-primary-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary-hover) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary-hover) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+					"transition": "none"
+				},
+				":focus-visible": {
+					"outline": "2px solid var(--ds-color-focus-ring)",
+					"outline-offset": "2px"
+				}
+			}
+		},
+		"nav-link": {
+			"name": "Nav item",
+			"match": {
+				"tags": [
+					"a",
+					"button"
+				],
+				"words": [
+					"nav-link",
+					"menu-link",
+					"nav-item",
+					"link",
+					"menu-item"
+				],
+				"context": [
+					"header",
+					"nav"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-8)",
+				"padding-inline": "var(--ds-space-3)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"background": "transparent",
+				"color": "var(--ds-color-text-nav)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-regular)",
+				"line-height": "var(--ds-leading-tight)",
+				"text-decoration": "none",
+				"transition": "color var(--ds-duration-base) var(--ds-easing-out)"
+			},
+			"tailwind": "ds-hex-frame-s inline-flex items-center gap-2 h-8 px-3 text-body-sm font-normal leading-none text-fg-nav no-underline transition-colors duration-base ease-out hover:text-fg hover:before:bg-subtle-hover active:before:bg-pressed aria-expanded:text-fg aria-expanded:before:bg-subtle-hover aria-[current=page]:text-fg motion-reduce:transition-none",
+			"rules": [
+				"Nav items are bare 14px labels in the graphite, 32px tall with 12px sides. Under the pointer, or while their menu is open, a compact hexagon of the hover wash (8px cuts) appears behind them and the label turns ink.",
+				"The current page is the ink label. Icons in nav rows are 20px and never move.",
+				"The hexagon is painted by the background (a middle band and four corner triangles, the corners left clear), not cut with clip-path: the element stays a box, so the 2px focus outline around it is never clipped. In React use the library item, which draws the same hexagon behind the label (ds-hex-frame with before: and after: fills)."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hn__top, .hn__trigger[aria-expanded=true]",
+			"states": {
+				":hover": {
+					"background": "linear-gradient(var(--ds-color-wash-hover), var(--ds-color-wash-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-wash-hover) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-wash-hover) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-wash-hover) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-wash-hover) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+					"color": "var(--ds-color-text-default)"
+				},
+				"[aria-expanded=true]": {
+					"background": "linear-gradient(var(--ds-color-wash-hover), var(--ds-color-wash-hover)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-wash-hover) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-wash-hover) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-wash-hover) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-wash-hover) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+					"color": "var(--ds-color-text-default)"
+				},
+				"[aria-current=page]": {
+					"color": "var(--ds-color-text-default)"
+				},
+				":active": {
+					"background": "linear-gradient(var(--ds-color-wash-pressed), var(--ds-color-wash-pressed)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-wash-pressed) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-wash-pressed) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-wash-pressed) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-wash-pressed) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+					"transition": "none"
+				},
+				":focus-visible": {
+					"outline": "2px solid var(--ds-color-focus-ring)",
+					"outline-offset": "2px"
+				}
+			}
+		},
+		"nav-dock": {
+			"name": "Nav sheet",
+			"match": {
+				"words": [
+					"dock",
+					"nav-pill",
+					"pill-nav",
+					"floating-nav",
+					"navpill",
+					"bottom-nav"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-layout-header)",
+				"padding-inline": "var(--ds-space-4)",
+				"border-inline": "1px solid var(--ds-color-border-default)",
+				"border-bottom": "1px solid var(--ds-color-border-default)",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)",
+				"box-shadow": "none"
+			},
+			"tailwind": "flex items-center gap-2 h-(--ds-layout-header) px-4 border-x border-b border-line rounded-none bg-surface shadow-none",
+			"rules": [
+				"A docked bar, not a floating pill: the header narrows to the section guides on the ground with quiet rules at both ends and beneath. No glass, no shadow, no rounding."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .site-header[data-docked] .site-header__ground"
+		},
+		"chip": {
+			"name": "Tag",
+			"match": {
+				"words": [
+					"chip",
+					"pill",
+					"tag",
+					"badge",
+					"token",
+					"label"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-2)",
+				"height": "var(--ds-space-5)",
+				"padding-inline": "var(--ds-space-3)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"background": "linear-gradient(var(--ds-color-bg-default), var(--ds-color-bg-default)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) calc(100% - 2px) no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center top / calc(100% - 2 * var(--ds-hex-chamfer-s)) 1px no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center bottom / calc(100% - 2 * var(--ds-hex-chamfer-s)) 1px no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+				"color": "var(--ds-color-text-default)",
+				"font-family": "var(--ds-font-mono)",
+				"font-size": "var(--ds-text-caption)",
+				"line-height": "var(--ds-leading-tight)",
+				"letter-spacing": "var(--ds-tracking-caps)",
+				"text-transform": "uppercase",
+				"white-space": "nowrap"
+			},
+			"tailwind": "ds-hex-frame-s inline-flex items-center gap-2 h-5 px-3 font-mono text-caption leading-none tracking-caps uppercase whitespace-nowrap text-fg before:bg-line-strong after:bg-surface",
+			"rules": [
+				"Tags are 20px outlined hexagons (8px cuts, a 1px strong edge around the ground) with a Kode Mono capital label 12px in.",
+				"No colored tag fills; a state that matters may put an orange mark or dot inside, never an orange fill."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .tag"
+		},
+		"stat": {
+			"name": "Stat",
+			"match": {
+				"words": [
+					"stat",
+					"metric",
+					"number",
+					"figure",
+					"kpi",
+					"count",
+					"value"
+				]
+			},
+			"css": {
+				"font-family": "var(--ds-font-display)",
+				"font-size": "var(--ds-text-display)",
+				"font-weight": "var(--ds-font-weight-heading)",
+				"line-height": "var(--ds-leading-tight)",
+				"letter-spacing": "var(--ds-tracking-tight)",
+				"color": "var(--ds-color-text-default)",
+				"font-variant-numeric": "tabular-nums"
+			},
+			"tailwind": "font-display text-display font-light leading-none tracking-tight tabular-nums text-fg",
+			"rules": [
+				"A figure is Chakra Petch light at 64px in the ink with tabular numbers; its unit in the quiet gray. Under it 16px light graphite copy, and the source in 14px quiet at the foot.",
+				"Figures sit in cells split by dashed guides, 48px above and 32px in; no boxes or fills."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .trust__stat, .trust__num, .trust__unit, .trust__stat-text"
+		},
+		"code-window": {
+			"name": "Code block",
+			"match": {
+				"tags": [
+					"pre"
+				],
+				"words": [
+					"code",
+					"terminal",
+					"snippet",
+					"codeblock",
+					"console",
+					"editor",
+					"window"
+				]
+			},
+			"css": {
+				"overflow": "hidden",
+				"padding": "var(--ds-space-4) var(--ds-space-5)",
+				"border": "1px solid var(--ds-color-border-code)",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-code)",
+				"color": "var(--ds-color-code-text)",
+				"font-family": "var(--ds-font-code)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body)",
+				"font-variant-ligatures": "none"
+			},
+			"tailwind": "overflow-hidden px-5 py-4 border border-line-code rounded-none bg-code text-code-text font-code text-body-sm leading-line-body",
+			"rules": [
+				"Code sits in a square frame of the quiet line on the ground: Kode Mono at 14px on 24px lines in the ink, 16px above and below and 20px in.",
+				"No syntax rainbow: keywords take the orange, comments the slate, the rest the ink and its grays. Never a dark block on the light page.",
+				"A 40px bar above it carries the language as a label and a ruled Copy action."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .bp-code, .bp-code__pre"
+		},
+		"media-frame": {
+			"name": "Media frame",
+			"match": {
+				"tags": [
+					"img",
+					"video",
+					"picture",
+					"figure",
+					"iframe"
+				],
+				"words": [
+					"screenshot",
+					"image",
+					"media",
+					"preview",
+					"shot",
+					"visual",
+					"frame",
+					"mockup"
+				]
+			},
+			"css": {
+				"overflow": "hidden",
+				"border": "1px solid var(--ds-color-border-frame)",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)"
+			},
+			"tailwind": "overflow-hidden border border-line-frame rounded-none bg-surface",
+			"rules": [
+				"Product art and screenshots sit square in a stone frame on the ground (or inside corner ticks), never rounded, never shadowed."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .band__frame, .visual-slot"
+		},
+		"table": {
+			"name": "Table",
+			"match": {
+				"tags": [
+					"table"
+				],
+				"words": [
+					"table",
+					"comparison",
+					"compare",
+					"pricing-table",
+					"grid"
+				]
+			},
+			"css": {
+				"width": "100%",
+				"border-collapse": "separate",
+				"border-spacing": "0",
+				"table-layout": "fixed",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)",
+				"color": "var(--ds-color-text-default)"
+			},
+			"tailwind": "w-full border-separate border-spacing-0 table-fixed text-body-sm leading-line-body-sm text-fg",
+			"rules": [
+				"Ruled, not boxed: 64px column heads in Chakra Petch 20px over a quiet rule, sticky under the header; group heads in Chakra Petch 20px 48px above their rows.",
+				"48px rows split by a quiet rule: the row name in 14px graphite, values in the ink. Yes is a small filled ink hexagon, no a slate dash."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .pr-table, .pr-table__group, .pr-yes, .pr-no"
+		},
+		"faq": {
+			"name": "FAQ row",
+			"match": {
+				"tags": [
+					"details"
+				],
+				"words": [
+					"faq",
+					"accordion",
+					"question",
+					"qa"
+				]
+			},
+			"css": {
+				"padding-block": "var(--ds-space-6)",
+				"border-bottom": "1px solid var(--ds-color-border-default)",
+				"color": "var(--ds-color-text-default)",
+				"font-size": "var(--ds-text-body-lg)",
+				"line-height": "var(--ds-leading-relaxed)"
+			},
+			"tailwind": "py-6 border-b border-line first:border-t text-body-lg leading-relaxed text-fg",
+			"rules": [
+				"Ruled rows (a quiet rule between them and above the first) of 18px questions with a hexagon holding a plus at the end, 16px apart, 24px above and below (16px questions on a phone).",
+				"Open, the hexagon turns 30 degrees in 240ms on the strong ease-out and the plus becomes a minus; the answer is 16px light graphite, at most 600px wide."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .faq__item, .faq__summary, .faq__hex"
+		},
+		"tabs": {
+			"name": "Tabs",
+			"match": {
+				"roles": [
+					"tab",
+					"tablist"
+				],
+				"words": [
+					"tab",
+					"tabs",
+					"segment",
+					"toggle",
+					"switcher"
+				]
+			},
+			"css": {
+				"display": "inline-flex",
+				"align-items": "center",
+				"padding": "var(--ds-space-1)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-control)",
+				"background": "linear-gradient(var(--ds-color-bg-default), var(--ds-color-bg-default)) center / calc(100% - 2 * var(--ds-hex-chamfer)) calc(100% - 2px) no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center top / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(var(--ds-color-border-strong), var(--ds-color-border-strong)) center bottom / calc(100% - 2 * var(--ds-hex-chamfer)) 1px no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) left bottom / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right top / var(--ds-hex-chamfer) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-border-strong) 50% calc(50% + 1px), var(--ds-color-bg-default) calc(50% + 1px)) right bottom / var(--ds-hex-chamfer) 50% no-repeat",
+				"color": "var(--ds-color-text-muted)",
+				"font-size": "var(--ds-text-body-sm)",
+				"font-weight": "var(--ds-font-weight-medium)"
+			},
+			"tailwind": "ds-hex-frame inline-flex items-center p-1 before:bg-line-strong after:bg-surface",
+			"rules": [
+				"A segmented choice (Monthly, Yearly) is an outlined hexagon 4px around 32px tabs with 8px cuts and 20px sides; labels are 14px medium in the quiet gray, ink under the pointer.",
+				"The chosen tab is a filled ink hexagon with its label in the ground color; it slides to the chosen tab in 240ms on the in-out curve. Panels change in place, with no entrance.",
+				"A filter row (the changelog and the blog) is joined 32px boxes on quiet edges instead, the chosen one filled ink.",
+				"The hexagon is painted by the background (a middle band and four corner triangles, the corners left clear), not cut with clip-path: the element stays a box, so the 2px focus outline around it is never clipped. In React use the library item, which draws the same hexagon behind the label (ds-hex-frame with before: and after: fills)."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .pr-period, .pr-period__option, .cl-filter",
+			"states": {
+				"[aria-selected=true]": {
+					"background": "linear-gradient(var(--ds-color-action-primary), var(--ds-color-action-primary)) center / calc(100% - 2 * var(--ds-hex-chamfer-s)) 100% no-repeat, linear-gradient(to bottom right, transparent 50%, var(--ds-color-action-primary) 50%) left top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top right, transparent 50%, var(--ds-color-action-primary) 50%) left bottom / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to bottom left, transparent 50%, var(--ds-color-action-primary) 50%) right top / var(--ds-hex-chamfer-s) 50% no-repeat, linear-gradient(to top left, transparent 50%, var(--ds-color-action-primary) 50%) right bottom / var(--ds-hex-chamfer-s) 50% no-repeat",
+					"color": "var(--ds-color-action-primary-fg)"
+				}
+			}
+		},
+		"input": {
+			"name": "Field",
+			"match": {
+				"tags": [
+					"input",
+					"textarea",
+					"select"
+				],
+				"words": [
+					"input",
+					"field",
+					"search",
+					"email"
+				]
+			},
+			"css": {
+				"height": "var(--ds-space-10)",
+				"padding-inline": "var(--ds-space-3)",
+				"border": "1px solid var(--ds-color-border-field)",
+				"border-radius": "var(--ds-radius-control)",
+				"background-color": "var(--ds-color-bg-default)",
+				"color": "var(--ds-color-text-default)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)",
+				"transition": "border-color var(--ds-duration-fast) var(--ds-easing-out)"
+			},
+			"tailwind": "h-10 px-3 border border-line-field rounded-none bg-surface text-fg font-sans text-body-sm leading-line-body-sm transition-[border-color] duration-fast ease-out placeholder:text-fg-subtle hover:border-line-strong focus-visible:border-focus-ring focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-invalid:border-danger aria-invalid:focus-visible:outline-danger disabled:cursor-not-allowed disabled:border-line disabled:text-fg-subtle motion-reduce:transition-none",
+			"rules": [
+				"Fields are square: 40px (48px on a touch screen), a 1px 32 percent edge on the ground, 14px Satoshi 12px in, a slate placeholder. A textarea keeps its rows.",
+				"Under the pointer the edge turns strong (120ms); on focus it turns ink with a 1px inset outline, a 2px ink line in all.",
+				"Labels sit above in 14px medium; help below in 14px quiet gray. A rejected value takes the orange edge and an orange message."
+			],
+			"source": "hoplite-website-fawn.vercel.app: fields as the library input draws them (the site's form controls share the hairline and focus ink)",
+			"states": {
+				":hover": {
+					"border-color": "var(--ds-color-border-strong)"
+				},
+				":focus-visible": {
+					"border-color": "var(--ds-color-focus-ring)",
+					"outline": "1px solid var(--ds-color-focus-ring)",
+					"outline-offset": "-2px"
+				},
+				"::placeholder": {
+					"color": "var(--ds-color-text-subtle)"
+				},
+				"[aria-invalid=true]": {
+					"border-color": "var(--ds-color-status-danger)",
+					"outline-color": "var(--ds-color-status-danger)"
+				},
+				":disabled": {
+					"border-color": "var(--ds-color-border-default)",
+					"color": "var(--ds-color-text-subtle)"
+				}
+			}
+		},
+		"logo-strip": {
+			"name": "Logo row",
+			"match": {
+				"words": [
+					"logos",
+					"logo-strip",
+					"clients",
+					"customers",
+					"trusted",
+					"marquee",
+					"partners",
+					"brands"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"flex-wrap": "wrap",
+				"align-items": "center",
+				"justify-content": "space-between",
+				"gap": "var(--ds-space-12)",
+				"color": "var(--ds-color-text-secondary)"
+			},
+			"tailwind": "flex flex-wrap items-center justify-between gap-12 text-fg-secondary",
+			"rules": [
+				"Customer marks are one color in the graphite, never in their own colors, set between the section guides. Under the pointer a linked mark turns ink (200ms)."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .trust, .trust__logo"
+		},
+		"footer": {
+			"name": "Site footer",
+			"match": {
+				"tags": [
+					"footer"
+				],
+				"words": [
+					"footer",
+					"site-footer"
+				],
+				"roles": [
+					"contentinfo"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"flex-direction": "column",
+				"gap": "var(--ds-space-6)",
+				"padding-block": "var(--ds-space-16) var(--ds-space-8)",
+				"color": "var(--ds-color-text-secondary)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)"
+			},
+			"tailwind": "flex flex-col gap-6 pt-16 pb-8 text-fg-secondary text-body-sm leading-line-body-sm",
+			"rules": [
+				"A tall footer on the ground: a Chakra Petch tagline at the left, four columns of 14px graphite links (an underline fades in under the pointer, 160ms), then the lockup filling the width at the foot.",
+				"The last row sits under a quiet rule: status, copyright and the theme switch in 12px quiet gray."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .site-footer, .site-footer__nav, .site-footer__bottom, .site-footer__lockup"
+		},
+		"menu-panel": {
+			"name": "Menu panel",
+			"match": {
+				"words": [
+					"dropdown-menu",
+					"dropdown-content",
+					"dropdown-menu-content",
+					"menu-panel",
+					"menu-content",
+					"select-content"
+				],
+				"roles": [
+					"menu",
+					"listbox"
+				]
+			},
+			"css": {
+				"padding": "var(--ds-space-1)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)",
+				"color": "var(--ds-color-text-default)",
+				"box-shadow": "var(--ds-shadow-floating)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)"
+			},
+			"tailwind": "rounded-none bg-surface p-1 font-sans text-body-sm leading-line-body-sm text-fg shadow-floating outline-none",
+			"rules": [
+				"Menus and select lists are square panels of the ground with a quiet hairline and a long soft cast, 4px inside, 8px from the trigger.",
+				"They open in 240ms on the strong ease-out from the trigger and leave in 200ms; nothing grows from zero."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hn__sheet, .hn__panel",
+			"states": {}
+		},
+		"menu-item": {
+			"name": "Menu item",
+			"match": {
+				"words": [
+					"dropdown-item",
+					"dropdown-menu-item",
+					"menu-item",
+					"select-item"
+				],
+				"roles": [
+					"menuitem",
+					"menuitemcheckbox",
+					"menuitemradio",
+					"option"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-2)",
+				"min-height": "var(--ds-space-9)",
+				"padding-inline": "var(--ds-space-3)",
+				"padding-block": "var(--ds-space-2)",
+				"border-radius": "var(--ds-radius-control)",
+				"color": "var(--ds-color-text-default)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)"
+			},
+			"tailwind": "flex items-center gap-2 min-h-9 px-3 py-2 rounded-none text-fg text-body-sm leading-line-body-sm outline-none data-[highlighted]:bg-subtle-hover data-[disabled]:pointer-events-none data-[disabled]:text-fg-subtle",
+			"rules": [
+				"Rows are 36px with 12px sides: a 16px icon 8px from a 14px ink label (a quiet 14px line under it when it has one). The highlighted row takes the hover wash at once, square; a chosen row ends in a check in the ink."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hn__item, .hn__item-label, .hn__item-body",
+			"states": {
+				"[data-highlighted]": {
+					"background-color": "var(--ds-color-bg-subtle-hover)"
+				},
+				"[data-disabled]": {
+					"color": "var(--ds-color-text-subtle)",
+					"pointer-events": "none"
+				}
+			}
+		},
+		"glass-menu": {
+			"name": "Floating panel",
+			"match": {
+				"words": [
+					"glass-menu",
+					"glass-dropdown",
+					"dock-card"
+				]
+			},
+			"css": {
+				"padding": "var(--ds-space-1)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)",
+				"color": "var(--ds-color-text-default)",
+				"box-shadow": "var(--ds-shadow-floating)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)"
+			},
+			"tailwind": "rounded-none bg-surface p-1 font-sans text-body-sm leading-line-body-sm text-fg shadow-floating",
+			"rules": [
+				"Hoplite has no glass: a floating panel is the square menu panel of the ground."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hn__panel"
+		},
+		"glass-menu-item": {
+			"name": "Floating panel item",
+			"match": {
+				"words": [
+					"glass-menu-item",
+					"glass-dropdown-item",
+					"dock-card-item"
+				]
+			},
+			"css": {
+				"display": "flex",
+				"align-items": "center",
+				"gap": "var(--ds-space-2)",
+				"min-height": "var(--ds-space-9)",
+				"padding-inline": "var(--ds-space-3)",
+				"padding-block": "var(--ds-space-2)",
+				"border-radius": "var(--ds-radius-control)",
+				"color": "var(--ds-color-text-default)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)"
+			},
+			"tailwind": "flex items-center gap-2 min-h-9 px-3 py-2 rounded-none text-fg text-body-sm leading-line-body-sm outline-none data-[highlighted]:bg-subtle-hover data-[disabled]:pointer-events-none data-[disabled]:text-fg-subtle",
+			"rules": [
+				"As a menu item."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hn__item",
+			"states": {
+				"[data-highlighted]": {
+					"background-color": "var(--ds-color-bg-subtle-hover)"
+				},
+				"[data-disabled]": {
+					"color": "var(--ds-color-text-subtle)",
+					"pointer-events": "none"
+				}
+			}
+		},
+		"popover-panel": {
+			"name": "Popover panel",
+			"match": {
+				"words": [
+					"popover-content",
+					"popover-panel"
+				]
+			},
+			"css": {
+				"padding": "var(--ds-space-4)",
+				"border": "0",
+				"border-radius": "var(--ds-radius-panel)",
+				"background-color": "var(--ds-color-bg-default)",
+				"color": "var(--ds-color-text-default)",
+				"box-shadow": "var(--ds-shadow-floating)",
+				"font-family": "var(--ds-font-sans)",
+				"font-size": "var(--ds-text-body-sm)",
+				"line-height": "var(--ds-line-body-sm)"
+			},
+			"tailwind": "rounded-none bg-surface p-4 font-sans text-body-sm leading-line-body-sm text-fg shadow-floating",
+			"rules": [
+				"Popovers are the square menu panel with 16px inside; they open in 240ms on the strong ease-out and leave in 200ms."
+			],
+			"source": "hoplite-website-fawn.vercel.app: .hn__panel"
+		}
+	}
+}

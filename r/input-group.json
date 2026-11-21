@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "name": "input-group",
+  "useFor": "Use InputGroup when a field needs a glyph (search), a fixed prefix or suffix (github.com/), or an action inside it (copy, send). Put InputGroupInput or InputGroupTextarea inside with InputGroupAddon on the side given by align; use InputGroupButton for keys and InputGroupText for words.",
+  "constraints": [
+    "A rounded frame",
+    "A main ink key inside a plain search field",
+    "Addons in the ink",
+    "Icons that move on hover"
+  ],
+  "documentation": "",
+  "source": "Derived from the Hoplite website's lines, type and nav keys (.hn__top), as Input is (the site has no fields)",
+  "exports": [
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupInput",
+    "InputGroupText",
+    "InputGroupTextarea"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/input-group",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/input-group.md",
+  "examples": [
+    {
+      "path": "examples/input-group.tsx",
+      "content": "import { ArrowUpIcon, CopyIcon, GitBranchIcon, MagnifyingGlassIcon, PaperclipIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from \"@/components/ui/input-group\";\n\nexport function Preview() {\n  return (\n    <InputGroup className=\"max-w-sm\">\n      <InputGroupAddon>\n        <MagnifyingGlassIcon />\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"Search threads\" aria-label=\"Search threads\" />\n      <InputGroupAddon align=\"inline-end\">\n        <InputGroupText>12 results</InputGroupText>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n\nexport function Addons() {\n  return (\n    <div className=\"grid w-full max-w-sm gap-4\">\n      <InputGroup>\n        <InputGroupAddon>\n          <InputGroupText>github.com/</InputGroupText>\n        </InputGroupAddon>\n        <InputGroupInput placeholder=\"acme/payments-api\" aria-label=\"Repository\" />\n      </InputGroup>\n      <InputGroup>\n        <InputGroupAddon>\n          <GitBranchIcon />\n        </InputGroupAddon>\n        <InputGroupInput defaultValue=\"agent/upgrade-node-22\" aria-label=\"Branch\" readOnly />\n        <InputGroupAddon align=\"inline-end\">\n          <InputGroupButton size=\"icon-sm\" aria-label=\"Copy branch name\">\n            <CopyIcon />\n          </InputGroupButton>\n        </InputGroupAddon>\n      </InputGroup>\n      <InputGroup>\n        <InputGroupInput aria-invalid defaultValue=\"payments api\" aria-label=\"Sandbox name\" />\n        <InputGroupAddon align=\"inline-end\">\n          <InputGroupText className=\"text-danger\">No spaces</InputGroupText>\n        </InputGroupAddon>\n      </InputGroup>\n      <InputGroup>\n        <InputGroupAddon>\n          <MagnifyingGlassIcon />\n        </InputGroupAddon>\n        <InputGroupInput disabled placeholder=\"Search is off while indexing\" aria-label=\"Search\" />\n      </InputGroup>\n    </div>\n  );\n}\n\nexport function Composer() {\n  return (\n    <InputGroup className=\"max-w-md\">\n      <InputGroupTextarea placeholder=\"Ask an agent to fix the failing check\" aria-label=\"Message\" />\n      <InputGroupAddon align=\"block-end\">\n        <InputGroupButton size=\"sm\">\n          <PaperclipIcon />\n          Attach\n        </InputGroupButton>\n        <InputGroupText className=\"ml-auto\">Sonnet, 2 sandboxes</InputGroupText>\n        <InputGroupButton size=\"icon-sm\" variant=\"default\" aria-label=\"Send\">\n          <ArrowUpIcon />\n        </InputGroupButton>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Addons",
+        "Composer"
+      ],
+      "requires": [
+        "input-group"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/input-group/Preview"
+        },
+        {
+          "name": "Addons",
+          "url": "https://hoplite-ds.vercel.app/preview/input-group/Addons"
+        },
+        {
+          "name": "Composer",
+          "url": "https://hoplite-ds.vercel.app/preview/input-group/Composer"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Input group",
+  "description": "The square field with things inside it: a 16px Phosphor glyph, quiet text, or a compact ghost hexagon key at either end, or a row of actions above or below a textarea; hover, focus and invalid belong to the whole frame.",
+  "surface": "site",
+  "kinds": [
+    "input"
+  ],
+  "requires": [
+    "theme",
+    "button",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/input-group.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Input as BaseInput } from \"@base-ui/react/input\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { cn } from \"@/lib/utils\";\n\n// The field (input.tsx) with things inside it: the square 40px frame with its 32 percent edge on the ground around a\n// borderless control, and addons 12px from either end: a 16px Phosphor glyph or 14px text in the quiet gray, a Kbd, or\n// a compact ghost hexagon key (24px or 32px, 8px cuts) 4px from the edge. Addons can also sit above or below a textarea\n// (block-start, block-end) on a quiet rule. Hover, focus, invalid and disabled belong to the whole frame, as on Input:\n// the strong edge under the pointer, the 2px ink edge while the control has keyboard focus, the orange edge when\n// invalid. The site has no fields: this follows its lines, type and nav keys.\nfunction InputGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"input-group\"\n      role=\"group\"\n      className={cn(\n        \"group/input-group relative flex h-10 w-full min-w-0 items-center border border-line-field bg-transparent transition-[border-color] duration-fast ease-out hover:border-line-strong pointer-coarse:h-12 motion-reduce:transition-none\",\n        \"has-[[data-slot=input-group-control]:focus-visible]:border-focus-ring has-[[data-slot=input-group-control]:focus-visible]:outline-1 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-2 has-[[data-slot=input-group-control]:focus-visible]:outline-focus-ring\",\n        \"has-[[data-slot=input-group-control][aria-invalid=true]]:border-danger has-[[data-slot=input-group-control][aria-invalid=true]]:outline-danger has-[[data-slot=input-group-control][data-invalid]]:border-danger\",\n        \"has-[[data-slot=input-group-control]:disabled]:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-line\",\n        \"has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto\",\n        \"has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nconst inputGroupAddonVariants = cva(\n  \"flex h-auto shrink-0 cursor-text items-center justify-center gap-2 font-sans text-body-sm leading-line-body-sm text-fg-muted select-none group-has-[[data-slot=input-group-control]:disabled]/input-group:cursor-not-allowed group-has-[[data-slot=input-group-control]:disabled]/input-group:text-fg-subtle [&>svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      align: {\n        \"inline-start\": \"order-first pl-3 has-[>button]:pl-1\",\n        \"inline-end\": \"order-last pr-3 has-[>button]:pr-1\",\n        \"block-start\": \"order-first w-full justify-start border-b border-line px-3 py-2 has-[>button]:py-1\",\n        \"block-end\": \"order-last w-full justify-start border-t border-line px-3 py-2 has-[>button]:py-1\",\n      },\n    },\n    defaultVariants: { align: \"inline-start\" },\n  },\n);\n\nfunction InputGroupAddon({ className, align = \"inline-start\", ...props }: React.ComponentProps<\"div\"> & VariantProps<typeof inputGroupAddonVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"input-group-addon\"\n      data-align={align}\n      className={cn(inputGroupAddonVariants({ align }), className)}\n      onClick={(e) => {\n        // A click on the addon (not on a key in it) focuses the control, as a click inside a field would.\n        if ((e.target as HTMLElement).closest(\"button\")) return;\n        e.currentTarget.parentElement?.querySelector<HTMLElement>(\"input, textarea\")?.focus();\n      }}\n      {...props}\n    />\n  );\n}\n\nconst inputGroupButtonVariants = cva(\"\", {\n  variants: {\n    size: {\n      xs: \"h-6 gap-1 px-2\",\n      sm: \"h-8 gap-2 px-3\",\n      \"icon-xs\": \"size-6 px-0\",\n      \"icon-sm\": \"size-8 px-0\",\n    },\n  },\n  defaultVariants: { size: \"xs\" },\n});\n\nfunction InputGroupButton({ className, type = \"button\", variant = \"ghost\", size = \"xs\", ...props }: Omit<React.ComponentProps<typeof Button>, \"size\"> & VariantProps<typeof inputGroupButtonVariants>) {\n  return <Button type={type} data-size={size} variant={variant} size=\"sm\" className={cn(\"pointer-coarse:h-auto\", inputGroupButtonVariants({ size }), className)} {...props} />;\n}\n\nfunction InputGroupText({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"input-group-text\" className={cn(\"flex items-center gap-2 font-sans text-body-sm leading-line-body-sm text-fg-muted [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4\", className)} {...props} />;\n}\n\nconst CONTROL = \"min-w-0 flex-1 border-0 bg-transparent px-3 font-sans text-body-sm leading-line-body-sm text-fg outline-none placeholder:text-fg-subtle disabled:cursor-not-allowed disabled:text-fg-subtle pointer-coarse:text-body\";\n\nfunction InputGroupInput({ className, ...props }: React.ComponentProps<typeof BaseInput>) {\n  return <BaseInput data-slot=\"input-group-control\" className={cn(CONTROL, \"h-full\", className)} {...props} />;\n}\n\nfunction InputGroupTextarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return <textarea data-slot=\"input-group-control\" className={cn(CONTROL, \"field-sizing-content flex min-h-24 w-full resize-none py-2\", className)} {...props} />;\n}\n\nexport { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea };\n"
+    }
+  ]
+}

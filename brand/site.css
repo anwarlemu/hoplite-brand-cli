@@ -1,0 +1,319 @@
+/* The base layer: what every Hoplite screen has before any component is styled, measured from the Hoplite website.
+   Defaults use :where() so the app's own rules still win; there are no markup touches. */
+
+/* Element defaults sit in the base layer, so a utility class on an element (a library component's text-fg-muted)
+   wins over them; their :where() selectors already let an app's own rules win. */
+@layer base {
+	html {
+		background-color: var(--ds-color-bg-page);
+	}
+
+	html,
+	body {
+		color: var(--ds-color-text-default);
+	}
+
+	body {
+		background-color: var(--ds-color-bg-default);
+		font-family: var(--ds-font-sans);
+		font-size: var(--ds-text-body);
+		font-weight: var(--ds-font-weight-regular);
+		line-height: var(--ds-leading-body);
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* Titles are Chakra Petch, light, balanced. */
+	:where(h1, h2, h3, h4, h5, h6) {
+		font-family: var(--ds-font-display);
+		font-weight: var(--ds-font-weight-heading);
+		color: inherit;
+		line-height: var(--ds-leading-heading);
+		text-wrap: balance;
+	}
+
+	:where(p, li, blockquote, figcaption, dd, td) {
+		text-wrap: pretty;
+	}
+
+	:where(code, kbd, pre, samp) {
+		font-family: var(--ds-font-code);
+		font-variant-ligatures: none;
+	}
+
+	:where(a) {
+		color: inherit;
+	}
+
+	::selection {
+		background-color: var(--ds-color-wash-pressed);
+	}
+
+	/* Focus is a 2px ink outline, 4px out (2px on controls that sit close together). */
+	:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+		outline: 2px solid var(--ds-color-focus-ring);
+		outline-offset: 2px;
+	}
+}
+
+/* The dark theme (the site's night): the ink and the ground swap, the gray steps run the other way, and the lines
+   are drawn from the light ink. It follows a .dark class or data-theme="dark" on the root, or on any element that
+   also carries ds-theme (a dark band or a preview). */
+:root:is(.dark, [data-theme="dark"]),
+.ds-theme:is(.dark, [data-theme="dark"]),
+:is(.dark, [data-theme="dark"]) .ds-theme {
+	color-scheme: dark;
+	--ds-color-ink: #F2F2F0;
+	--ds-color-ground: #1A1A1A;
+	--ds-color-paper: #262626;
+	--ds-color-bg-default: #1A1A1A;
+	--ds-color-bg-page: #1A1A1A;
+	--ds-color-bg-subtle: #262626;
+	--ds-color-bg-subtle-hover: #292929;
+	--ds-color-bg-pressed: #323232;
+	--ds-color-bg-frame: #1A1A1A;
+	--ds-color-bg-canvas: #1A1A1A;
+	--ds-color-bg-tint: #292929;
+	--ds-color-bg-inverse: #F2F2F0;
+	--ds-color-bg-dark: #0F0F0F;
+	--ds-color-bg-code: #1A1A1A;
+	--ds-color-bg-code-head: #1A1A1A;
+	--ds-color-bg-scrim: rgb(0 0 0 / 0.48);
+	--ds-color-bg-sheet: #1A1A1A;
+	--ds-color-bg-off: #323232;
+	--ds-color-text-default: #F2F2F0;
+	--ds-color-text-secondary: #C2C2C0;
+	--ds-color-text-muted: #929291;
+	--ds-color-text-subtle: #626261;
+	--ds-color-text-nav: #C2C2C0;
+	--ds-color-text-faint: #323232;
+	--ds-color-text-inverse: #1A1A1A;
+	--ds-color-text-brand: #F2F2F0;
+	--ds-color-text-label: #929291;
+	--ds-color-icon-default: #F2F2F0;
+	--ds-color-icon-secondary: #929291;
+	--ds-color-code-text: #F2F2F0;
+	--ds-color-code-key: #F2F2F0;
+	--ds-color-code-string: #C2C2C0;
+	--ds-color-code-number: #C2C2C0;
+	--ds-color-code-function: #F2F2F0;
+	--ds-color-code-type: #C2C2C0;
+	--ds-color-code-tag: #F2F2F0;
+	--ds-color-code-attr: #929291;
+	--ds-color-code-punct: #929291;
+	--ds-color-code-comment: #626261;
+	--ds-color-code-line: #626261;
+	--ds-color-code-line-active: #F2F2F0;
+	--ds-color-code-brace: #929291;
+	--ds-color-code-head-fg: #929291;
+	--ds-color-border-default: rgb(242 242 240 / 0.16);
+	--ds-color-border-subtle: rgb(242 242 240 / 0.16);
+	--ds-color-border-strong: rgb(242 242 240 / 0.7);
+	--ds-color-border-field: rgb(242 242 240 / 0.32);
+	--ds-color-border-frame: #323232;
+	--ds-color-border-row: rgb(242 242 240 / 0.16);
+	--ds-color-border-ring: rgb(242 242 240 / 0.16);
+	--ds-color-border-code: rgb(242 242 240 / 0.16);
+	--ds-color-corner: #626261;
+	--ds-color-shadow-drop: rgb(0 0 0 / 0.4);
+	--ds-color-wash-hover: rgb(242 242 240 / 0.07);
+	--ds-color-wash-pressed: rgb(242 242 240 / 0.11);
+	--ds-color-ring-tint: rgb(242 242 240 / 0.16);
+	--ds-color-action-primary: #F2F2F0;
+	--ds-color-action-primary-hover: #C2C2C0;
+	--ds-color-action-primary-fg: #1A1A1A;
+	--ds-color-focus-ring: #F2F2F0;
+	--ds-color-status-success: #5BBE62;
+	--ds-color-status-success-bg: rgb(91 190 98 / 0.14);
+	--ds-color-status-warning: #E0A040;
+	--ds-color-status-warning-bg: rgb(224 160 64 / 0.14);
+	--ds-color-status-warning-fg: #F2F2F0;
+	--ds-color-status-danger-bg: rgb(255 54 22 / 0.16);
+	--ds-color-status-info: #F2F2F0;
+	--ds-color-status-info-bg: rgb(242 242 240 / 0.07);
+	--ds-color-status-info-fg: #F2F2F0;
+	--ds-color-chart-series-1: #F2F2F0;
+	--ds-color-chart-series-3: #929291;
+	--ds-color-chart-series-4: #626261;
+	--ds-color-chart-series-5: #323232;
+	--ds-shadow-s: 0 0 0 1px rgb(242 242 240 / 0.16);
+	--ds-shadow-card: 0 0 0 1px rgb(242 242 240 / 0.16);
+	--ds-shadow-line: 0 1px 0 rgb(242 242 240 / 0.16);
+	--ds-shadow-floating: 0 0 0 1px rgb(242 242 240 / 0.16), 0 24px 48px -24px rgb(0 0 0 / 0.5);
+	--ds-shadow-dialog: 0 0 0 1px rgb(242 242 240 / 0.16), 0 32px 80px -32px rgb(0 0 0 / 0.6);
+	--ds-shadow-cast: -32px 0 80px -24px rgb(0 0 0 / 0.4), -8px 0 24px -8px rgb(0 0 0 / 0.2);
+	--ds-shadow-knob: 0 0 0 1px rgb(242 242 240 / 0.16);
+	--ds-shadow-focus: 0 0 0 2px #F2F2F0;
+}
+
+/* Hoplite's shapes, as utilities the library and apps share. They sit in the components layer, so a utility class
+   on the same element still wins. */
+@layer components {
+	/* A hexagon: the box with its two ends cut to a point, 12px deep (ds-hex-s: 8px, for compact actions and tags). */
+	.ds-hex {
+		clip-path: polygon(var(--ds-hex-chamfer) 0, calc(100% - var(--ds-hex-chamfer)) 0, 100% 50%, calc(100% - var(--ds-hex-chamfer)) 100%, var(--ds-hex-chamfer) 100%, 0 50%);
+	}
+
+	.ds-hex-s {
+		clip-path: polygon(var(--ds-hex-chamfer-s) 0, calc(100% - var(--ds-hex-chamfer-s)) 0, 100% 50%, calc(100% - var(--ds-hex-chamfer-s)) 100%, var(--ds-hex-chamfer-s) 100%, 0 50%);
+	}
+
+	/* A hexagon drawn behind the element, so the element itself stays a box that takes a focus outline (a clip-path
+	   would cut it off). ::before is the hexagon (a fill, or the edge of an outlined one) and ::after the same
+	   hexagon 1px in (the inside of an outlined one); color them with before: and after: classes
+	   (before:bg-primary, or before:bg-line-strong after:bg-surface). ds-hex-frame-s cuts the ends 8px deep. */
+	.ds-hex-frame,
+	.ds-hex-frame-s {
+		--hex-cut: var(--ds-hex-chamfer);
+		position: relative;
+		isolation: isolate;
+	}
+
+	.ds-hex-frame-s {
+		--hex-cut: var(--ds-hex-chamfer-s);
+	}
+
+	:is(.ds-hex-frame, .ds-hex-frame-s)::before,
+	:is(.ds-hex-frame, .ds-hex-frame-s)::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		clip-path: polygon(var(--hex-cut) 0, calc(100% - var(--hex-cut)) 0, 100% 50%, calc(100% - var(--hex-cut)) 100%, var(--hex-cut) 100%, 0 50%);
+		transition: background-color var(--ds-duration-base) var(--ds-easing-out);
+	}
+
+	:is(.ds-hex-frame, .ds-hex-frame-s)::after {
+		inset: 1px;
+	}
+
+	/* A text link (Read the quickstart): the medium ink label over a quiet 1px rule; under the pointer or focus the
+	   rule wipes out to the right while a dashed one wipes in, then marches. Put the label and its arrow in a span. */
+	.ds-link {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--ds-space-1);
+		padding-bottom: 1px;
+		font-size: var(--ds-text-body-sm);
+		font-weight: var(--ds-font-weight-medium);
+		color: var(--ds-color-text-default);
+		text-decoration: none;
+	}
+
+	.ds-link::before,
+	.ds-link::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 1px;
+		transition: clip-path 360ms var(--ds-easing-dock);
+	}
+
+	.ds-link::before {
+		background: var(--ds-color-border-default);
+		clip-path: inset(0);
+	}
+
+	.ds-link::after {
+		background: repeating-linear-gradient(90deg, var(--ds-color-border-strong) 0 10px, transparent 0 18px) left bottom / 18px 1px repeat-x;
+		clip-path: inset(0 100% 0 0);
+		mask-image: linear-gradient(to right, transparent, #000 var(--ds-space-3), #000 calc(100% - var(--ds-space-3)), transparent);
+	}
+
+	.ds-link:focus-visible::before {
+		clip-path: inset(0 0 0 100%);
+	}
+
+	.ds-link:focus-visible::after {
+		clip-path: inset(0);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.ds-link:hover::before {
+			clip-path: inset(0 0 0 100%);
+		}
+
+		.ds-link:hover::after {
+			clip-path: inset(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.ds-link:focus-visible::after {
+			animation: ds-link-march 0.9s linear 0.36s infinite;
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			.ds-link:hover::after {
+				animation: ds-link-march 0.9s linear 0.36s infinite;
+			}
+		}
+	}
+
+	/* A frame's corner ticks: four 16px corners drawn in the slate, over a transparent 1px border. */
+	.ds-corners {
+		border: 1px solid transparent;
+		background:
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left top / var(--ds-corner-length) 1px no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left top / 1px var(--ds-corner-length) no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right top / var(--ds-corner-length) 1px no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right top / 1px var(--ds-corner-length) no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left bottom / var(--ds-corner-length) 1px no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) left bottom / 1px var(--ds-corner-length) no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right bottom / var(--ds-corner-length) 1px no-repeat border-box,
+			linear-gradient(var(--ds-color-corner), var(--ds-color-corner)) right bottom / 1px var(--ds-corner-length) no-repeat border-box;
+	}
+
+	/* Dashed rules: 10px dashes on an 18px period in the quiet line (ds-rule-x along the bottom, ds-rule-y down the
+	   left). The site draws its section guides and its plan marks with these. */
+	.ds-rule-x {
+		background: repeating-linear-gradient(90deg, var(--ds-color-border-default) 0 10px, transparent 0 18px) left bottom / 100% 1px no-repeat;
+	}
+
+	.ds-rule-y {
+		background: repeating-linear-gradient(180deg, var(--ds-color-border-default) 0 10px, transparent 0 18px) left top / 1px 100% no-repeat;
+	}
+
+	/* A label (an eyebrow, a column head, a date): 12px Kode Mono in capitals, tracked 8 percent, in the quiet gray. */
+	.ds-label {
+		font-family: var(--ds-font-mono);
+		font-size: var(--ds-text-caption);
+		line-height: var(--ds-line-caption);
+		letter-spacing: var(--ds-tracking-caps);
+		text-transform: uppercase;
+		color: var(--ds-color-text-label);
+	}
+
+	/* A hexagonal mark (a bullet, a radio, an avatar): a point-up hexagon that fills its box. */
+	.ds-hex-mark {
+		clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+	}
+
+	/* The site's paper grain: a 6 percent noise over the ground, for a page or a section that opts in. */
+	.ds-grain {
+		position: relative;
+		isolation: isolate;
+	}
+
+	.ds-grain::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		opacity: 0.06;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+}
+
+/* The text link's dashed rule marching one period (18px) to the right. */
+@keyframes ds-link-march {
+	to {
+		background-position: 18px 100%;
+	}
+}

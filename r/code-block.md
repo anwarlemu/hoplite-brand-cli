@@ -1,0 +1,248 @@
+# Code Block
+The blog's code block: a square frame of the quiet line, a 40px bar with the language as a Kode Mono label and a ruled-off Copy action, then Kode Mono code at 14px on 24px lines with keywords in the orange and comments in the slate. A tall file or long lines fade at the edge they scroll past (fade-xy; fade-y when lines wrap).
+
+Install: npx hoplite-ds add code-block
+Requires: theme, utils
+Packages: none
+Exports: CodeBlock, CodeBlockActions, CodeBlockContent, CodeBlockCopyButton, CodeBlockHeader, CodeBlockTitle, tokenize
+Client boundary: yes
+Reference: The Hoplite website's blog code blocks (.bp-code, .bp-code__bar, .bp-copy, .bp-code__pre)
+
+
+## Usage
+Use CodeBlock for a command, a config file or a snippet people copy. Give CodeBlockContent the text as code and its language (bash, tsx, ts, json, css); add CodeBlockCopyButton with the same text. Use lineNumbers for a file, wrap for long prose-like lines.
+- Avoid: A dark editor theme
+- Avoid: Rounded corners
+- Avoid: Syntax colors beyond the orange keywords
+- Avoid: A copy glyph that moves
+
+
+## Examples
+Example components: npx hoplite-ds add code-block
+[Preview](https://hoplite-ds.vercel.app/preview/code-block/Preview) | [LineNumbers](https://hoplite-ds.vercel.app/preview/code-block/LineNumbers)
+
+examples/code-block.tsx
+
+```tsx
+import { CodeBlock, CodeBlockActions, CodeBlockContent, CodeBlockCopyButton, CodeBlockHeader, CodeBlockTitle } from "@/components/ui/code-block";
+
+const INSTALL = `brew install usehoplite/tap/hoplite
+hoplite login
+hoplite thread "Fix 500 on uploads over 10 MB" --repo notra/notra-api`;
+
+const CONFIG = `// hoplite.config.ts
+export default {
+  sandbox: { size: "8 vCPU", memory: "32 GiB" },
+  // Run the suite before opening a pull request
+  verify: ["npm test"],
+  autoMerge: true,
+};`;
+
+export function Preview() {
+  return (
+    <CodeBlock className="max-w-xl">
+      <CodeBlockHeader>
+        <CodeBlockTitle>Bash</CodeBlockTitle>
+        <CodeBlockActions>
+          <CodeBlockCopyButton value={INSTALL} />
+        </CodeBlockActions>
+      </CodeBlockHeader>
+      <CodeBlockContent code={INSTALL} language="bash" />
+    </CodeBlock>
+  );
+}
+
+export function LineNumbers() {
+  return (
+    <CodeBlock className="max-w-xl">
+      <CodeBlockHeader>
+        <CodeBlockTitle>TypeScript</CodeBlockTitle>
+        <CodeBlockActions>
+          <CodeBlockCopyButton value={CONFIG} />
+        </CodeBlockActions>
+      </CodeBlockHeader>
+      <CodeBlockContent code={CONFIG} language="ts" lineNumbers />
+    </CodeBlock>
+  );
+}
+
+```
+
+## Source
+
+components/ui/code-block.tsx
+
+```tsx
+"use client";
+
+import * as React from "react";
+
+import { cn } from "@/lib/utils";
+
+// The blog's code block (.bp-code): a square frame of the quiet line on the ground, a 40px bar with the language as a
+// Kode Mono label 20px in and a Copy action ruled off at its right end (14px medium, quiet until the pointer turns it
+// ink; it reads Copied once done), then the code ruled off under it: Kode Mono at 14px on 24px lines, 16px above and
+// below and 20px in, in the ink with keywords in the orange and comments in the slate. Line numbers are optional; long
+// lines scroll, or wrap with `wrap`.
+function CodeBlock({ className, ...props }: React.ComponentProps<"figure">) {
+  return <figure data-slot="code-block" className={cn("group/code-block m-0 flex w-full min-w-0 flex-col border border-line-code bg-code text-code-text", className)} {...props} />;
+}
+
+function CodeBlockHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="code-block-header" className={cn("flex h-10 min-w-0 shrink-0 items-center gap-2 border-b border-line-code bg-code-head pl-5", className)} {...props} />;
+}
+
+function CodeBlockTitle({ className, children, language: _language, ...props }: React.ComponentProps<"figcaption"> & { language?: string }) {
+  return (
+    <figcaption data-slot="code-block-title" className={cn("ds-label flex min-w-0 items-center gap-2 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4", className)} {...props}>
+      <span className="truncate">{children}</span>
+    </figcaption>
+  );
+}
+
+function CodeBlockActions({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="code-block-actions" className={cn("ml-auto flex h-full shrink-0 items-stretch", className)} {...props} />;
+}
+
+function CodeBlockCopyButton({ value, className, ...props }: Omit<React.ComponentProps<"button">, "value" | "children"> & { value: string }) {
+  const [state, setState] = React.useState<"idle" | "copied" | "failed">("idle");
+  React.useEffect(() => {
+    if (state === "idle") return;
+    // ds-latency: resets completed clipboard feedback without delaying the copy action.
+    const timeout = setTimeout(() => setState("idle"), 2000);
+    return () => clearTimeout(timeout);
+  }, [state]);
+  return (
+    <>
+      <button
+        type="button"
+        data-slot="code-block-copy-button"
+        data-copied={state === "copied" || undefined}
+        aria-label={state === "copied" ? "Copied" : "Copy code"}
+        onClick={() => navigator.clipboard.writeText(value).then(() => setState("copied"), () => setState("failed"))}
+        className={cn("grid h-full cursor-pointer place-items-center border-l border-line-code px-5 font-sans text-body-sm leading-line-body-sm font-medium text-fg-muted transition-colors duration-base ease-out hover:text-fg active:text-fg focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-copied:text-fg motion-reduce:transition-none", className)}
+        {...props}
+      >
+        <span className={cn("col-start-1 row-start-1", state === "copied" && "invisible")}>Copy</span>
+        <span aria-hidden className={cn("col-start-1 row-start-1", state !== "copied" && "invisible")}>Copied</span>
+      </button>
+      <span aria-live="polite" className="sr-only">
+        {state === "copied" ? "Copied" : state === "failed" ? "Copy failed. Select the code and copy it." : ""}
+      </span>
+    </>
+  );
+}
+
+type Kind = "key" | "string" | "punct" | "keyword" | "comment" | "number" | "function" | "type" | "tag" | "attr" | "plain";
+const COLOR: Record<Kind, string | undefined> = {
+  key: "text-code-key",
+  string: "text-code-string",
+  punct: "text-code-punct",
+  keyword: "text-code-keyword",
+  comment: "text-code-comment",
+  number: "text-code-number",
+  function: "text-code-function",
+  type: "text-code-type",
+  tag: "text-code-tag",
+  attr: "text-code-attr",
+  plain: undefined,
+};
+
+const KEYWORDS = /^(?:import|from|export|default|function|return|const|let|var|if|else|for|of|in|new|type|interface|extends|as|async|await|true|false|null|undefined|class|this|throw|try|catch)$/;
+
+/** Splits code into runs: keywords take the orange, comments the slate, the rest stays in the ink and its grays. */
+function tokenize(code: string, language: string): { kind: Kind; text: string }[] {
+  const out: { kind: Kind; text: string }[] = [];
+  const push = (kind: Kind, text: string) => (text ? out.push({ kind, text }) : undefined);
+  if (language === "json") {
+    for (const m of code.matchAll(/("(?:\\.|[^"\\])*")(\s*:)?|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)|(true|false|null)|([{}[\]])|([^"{}[\]\d\-tfn]+|[\s\S])/g)) {
+      if (m[1]) {
+        push(m[2] ? "key" : "string", m[1]);
+        push("plain", m[2] ?? "");
+      } else if (m[3]) push("number", m[3]);
+      else if (m[4]) push("keyword", m[4]);
+      else if (m[5]) push("punct", m[5]);
+      else push("plain", m[0]);
+    }
+    return out;
+  }
+  if (language === "bash" || language === "sh" || language === "shell") {
+    for (const line of code.split(/(\n)/)) {
+      if (line === "\n") push("plain", line);
+      else if (/^\s*#/.test(line)) push("comment", line);
+      else
+        for (const [i, m] of [...line.matchAll(/("[^"]*"|'[^']*')|(\s--?[\w-]+)|(\S+|\s+)/g)].entries()) {
+          if (m[1]) push("string", m[1]);
+          else if (m[2]) push("keyword", m[2]);
+          else push(i === 0 || (i === 1 && /^\s/.test(line)) ? "function" : "plain", m[0]);
+        }
+    }
+    return out;
+  }
+  const pattern = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|(<\/?)([A-Za-z][\w.]*)|([A-Za-z_$][\w-]*)(=)|\b(\d+(?:\.\d+)?)\b|([A-Za-z_$][\w$]*)(?=\s*\()|([A-Z][\w$]*)|([A-Za-z_$][\w$]*)|([\s\S])/g;
+  for (const m of code.matchAll(pattern)) {
+    if (m[1]) push("comment", m[1]);
+    else if (m[2]) push("string", m[2]);
+    else if (m[3]) {
+      push("punct", m[3]);
+      push("tag", m[4]);
+    } else if (m[5]) {
+      push("attr", m[5]);
+      push("plain", m[6]);
+    } else if (m[7]) push("number", m[7]);
+    else if (m[8]) push(KEYWORDS.test(m[8]) ? "keyword" : "function", m[8]);
+    else if (m[9]) push("type", m[9]);
+    else if (m[10]) push(KEYWORDS.test(m[10]) ? "keyword" : "plain", m[10]);
+    else push("plain", m[11]);
+  }
+  return out;
+}
+
+/**
+ * The code itself. Pass the text as `code` and its `language` (json, tsx, ts, css, bash). `lineNumbers` adds a slate
+ * gutter; `wrap` breaks long lines instead of scrolling; set a max height to scroll a long file inside the block.
+ */
+function CodeBlockContent({ code, language = "tsx", lineNumbers = false, wrap = false, className, ...props }: Omit<React.ComponentProps<"pre">, "children"> & { code: string; language?: string; lineNumbers?: boolean; wrap?: boolean }) {
+  const lines = React.useMemo(() => {
+    const rows: { kind: Kind; text: string }[][] = [[]];
+    for (const token of tokenize(code.replace(/\n$/, ""), language)) {
+      const parts = token.text.split("\n");
+      parts.forEach((part, i) => {
+        if (i > 0) rows.push([]);
+        if (part) rows[rows.length - 1].push({ kind: token.kind, text: part });
+      });
+    }
+    return rows;
+  }, [code, language]);
+  return (
+    <pre
+      data-slot="code-block-content"
+      tabIndex={0}
+      className={cn("m-0 overflow-auto bg-code py-4 font-code text-body-sm leading-body tracking-normal [scrollbar-width:thin] [tab-size:2] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring", wrap ? "fade-y" : "fade-xy", className)}
+      {...props}
+    >
+      <code className={cn("grid", wrap ? "grid-cols-[minmax(0,1fr)]" : "min-w-max")}>
+        {lines.map((line, i) => (
+          <span key={i} className={cn("grid", lineNumbers ? "grid-cols-[3rem_minmax(0,1fr)]" : "grid-cols-[minmax(0,1fr)] pl-5", wrap && "min-w-0")}>
+            {lineNumbers && (
+              <span aria-hidden className="pr-4 text-right text-code-line select-none">
+                {i + 1}
+              </span>
+            )}
+            <span className={cn("pr-5", wrap ? "whitespace-pre-wrap [overflow-wrap:anywhere]" : "whitespace-pre")}>
+              {line.length ? line.map((t, j) => (
+                <span key={j} className={COLOR[t.kind]}>
+                  {t.text}
+                </span>
+              )) : "\u200b"}
+            </span>
+          </span>
+        ))}
+      </code>
+    </pre>
+  );
+}
+
+export { CodeBlock, CodeBlockActions, CodeBlockContent, CodeBlockCopyButton, CodeBlockHeader, CodeBlockTitle, tokenize };
+
+```

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "name": "collapsible",
+  "useFor": "Use Collapsible for one optional section (advanced settings, the full list of checks). Use the built-in trigger for a quiet text toggle, or asChild with a Button (ghost icon-sm) beside a heading. For several sections in a column, use Accordion.",
+  "constraints": [
+    "A caret that moves on hover",
+    "A filled or boxed trigger",
+    "Content that fades or slides in sideways"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the changelog's quiet disclosures (.cl-entry__summary) and the FAQ's height animation (.faq__item)",
+  "exports": [
+    "Collapsible",
+    "CollapsibleContent",
+    "CollapsibleTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/collapsible",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/collapsible.md",
+  "examples": [
+    {
+      "path": "examples/collapsible.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { CaretUpDownIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Collapsible, CollapsibleContent, CollapsibleTrigger } from \"@/components/ui/collapsible\";\n\nexport function Preview() {\n  return (\n    <Collapsible defaultOpen className=\"w-full max-w-md\">\n      <CollapsibleTrigger>Advanced sandbox settings</CollapsibleTrigger>\n      <CollapsibleContent>\n        <div className=\"grid gap-2 pt-4 pl-6 text-body-sm leading-line-body-sm text-fg-secondary\">\n          <p>Image: ubuntu-24.04 with Node 22</p>\n          <p>Size: 4 vCPU, 16 GiB</p>\n          <p>Idle timeout: 30 minutes</p>\n        </div>\n      </CollapsibleContent>\n    </Collapsible>\n  );\n}\n\nconst CHECKS = [\"lint\", \"typecheck\", \"unit tests\", \"e2e: checkout\"];\n\nexport function WithButton() {\n  const [open, setOpen] = React.useState(false);\n  return (\n    <Collapsible open={open} onOpenChange={setOpen} className=\"w-full max-w-md\">\n      <div className=\"flex items-center justify-between gap-4 border-b border-line pb-3\">\n        <span className=\"text-body-sm leading-line-body-sm font-medium text-fg\">4 checks passed on #482</span>\n        <CollapsibleTrigger asChild>\n          <Button variant=\"ghost\" size=\"icon-sm\" aria-label={open ? \"Hide checks\" : \"Show checks\"}>\n            <CaretUpDownIcon />\n          </Button>\n        </CollapsibleTrigger>\n      </div>\n      <CollapsibleContent>\n        <ul className=\"grid\">\n          {CHECKS.map((check) => (\n            <li key={check} className=\"flex h-9 items-center justify-between border-b border-line text-body-sm leading-line-body-sm text-fg-secondary\">\n              {check}\n              <span className=\"font-mono text-caption tracking-code text-fg-muted\">passed</span>\n            </li>\n          ))}\n        </ul>\n      </CollapsibleContent>\n    </Collapsible>\n  );\n}\n\nexport function Disabled() {\n  return (\n    <Collapsible disabled>\n      <CollapsibleTrigger>Billing history (owners only)</CollapsibleTrigger>\n      <CollapsibleContent>Hidden</CollapsibleContent>\n    </Collapsible>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "WithButton",
+        "Disabled"
+      ],
+      "requires": [
+        "collapsible",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/collapsible/Preview"
+        },
+        {
+          "name": "WithButton",
+          "url": "https://hoplite-ds.vercel.app/preview/collapsible/WithButton"
+        },
+        {
+          "name": "Disabled",
+          "url": "https://hoplite-ds.vercel.app/preview/collapsible/Disabled"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Collapsible",
+  "description": "A section that opens in place: a 14px medium graphite trigger with a caret that turns a quarter when open, and a panel that opens with its height.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/collapsible.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Collapsible as BaseCollapsible } from \"@base-ui/react/collapsible\";\nimport { CaretRightIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { cn, slot } from \"@/lib/utils\";\n\n// A section that opens in place, drawn from the site's quiet disclosures (the changelog's entries, .cl-entry): a 14px\n// medium graphite trigger with a 16px caret before it that turns a quarter to point down when open (240ms, ease-out);\n// under the pointer the label turns ink, and the caret only changes color. The panel opens with its height (240ms,\n// ease-out; it closes in 200ms). With asChild the trigger takes the look of its child (a Button) and no caret.\ntype CollapsibleProps = React.ComponentProps<typeof BaseCollapsible.Root>;\n\nfunction Collapsible(props: CollapsibleProps) {\n  return <BaseCollapsible.Root data-slot=\"collapsible\" {...props} />;\n}\n\nfunction CollapsibleTrigger({ className, children, asChild = false, render, ...props }: React.ComponentProps<typeof BaseCollapsible.Trigger> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  if (parts.render) {\n    // A component child (the library's Button) renders a native button; a plain element other than a button does not.\n    const type = React.isValidElement(parts.render) ? parts.render.type : undefined;\n    const native = !(typeof type === \"string\" && type !== \"button\");\n    return (\n      <BaseCollapsible.Trigger data-slot=\"collapsible-trigger\" nativeButton={native} render={parts.render} className={className} {...props}>\n        {parts.children}\n      </BaseCollapsible.Trigger>\n    );\n  }\n  return (\n    <BaseCollapsible.Trigger\n      data-slot=\"collapsible-trigger\"\n      className={cn(\n        \"group/collapsible-trigger inline-flex cursor-pointer items-center gap-2 font-sans text-body-sm leading-line-body-sm font-medium text-fg-secondary transition-colors duration-base ease-out hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring data-panel-open:text-fg data-disabled:cursor-default data-disabled:text-fg-subtle motion-reduce:transition-none\",\n        className,\n      )}\n      {...props}\n    >\n      <CaretRightIcon aria-hidden data-slot=\"collapsible-caret\" className=\"size-4 shrink-0 text-fg-muted transition-[rotate,color] duration-slow ease-out group-hover/collapsible-trigger:text-fg group-data-panel-open/collapsible-trigger:rotate-90 group-data-panel-open/collapsible-trigger:text-fg motion-reduce:transition-none\" />\n      {children}\n    </BaseCollapsible.Trigger>\n  );\n}\n\nfunction CollapsibleContent({ className, ...props }: React.ComponentProps<typeof BaseCollapsible.Panel>) {\n  return (\n    <BaseCollapsible.Panel\n      data-slot=\"collapsible-content\"\n      className={cn(\n        \"h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-slow ease-out data-starting-style:h-0 data-ending-style:h-0 data-ending-style:duration-moderate motion-reduce:transition-none\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Collapsible, CollapsibleContent, CollapsibleTrigger };\n"
+    }
+  ]
+}

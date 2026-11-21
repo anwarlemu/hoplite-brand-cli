@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "name": "drawer",
+  "useFor": "Use on touch screens for a short task or a list to act on (steering running subagents) that should feel like part of the page. Put the title in DrawerHeader and stacked actions in DrawerFooter. direction=\"right\" or \"left\" makes a swipeable side panel; on desktop prefer Dialog or Sheet.",
+  "constraints": [
+    "A rounded top or handle",
+    "A white panel",
+    "Content that needs a long scroll",
+    "Nested drawers",
+    "Easing in"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the square ground panel of its popups (.hn__sheet), the dock curve (--dock) and the long soft cast; built on Base UI's drawer for the swipe.",
+  "exports": [
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerDescription",
+    "DrawerFooter",
+    "DrawerHeader",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "DrawerTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/drawer",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/drawer.md",
+  "examples": [
+    {
+      "path": "examples/drawer.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from \"@/components/ui/drawer\";\n\nconst AGENTS = [\n  { name: \"Fix flaky upload test\", state: \"Running checks\" },\n  { name: \"Prorate seats on upgrade\", state: \"Waiting for review\" },\n  { name: \"Bump the Node image\", state: \"Done\" },\n];\n\nfunction Subagents({ defaultOpen }: { defaultOpen?: boolean }) {\n  return (\n    <Drawer defaultOpen={defaultOpen}>\n      <DrawerTrigger render={<Button variant=\"outline\" />}>Steer subagents</DrawerTrigger>\n      <DrawerContent>\n        <div className=\"mx-auto flex w-full max-w-md flex-col\">\n          <DrawerHeader>\n            <DrawerTitle>Running subagents</DrawerTitle>\n            <DrawerDescription>Three agents are working in acme-web. Swipe down to close.</DrawerDescription>\n          </DrawerHeader>\n          <ul className=\"m-0 list-none px-6 py-0\">\n            {AGENTS.map((agent) => (\n              <li key={agent.name} className=\"flex items-center justify-between gap-4 border-b border-line py-3 text-body-sm leading-line-body-sm first:border-t\">\n                <span className=\"text-fg\">{agent.name}</span>\n                <span className=\"shrink-0 text-fg-muted\">{agent.state}</span>\n              </li>\n            ))}\n          </ul>\n          <DrawerFooter>\n            <Button>Open threads</Button>\n            <DrawerClose render={<Button variant=\"outline\" />}>Close</DrawerClose>\n          </DrawerFooter>\n        </div>\n      </DrawerContent>\n    </Drawer>\n  );\n}\n\nexport function Preview() {\n  return <Subagents />;\n}\n\nexport function Open() {\n  return (\n    <div className=\"min-h-120\">\n      <Subagents defaultOpen />\n    </div>\n  );\n}\n\nexport function Side() {\n  return (\n    <Drawer direction=\"right\">\n      <DrawerTrigger render={<Button variant=\"outline\" />}>Open from the right</DrawerTrigger>\n      <DrawerContent>\n        <DrawerHeader>\n          <DrawerTitle>Thread details</DrawerTitle>\n          <DrawerDescription>Swipe right to close.</DrawerDescription>\n        </DrawerHeader>\n        <dl className=\"m-0 grid grid-cols-2 gap-x-4 gap-y-3 px-6 text-body-sm leading-line-body-sm\">\n          <dt className=\"text-fg-muted\">Repository</dt>\n          <dd className=\"m-0 text-fg\">acme/web</dd>\n          <dt className=\"text-fg-muted\">Branch</dt>\n          <dd className=\"m-0 text-fg\">fix/upload-retry</dd>\n          <dt className=\"text-fg-muted\">Agent</dt>\n          <dd className=\"m-0 text-fg\">Claude Code</dd>\n        </dl>\n        <DrawerFooter>\n          <DrawerClose render={<Button variant=\"outline\" />}>Close</DrawerClose>\n        </DrawerFooter>\n      </DrawerContent>\n    </Drawer>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Open",
+        "Side"
+      ],
+      "requires": [
+        "drawer",
+        "button"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/drawer/Preview"
+        },
+        {
+          "name": "Open",
+          "url": "https://hoplite-ds.vercel.app/preview/drawer/Open"
+        },
+        {
+          "name": "Side",
+          "url": "https://hoplite-ds.vercel.app/preview/drawer/Side"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Drawer",
+  "description": "A square sheet of the ground that rises from the bottom edge, ruled off by the quiet line with a long soft cast, over the ink at 32 percent: a small square handle near its top, a centered Chakra Petch light 20px title over a 14px graphite description, stacked hexagon keys. It slides its own height on the dock curve and follows a swipe down to close. A long body scrolls inside the panel and fades at the edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils",
+    "surface"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/drawer.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Drawer as BaseDrawer } from \"@base-ui/react/drawer\";\n\nimport { cn, slot } from \"@/lib/utils\";\nimport { usePortalContainer } from \"@/lib/surface\";\n\n// A sheet that rises from the bottom edge and follows the finger: a square panel of the ground the full width of the\n// screen, ruled off from the page by the quiet line with the long soft cast over it, over the ink at 32 percent. A\n// small square handle of the 32 percent line sits 12px from its top edge. The header centers a Chakra Petch light 20px\n// title over a 14px graphite description; the footer stacks its hexagon keys. It slides its own height on the dock curve\n// in 240ms; a swipe down dismisses it and the release runs shorter the faster the flick. `direction` puts it on another\n// edge (no handle there). With reduced motion it appears in place.\ntype Direction = \"bottom\" | \"top\" | \"left\" | \"right\";\n\nconst SWIPE = { bottom: \"down\", top: \"up\", left: \"left\", right: \"right\" } as const;\n\nconst PLACE: Record<Direction, string> = {\n  bottom:\n    \"inset-x-0 bottom-0 max-h-[85dvh] border-t border-line [transform:translateY(var(--drawer-swipe-movement-y))] data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]\",\n  top: \"inset-x-0 top-0 max-h-[85dvh] border-b border-line [transform:translateY(var(--drawer-swipe-movement-y))] data-starting-style:[transform:translateY(-100%)] data-ending-style:[transform:translateY(-100%)]\",\n  right:\n    \"inset-y-0 right-0 h-full w-3/4 max-w-sm border-l border-line [transform:translateX(var(--drawer-swipe-movement-x))] data-starting-style:[transform:translateX(100%)] data-ending-style:[transform:translateX(100%)]\",\n  left: \"inset-y-0 left-0 h-full w-3/4 max-w-sm border-r border-line [transform:translateX(var(--drawer-swipe-movement-x))] data-starting-style:[transform:translateX(-100%)] data-ending-style:[transform:translateX(-100%)]\",\n};\n\nconst DirectionContext = React.createContext<Direction>(\"bottom\");\n\n/** A trigger renders a native button unless its `render` (or asChild child) is another tag. */\nfunction isNativeButton(render: unknown) {\n  return !React.isValidElement(render) || typeof render.type !== \"string\" || render.type === \"button\";\n}\n\ntype DrawerProps = Omit<React.ComponentProps<typeof BaseDrawer.Root>, \"onOpenChange\" | \"swipeDirection\"> & { direction?: Direction; onOpenChange?: (open: boolean) => void };\n\nfunction Drawer({ direction = \"bottom\", onOpenChange, ...props }: DrawerProps) {\n  return (\n    <DirectionContext.Provider value={direction}>\n      <BaseDrawer.Root data-slot=\"drawer\" swipeDirection={SWIPE[direction]} onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined} {...props} />\n    </DirectionContext.Provider>\n  );\n}\n\nfunction DrawerTrigger({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDrawer.Trigger> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseDrawer.Trigger data-slot=\"drawer-trigger\" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>\n      {parts.children}\n    </BaseDrawer.Trigger>\n  );\n}\n\nfunction DrawerPortal(props: React.ComponentProps<typeof BaseDrawer.Portal>) {\n  const container = usePortalContainer();\n  return <BaseDrawer.Portal data-slot=\"drawer-portal\" container={container} {...props} />;\n}\n\nfunction DrawerClose({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDrawer.Close> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseDrawer.Close data-slot=\"drawer-close\" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>\n      {parts.children}\n    </BaseDrawer.Close>\n  );\n}\n\nfunction DrawerOverlay({ className, ...props }: Omit<React.ComponentProps<typeof BaseDrawer.Backdrop>, \"className\"> & { className?: string }) {\n  return (\n    <BaseDrawer.Backdrop\n      data-slot=\"drawer-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-scrim opacity-[calc(1-var(--drawer-swipe-progress))] transition-opacity duration-slow ease-drawer data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*var(--ds-duration-slow))] data-swiping:duration-0 motion-reduce:transition-none\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction DrawerContent({ className, children, ...props }: Omit<React.ComponentProps<typeof BaseDrawer.Popup>, \"className\"> & { className?: string }) {\n  const direction = React.useContext(DirectionContext);\n  return (\n    <DrawerPortal>\n      <DrawerOverlay />\n      <BaseDrawer.Viewport data-slot=\"drawer-viewport\" className=\"fixed inset-0 z-50\">\n        <BaseDrawer.Popup\n          data-slot=\"drawer-content\"\n          data-direction={direction}\n          className={cn(\n            \"fixed flex flex-col bg-surface text-fg shadow-floating outline-none touch-auto transition-transform duration-slow ease-drawer data-ending-style:duration-[calc(var(--drawer-swipe-strength)*var(--ds-duration-slow))] data-swiping:duration-0 data-swiping:select-none motion-reduce:transition-none\",\n            PLACE[direction],\n            className,\n          )}\n          {...props}\n        >\n          {direction === \"bottom\" && <div data-slot=\"drawer-handle\" aria-hidden className=\"mx-auto mt-3 h-1 w-12 shrink-0 bg-line-field\" />}\n          <BaseDrawer.Content data-slot=\"drawer-body\" className=\"flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain fade-y\">\n            {children}\n          </BaseDrawer.Content>\n        </BaseDrawer.Popup>\n      </BaseDrawer.Viewport>\n    </DrawerPortal>\n  );\n}\n\nfunction DrawerHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  const direction = React.useContext(DirectionContext);\n  return <div data-slot=\"drawer-header\" className={cn(\"flex flex-col gap-2 p-6\", direction === \"bottom\" || direction === \"top\" ? \"items-center text-center\" : \"\", className)} {...props} />;\n}\n\nfunction DrawerFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"drawer-footer\" className={cn(\"mt-auto flex flex-col gap-3 p-6 pb-[max(var(--ds-space-6),env(safe-area-inset-bottom))]\", className)} {...props} />;\n}\n\nfunction DrawerTitle({ className, ...props }: Omit<React.ComponentProps<typeof BaseDrawer.Title>, \"className\"> & { className?: string }) {\n  return <BaseDrawer.Title data-slot=\"drawer-title\" className={cn(\"font-display text-h5 leading-title font-light text-balance text-fg\", className)} {...props} />;\n}\n\nfunction DrawerDescription({ className, ...props }: Omit<React.ComponentProps<typeof BaseDrawer.Description>, \"className\"> & { className?: string }) {\n  return <BaseDrawer.Description data-slot=\"drawer-description\" className={cn(\"text-body-sm leading-line-body-sm text-pretty text-fg-secondary\", className)} {...props} />;\n}\n\nexport { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle, DrawerTrigger };\n"
+    }
+  ]
+}

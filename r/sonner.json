@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "name": "sonner",
+  "useFor": "Mount Toaster once near the root and call toast() from sonner anywhere: toast(\"Sandbox paused\", { description, action }), toast.success, toast.error, toast.warning, toast.info and toast.promise for work in flight. Keep titles short and say what happened; give an undo action where one exists.",
+  "constraints": [
+    "Rounded toasts",
+    "Colored toast backgrounds",
+    "More than one action",
+    "A toast for something people must act on (use a dialog)",
+    "Bouncy or slow motion"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website's popups (the nav sheet and menus, .hn__): the square ground panel with its hairline and long cast, and its compact keys (.button--s)",
+  "exports": [
+    "Toaster"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/sonner",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/sonner.md",
+  "examples": [
+    {
+      "path": "examples/sonner.tsx",
+      "content": "\"use client\";\n\nimport { toast } from \"sonner\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport function Preview() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Toaster />\n      <Button\n        variant=\"outline\"\n        onClick={() =>\n          toast(\"Sandbox paused\", {\n            description: \"sbx-7f3a keeps its files for seven days.\",\n            action: { label: \"Resume\", onClick: () => toast.success(\"Sandbox resumed\") },\n          })\n        }\n      >\n        Pause sandbox\n      </Button>\n    </div>\n  );\n}\n\nexport function Types() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Toaster />\n      <Button variant=\"outline\" onClick={() => toast.success(\"Pull request merged\", { description: \"Fix the null check in billing is on main.\" })}>\n        Success\n      </Button>\n      <Button variant=\"outline\" onClick={() => toast.error(\"Check failed\", { description: \"npm test exited with code 1 on sbx-91c2.\" })}>\n        Error\n      </Button>\n      <Button variant=\"outline\" onClick={() => toast.warning(\"2 seats left\", { description: \"Add seats before inviting more people.\" })}>\n        Warning\n      </Button>\n      <Button variant=\"outline\" onClick={() => toast.info(\"Automation scheduled\", { description: \"Sentry triage runs every night at 2:00.\" })}>\n        Info\n      </Button>\n    </div>\n  );\n}\n\nexport function Promise() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Toaster />\n      <Button\n        variant=\"outline\"\n        onClick={() =>\n          toast.promise(\n            // ds-latency: demonstrates a pending notification; no control or input waits for the demo timer.\n            new globalThis.Promise((resolve) => setTimeout(resolve, 1600)),\n            { loading: \"Starting the agent...\", success: \"The agent is running in sbx-04de\", error: \"Could not start the agent\" },\n          )\n        }\n      >\n        Start agent\n      </Button>\n      <Button\n        variant=\"outline\"\n        onClick={() =>\n          toast(\"Delete this automation?\", {\n            description: \"Its runs and logs are removed too.\",\n            cancel: { label: \"Cancel\", onClick: () => undefined },\n            action: { label: \"Delete\", onClick: () => toast(\"Automation deleted\") },\n          })\n        }\n      >\n        With cancel\n      </Button>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Types",
+        "Promise"
+      ],
+      "requires": [
+        "sonner",
+        "button"
+      ],
+      "packages": [
+        "sonner"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/sonner/Preview"
+        },
+        {
+          "name": "Types",
+          "url": "https://hoplite-ds.vercel.app/preview/sonner/Types"
+        },
+        {
+          "name": "Promise",
+          "url": "https://hoplite-ds.vercel.app/preview/sonner/Promise"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Sonner",
+  "description": "Toasts: square panels of the ground with the floating shadow, a 16px status glyph, a 14px medium title over a quiet description, a compact ink hexagon action and a ghost close glyph. Stacked at the bottom right; they rise in 240ms and leave in 200ms. A long description scrolls and fades at the edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [
+    "popover-panel"
+  ],
+  "requires": [
+    "theme"
+  ],
+  "packages": [
+    "@phosphor-icons/react",
+    "sonner"
+  ],
+  "files": [
+    {
+      "path": "components/ui/sonner.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { CheckCircleIcon, InfoIcon, SpinnerGapIcon, WarningCircleIcon, WarningIcon, XIcon } from \"@phosphor-icons/react/ssr\";\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\";\n\n// Toasts, extrapolated from the Hoplite website's popups (the nav's sheet and menus): a square 360px panel of the\n// ground with the floating shadow (a quiet hairline and a long soft cast) and 16px of padding. A 16px Phosphor status\n// glyph leads (a check in green, a warning in amber, an error in orange, info in the quiet gray, a turning loader),\n// then the 14px medium ink title over the 14px quiet description. The action is the compact ink hexagon (32px, 8px\n// cuts) and cancel the compact outlined one; the close key is a ghost glyph at the top right whose compact hexagon of\n// the hover wash appears under the pointer. The stack sits 24px in from the bottom right. Sonner stacks, swipes and\n// times them; its motion is retimed to the brand's: toasts rise in 240ms on the strong ease-out and leave in 200ms,\n// and reduced motion turns it off.\nconst KEY = \"ds-hex-frame-s inline-flex h-8 shrink-0 cursor-pointer items-center justify-center px-4 font-sans text-body-sm leading-none font-medium whitespace-nowrap transition-colors duration-base ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none\";\n\nfunction Toaster({ toastOptions, closeButton, offset = 24, mobileOffset = 16, ...props }: ToasterProps) {\n  return (\n    <Sonner\n      data-slot=\"sonner\"\n      className=\"toaster group font-sans duration-slow! ease-out!\"\n      closeButton={closeButton}\n      offset={offset}\n      mobileOffset={mobileOffset}\n      gap={12}\n      icons={{\n        success: <CheckCircleIcon className=\"size-4 text-success\" />,\n        info: <InfoIcon className=\"size-4 text-fg-muted\" />,\n        warning: <WarningIcon className=\"size-4 text-warning\" />,\n        error: <WarningCircleIcon className=\"size-4 text-danger\" />,\n        loading: <SpinnerGapIcon className=\"size-4 animate-spin text-fg-muted motion-reduce:animate-none\" />,\n        close: <XIcon className=\"size-4\" />,\n      }}\n      toastOptions={{\n        ...toastOptions,\n        unstyled: true,\n        classNames: {\n          toast:\n            \"group/toast flex w-(--width) items-start gap-3 bg-surface p-4 font-sans text-fg shadow-floating duration-slow! ease-out! focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-[removed=true]:duration-moderate! data-[expanded=false]:data-[front=false]:[&>*]:opacity-0 [&>*]:duration-slow! [&>*]:ease-out!\",\n          icon: \"flex h-6 w-4 shrink-0 items-center justify-center\",\n          content: \"grid min-w-0 flex-1 gap-1 pr-8 group-has-data-button/toast:pr-0\",\n          title: \"text-body-sm leading-line-body-sm font-medium text-fg\",\n          description: \"max-h-40 overflow-y-auto fade-y text-body-sm leading-line-body-sm text-fg-muted whitespace-pre-line wrap-anywhere\",\n          actionButton: `${KEY} self-center group-has-data-close-button/toast:last:mr-8 text-on-primary before:bg-primary hover:before:bg-primary-hover active:before:bg-primary-hover`,\n          cancelButton: `${KEY} self-center group-has-data-close-button/toast:last:mr-8 text-fg before:bg-line-strong after:bg-surface hover:after:bg-subtle-hover active:after:bg-pressed`,\n          closeButton:\n            \"ds-hex-frame-s absolute! top-3 right-3 inline-flex size-8 cursor-pointer items-center justify-center text-fg-muted transition-colors duration-base ease-out hover:text-fg hover:before:bg-subtle-hover active:before:bg-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring motion-reduce:transition-none\",\n          ...toastOptions?.classNames,\n        },\n      }}\n      style={{ \"--width\": \"22.5rem\" } as React.CSSProperties}\n      {...props}\n    />\n  );\n}\n\nexport { Toaster };\n"
+    }
+  ]
+}

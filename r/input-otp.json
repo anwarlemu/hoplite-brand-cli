@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "name": "input-otp",
+  "useFor": "Use InputOTP for a short verification or pairing code. Set maxLength and lay out InputOTPSlot cells in one or two InputOTPGroup rows with an InputOTPSeparator between. Digits are the default; pass pattern=REGEXP_ONLY_DIGITS_AND_CHARS for letters too. Label it with a visible label and htmlFor on the id.",
+  "constraints": [
+    "Rounded cells",
+    "Satoshi or display type in the cells",
+    "An orange active cell",
+    "Cells that grow when focused"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the joined boxes of its changelog filter (.cl-filter), its quiet and strong lines, and Kode Mono for codes",
+  "exports": [
+    "InputOTP",
+    "InputOTPGroup",
+    "InputOTPSeparator",
+    "InputOTPSlot",
+    "REGEXP_ONLY_CHARS",
+    "REGEXP_ONLY_DIGITS",
+    "REGEXP_ONLY_DIGITS_AND_CHARS"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/input-otp",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/input-otp.md",
+  "examples": [
+    {
+      "path": "examples/input-otp.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, REGEXP_ONLY_DIGITS_AND_CHARS } from \"@/components/ui/input-otp\";\n\nexport function Preview() {\n  return (\n    <div className=\"grid gap-2\">\n      <label htmlFor=\"otp-code\" className=\"font-sans text-body-sm font-medium text-fg\">\n        Verification code\n      </label>\n      <InputOTP id=\"otp-code\" maxLength={6}>\n        <InputOTPGroup>\n          <InputOTPSlot index={0} />\n          <InputOTPSlot index={1} />\n          <InputOTPSlot index={2} />\n        </InputOTPGroup>\n        <InputOTPSeparator />\n        <InputOTPGroup>\n          <InputOTPSlot index={3} />\n          <InputOTPSlot index={4} />\n          <InputOTPSlot index={5} />\n        </InputOTPGroup>\n      </InputOTP>\n      <p className=\"m-0 text-body-sm text-fg-muted\">Enter the code we sent to your device.</p>\n    </div>\n  );\n}\n\nexport function Controlled() {\n  const [value, setValue] = React.useState(\"\");\n  return (\n    <div className=\"grid gap-2\">\n      <InputOTP maxLength={4} value={value} onChange={setValue} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} aria-label=\"Pairing code\">\n        <InputOTPGroup>\n          <InputOTPSlot index={0} />\n          <InputOTPSlot index={1} />\n          <InputOTPSlot index={2} />\n          <InputOTPSlot index={3} />\n        </InputOTPGroup>\n      </InputOTP>\n      <p className=\"m-0 text-body-sm text-fg-muted\">{value ? `Pairing code: ${value.toUpperCase()}` : \"Enter the pairing code shown in the desktop app.\"}</p>\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid gap-4\">\n      <InputOTP maxLength={6} defaultValue=\"482913\" aria-label=\"Complete\">\n        <InputOTPGroup>\n          {Array.from({ length: 6 }, (_, i) => (\n            <InputOTPSlot key={i} index={i} />\n          ))}\n        </InputOTPGroup>\n      </InputOTP>\n      <InputOTP maxLength={6} defaultValue=\"4829\" aria-invalid aria-label=\"Invalid\">\n        <InputOTPGroup>\n          {Array.from({ length: 6 }, (_, i) => (\n            <InputOTPSlot key={i} index={i} />\n          ))}\n        </InputOTPGroup>\n      </InputOTP>\n      <InputOTP maxLength={6} defaultValue=\"48\" disabled aria-label=\"Disabled\">\n        <InputOTPGroup>\n          {Array.from({ length: 6 }, (_, i) => (\n            <InputOTPSlot key={i} index={i} />\n          ))}\n        </InputOTPGroup>\n      </InputOTP>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Controlled",
+        "States"
+      ],
+      "requires": [
+        "input-otp"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/input-otp/Preview"
+        },
+        {
+          "name": "Controlled",
+          "url": "https://hoplite-ds.vercel.app/preview/input-otp/Controlled"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/input-otp/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Input OTP",
+  "description": "A one-time code on Base UI's OTP field: joined square 40px cells on the quiet rule, a 16px Kode Mono character in each, the cell with the caret on the strong edge; orange edges when invalid.",
+  "surface": "site",
+  "kinds": [
+    "input"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/input-otp.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { OTPField } from \"@base-ui/react/otp-field\";\nimport { MinusIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A one-time code field on Base UI's OTP field, drawn with the site's lines (extrapolated: the site has no fields):\n// joined square 40px cells on the quiet rule, as the changelog filter joins its boxes (.cl-filter), each holding one\n// 16px Kode Mono character in the ink. The cell with the caret takes the strong edge, 2px with an inset outline, and\n// rises above its neighbors; nothing moves or grows. An invalid code turns every edge orange; a disabled one goes quiet\n// with slate characters. Groups sit 8px apart around a 16px slate dash. Each cell is a real input, so typing,\n// deleting, pasting a whole code, SMS autofill and arrow keys work; `pattern` picks digits, letters or both.\nconst REGEXP_ONLY_DIGITS = \"^\\\\d+$\";\nconst REGEXP_ONLY_CHARS = \"^[a-zA-Z]+$\";\nconst REGEXP_ONLY_DIGITS_AND_CHARS = \"^[a-zA-Z0-9]+$\";\n\nconst VALIDATION: Record<string, \"numeric\" | \"alpha\" | \"alphanumeric\"> = {\n  [REGEXP_ONLY_DIGITS]: \"numeric\",\n  [REGEXP_ONLY_CHARS]: \"alpha\",\n  [REGEXP_ONLY_DIGITS_AND_CHARS]: \"alphanumeric\",\n};\n\nconst InputOTPContext = React.createContext<{ length: number; invalid: boolean; className?: string }>({ length: 0, invalid: false });\n\ntype InputOTPProps = Omit<React.ComponentProps<typeof OTPField.Root>, \"length\" | \"onChange\" | \"onValueChange\" | \"onValueComplete\" | \"className\"> & {\n  maxLength: number;\n  onChange?: (value: string) => void;\n  onComplete?: (value: string) => void;\n  /** One of REGEXP_ONLY_DIGITS (the default), REGEXP_ONLY_CHARS or REGEXP_ONLY_DIGITS_AND_CHARS; anything else allows every character. */\n  pattern?: string;\n  containerClassName?: string;\n  /** Classes for every cell. */\n  className?: string;\n};\n\nfunction InputOTP({ maxLength, onChange, onComplete, pattern = REGEXP_ONLY_DIGITS, validationType, containerClassName, className, children, ...props }: InputOTPProps) {\n  const invalid = props[\"aria-invalid\"] === true || props[\"aria-invalid\"] === \"true\";\n  return (\n    <InputOTPContext.Provider value={{ length: maxLength, invalid, className }}>\n      <OTPField.Root\n        data-slot=\"input-otp\"\n        length={maxLength}\n        validationType={validationType ?? VALIDATION[pattern] ?? \"none\"}\n        onValueChange={onChange ? (value) => onChange(value) : undefined}\n        onValueComplete={onComplete ? (value) => onComplete(value) : undefined}\n        className={cn(\"group/input-otp flex items-center gap-2\", containerClassName)}\n        {...props}\n      >\n        {children}\n      </OTPField.Root>\n    </InputOTPContext.Provider>\n  );\n}\n\nfunction InputOTPGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"input-otp-group\" className={cn(\"flex items-center\", className)} {...props} />;\n}\n\nfunction InputOTPSlot({ index, className, ...props }: Omit<React.ComponentProps<typeof OTPField.Input>, \"className\"> & { index: number; className?: string }) {\n  const context = React.useContext(InputOTPContext);\n  return (\n    <OTPField.Input\n      data-slot=\"input-otp-slot\"\n      aria-label={index > 0 ? `Character ${index + 1} of ${context.length}` : undefined}\n      aria-invalid={context.invalid || undefined}\n      className={cn(\n        \"relative -ml-px size-10 min-w-0 border border-line bg-transparent p-0 text-center font-mono text-body leading-none text-fg caret-fg transition-[border-color] duration-fast ease-out first:ml-0 hover:z-10 hover:border-line-field focus:z-20 focus:border-line-strong focus:outline-1 focus:-outline-offset-2 focus:outline-line-strong aria-invalid:z-10 aria-invalid:border-danger aria-invalid:focus:outline-danger data-invalid:border-danger data-disabled:cursor-not-allowed data-disabled:border-line data-disabled:text-fg-subtle pointer-coarse:size-12 motion-reduce:transition-none\",\n        context.className,\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction InputOTPSeparator({ className, ...props }: React.ComponentProps<typeof OTPField.Separator>) {\n  return (\n    <OTPField.Separator data-slot=\"input-otp-separator\" className={cn(\"flex items-center text-fg-subtle\", className)} {...props}>\n      <MinusIcon aria-hidden className=\"size-4\" />\n    </OTPField.Separator>\n  );\n}\n\nexport { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS };\n"
+    }
+  ]
+}

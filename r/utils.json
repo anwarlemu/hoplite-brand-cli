@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "name": "utils",
+  "useFor": "Compose every component's classes with cn so a caller's className replaces the default it conflicts with.",
+  "constraints": [],
+  "documentation": "",
+  "exports": [
+    "cn",
+    "slot"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/r/utils.md",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/utils.md",
+  "examples": [],
+  "type": "lib",
+  "title": "cn",
+  "description": "Merges class names and resolves conflicts between the brand's own scales (text-body-sm, rounded-control, shadow-floating).",
+  "surface": "site",
+  "kinds": [],
+  "requires": [],
+  "packages": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "lib/utils.ts",
+      "content": "import * as React from \"react\";\nimport { type ClassValue, clsx } from \"clsx\";\nimport { extendTailwindMerge } from \"tailwind-merge\";\n\n// The brand's scales have their own names (text-body-sm, rounded-control, shadow-s). Without teaching tailwind-merge,\n// it reads text-body-sm as a text color and drops the real color beside it, and keeps a default rounded-md next to a\n// brand radius meant to replace it. Brand text sizes do not set line height: keep explicit leading in either order.\nconst twMerge = extendTailwindMerge<\"brand-font-size\">({\n  extend: {\n    theme: {\n      leading: [\"tight\", \"display\", \"heading\", \"title\", \"snug\", \"body\", \"relaxed\", \"prose\", \"code\", \"line-body\", \"line-body-sm\", \"line-caption\"],\n      tracking: [\"normal\", \"tight\", \"caps\", \"code\"],\n      radius: [\"xs\", \"sm\", \"control\", \"panel\", \"dialog\", \"pill\"],\n      shadow: [\"s\", \"line\", \"card\", \"floating\", \"dialog\", \"cast\", \"knob\", \"focus\"],\n    },\n    classGroups: {\n      \"brand-font-size\": [{ text: [\"display\", \"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"body-lg\", \"body\", \"body-sm\", \"caption\", \"micro\"] }],\n    },\n    conflictingClassGroups: {\n      \"brand-font-size\": [\"font-size\"],\n      \"font-size\": [\"brand-font-size\"],\n    },\n    conflictingClassGroupModifiers: { \"brand-font-size\": [\"leading\"] },\n  },\n});\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\n/**\n * `asChild` for a Base UI part: the one child element becomes the rendered element (Base UI's `render`), keeping its\n * own children, so `<Button asChild><a href=\"/docs\">Docs</a></Button>` renders the link with the button's look.\n */\nexport function slot<R>(asChild: boolean | undefined, children: React.ReactNode, render?: R): { render: R | React.ReactElement | undefined; children: React.ReactNode } {\n  if (asChild && React.isValidElement<{ children?: React.ReactNode }>(children)) return { render: children, children: children.props.children };\n  return { render, children };\n}\n"
+    }
+  ]
+}

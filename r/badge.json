@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "name": "badge",
+  "useFor": "Use Badge for a short status or category beside a name (New, Team, Passed, PR #482). Use default for most tags, solid for a plan or a state that should stand out, accent once per view for the thing that matters (Most popular), success, warning and destructive for check states. asChild turns a link into a tag.",
+  "constraints": [
+    "A pill or square tag",
+    "Lowercase or sentence-case labels (the label is set in capitals by the font style)",
+    "Two accent tags in one view",
+    "Long labels",
+    "Bold type"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's .tag (pricing, the hero's pill) and the nav's news card (.hn__news, New)",
+  "exports": [
+    "Badge",
+    "badgeVariants"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/badge",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/badge.md",
+  "examples": [
+    {
+      "path": "examples/badge.tsx",
+      "content": "import { CheckIcon, GitPullRequestIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Badge } from \"@/components/ui/badge\";\n\nexport function Preview() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Badge>New</Badge>\n      <Badge variant=\"solid\">Team</Badge>\n      <Badge variant=\"accent\">Most popular</Badge>\n    </div>\n  );\n}\n\nexport function Variants() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Badge>Default</Badge>\n      <Badge variant=\"solid\">Solid</Badge>\n      <Badge variant=\"secondary\">Secondary</Badge>\n      <Badge variant=\"outline\">Outline</Badge>\n      <Badge variant=\"accent\">Accent</Badge>\n      <Badge variant=\"success\">Passed</Badge>\n      <Badge variant=\"warning\">Queued</Badge>\n      <Badge variant=\"destructive\">Failed</Badge>\n      <Badge variant=\"ghost\">Ghost</Badge>\n    </div>\n  );\n}\n\nexport function WithIcon() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Badge variant=\"success\">\n        <CheckIcon />\n        Checks passed\n      </Badge>\n      <Badge>\n        <GitPullRequestIcon />\n        PR #482\n      </Badge>\n      <Badge asChild variant=\"outline\">\n        <a href=\"#changelog\">Changelog</a>\n      </Badge>\n    </div>\n  );\n}\n\nexport function NavNews() {\n  return (\n    <a href=\"#subagents\" className=\"grid w-full max-w-xs justify-items-start gap-3 border border-line p-4 transition-[border-color] duration-base ease-out hover:border-line-field focus-visible:-outline-offset-2 motion-reduce:transition-none\">\n      <Badge>New</Badge>\n      <span className=\"text-body-sm leading-line-body-sm font-medium text-fg\">Steer running subagents from your phone</span>\n    </a>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Variants",
+        "WithIcon",
+        "NavNews"
+      ],
+      "requires": [
+        "badge"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/badge/Preview"
+        },
+        {
+          "name": "Variants",
+          "url": "https://hoplite-ds.vercel.app/preview/badge/Variants"
+        },
+        {
+          "name": "WithIcon",
+          "url": "https://hoplite-ds.vercel.app/preview/badge/WithIcon"
+        },
+        {
+          "name": "NavNews",
+          "url": "https://hoplite-ds.vercel.app/preview/badge/NavNews"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Badge",
+  "description": "The site's tag: a 20px hexagon with 8px cuts and a 12px Kode Mono capital label. Default is the outlined tag (strong edge, ink label); solid is ink, accent the orange edge and label, plus status, outline, secondary, destructive and ghost.",
+  "surface": "site",
+  "kinds": [
+    "chip"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/badge.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn, slot } from \"@/lib/utils\";\n\n// The site's tag (.tag, and the New tag in the nav's news card, .hn__news): a 20px hexagon with its ends cut 8px, drawn\n// behind the label, holding a 12px Kode Mono capital label tracked 8 percent, 12px in from each side. `default` is the\n// site's tag: a 1px strong edge around the ground with the label in the ink. `solid` is the ink hexagon with a ground\n// label, `secondary` a hexagon of the hover wash, `outline` the quiet 16 percent edge with a quiet label, `accent` the\n// orange edge and label (the one mark on a view), `success` and `warning` their status edges and labels, `destructive`\n// the orange hexagon with a white label, and `ghost` the bare label. A 12px glyph sits 4px from the label.\nconst badgeVariants = cva(\n  \"ds-label ds-hex-frame-s inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 px-3 whitespace-nowrap select-none [&>svg]:pointer-events-none [&>svg]:size-3 [&>svg]:shrink-0 [a&]:transition-colors [a&]:duration-base [a&]:ease-out [a&]:motion-reduce:transition-none\",\n  {\n    variants: {\n      variant: {\n        default: \"text-fg before:bg-line-strong after:bg-surface [a&]:hover:after:bg-subtle-hover\",\n        solid: \"text-on-primary before:bg-primary [a&]:hover:before:bg-primary-hover\",\n        secondary: \"text-fg before:bg-subtle-hover [a&]:hover:before:bg-pressed\",\n        outline: \"text-fg-muted before:bg-line after:bg-surface [a&]:hover:text-fg\",\n        accent: \"text-fg-accent before:bg-brand after:bg-surface\",\n        success: \"text-success before:bg-success after:bg-surface\",\n        warning: \"text-warning before:bg-warning after:bg-surface\",\n        destructive: \"text-white before:bg-danger [a&]:hover:before:bg-danger-strong\",\n        ghost: \"px-0 text-fg-muted [a&]:hover:text-fg\",\n      },\n    },\n    defaultVariants: { variant: \"default\" },\n  },\n);\n\ntype BadgeProps = useRender.ComponentProps<\"span\"> & VariantProps<typeof badgeVariants> & { asChild?: boolean };\n\nfunction Badge({ className, variant, asChild = false, render, children, ...props }: BadgeProps) {\n  const parts = slot(asChild, children, render);\n  return useRender({\n    defaultTagName: \"span\",\n    render: parts.render as BadgeProps[\"render\"],\n    props: mergeProps<\"span\">({ className: cn(badgeVariants({ variant }), className), children: parts.children }, props, { \"data-slot\": \"badge\", \"data-variant\": variant ?? \"default\" } as React.ComponentProps<\"span\">),\n  });\n}\n\nexport { Badge, badgeVariants };\n"
+    }
+  ]
+}

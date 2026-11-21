@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "name": "empty",
+  "useFor": "Use Empty for a list, table or page with no content yet (no threads, no automations) or a search with no results. Say what goes here and give the one action that fills it (an ink key), with a second outlined key or a link at most.",
+  "constraints": [
+    "Illustrations or mascots",
+    "A filled hexagon or an orange glyph",
+    "More than two keys",
+    "Bold titles"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its hexagonal marks (.faq__hex), square frames (.pr-plan, .how__frame corners), display type and keys",
+  "exports": [
+    "Empty",
+    "EmptyContent",
+    "EmptyDescription",
+    "EmptyHeader",
+    "EmptyMedia",
+    "EmptyTitle"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/empty",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/empty.md",
+  "examples": [
+    {
+      "path": "examples/empty.tsx",
+      "content": "import { ArrowRightIcon, GitBranchIcon, RobotIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from \"@/components/ui/empty\";\n\nexport function Preview() {\n  return (\n    <Empty variant=\"outline\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <RobotIcon />\n        </EmptyMedia>\n        <EmptyTitle>No threads yet</EmptyTitle>\n        <EmptyDescription>Start a thread and an agent picks up the task in its own sandbox.</EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button>Start a thread</Button>\n        <Button variant=\"outline\">Import an issue</Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n\nexport function Corners() {\n  return (\n    <Empty variant=\"corners\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <GitBranchIcon />\n        </EmptyMedia>\n        <EmptyTitle>Connect a repository</EmptyTitle>\n        <EmptyDescription>\n          Agents need a repository to work in. <a href=\"#docs\">Read the setup guide</a>.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button variant=\"link\">\n          Connect GitHub\n          <ArrowRightIcon />\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n\nexport function Bare() {\n  return (\n    <Empty>\n      <EmptyHeader>\n        <EmptyTitle>No automations match “nightly”</EmptyTitle>\n        <EmptyDescription>Try another name, or clear the filter.</EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button variant=\"secondary\" size=\"sm\">\n          Clear filter\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Corners",
+        "Bare"
+      ],
+      "requires": [
+        "empty",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/empty/Preview"
+        },
+        {
+          "name": "Corners",
+          "url": "https://hoplite-ds.vercel.app/preview/empty/Corners"
+        },
+        {
+          "name": "Bare",
+          "url": "https://hoplite-ds.vercel.app/preview/empty/Bare"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Empty",
+  "description": "A view with nothing in it yet: centered, a 48px hexagon outline holding a glyph, a 20px Chakra Petch title, 14px quiet text and hexagonal keys below; bare, in a stone frame, or inside crop marks.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/empty.tsx",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A view with nothing in it yet, extrapolated from the site's frames and hexagonal marks: centered in the space, 32px\n// in, a 48px glyph frame (a hexagon outline of the strong edge, points left and right like the FAQ's mark, holding a\n// 20px Phosphor glyph in the ink), a 20px Chakra Petch light title, 14px quiet text that stops at 384px, and the keys\n// below (hexagons, 12px apart). `outline` draws the stone frame around the whole state; `corners` its crop marks.\nfunction Empty({ className, variant = \"default\", ...props }: React.ComponentProps<\"div\"> & { variant?: \"default\" | \"outline\" | \"corners\" }) {\n  return (\n    <div\n      data-slot=\"empty\"\n      data-variant={variant}\n      className={cn(\n        \"flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-8 text-center font-sans text-balance\",\n        variant === \"outline\" && \"border border-line-frame\",\n        variant === \"corners\" && \"ds-corners\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction EmptyHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"empty-header\" className={cn(\"flex max-w-96 flex-col items-center gap-2\", className)} {...props} />;\n}\n\nconst emptyMediaVariants = cva(\"mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0\", {\n  variants: {\n    variant: {\n      default: \"bg-transparent\",\n      icon: \"relative size-12 text-fg [&>svg:not([data-slot=empty-hex])]:size-5\",\n    },\n  },\n  defaultVariants: { variant: \"default\" },\n});\n\nfunction EmptyMedia({ className, variant = \"default\", children, ...props }: React.ComponentProps<\"div\"> & VariantProps<typeof emptyMediaVariants>) {\n  return (\n    <div data-slot=\"empty-media\" data-variant={variant} className={cn(emptyMediaVariants({ variant }), className)} {...props}>\n      {variant === \"icon\" && (\n        <svg data-slot=\"empty-hex\" viewBox=\"0 0 48 48\" aria-hidden className=\"absolute inset-0 size-full fill-none stroke-line-strong\">\n          <path d=\"M46.5 24L35.25 43.49L12.75 43.49L1.5 24L12.75 4.51L35.25 4.51Z\" strokeWidth={1} vectorEffect=\"non-scaling-stroke\" />\n        </svg>\n      )}\n      {children}\n    </div>\n  );\n}\n\nfunction EmptyTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"empty-title\" className={cn(\"font-display text-h5 leading-7 font-light text-fg\", className)} {...props} />;\n}\n\nfunction EmptyDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return <p data-slot=\"empty-description\" className={cn(\"text-body-sm leading-line-body-sm text-pretty text-fg-muted [&>a]:text-fg [&>a]:underline [&>a]:decoration-line [&>a]:underline-offset-4 [&>a:hover]:decoration-current\", className)} {...props} />;\n}\n\nfunction EmptyContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"empty-content\" className={cn(\"flex w-full max-w-96 min-w-0 flex-wrap items-center justify-center gap-3 text-body-sm leading-line-body-sm text-balance text-fg-muted\", className)} {...props} />;\n}\n\nexport { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle };\n"
+    }
+  ]
+}

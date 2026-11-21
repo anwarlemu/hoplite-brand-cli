@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "name": "features-page",
+  "useFor": "Use for each product area (a feature, a use case).",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's product page (/product/multiplayer)",
+  "exports": [
+    "FeaturesPage"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/features-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/features-page.md",
+  "examples": [
+    {
+      "path": "examples/features-page.tsx",
+      "content": "import { FeaturesPage } from \"@/components/blocks/features-page\";\n\nexport function Preview() {\n  return <FeaturesPage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "features-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/features-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Features page",
+  "description": "A product or features template: the hero with an eyebrow over a drawing, the feature band and the closing band.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "cta",
+    "feature-grid",
+    "footer",
+    "hero",
+    "site-header",
+    "brand-marks",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/features-page.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Cta } from \"@/components/blocks/cta\";\nimport { FeatureGrid } from \"@/components/blocks/feature-grid\";\nimport { Footer } from \"@/components/blocks/footer\";\nimport { Hero } from \"@/components/blocks/hero\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { NodeTree } from \"@/components/site/brand-marks\";\nimport { cn } from \"@/lib/utils\";\n\n// A product page (hoplite.sh/product/multiplayer): the hero with its two keys over the product drawing, the feature\n// band with its heading and lead beside each other, the closing band and the footer.\nfunction FeaturesPage({ className }: { className?: string }) {\n  return (\n    <div data-slot=\"features-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main>\n        <Hero\n          eyebrow=\"Multiplayer\"\n          title=\"The multiplayer coding agent for your whole team\"\n          lead=\"One agent, one thread, and the whole team in it.\"\n          media={\n            <div className=\"ds-corners grid min-h-80 place-items-center p-4 sm:p-8\">\n              <NodeTree root=\"fix-upload-500\" rootNote=\"running\" leaves={[{ title: \"Agent\", note: \"opening a pull request\", active: true }, { title: \"Teammate\", note: \"steered the agent\" }, { title: \"Reviewer\", note: \"watching\" }]} />\n            </div>\n          }\n        />\n        <FeatureGrid title=\"Share, hand off, and approve every run\" lead=\"The whole team works in the same run, and it keeps going when the laptop closes.\" link={null} />\n        <Cta />\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { FeaturesPage };\n"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "name": "select",
+  "useFor": "Use to choose one value from five to about fifteen (a model, a sandbox size, a base branch). Give it a label or aria-label and a placeholder when nothing is chosen; group long lists with SelectGroup and SelectLabel. Pass items (value and label) to Select, or write SelectItems as children and the trigger shows the chosen label. Give it a name so its value is in the form's FormData; size=\"sm\" is the 32px toolbar field. Built on Base UI Select.",
+  "constraints": [
+    "Rounded corners on the trigger or the list",
+    "A check at the start of a row",
+    "Animating the highlight between rows",
+    "An orange chosen row",
+    "A white list on the gray ground"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: the field lines and 14px controls, and the nav popup (.hn__panel, .hn__item: rows on the hover wash, the quiet hairline)",
+  "exports": [
+    "Select",
+    "SelectContent",
+    "SelectGroup",
+    "SelectItem",
+    "SelectLabel",
+    "SelectScrollDownButton",
+    "SelectScrollUpButton",
+    "SelectSeparator",
+    "SelectTrigger",
+    "SelectValue"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/select",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/select.md",
+  "examples": [
+    {
+      "path": "examples/select.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { CloudIcon, CpuIcon, DesktopTowerIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from \"@/components/ui/select\";\n\nconst MODELS = [\n  { value: \"auto\", label: \"Auto\" },\n  { value: \"opus\", label: \"Claude Opus\" },\n  { value: \"sonnet\", label: \"Claude Sonnet\" },\n  { value: \"gpt\", label: \"GPT-5 Codex\" },\n];\n\nexport function Preview() {\n  const [model, setModel] = React.useState(\"auto\");\n  const [saved, setSaved] = React.useState<string>();\n  return (\n    <form\n      className=\"grid w-full max-w-sm gap-2\"\n      onSubmit={(event) => {\n        event.preventDefault();\n        setSaved(String(new FormData(event.currentTarget).get(\"model\")));\n      }}\n    >\n      <label id=\"model-label\" className=\"text-body-sm font-medium text-fg\">\n        Default model\n      </label>\n      <Select name=\"model\" items={MODELS} value={model} onValueChange={(next) => setModel(String(next))}>\n        <SelectTrigger aria-labelledby=\"model-label\">\n          <SelectValue />\n        </SelectTrigger>\n        <SelectContent>\n          {MODELS.map((m) => (\n            <SelectItem key={m.value} value={m.value}>\n              {m.label}\n            </SelectItem>\n          ))}\n        </SelectContent>\n      </Select>\n      <p className=\"text-body-sm text-fg-muted\">New threads start on this model.</p>\n      <div className=\"mt-2 flex items-center gap-4\">\n        <Button type=\"submit\">Save</Button>\n        <p aria-live=\"polite\" className=\"text-body-sm text-fg-muted\">\n          {saved ? `Saved: ${saved}` : \"\"}\n        </p>\n      </div>\n    </form>\n  );\n}\n\nexport function Grouped() {\n  return (\n    <div className=\"grid w-full max-w-sm gap-2\">\n      <label id=\"sandbox-label\" className=\"text-body-sm font-medium text-fg\">\n        Sandbox size\n      </label>\n      <Select defaultValue={null}>\n        <SelectTrigger aria-labelledby=\"sandbox-label\">\n          <SelectValue placeholder=\"Choose a size\" />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectGroup>\n            <SelectLabel>Cloud</SelectLabel>\n            <SelectItem value=\"s\">\n              <CloudIcon /> 2 vCPU, 8 GiB\n            </SelectItem>\n            <SelectItem value=\"m\">\n              <CloudIcon /> 8 vCPU, 32 GiB\n            </SelectItem>\n            <SelectItem value=\"l\" disabled>\n              <CpuIcon /> 16 vCPU, 64 GiB (Team)\n            </SelectItem>\n          </SelectGroup>\n          <SelectSeparator />\n          <SelectGroup>\n            <SelectLabel>Local</SelectLabel>\n            <SelectItem value=\"local\">\n              <DesktopTowerIcon /> This Mac\n            </SelectItem>\n          </SelectGroup>\n        </SelectContent>\n      </Select>\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid w-full max-w-sm gap-3\">\n      <Select defaultValue=\"main\">\n        <SelectTrigger size=\"sm\" aria-label=\"Base branch\" className=\"w-44\">\n          <SelectValue />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectItem value=\"main\">main</SelectItem>\n          <SelectItem value=\"develop\">develop</SelectItem>\n          <SelectItem value=\"release\">release/1.4</SelectItem>\n        </SelectContent>\n      </Select>\n      <Select defaultValue={null}>\n        <SelectTrigger aria-label=\"Reviewer\" aria-invalid>\n          <SelectValue placeholder=\"Choose a reviewer\" />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectItem value=\"maya\">Maya</SelectItem>\n          <SelectItem value=\"lead\">Platform lead</SelectItem>\n        </SelectContent>\n      </Select>\n      <Select defaultValue=\"weekly\" disabled>\n        <SelectTrigger aria-label=\"Report\">\n          <SelectValue />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectItem value=\"weekly\">Weekly usage report</SelectItem>\n        </SelectContent>\n      </Select>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Grouped",
+        "States"
+      ],
+      "requires": [
+        "select",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/select/Preview"
+        },
+        {
+          "name": "Grouped",
+          "url": "https://hoplite-ds.vercel.app/preview/select/Grouped"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/select/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Select",
+  "description": "The square 40px field with a caret, opening the site's popup: a square panel of the ground with a hairline and a long soft cast, 36px rows, the highlighted row on the hover wash and a check at the end of the chosen one. A long list fades at the edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [
+    "input",
+    "menu-panel",
+    "menu-item"
+  ],
+  "requires": [
+    "theme",
+    "surface",
+    "utils"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/select.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Select as BaseSelect } from \"@base-ui/react/select\";\nimport { CaretDownIcon, CaretUpIcon, CheckIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { usePortalContainer } from \"@/lib/surface\";\nimport { cn } from \"@/lib/utils\";\n\n// A choice drawn as the site would draw one (it has no selects): the trigger is the field, square and 40px, a 32\n// percent edge on the ground, the value in 14px ink 12px in (the placeholder in the slate) and a 16px caret in the quiet\n// gray 12px from the right. The edge turns strong under the pointer and while the list is open, and the ink on focus\n// (2px with the inset outline). The list is the site's popup, 4px below: a square panel of the ground with the quiet\n// hairline and the long soft cast, at least the trigger's width, 4px inside. Rows are 36px with 12px sides, 14px ink;\n// the highlighted row takes the hover wash at once (it follows the keys) and the chosen row ends in a 16px check. Group\n// heads are Kode Mono labels. The list grows from the trigger (opacity and 98 percent scale, 240ms on the strong\n// ease-out) and leaves in 200ms. `sm` is the 32px toolbar field.\n\ntype SelectProps<Value, Multiple extends boolean | undefined = false> = BaseSelect.Root.Props<Value, Multiple>;\ntype ItemLabel = { value: unknown; label: React.ReactNode };\n\n/** The SelectItems written as children, so the trigger can show a chosen item's label without an `items` prop. */\nfunction collectItems(children: React.ReactNode, out: ItemLabel[] = []) {\n  React.Children.forEach(children, (child) => {\n    if (!React.isValidElement<{ value?: unknown; children?: React.ReactNode }>(child)) return;\n    if (child.type === SelectItem) out.push({ value: child.props.value, label: child.props.children });\n    else if (child.props.children) collectItems(child.props.children, out);\n  });\n  return out;\n}\n\nfunction Select<Value, Multiple extends boolean | undefined = false>({ items, children, ...props }: SelectProps<Value, Multiple>) {\n  const collected = React.useMemo(() => (items ? undefined : collectItems(children)), [items, children]);\n  return (\n    <BaseSelect.Root items={items ?? (collected?.length ? (collected as ReadonlyArray<{ value: Value; label: React.ReactNode }>) : undefined)} {...props}>\n      {children}\n    </BaseSelect.Root>\n  );\n}\n\nfunction SelectGroup({ className, ...props }: React.ComponentProps<typeof BaseSelect.Group>) {\n  return <BaseSelect.Group data-slot=\"select-group\" className={cn(\"flex flex-col\", className)} {...props} />;\n}\n\nfunction SelectValue({ className, ...props }: React.ComponentProps<typeof BaseSelect.Value>) {\n  return <BaseSelect.Value data-slot=\"select-value\" className={cn(\"flex min-w-0 flex-1 items-center gap-2 truncate text-left\", className)} {...props} />;\n}\n\nconst TRIGGER =\n  \"group/select-trigger flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 border border-line-field bg-transparent px-3 font-sans text-body-sm leading-line-body-sm font-normal whitespace-nowrap text-fg select-none transition-[border-color] duration-fast ease-out hover:border-line-strong focus-visible:border-focus-ring focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-popup-open:border-line-strong aria-invalid:border-danger data-invalid:border-danger data-disabled:cursor-not-allowed data-disabled:border-line data-disabled:text-fg-subtle data-placeholder:text-fg-subtle motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\";\n\nfunction SelectTrigger({ className, size = \"default\", children, ...props }: React.ComponentProps<typeof BaseSelect.Trigger> & { size?: \"sm\" | \"default\" }) {\n  return (\n    <BaseSelect.Trigger data-slot=\"select-trigger\" data-size={size} className={cn(TRIGGER, size === \"sm\" ? \"h-8\" : \"h-10 pointer-coarse:h-12\", className)} {...props}>\n      {children}\n      <BaseSelect.Icon data-slot=\"select-icon\" className=\"flex text-fg-muted group-data-disabled/select-trigger:text-fg-subtle\">\n        <CaretDownIcon />\n      </BaseSelect.Icon>\n    </BaseSelect.Trigger>\n  );\n}\n\nconst POPUP =\n  \"flex max-h-(--available-height) max-w-(--available-width) min-w-(--anchor-width) origin-(--transform-origin) flex-col overflow-hidden bg-surface text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]\";\n\ntype SelectContentProps = React.ComponentProps<typeof BaseSelect.Popup> &\n  Pick<React.ComponentProps<typeof BaseSelect.Positioner>, \"side\" | \"sideOffset\" | \"align\" | \"alignOffset\" | \"alignItemWithTrigger\"> & {\n    /** Radix's name for the placement; \"item-aligned\" overlaps the trigger so the chosen row sits on it. */\n    position?: \"popper\" | \"item-aligned\";\n  };\n\nfunction SelectContent({ className, children, side = \"bottom\", sideOffset = 4, align = \"start\", alignOffset = 0, alignItemWithTrigger, position = \"popper\", ...props }: SelectContentProps) {\n  const container = usePortalContainer();\n  return (\n    <BaseSelect.Portal container={container}>\n      <BaseSelect.Positioner side={side} sideOffset={sideOffset} align={align} alignOffset={alignOffset} alignItemWithTrigger={alignItemWithTrigger ?? position === \"item-aligned\"} className=\"z-50 outline-none select-none\">\n        <BaseSelect.Popup data-slot=\"select-content\" className={cn(POPUP, className)} {...props}>\n          <SelectScrollUpButton />\n          <BaseSelect.List data-slot=\"select-list\" className=\"max-h-80 min-h-0 scroll-py-1 overflow-y-auto overscroll-contain p-1 fade-y\">\n            {children}\n          </BaseSelect.List>\n          <SelectScrollDownButton />\n        </BaseSelect.Popup>\n      </BaseSelect.Positioner>\n    </BaseSelect.Portal>\n  );\n}\n\nfunction SelectLabel({ className, ...props }: React.ComponentProps<typeof BaseSelect.GroupLabel>) {\n  return <BaseSelect.GroupLabel data-slot=\"select-label\" className={cn(\"ds-label flex h-8 items-center px-3 select-none\", className)} {...props} />;\n}\n\nfunction SelectItem({ className, children, ...props }: React.ComponentProps<typeof BaseSelect.Item>) {\n  return (\n    <BaseSelect.Item\n      data-slot=\"select-item\"\n      className={cn(\n        \"relative flex h-9 w-full shrink-0 cursor-default items-center gap-2 px-3 font-sans text-body-sm leading-line-body-sm font-normal text-fg outline-none select-none data-disabled:pointer-events-none data-disabled:text-fg-subtle data-highlighted:bg-subtle-hover pointer-coarse:h-11 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-fg-muted\",\n        className,\n      )}\n      {...props}\n    >\n      <BaseSelect.ItemText data-slot=\"select-item-text\" className=\"flex min-w-0 flex-1 items-center gap-2 truncate\">\n        {children}\n      </BaseSelect.ItemText>\n      <BaseSelect.ItemIndicator data-slot=\"select-item-indicator\" className=\"flex shrink-0\">\n        <CheckIcon className=\"text-fg\" />\n      </BaseSelect.ItemIndicator>\n    </BaseSelect.Item>\n  );\n}\n\nfunction SelectSeparator({ className, ...props }: React.ComponentProps<typeof BaseSelect.Separator>) {\n  return <BaseSelect.Separator data-slot=\"select-separator\" className={cn(\"pointer-events-none -mx-1 my-1 h-px shrink-0 bg-line\", className)} {...props} />;\n}\n\nconst ARROW = \"flex h-6 w-full shrink-0 cursor-default items-center justify-center bg-surface text-fg-muted [&_svg]:size-4\";\n\nfunction SelectScrollUpButton({ className, ...props }: React.ComponentProps<typeof BaseSelect.ScrollUpArrow>) {\n  return (\n    <BaseSelect.ScrollUpArrow data-slot=\"select-scroll-up-button\" className={cn(ARROW, className)} {...props}>\n      <CaretUpIcon />\n    </BaseSelect.ScrollUpArrow>\n  );\n}\n\nfunction SelectScrollDownButton({ className, ...props }: React.ComponentProps<typeof BaseSelect.ScrollDownArrow>) {\n  return (\n    <BaseSelect.ScrollDownArrow data-slot=\"select-scroll-down-button\" className={cn(ARROW, className)} {...props}>\n      <CaretDownIcon />\n    </BaseSelect.ScrollDownArrow>\n  );\n}\n\nexport { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue };\n"
+    }
+  ]
+}

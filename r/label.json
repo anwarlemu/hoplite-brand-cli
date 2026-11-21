@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "name": "label",
+  "useFor": "Use Label to name a control: above an Input, or wrapping (or htmlFor-paired with) a Checkbox, RadioGroupItem or Switch. Inside a Field use FieldLabel, which wires itself to the control. Mark a required field with a span data-slot=\"label-required\".",
+  "constraints": [
+    "Caps or Kode Mono labels on fields",
+    "Bold labels",
+    "A placeholder in place of a label",
+    "An orange label on an invalid field"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its 14px medium control type (.button labels, .pr-period__option) and the principles' 14px medium labels above fields",
+  "exports": [
+    "Label"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/label",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/label.md",
+  "examples": [
+    {
+      "path": "examples/label.tsx",
+      "content": "import { Checkbox } from \"@/components/ui/checkbox\";\nimport { Input } from \"@/components/ui/input\";\nimport { Label } from \"@/components/ui/label\";\n\nexport function Preview() {\n  return (\n    <div className=\"grid w-full max-w-sm gap-2\">\n      <Label htmlFor=\"label-repo\">Repository</Label>\n      <Input id=\"label-repo\" placeholder=\"acme/payments-api\" />\n    </div>\n  );\n}\n\nexport function WithControl() {\n  return (\n    <div className=\"flex items-center gap-2\">\n      <Checkbox id=\"label-ci\" defaultChecked />\n      <Label htmlFor=\"label-ci\">Run checks on every pull request</Label>\n    </div>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"grid w-full max-w-sm gap-6\">\n      <div className=\"grid gap-2\">\n        <Label htmlFor=\"label-name\">\n          Sandbox name <span aria-hidden data-slot=\"label-required\">*</span>\n        </Label>\n        <Input id=\"label-name\" required placeholder=\"payments-staging\" />\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <Checkbox id=\"label-off\" disabled />\n        <Label htmlFor=\"label-off\">Allow agents to merge (Team plan)</Label>\n      </div>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "WithControl",
+        "States"
+      ],
+      "requires": [
+        "label",
+        "checkbox",
+        "input"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/label/Preview"
+        },
+        {
+          "name": "WithControl",
+          "url": "https://hoplite-ds.vercel.app/preview/label/WithControl"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/label/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Label",
+  "description": "A field's label: 14px Satoshi medium in the ink, above its field or 8px beside a check, radio or switch; a required mark in orange; the slate when its control is disabled.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/ui/label.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A field's label as the site's principles set it: 14px Satoshi medium in the ink on a 20px line, above its field or\n// 8px beside a check, radio or switch. A required mark inside it (`<span aria-hidden>*</span>` with\n// data-slot=\"label-required\") is the orange. When its field or its peer control is disabled the label turns the slate.\n// The site has no form labels: this is extrapolated from its 14px medium control type.\nfunction Label({ className, ...props }: React.ComponentProps<\"label\">) {\n  return (\n    <label\n      data-slot=\"label\"\n      className={cn(\n        \"flex items-center gap-2 font-sans text-body-sm leading-line-body-sm font-medium text-fg select-none *:data-[slot=label-required]:-ml-1 *:data-[slot=label-required]:text-danger group-data-disabled/field:pointer-events-none group-data-disabled/field:text-fg-subtle peer-disabled:cursor-not-allowed peer-disabled:text-fg-subtle peer-data-disabled:cursor-not-allowed peer-data-disabled:text-fg-subtle\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Label };\n"
+    }
+  ]
+}

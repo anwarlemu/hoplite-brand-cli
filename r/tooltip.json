@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "name": "tooltip",
+  "useFor": "Use to name an icon-only control (New thread, Open in terminal) or add one short line about a control. Wrap a toolbar in TooltipProvider so moving along it opens each tooltip at once. Use asChild or render on TooltipTrigger to attach it to a Button.",
+  "constraints": [
+    "Information found nowhere else",
+    "Interactive content",
+    "Rounded corners or an arrow",
+    "Text over two lines",
+    "A tooltip on a disabled control"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website's ink (the main key's fill, .button--primary) and its 12px labels; the site has no tooltips.",
+  "exports": [
+    "Tooltip",
+    "TooltipContent",
+    "TooltipProvider",
+    "TooltipTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/tooltip",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/tooltip.md",
+  "examples": [
+    {
+      "path": "examples/tooltip.tsx",
+      "content": "\"use client\";\n\nimport { ArchiveIcon, GitBranchIcon, PlusIcon, ShareNetworkIcon, TerminalWindowIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from \"@/components/ui/tooltip\";\n\nexport function Preview() {\n  return (\n    <Tooltip>\n      <TooltipTrigger render={<Button variant=\"outline\" size=\"icon\" aria-label=\"New thread\" />}>\n        <PlusIcon />\n      </TooltipTrigger>\n      <TooltipContent>New thread</TooltipContent>\n    </Tooltip>\n  );\n}\n\nexport function Open() {\n  return (\n    <div className=\"flex min-h-32 items-end justify-center\">\n      <Tooltip defaultOpen>\n        <TooltipTrigger render={<Button variant=\"outline\" size=\"icon\" aria-label=\"Open in terminal\" />}>\n          <TerminalWindowIcon />\n        </TooltipTrigger>\n        <TooltipContent>Open in terminal</TooltipContent>\n      </Tooltip>\n    </div>\n  );\n}\n\nconst TOOLS = [\n  { label: \"Open in terminal\", icon: TerminalWindowIcon },\n  { label: \"Branch from here\", icon: GitBranchIcon },\n  { label: \"Share thread\", icon: ShareNetworkIcon },\n  { label: \"Archive\", icon: ArchiveIcon },\n];\n\nexport function Toolbar() {\n  return (\n    <TooltipProvider>\n      <div className=\"flex w-fit items-center gap-1 border border-line p-1\">\n        {TOOLS.map(({ label, icon: Icon }) => (\n          <Tooltip key={label}>\n            <TooltipTrigger render={<Button variant=\"ghost\" size=\"icon-sm\" aria-label={label} />}>\n              <Icon />\n            </TooltipTrigger>\n            <TooltipContent side=\"bottom\">{label}</TooltipContent>\n          </Tooltip>\n        ))}\n      </div>\n    </TooltipProvider>\n  );\n}\n\nexport function Long() {\n  return (\n    <Tooltip>\n      <TooltipTrigger render={<Button variant=\"link\" />}>Why is this check queued?</TooltipTrigger>\n      <TooltipContent>Your plan runs two sandboxes at once. This check starts when the end-to-end run on acme-web finishes.</TooltipContent>\n    </Tooltip>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Open",
+        "Toolbar",
+        "Long"
+      ],
+      "requires": [
+        "tooltip",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/tooltip/Preview"
+        },
+        {
+          "name": "Open",
+          "url": "https://hoplite-ds.vercel.app/preview/tooltip/Open"
+        },
+        {
+          "name": "Toolbar",
+          "url": "https://hoplite-ds.vercel.app/preview/tooltip/Toolbar"
+        },
+        {
+          "name": "Long",
+          "url": "https://hoplite-ds.vercel.app/preview/tooltip/Long"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Tooltip",
+  "description": "A small square panel of the ink with 12px Satoshi in the ground color, 8px by 12px of air, 8px from its trigger. It waits 400ms the first time, then neighbors open at once; it only fades, and not at all between tooltips.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils",
+    "surface"
+  ],
+  "packages": [
+    "@base-ui/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/tooltip.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Tooltip as BaseTooltip } from \"@base-ui/react/tooltip\";\n\nimport { cn, slot } from \"@/lib/utils\";\nimport { usePortalContainer } from \"@/lib/surface\";\n\n// A tooltip: a small square panel of the ink with 12px Satoshi in the ground color, 8px above and below and 12px in,\n// at most 240px wide, 8px from its trigger. It waits 400ms the first time, then neighbors open at once while one is\n// showing (a delay group). It only fades: in over 160ms, out over 120ms on the strong ease-out, and not at all when\n// moving between tooltips.\nconst HasProvider = React.createContext(false);\n\ntype ProviderProps = React.ComponentProps<typeof BaseTooltip.Provider> & { delayDuration?: number; skipDelayDuration?: number };\n\nfunction TooltipProvider({ delayDuration, skipDelayDuration, delay, timeout, ...props }: ProviderProps) {\n  return (\n    <HasProvider.Provider value>\n      <BaseTooltip.Provider delay={delay ?? delayDuration ?? 400} timeout={timeout ?? skipDelayDuration ?? 400} {...props} />\n    </HasProvider.Provider>\n  );\n}\n\nfunction Tooltip(props: React.ComponentProps<typeof BaseTooltip.Root>) {\n  const root = <BaseTooltip.Root data-slot=\"tooltip\" {...props} />;\n  return React.useContext(HasProvider) ? root : <TooltipProvider>{root}</TooltipProvider>;\n}\n\nfunction TooltipTrigger({ asChild = false, render, children, ...props }: React.ComponentProps<typeof BaseTooltip.Trigger> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseTooltip.Trigger data-slot=\"tooltip-trigger\" render={parts.render} {...props}>\n      {parts.children}\n    </BaseTooltip.Trigger>\n  );\n}\n\ntype Placement = Pick<React.ComponentProps<typeof BaseTooltip.Positioner>, \"side\" | \"align\" | \"sideOffset\" | \"alignOffset\" | \"collisionPadding\">;\ntype TooltipContentProps = Omit<React.ComponentProps<typeof BaseTooltip.Popup>, \"className\"> & Placement & { className?: string };\n\nfunction TooltipContent({ className, side = \"top\", align = \"center\", sideOffset = 8, alignOffset = 0, collisionPadding = 8, ...props }: TooltipContentProps) {\n  const container = usePortalContainer();\n  return (\n    <BaseTooltip.Portal container={container}>\n      <BaseTooltip.Positioner className=\"z-50\" side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset} collisionPadding={collisionPadding}>\n        <BaseTooltip.Popup\n          data-slot=\"tooltip-content\"\n          className={cn(\n            \"max-w-60 bg-primary px-3 py-2 font-sans text-caption leading-line-caption text-balance text-on-primary transition-opacity duration-base ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-fast data-instant:transition-none\",\n            className,\n          )}\n          {...props}\n        />\n      </BaseTooltip.Positioner>\n    </BaseTooltip.Portal>\n  );\n}\n\nexport { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };\n"
+    }
+  ]
+}

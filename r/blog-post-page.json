@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "name": "blog-post-page",
+  "useFor": "Use for a single article; pass the article as children.",
+  "constraints": [
+    "Copy from real people or third parties",
+    "Sections reordered so two closing bands meet",
+    "Values outside the brand tokens"
+  ],
+  "documentation": "Built only from the section blocks and library items; every part takes its copy through props.",
+  "source": "The Hoplite website's blog posts (.bp-prose)",
+  "exports": [
+    "BlogPostPage"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/blog-post-page",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/blog-post-page.md",
+  "examples": [
+    {
+      "path": "examples/blog-post-page.tsx",
+      "content": "import { BlogPostPage } from \"@/components/blocks/blog-post-page\";\n\nexport function Preview() {\n  return <BlogPostPage />;\n}\n",
+      "exports": [
+        "Preview"
+      ],
+      "requires": [
+        "blog-post-page"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/blog-post-page/Preview"
+        }
+      ]
+    }
+  ],
+  "type": "block",
+  "title": "Blog post page",
+  "description": "The article template: breadcrumb, mono category and date, title, lead, byline, the drawing in corner ticks, the article as prose and the closing band.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "cta",
+    "footer",
+    "site-header",
+    "brand-marks",
+    "breadcrumb",
+    "code-block",
+    "typography",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/blocks/blog-post-page.tsx",
+      "content": "import * as React from \"react\";\n\nimport { Cta } from \"@/components/blocks/cta\";\nimport { Footer } from \"@/components/blocks/footer\";\nimport { SiteHeader } from \"@/components/blocks/site-header\";\nimport { NodeTree } from \"@/components/site/brand-marks\";\nimport { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from \"@/components/ui/breadcrumb\";\nimport { CodeBlock, CodeBlockContent, CodeBlockHeader, CodeBlockTitle } from \"@/components/ui/code-block\";\nimport { TypographyH1, TypographyLead, TypographyList, TypographyProse } from \"@/components/ui/typography\";\nimport { cn } from \"@/lib/utils\";\n\nconst CODE = `schedule: \"0 9 * * 1-5\"\ntask: |\n  Pick up new errors from the last day.\n  Reproduce each with a failing test, fix it,\n  and open one pull request per error.`;\n\nfunction Article() {\n  return (\n    <>\n      <p>An error that arrives at two in the morning used to wait for a person. With an automation, an agent picks it up on a schedule, reproduces it in a fresh sandbox and leaves a pull request for the morning.</p>\n      <h2>Describe the work once</h2>\n      <p>An automation is a task and a cadence. The task reads like a note to a teammate; the cadence is when it runs.</p>\n      <CodeBlock>\n        <CodeBlockHeader>\n          <CodeBlockTitle>automation.yaml</CodeBlockTitle>\n        </CodeBlockHeader>\n        <CodeBlockContent code={CODE} language=\"yaml\" />\n      </CodeBlock>\n      <h2>What every run does</h2>\n      <TypographyList>\n        <li>Starts in a fresh sandbox on its own branch.</li>\n        <li>Writes a failing test before it changes any code.</li>\n        <li>Ends in a pull request a person reviews.</li>\n      </TypographyList>\n      <blockquote>Nothing merges on its own. The agent does the work; a person decides.</blockquote>\n      <p>Set it up once and the queue of overnight errors becomes a short list of reviews.</p>\n    </>\n  );\n}\n\n// A blog post (hoplite.sh/blog/...): the breadcrumb, the mono category and date, the Chakra Petch title and lead, the\n// post's drawing in a frame of corner ticks, then the article set as prose (18px on a 32px line) at a readable measure,\n// and the closing band. Pass the article as children.\nfunction BlogPostPage({\n  title = \"Fix production errors while you sleep\",\n  lead = \"New errors get picked up on a schedule, reproduced with a failing test, and fixed in a pull request you review over coffee.\",\n  category = \"Tutorials\",\n  date = \"Aug 8, 2026\",\n  byline = \"The Hoplite team\",\n  children,\n  className,\n}: {\n  title?: string;\n  lead?: string;\n  category?: string;\n  date?: string;\n  byline?: string;\n  children?: React.ReactNode;\n  className?: string;\n}) {\n  return (\n    <div data-slot=\"blog-post-page\" className={cn(\"bg-surface text-fg\", className)}>\n      <SiteHeader />\n      <main className=\"mx-auto w-full max-w-320 pt-12 sm:pt-20\">\n        <article className=\"mx-auto grid max-w-180 gap-8\">\n          <Breadcrumb>\n            <BreadcrumbList>\n              <BreadcrumbItem>\n                <BreadcrumbLink href=\"#blog\">Blog</BreadcrumbLink>\n              </BreadcrumbItem>\n              <BreadcrumbSeparator />\n              <BreadcrumbItem>\n                <BreadcrumbPage>{category}</BreadcrumbPage>\n              </BreadcrumbItem>\n            </BreadcrumbList>\n          </Breadcrumb>\n          <header className=\"grid gap-6\">\n            <p className=\"ds-label m-0\">\n              {category} <span className=\"pl-3\">{date}</span>\n            </p>\n            <TypographyH1>{title}</TypographyH1>\n            <TypographyLead>{lead}</TypographyLead>\n            <p className=\"ds-rule-x m-0 pb-4 text-body-sm leading-line-body-sm text-fg-muted\">{byline}</p>\n          </header>\n          <div className=\"ds-corners grid min-h-64 place-items-center p-4 sm:p-8\">\n            <NodeTree root=\"New error\" rootNote=\"02:14\" leaves={[{ title: \"Failing test\", note: \"then a fix\" }, { title: \"PR ready\", note: \"by morning\", active: true }]} />\n          </div>\n          <TypographyProse>{children ?? <Article />}</TypographyProse>\n        </article>\n        <Cta title=\"Try it on your own repository.\" lead=\"Automations are available on every plan.\" />\n      </main>\n      <Footer />\n    </div>\n  );\n}\n\nexport { BlogPostPage };\n"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "name": "dialog",
+  "useFor": "Use for a short task that needs full attention (New automation) or a result to read before moving on (a new API key). Put the title and description in DialogHeader, fields in DialogBody, and the actions in DialogFooter: one ink Button for the main action, an outline DialogClose for Cancel. Use asChild or render on DialogTrigger to open it from a Button.",
+  "constraints": [
+    "Rounded corners",
+    "A white panel",
+    "A blurred page behind it",
+    "Two ink keys in the footer",
+    "Scaling from zero",
+    "A dialog that opens another dialog"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website's popups and keys: the square ground panel and quiet line (.hn__sheet), the ink at 32 percent from the brand principles, Chakra Petch light titles and the hexagon keys (.button, .button--line).",
+  "exports": [
+    "Dialog",
+    "DialogBody",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
+    "DialogTrigger"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/dialog",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/dialog.md",
+  "examples": [
+    {
+      "path": "examples/dialog.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Input } from \"@/components/ui/input\";\nimport { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from \"@/components/ui/dialog\";\n\nfunction NewAutomation({ defaultOpen }: { defaultOpen?: boolean }) {\n  return (\n    <Dialog defaultOpen={defaultOpen}>\n      <DialogTrigger render={<Button />}>New automation</DialogTrigger>\n      <DialogContent>\n        <DialogHeader>\n          <DialogTitle>New automation</DialogTitle>\n          <DialogDescription>An agent starts a thread on its own when the trigger fires, in a fresh sandbox.</DialogDescription>\n        </DialogHeader>\n        <DialogBody>\n          <label className=\"flex flex-col gap-2\">\n            <span className=\"text-body-sm leading-line-body-sm font-medium text-fg\">Name</span>\n            <Input defaultValue=\"Triage new issues\" />\n          </label>\n          <label className=\"flex flex-col gap-2\">\n            <span className=\"text-body-sm leading-line-body-sm font-medium text-fg\">Repository</span>\n            <Input defaultValue=\"acme/web\" />\n          </label>\n        </DialogBody>\n        <DialogFooter>\n          <DialogClose render={<Button variant=\"outline\" />}>Cancel</DialogClose>\n          <Button>Create automation</Button>\n        </DialogFooter>\n      </DialogContent>\n    </Dialog>\n  );\n}\n\nexport function Preview() {\n  return <NewAutomation />;\n}\n\nexport function Open() {\n  return (\n    <div className=\"min-h-120\">\n      <NewAutomation defaultOpen />\n    </div>\n  );\n}\n\nexport function Notice() {\n  return (\n    <Dialog>\n      <DialogTrigger render={<Button variant=\"outline\" />}>Show the API key</DialogTrigger>\n      <DialogContent className=\"max-w-md\">\n        <DialogHeader>\n          <DialogTitle>Your API key</DialogTitle>\n          <DialogDescription>Copy it now. For your safety it will not be shown again.</DialogDescription>\n        </DialogHeader>\n        <code className=\"block border border-line px-3 py-2 font-code text-body-sm leading-line-body-sm tracking-code break-all text-fg\">hpl_live_7f3a9c2e41b8d6</code>\n        <DialogFooter>\n          <DialogClose render={<Button />}>Done</DialogClose>\n        </DialogFooter>\n      </DialogContent>\n    </Dialog>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Open",
+        "Notice"
+      ],
+      "requires": [
+        "dialog",
+        "button",
+        "input"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/dialog/Preview"
+        },
+        {
+          "name": "Open",
+          "url": "https://hoplite-ds.vercel.app/preview/dialog/Open"
+        },
+        {
+          "name": "Notice",
+          "url": "https://hoplite-ds.vercel.app/preview/dialog/Notice"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Dialog",
+  "description": "A square 512px panel of the ground with 24px of air, a quiet hairline and a deep soft cast, centered over the ink at 32 percent: a Chakra Petch light 20px title, a 14px graphite description, hexagon keys at the end of the footer and a compact ghost X in the corner. It opens in place from 0.96 with a fade. A dialog taller than the screen scrolls and fades at the screen edge it scrolls past (fade-y).",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils",
+    "surface",
+    "button"
+  ],
+  "packages": [
+    "@base-ui/react",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/dialog.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Dialog as BaseDialog } from \"@base-ui/react/dialog\";\nimport { XIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { cn, slot } from \"@/lib/utils\";\nimport { usePortalContainer } from \"@/lib/surface\";\nimport { Button } from \"@/components/ui/button\";\n\n// A dialog as the site would draw one from its popups: a square panel of the ground, 512px wide with 24px of air, a\n// quiet hairline and a deep soft cast (shadow-dialog), centered over the ink at 32 percent. The title is Chakra Petch\n// light at 20px in the ink, the description 14px graphite under it; the actions are hexagon keys at the end of the\n// footer, the main one in ink. The close key is a compact ghost hexagon with a 16px X in the top right corner. It opens\n// in place from 0.96 with a fade in 200ms on the strong ease-out and leaves in 120ms; with reduced motion it only fades.\nconst OVERLAY =\n  \"fixed inset-0 z-50 bg-scrim transition-opacity duration-moderate ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-fast motion-reduce:transition-none\";\n\nconst POPUP =\n  \"relative flex w-full max-w-lg flex-col gap-6 bg-surface p-6 text-fg shadow-dialog outline-none transition-[opacity,scale] duration-moderate ease-out data-starting-style:scale-96 data-starting-style:opacity-0 data-ending-style:scale-96 data-ending-style:opacity-0 data-ending-style:duration-fast motion-reduce:transition-opacity\";\n\n/** A trigger renders a native button unless its `render` (or asChild child) is another tag. */\nfunction isNativeButton(render: unknown) {\n  return !React.isValidElement(render) || typeof render.type !== \"string\" || render.type === \"button\";\n}\n\ntype DialogProps = Omit<React.ComponentProps<typeof BaseDialog.Root>, \"onOpenChange\"> & { onOpenChange?: (open: boolean) => void };\n\nfunction Dialog({ onOpenChange, ...props }: DialogProps) {\n  return <BaseDialog.Root data-slot=\"dialog\" onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined} {...props} />;\n}\n\nfunction DialogTrigger({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDialog.Trigger> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseDialog.Trigger data-slot=\"dialog-trigger\" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>\n      {parts.children}\n    </BaseDialog.Trigger>\n  );\n}\n\nfunction DialogPortal(props: React.ComponentProps<typeof BaseDialog.Portal>) {\n  const container = usePortalContainer();\n  return <BaseDialog.Portal data-slot=\"dialog-portal\" container={container} {...props} />;\n}\n\nfunction DialogClose({ asChild = false, render, nativeButton, children, ...props }: React.ComponentProps<typeof BaseDialog.Close> & { asChild?: boolean }) {\n  const parts = slot(asChild, children, render);\n  return (\n    <BaseDialog.Close data-slot=\"dialog-close\" render={parts.render} nativeButton={nativeButton ?? isNativeButton(parts.render)} {...props}>\n      {parts.children}\n    </BaseDialog.Close>\n  );\n}\n\nfunction DialogOverlay({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Backdrop>, \"className\"> & { className?: string }) {\n  return <BaseDialog.Backdrop data-slot=\"dialog-overlay\" className={cn(OVERLAY, className)} {...props} />;\n}\n\ntype DialogContentProps = Omit<React.ComponentProps<typeof BaseDialog.Popup>, \"className\"> & { className?: string; showClose?: boolean; showCloseButton?: boolean };\n\nfunction DialogContent({ className, children, showClose, showCloseButton, ...props }: DialogContentProps) {\n  const close = showClose ?? showCloseButton ?? true;\n  return (\n    <DialogPortal>\n      <DialogOverlay />\n      <BaseDialog.Viewport data-slot=\"dialog-viewport\" className=\"fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 fade-y sm:p-6\">\n        <BaseDialog.Popup data-slot=\"dialog-content\" className={cn(POPUP, className)} {...props}>\n          {children}\n          {close && (\n            <BaseDialog.Close data-slot=\"dialog-close\" render={<Button variant=\"ghost\" size=\"icon-sm\" />} className=\"absolute top-4 right-4\" aria-label=\"Close\">\n              <XIcon />\n            </BaseDialog.Close>\n          )}\n        </BaseDialog.Popup>\n      </BaseDialog.Viewport>\n    </DialogPortal>\n  );\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"dialog-header\" className={cn(\"flex flex-col gap-2 pr-10\", className)} {...props} />;\n}\n\nfunction DialogBody({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"dialog-body\" className={cn(\"flex min-w-0 flex-col gap-4 text-body-sm leading-line-body-sm text-fg-secondary\", className)} {...props} />;\n}\n\nfunction DialogFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"dialog-footer\" className={cn(\"flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end\", className)} {...props} />;\n}\n\nfunction DialogTitle({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Title>, \"className\"> & { className?: string }) {\n  return <BaseDialog.Title data-slot=\"dialog-title\" className={cn(\"font-display text-h5 leading-title font-light text-balance text-fg\", className)} {...props} />;\n}\n\nfunction DialogDescription({ className, ...props }: Omit<React.ComponentProps<typeof BaseDialog.Description>, \"className\"> & { className?: string }) {\n  return <BaseDialog.Description data-slot=\"dialog-description\" className={cn(\"text-body-sm leading-line-body-sm text-pretty text-fg-secondary\", className)} {...props} />;\n}\n\nexport { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };\n"
+    }
+  ]
+}

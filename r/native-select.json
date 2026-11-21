@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "name": "native-select",
+  "useFor": "Use NativeSelect where the platform picker serves best: phones, long plain lists, forms that must work without script. Use Select for the brand's popup list. size=\"sm\" is the 32px field.",
+  "constraints": [
+    "A rounded or filled select",
+    "A bold caret",
+    "Options styled to imitate the brand's popup",
+    "A caret that turns or moves"
+  ],
+  "documentation": "",
+  "source": "Derived from the Hoplite website's lines and type, as Input is (the site has no fields)",
+  "exports": [
+    "NativeSelect",
+    "NativeSelectOptGroup",
+    "NativeSelectOption"
+  ],
+  "client": true,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/native-select",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/native-select.md",
+  "examples": [
+    {
+      "path": "examples/native-select.tsx",
+      "content": "import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from \"@/components/ui/native-select\";\n\nexport function Preview() {\n  return (\n    <div className=\"grid w-full max-w-xs gap-2\">\n      <label htmlFor=\"native-size\" className=\"font-sans text-body-sm font-medium text-fg\">\n        Sandbox size\n      </label>\n      <NativeSelect id=\"native-size\" defaultValue=\"standard\" className=\"w-full\">\n        <NativeSelectOption value=\"small\">Small, 1 vCPU, 4 GiB</NativeSelectOption>\n        <NativeSelectOption value=\"standard\">Standard, 2 vCPU, 8 GiB</NativeSelectOption>\n        <NativeSelectOption value=\"large\">Large, 8 vCPU, 32 GiB</NativeSelectOption>\n      </NativeSelect>\n    </div>\n  );\n}\n\nexport function Groups() {\n  return (\n    <NativeSelect defaultValue=\"sonnet\" aria-label=\"Model\">\n      <NativeSelectOptGroup label=\"Fast\">\n        <NativeSelectOption value=\"haiku\">Haiku</NativeSelectOption>\n      </NativeSelectOptGroup>\n      <NativeSelectOptGroup label=\"Balanced\">\n        <NativeSelectOption value=\"sonnet\">Sonnet</NativeSelectOption>\n      </NativeSelectOptGroup>\n      <NativeSelectOptGroup label=\"Deep\">\n        <NativeSelectOption value=\"opus\">Opus</NativeSelectOption>\n      </NativeSelectOptGroup>\n    </NativeSelect>\n  );\n}\n\nexport function States() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <NativeSelect size=\"sm\" defaultValue=\"main\" aria-label=\"Base branch\">\n        <NativeSelectOption value=\"main\">main</NativeSelectOption>\n        <NativeSelectOption value=\"develop\">develop</NativeSelectOption>\n      </NativeSelect>\n      <NativeSelect aria-invalid defaultValue=\"\" aria-label=\"Region\">\n        <NativeSelectOption value=\"\">Choose a region</NativeSelectOption>\n        <NativeSelectOption value=\"us\">US East</NativeSelectOption>\n      </NativeSelect>\n      <NativeSelect disabled defaultValue=\"team\" aria-label=\"Plan\">\n        <NativeSelectOption value=\"team\">Team plan</NativeSelectOption>\n      </NativeSelect>\n    </div>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Groups",
+        "States"
+      ],
+      "requires": [
+        "native-select"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/native-select/Preview"
+        },
+        {
+          "name": "Groups",
+          "url": "https://hoplite-ds.vercel.app/preview/native-select/Groups"
+        },
+        {
+          "name": "States",
+          "url": "https://hoplite-ds.vercel.app/preview/native-select/States"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Native select",
+  "description": "The browser's select dressed as the square field: a 32 percent edge on the ground, 14px ink and a 16px Phosphor caret in the quiet gray at the end; the open list is the platform's.",
+  "surface": "site",
+  "kinds": [
+    "input"
+  ],
+  "requires": [
+    "theme",
+    "input",
+    "utils"
+  ],
+  "packages": [
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "components/ui/native-select.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { CaretDownIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { inputClassName } from \"@/components/ui/input\";\nimport { cn } from \"@/lib/utils\";\n\n// The browser's own select dressed as the field (input.tsx): square, 40px, a 32 percent edge on the ground, 14px ink\n// with 12px on the left and room on the right for a 16px Phosphor caret in the quiet gray, 12px from the edge. The edge\n// turns strong under the pointer and the ink on focus; invalid takes the orange edge; disabled goes quiet with a slate\n// caret. `size=\"sm\"` is the 32px field. The open list is the platform's. Use it where the native picker is better\n// (phones, long lists, forms without script); use Select for the brand's popup.\ntype NativeSelectProps = Omit<React.ComponentProps<\"select\">, \"size\"> & { size?: \"sm\" | \"default\" };\n\nfunction NativeSelect({ className, size = \"default\", ...props }: NativeSelectProps) {\n  return (\n    <div data-slot=\"native-select-wrapper\" data-size={size} className={cn(\"group/native-select relative w-fit\", className)}>\n      <select data-slot=\"native-select\" data-size={size} className={cn(inputClassName, \"cursor-pointer appearance-none pr-10 group-data-invalid/field:border-danger data-[size=sm]:h-8 pointer-coarse:data-[size=sm]:h-12\")} {...props} />\n      <CaretDownIcon aria-hidden data-slot=\"native-select-icon\" className=\"pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-fg-muted group-has-[select:disabled]/native-select:text-fg-subtle\" />\n    </div>\n  );\n}\n\nfunction NativeSelectOption({ className, ...props }: React.ComponentProps<\"option\">) {\n  return <option data-slot=\"native-select-option\" className={cn(\"bg-surface text-fg\", className)} {...props} />;\n}\n\nfunction NativeSelectOptGroup({ className, ...props }: React.ComponentProps<\"optgroup\">) {\n  return <optgroup data-slot=\"native-select-optgroup\" className={cn(\"bg-surface text-fg\", className)} {...props} />;\n}\n\nexport { NativeSelect, NativeSelectOptGroup, NativeSelectOption };\n"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "name": "table",
+  "useFor": "Use Table for records people read across (threads, seats, runs) and variant=\"compare\" for a plan or feature comparison: TableGroup opens each section, row names are TableHead with scope=\"row\", and TableYes and TableNo mark what is included. Use variant=\"prose\" inside an article. Keep the shadcn parts (TableHeader, TableBody, TableRow, TableHead, TableCell, TableFooter, TableCaption); mark a chosen row with data-state=\"selected\". For sorting, selection and pages use DataTable.",
+  "constraints": [
+    "A boxed or rounded frame",
+    "Zebra stripes or filled head rows",
+    "Bold heads",
+    "A check icon or an orange mark for yes",
+    "Rows that move under the pointer"
+  ],
+  "documentation": "",
+  "source": "The Hoplite website's pricing comparison (.pr-table, .pr-table__group, .pr-yes, .pr-no on /pricing) and the blog table (.bp-table)",
+  "exports": [
+    "Table",
+    "TableBody",
+    "TableCaption",
+    "TableCell",
+    "TableFooter",
+    "TableGroup",
+    "TableHead",
+    "TableHeader",
+    "TableNo",
+    "TableRow",
+    "TableYes"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/table",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/table.md",
+  "examples": [
+    {
+      "path": "examples/table.tsx",
+      "content": "import { Table, TableBody, TableCaption, TableCell, TableFooter, TableGroup, TableHead, TableHeader, TableNo, TableRow, TableYes } from \"@/components/ui/table\";\n\nconst THREADS = [\n  { name: \"Fix flaky checkout test\", repo: \"acme/storefront\", agent: \"Claude Code\", status: \"Ready for review\", updated: \"2 min ago\" },\n  { name: \"Migrate auth to sessions\", repo: \"acme/api\", agent: \"Codex\", status: \"Running\", updated: \"14 min ago\" },\n  { name: \"Bump Next to 16.1\", repo: \"acme/web\", agent: \"Claude Code\", status: \"Merged\", updated: \"1 h ago\" },\n  { name: \"Add rate limits to webhooks\", repo: \"acme/api\", agent: \"Amp\", status: \"Needs input\", updated: \"3 h ago\" },\n];\n\nexport function Preview() {\n  return (\n    <Table className=\"min-w-160\">\n      <TableHeader>\n        <TableRow>\n          <TableHead>Thread</TableHead>\n          <TableHead>Repository</TableHead>\n          <TableHead>Agent</TableHead>\n          <TableHead>Status</TableHead>\n          <TableHead className=\"text-right\">Updated</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        {THREADS.map((t) => (\n          <TableRow key={t.name}>\n            <TableCell className=\"font-medium\">{t.name}</TableCell>\n            <TableCell className=\"font-code text-fg-secondary\">{t.repo}</TableCell>\n            <TableCell>{t.agent}</TableCell>\n            <TableCell className=\"text-fg-secondary\">{t.status}</TableCell>\n            <TableCell className=\"text-right text-fg-muted\">{t.updated}</TableCell>\n          </TableRow>\n        ))}\n      </TableBody>\n    </Table>\n  );\n}\n\nconst PLANS = [\"Free\", \"Plus\", \"Team\", \"Enterprise\"];\nconst GROUPS: { name: string; rows: [string, ...(string | boolean)[]][] }[] = [\n  {\n    name: \"Usage\",\n    rows: [\n      [\"Included usage\", \"Monthly, with a daily limit\", \"Generous, per seat\", \"Most, per seat\", \"Custom\"],\n      [\"All platform models\", true, true, true, true],\n      [\"Prepaid credits beyond that\", false, true, true, true],\n    ],\n  },\n  {\n    name: \"Sandboxes\",\n    rows: [\n      [\"Largest sandbox\", \"2 vCPU, 8 GiB\", \"8 vCPU, 32 GiB\", \"16 vCPU, 64 GiB\", \"Custom\"],\n      [\"Subagents per task at once\", \"4\", \"8\", \"8\", \"8\"],\n      [\"Snapshots and forks\", false, false, true, true],\n    ],\n  },\n];\n\nexport function Compare() {\n  return (\n    <Table variant=\"compare\" className=\"min-w-160\">\n      <TableHeader>\n        <TableRow>\n          <TableHead className=\"w-1/3\">\n            <span className=\"sr-only\">Feature</span>\n          </TableHead>\n          {PLANS.map((p) => (\n            <TableHead key={p}>{p}</TableHead>\n          ))}\n        </TableRow>\n      </TableHeader>\n      {GROUPS.map((g) => (\n        <TableBody key={g.name}>\n          <TableGroup colSpan={PLANS.length + 1}>{g.name}</TableGroup>\n          {g.rows.map(([name, ...values]) => (\n            <TableRow key={name}>\n              <TableHead scope=\"row\">{name}</TableHead>\n              {values.map((v, i) => (\n                <TableCell key={PLANS[i]}>{v === true ? <TableYes /> : v === false ? <TableNo /> : v}</TableCell>\n              ))}\n            </TableRow>\n          ))}\n        </TableBody>\n      ))}\n    </Table>\n  );\n}\n\nexport function Prose() {\n  return (\n    <div className=\"w-full max-w-160\">\n      <Table variant=\"prose\">\n        <TableHeader>\n          <TableRow>\n            <TableHead>Sandbox</TableHead>\n            <TableHead>Cold start</TableHead>\n            <TableHead>Warm start</TableHead>\n          </TableRow>\n        </TableHeader>\n        <TableBody>\n          <TableRow>\n            <TableCell>2 vCPU, 8 GiB</TableCell>\n            <TableCell>1.8 s</TableCell>\n            <TableCell>240 ms</TableCell>\n          </TableRow>\n          <TableRow>\n            <TableCell>8 vCPU, 32 GiB</TableCell>\n            <TableCell>2.4 s</TableCell>\n            <TableCell>260 ms</TableCell>\n          </TableRow>\n          <TableRow>\n            <TableCell>16 vCPU, 64 GiB</TableCell>\n            <TableCell>3.1 s</TableCell>\n            <TableCell>310 ms</TableCell>\n          </TableRow>\n        </TableBody>\n        <TableCaption>Median of 500 starts per size, measured in October.</TableCaption>\n      </Table>\n    </div>\n  );\n}\n\nexport function WithFooter() {\n  return (\n    <Table className=\"max-w-120\">\n      <TableHeader>\n        <TableRow>\n          <TableHead>Seat</TableHead>\n          <TableHead>Plan</TableHead>\n          <TableHead className=\"text-right\">Monthly</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        <TableRow>\n          <TableCell>Maya</TableCell>\n          <TableCell className=\"text-fg-secondary\">Team</TableCell>\n          <TableCell className=\"text-right tabular-nums\">$40.00</TableCell>\n        </TableRow>\n        <TableRow data-state=\"selected\">\n          <TableCell>Platform lead</TableCell>\n          <TableCell className=\"text-fg-secondary\">Team</TableCell>\n          <TableCell className=\"text-right tabular-nums\">$40.00</TableCell>\n        </TableRow>\n        <TableRow>\n          <TableCell>Release bot</TableCell>\n          <TableCell className=\"text-fg-secondary\">Plus</TableCell>\n          <TableCell className=\"text-right tabular-nums\">$20.00</TableCell>\n        </TableRow>\n      </TableBody>\n      <TableFooter>\n        <TableRow>\n          <TableCell colSpan={2}>Total</TableCell>\n          <TableCell className=\"text-right tabular-nums\">$100.00</TableCell>\n        </TableRow>\n      </TableFooter>\n    </Table>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Compare",
+        "Prose",
+        "WithFooter"
+      ],
+      "requires": [
+        "table"
+      ],
+      "packages": [],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/table/Preview"
+        },
+        {
+          "name": "Compare",
+          "url": "https://hoplite-ds.vercel.app/preview/table/Compare"
+        },
+        {
+          "name": "Prose",
+          "url": "https://hoplite-ds.vercel.app/preview/table/Prose"
+        },
+        {
+          "name": "WithFooter",
+          "url": "https://hoplite-ds.vercel.app/preview/table/WithFooter"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Table",
+  "description": "Ruled, not boxed: Kode Mono column heads over the strong rule and 48px rows of 14px ink with a quiet rule between them; the compare variant is the pricing table (Chakra Petch 20px plan heads, group rows, a filled ink hexagon for yes and a slate dash for no) and the prose variant the blog's 16px table. A table wider than its frame scrolls sideways and fades at the edge it scrolls past (fade-x).",
+  "surface": "site",
+  "kinds": [
+    "table"
+  ],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [],
+  "files": [
+    {
+      "path": "components/ui/table.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The site's ruled tables: no box, no fills, a quiet 16 percent rule between rows. `default` is the list table: Kode\n// Mono column heads (12px capitals, tracked 8 percent, quiet gray) in a 40px row over the strong rule, then 48px rows of\n// 14px ink with 16px sides, the first column flush with the rules. `compare` is the pricing comparison (.pr-table):\n// 64px heads in Chakra Petch 20px over the quiet rule, 48px rows ruled at the top, row names (a TableHead with\n// scope=\"row\") in 14px graphite and values in the ink; a TableGroup row opens each section with a Chakra Petch 20px head\n// 48px below the last row and 16px above the first. TableYes is the filled ink hexagon and TableNo the slate dash.\n// `prose` is the blog's table (.bp-table): 16px tabular text in rows 12px tall above and below, top aligned, the Kode\n// Mono heads over the strong rule. A selected row (data-state=\"selected\") takes the hover wash at once. Nothing moves.\ntype TableVariant = \"default\" | \"compare\" | \"prose\";\n\nfunction Table({ className, variant = \"default\", ...props }: React.ComponentProps<\"table\"> & { variant?: TableVariant }) {\n  return (\n    <div data-slot=\"table-container\" className=\"relative w-full overflow-x-auto fade-x\">\n      <table\n        data-slot=\"table\"\n        data-variant={variant}\n        className={cn(\n          \"group/table w-full caption-bottom border-separate border-spacing-0 font-sans text-body-sm leading-line-body-sm text-fg\",\n          variant === \"compare\" && \"table-fixed\",\n          variant === \"prose\" && \"text-body leading-line-body tabular-nums\",\n          className,\n        )}\n        {...props}\n      />\n    </div>\n  );\n}\n\nfunction TableHeader({ className, ...props }: React.ComponentProps<\"thead\">) {\n  return <thead data-slot=\"table-header\" className={className} {...props} />;\n}\n\nfunction TableBody({ className, ...props }: React.ComponentProps<\"tbody\">) {\n  // The head draws the rule above the first row, so the first row does not draw its own.\n  return <tbody data-slot=\"table-body\" className={cn(\"[&>tr:first-child>*]:border-t-0\", className)} {...props} />;\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return <tfoot data-slot=\"table-footer\" className={cn(\"font-medium [&>tr>*]:border-t [&>tr>*]:border-line-strong\", className)} {...props} />;\n}\n\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return <tr data-slot=\"table-row\" className={cn(\"data-[state=selected]:[&>*]:bg-subtle-hover\", className)} {...props} />;\n}\n\n// A column head by default; with scope=\"row\" it is a row's name, drawn as the site's pricing rows draw theirs.\nfunction TableHead({ className, scope, ...props }: React.ComponentProps<\"th\">) {\n  if (scope === \"row\") {\n    return (\n      <th\n        data-slot=\"table-head\"\n        scope=\"row\"\n        className={cn(\n          \"h-12 border-t border-line px-4 py-3 text-left align-middle font-sans font-normal text-fg-secondary first:pl-0 last:pr-0\",\n          \"group-data-[variant=prose]/table:h-auto group-data-[variant=prose]/table:py-3 group-data-[variant=prose]/table:pl-0 group-data-[variant=prose]/table:align-top\",\n          className,\n        )}\n        {...props}\n      />\n    );\n  }\n  return (\n    <th\n      data-slot=\"table-head\"\n      scope={scope}\n      className={cn(\n        \"ds-label h-10 border-b border-line-strong px-4 text-left align-middle font-normal whitespace-nowrap first:pl-0 last:pr-0 [&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0\",\n        \"group-data-[variant=compare]/table:h-16 group-data-[variant=compare]/table:border-line group-data-[variant=compare]/table:font-display group-data-[variant=compare]/table:text-h5 group-data-[variant=compare]/table:leading-7 group-data-[variant=compare]/table:tracking-normal group-data-[variant=compare]/table:text-fg group-data-[variant=compare]/table:normal-case\",\n        \"group-data-[variant=prose]/table:h-auto group-data-[variant=prose]/table:py-3 group-data-[variant=prose]/table:pl-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TableCell({ className, ...props }: React.ComponentProps<\"td\">) {\n  return (\n    <td\n      data-slot=\"table-cell\"\n      className={cn(\n        \"h-12 border-t border-line px-4 py-3 text-left align-middle first:pl-0 last:pr-0 [&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0\",\n        \"group-data-[variant=prose]/table:h-auto group-data-[variant=prose]/table:pl-0 group-data-[variant=prose]/table:align-top\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n/** A section head inside the body: Chakra Petch 20px across every column (the pricing table's Usage, Automations). */\nfunction TableGroup({ className, colSpan, children, ...props }: React.ComponentProps<\"tr\"> & { colSpan?: number }) {\n  return (\n    <tr data-slot=\"table-group\" className={className} {...props}>\n      <th scope=\"colgroup\" colSpan={colSpan} className=\"pt-12 pb-4 text-left font-display text-h5 leading-7 font-normal text-fg [tbody:first-of-type>tr:first-child>&]:pt-8\">\n        {children}\n      </th>\n    </tr>\n  );\n}\n\n/** Included: the pricing table's 12px mark, a filled ink hexagon with its points at the sides. */\nfunction TableYes({ className, label = \"Included\", ...props }: React.ComponentProps<\"svg\"> & { label?: string }) {\n  return (\n    <svg data-slot=\"table-yes\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" role=\"img\" aria-label={label} className={cn(\"block fill-fg\", className)} {...props}>\n      <path d=\"M11 6L8.5 10.33L3.5 10.33L1 6L3.5 1.67L8.5 1.67Z\" />\n    </svg>\n  );\n}\n\n/** Not included: a 6px dash in the slate. */\nfunction TableNo({ className, label = \"Not included\", ...props }: React.ComponentProps<\"svg\"> & { label?: string }) {\n  return (\n    <svg data-slot=\"table-no\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" role=\"img\" aria-label={label} className={cn(\"block fill-none stroke-fg-subtle\", className)} strokeWidth={1} {...props}>\n      <path d=\"M3 6h6\" />\n    </svg>\n  );\n}\n\nfunction TableCaption({ className, ...props }: React.ComponentProps<\"caption\">) {\n  return <caption data-slot=\"table-caption\" className={cn(\"mt-4 text-left font-sans text-body-sm leading-line-body-sm text-fg-muted\", className)} {...props} />;\n}\n\nexport { Table, TableBody, TableCaption, TableCell, TableFooter, TableGroup, TableHead, TableHeader, TableNo, TableRow, TableYes };\n"
+    }
+  ]
+}

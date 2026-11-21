@@ -1,0 +1,46 @@
+{
+	"$comment": "Share images and social posts, from the brand's own social tool in agd-playground (src/components/hoplite-og: draw.ts layoutFor and drawDesign, scene.ts, content.ts; route /hoplite). Each template is the tool's layout, ported as is (src/assets/og.ts): the measure, the dashed rules, the notes, the globe, cube and loader, the lockup and the foot line. Colors are token names; an opacity beside a token is the tool's own (its drawings set the ink at 40 to 72 percent). Copy is the tool's sample copy for the occasion each template borrows, without third-party names.",
+	"themes": {
+		"light": { "label": "Light", "mode": "light", "bg": "ground", "ink": "ink", "muted": "text-muted", "line": ["ink", 0.4], "grid": ["ink", 0.6], "node": "orange", "description": "The site's warm ground and ink (the default, as on hoplite.sh)." },
+		"night": { "label": "Night", "mode": "dark", "bg": "ground", "ink": "ink", "muted": "text-muted", "line": ["ink", 0.5], "grid": ["ink", 0.72], "node": "orange", "description": "The site's dark theme: the ink and the ground swapped (the tool's default look)." },
+		"black": { "label": "Black", "mode": "dark", "bg": "bg-dark", "ink": "ink", "muted": "text-muted", "line": ["ink", 0.45], "grid": ["ink", 0.66], "node": "orange", "description": "The darkest ground the dark theme has (bg-dark), the tool's Black." }
+	},
+	"notes": [
+		"Theme Night: the tool's ground #1d1d1d is the dark theme's ground (#1A1A1A); its ink #f0f0ee is the dark ink (#F2F2F0); its gray #8d8d89 is the dark text-muted (#929291).",
+		"Theme Black: the tool's #0d0d0d is the dark theme's bg-dark (#0F0F0F).",
+		"Theme Light: the tool's #eaeaea ground and #121212 ink are the site's ground (#F2F2F0) and ink (#1A1A1A); its gray #6b6b68 is text-muted (#626261). Light is the default here because the site is light by default; the tool opens on Night.",
+		"The tool's Red theme (an orange ground) is left out: the brand's principles keep the orange a mark, never a fill for a whole panel.",
+		"Faces: the tool set notes and the foot line in Share Tech Mono and its text in Chakra Petch; tokens.css names Kode Mono for labels, so notes, the loader and the foot are Kode Mono. Headlines stay Chakra Petch light, as both set them.",
+		"The cog node and the lockup's horse are the orange, as in the tool and the app icon.",
+		"A picture (--image) takes the drawing's place, cropped to fill the drawing's box inside the rules, framed with the site's corner ticks (.ds-corners, 16px). --shade darkens it with bg-dark, as the tool's window shade darkens the brand's aerials.",
+		"The film grain is raster only: an SVG leaves it out so the file stays vector.",
+		"The tool's foot line read BACKED BY Y COMBINATOR; a third-party name is not shipped, so the foot's right side is the brand's tagline. Pass --foot-right to change it."
+	],
+	"sizes": {
+		"og": { "label": "Link preview", "w": 1200, "h": 630, "group": "share" },
+		"card": { "label": "X card", "w": 1200, "h": 675, "group": "share" },
+		"li-link": { "label": "LinkedIn link", "w": 1200, "h": 627, "group": "share" },
+		"x-banner": { "label": "X header", "w": 1500, "h": 500, "group": "banner", "aliases": ["x", "x-header"] },
+		"linkedin-banner": { "label": "LinkedIn profile banner", "w": 1584, "h": 396, "group": "banner", "aliases": ["li-profile"] },
+		"li-page": { "label": "LinkedIn page", "w": 1128, "h": 191, "group": "banner" },
+		"yt": { "label": "YouTube channel", "w": 2560, "h": 1440, "group": "banner" },
+		"email": { "label": "Email header", "w": 1200, "h": 300, "group": "banner" },
+		"square": { "label": "Square", "w": 1080, "h": 1080, "group": "social" },
+		"portrait": { "label": "Portrait 4:5", "w": 1080, "h": 1350, "group": "social" },
+		"story": { "label": "Story 9:16", "w": 1080, "h": 1920, "group": "social" },
+		"landscape": { "label": "Landscape 16:9", "w": 1200, "h": 675, "group": "social", "aliases": ["wide", "16:9"] },
+		"li-post": { "label": "LinkedIn post", "w": 1200, "h": 627, "group": "social", "aliases": ["linkedin"] },
+		"li-square": { "label": "LinkedIn square", "w": 1200, "h": 1200, "group": "social" }
+	},
+	"social": ["og", "square", "portrait", "story", "landscape", "x-banner", "linkedin-banner"],
+	"foot": { "left": "HOPLITE.SH", "right": "EFFORTLESS CLOUD CODING AGENTS" },
+	"templates": {
+		"globe": { "label": "Globe", "description": "The headline top left inside the dashed rules, a note under it at each side, the globe's top rising to the rule at the foot, the lockup bottom right.", "copy": { "headline": "Everything a swarm of agents needs.", "note": "An orchestrator plans the work, runs subagents in parallel and checks what comes back.", "note2": "Every agent gets its own branch and its own sandbox." }, "picture": true },
+		"cube": { "label": "Cube", "description": "The headline top left, two notes down the left, a cube cut into cells running off the right edge and the foot, the lockup bottom right.", "copy": { "headline": "Bring your own skills and MCP servers.", "note": "Drive Hoplite from any MCP client through api.hoplite.sh/mcp.", "note2": "Approve sensitive actions when they come up." }, "picture": true },
+		"horizon": { "label": "Horizon", "description": "The headline centered, a globe's dome under it with a ring and a large node on its pole, the address and a line at the foot.", "copy": { "headline": "A workstation for your army of coding agents." }, "picture": true },
+		"banner": { "label": "Header", "description": "A globe at the left, the headline and a note at the right, one dashed rule along the foot (on tall frames the globe sits above the words).", "copy": { "headline": "A workstation for your army of coding agents.", "note": "Agents run in the cloud and let you know when they need input." }, "picture": true },
+		"loader": { "label": "Loader", "description": "The headline top left, a note, and the loading bar with its node across the image, the lockup bottom right.", "copy": { "headline": "Hoplite is almost out of beta.", "note": "Thousands of threads run on Hoplite every day.", "progress": "58", "loaderLabel": "Loading" }, "picture": false },
+		"logo": { "label": "Logo", "description": "The lockup large in the middle over the dome, the address and a line at the foot.", "copy": {}, "picture": true },
+		"partner": { "label": "Lockup", "description": "The lockup beside a partner's name (or logo, --partner) with a cross between them, the headline under it, the dome below and the foot line.", "copy": { "headline": "Hoplite now works with Acme.", "partnerName": "Acme" }, "picture": true }
+	}
+}

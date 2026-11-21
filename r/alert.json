@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "name": "alert",
+  "useFor": "Use Alert for a message about the page or the workspace that stays until it is resolved (a failed check, a usage limit close at hand, a connected repository). Put one glyph first, a short title, and a sentence of detail; an action goes in AlertAction. For a passing confirmation, use a toast.",
+  "constraints": [
+    "An orange fill",
+    "A rounded or shadowed box",
+    "Bold titles",
+    "More than one action",
+    "An alert for every success"
+  ],
+  "documentation": "",
+  "source": "Extrapolated from the Hoplite website: its square frames on quiet lines (.hn__news), 14px notes and the orange used only as a mark",
+  "exports": [
+    "Alert",
+    "AlertAction",
+    "AlertDescription",
+    "AlertTitle",
+    "alertVariants"
+  ],
+  "client": false,
+  "docsUrl": "https://hoplite-ds.vercel.app/components/alert",
+  "markdownUrl": "https://hoplite-ds.vercel.app/r/alert.md",
+  "examples": [
+    {
+      "path": "examples/alert.tsx",
+      "content": "import { CheckCircleIcon, InfoIcon, WarningIcon, WarningOctagonIcon } from \"@phosphor-icons/react/ssr\";\n\nimport { Alert, AlertAction, AlertDescription, AlertTitle } from \"@/components/ui/alert\";\nimport { Button } from \"@/components/ui/button\";\n\nexport function Preview() {\n  return (\n    <Alert className=\"max-w-xl\">\n      <InfoIcon />\n      <AlertTitle>Sandboxes now restart from their last snapshot</AlertTitle>\n      <AlertDescription>Threads that were running when a sandbox stopped pick up from the last finished step.</AlertDescription>\n    </Alert>\n  );\n}\n\nexport function Variants() {\n  return (\n    <div className=\"grid max-w-xl gap-4\">\n      <Alert variant=\"destructive\">\n        <WarningOctagonIcon />\n        <AlertTitle>The deploy check failed</AlertTitle>\n        <AlertDescription>e2e: checkout timed out after 10 minutes on pull request #482. The agent has paused.</AlertDescription>\n      </Alert>\n      <Alert variant=\"success\">\n        <CheckCircleIcon />\n        <AlertTitle>Repository connected</AlertTitle>\n        <AlertDescription>acme/storefront is ready. Setup ran green in 2 minutes.</AlertDescription>\n      </Alert>\n      <Alert variant=\"warning\">\n        <WarningIcon />\n        <AlertTitle>You have used 84 percent of this month's usage</AlertTitle>\n        <AlertDescription>Runs will draw on prepaid credits once the allowance is used up.</AlertDescription>\n      </Alert>\n    </div>\n  );\n}\n\nexport function WithAction() {\n  return (\n    <Alert className=\"max-w-xl\">\n      <InfoIcon />\n      <AlertTitle>Two seats are unassigned</AlertTitle>\n      <AlertDescription>Invite teammates or remove the seats before the next billing date.</AlertDescription>\n      <AlertAction>\n        <Button size=\"sm\" variant=\"outline\">\n          Manage seats\n        </Button>\n      </AlertAction>\n    </Alert>\n  );\n}\n\nexport function TitleOnly() {\n  return (\n    <Alert className=\"max-w-xl\">\n      <AlertTitle>Automations are paused while the workspace is in read-only mode.</AlertTitle>\n    </Alert>\n  );\n}\n",
+      "exports": [
+        "Preview",
+        "Variants",
+        "WithAction",
+        "TitleOnly"
+      ],
+      "requires": [
+        "alert",
+        "button"
+      ],
+      "packages": [
+        "@phosphor-icons/react"
+      ],
+      "previews": [
+        {
+          "name": "Preview",
+          "url": "https://hoplite-ds.vercel.app/preview/alert/Preview"
+        },
+        {
+          "name": "Variants",
+          "url": "https://hoplite-ds.vercel.app/preview/alert/Variants"
+        },
+        {
+          "name": "WithAction",
+          "url": "https://hoplite-ds.vercel.app/preview/alert/WithAction"
+        },
+        {
+          "name": "TitleOnly",
+          "url": "https://hoplite-ds.vercel.app/preview/alert/TitleOnly"
+        }
+      ]
+    }
+  ],
+  "type": "ui",
+  "title": "Alert",
+  "description": "A ruled notice: a square block inside a quiet edge, a 16px Phosphor glyph beside a 14px medium title and 14px graphite text. Destructive takes the orange edge and glyph; success and warning a glyph in their status color.",
+  "surface": "site",
+  "kinds": [],
+  "requires": [
+    "theme",
+    "utils"
+  ],
+  "packages": [
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "components/ui/alert.tsx",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nimport { cn } from \"@/lib/utils\";\n\n// A notice in the site's ruled language (extrapolated from its frames and notes): a square block on the ground inside a\n// quiet 16 percent edge, 16px in, a 16px Phosphor glyph in the ink 2px down beside a 14px medium ink title and a 14px\n// graphite description. Nothing is filled: `destructive` takes the orange edge and an orange glyph, `success` and\n// `warning` keep the quiet edge with a glyph in their status color. An action sits at the end, centered on the block.\nconst alertVariants = cva(\n  \"group/alert relative grid w-full grid-cols-[0_1fr] items-start gap-y-1 border px-4 py-4 font-sans text-body-sm leading-line-body-sm has-[>svg]:grid-cols-[16px_1fr] has-[>svg]:gap-x-3 has-data-[slot=alert-action]:grid-cols-[0_1fr_auto] has-[>svg]:has-data-[slot=alert-action]:grid-cols-[16px_1fr_auto] [&>svg]:row-span-2 [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0\",\n  {\n    variants: {\n      variant: {\n        default: \"border-line text-fg [&>svg]:text-fg\",\n        destructive: \"border-danger text-fg [&>svg]:text-danger\",\n        success: \"border-line text-fg [&>svg]:text-success\",\n        warning: \"border-line text-fg [&>svg]:text-warning\",\n      },\n    },\n    defaultVariants: { variant: \"default\" },\n  },\n);\n\nfunction Alert({ className, variant, ...props }: React.ComponentProps<\"div\"> & VariantProps<typeof alertVariants>) {\n  return <div data-slot=\"alert\" data-variant={variant ?? \"default\"} role=\"alert\" className={cn(alertVariants({ variant }), className)} {...props} />;\n}\n\nfunction AlertTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"alert-title\" className={cn(\"col-start-2 min-h-5 font-medium text-pretty text-fg\", className)} {...props} />;\n}\n\nfunction AlertDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"alert-description\" className={cn(\"col-start-2 grid justify-items-start gap-1 text-pretty text-fg-secondary [&_a]:text-fg [&_a]:underline [&_a]:decoration-line [&_a]:underline-offset-4 [&_a:hover]:decoration-current [&_p]:leading-line-body-sm\", className)} {...props} />;\n}\n\nfunction AlertAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"alert-action\" className={cn(\"col-start-3 row-span-2 row-start-1 ml-4 flex items-center gap-2 self-center\", className)} {...props} />;\n}\n\nexport { Alert, AlertAction, AlertDescription, AlertTitle, alertVariants };\n"
+    }
+  ]
+}
