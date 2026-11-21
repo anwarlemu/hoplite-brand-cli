@@ -25,7 +25,7 @@ export function Preview() {
 
 export function Horizontal() {
   return (
-    <ScrollArea className="w-full max-w-96 border border-line">
+    <ScrollArea orientation="horizontal" className="w-full max-w-96 border border-line">
       <div className="flex w-max gap-2 p-4">
         {["main", "fix/null-check", "feat/automations", "chore/node-22", "feat/seats", "fix/flaky-test", "docs/quickstart"].map((branch) => (
           <span key={branch} className="flex h-8 items-center border border-line-field px-3 font-code text-body-sm text-fg">

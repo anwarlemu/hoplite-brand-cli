@@ -76,13 +76,16 @@ function SheetContent({ className, children, side = "right", showCloseButton, sh
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "fixed z-50 flex flex-col overflow-y-auto overscroll-contain bg-surface text-fg outline-none transition-[translate] duration-slow ease-drawer data-ending-style:duration-moderate motion-reduce:transition-none",
+          "fixed z-50 flex flex-col bg-surface text-fg outline-none transition-[translate] duration-slow ease-drawer data-ending-style:duration-moderate motion-reduce:transition-none",
           SIDES[side],
           className,
         )}
         {...props}
       >
-        {children}
+        {/* The body scrolls inside the panel, so a long sheet fades at its edges while the panel stays whole. */}
+        <div data-slot="sheet-body" className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain fade-y">
+          {children}
+        </div>
         {close && (
           <BaseDialog.Close data-slot="sheet-close" render={<Button variant="ghost" size="icon-sm" />} className="absolute top-4 right-4" aria-label="Close">
             <XIcon />

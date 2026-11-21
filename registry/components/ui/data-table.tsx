@@ -71,7 +71,7 @@ function DataTableColumnHeader({ title, sorted, onSort, className }: { title: Re
 }
 
 const POPUP =
-  "max-h-(--available-height) min-w-52 origin-(--transform-origin) overflow-y-auto bg-surface p-1 text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]";
+  "flex max-h-(--available-height) min-w-52 origin-(--transform-origin) flex-col bg-surface text-fg shadow-floating outline-none transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate motion-reduce:transition-[opacity]";
 
 /** The Columns key and its popup of checks, one per column that can be hidden. */
 function DataTableViewOptions({ columns, visible, onVisibleChange }: { columns: { id: string; header: React.ReactNode }[]; visible: Record<string, boolean>; onVisibleChange: (id: string, on: boolean) => void }) {
@@ -85,7 +85,7 @@ function DataTableViewOptions({ columns, visible, onVisibleChange }: { columns: 
       <BaseMenu.Portal container={container}>
         <BaseMenu.Positioner side="bottom" align="end" sideOffset={4} className="z-50 outline-none">
           <BaseMenu.Popup className={POPUP}>
-            <BaseMenu.Group>
+            <BaseMenu.Group className="min-h-0 overflow-y-auto overscroll-contain p-1 fade-y">
               <BaseMenu.GroupLabel className="ds-label flex h-8 items-center px-3">Show columns</BaseMenu.GroupLabel>
               {columns.map((c) => (
                 <BaseMenu.CheckboxItem

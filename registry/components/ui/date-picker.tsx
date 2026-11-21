@@ -60,18 +60,20 @@ function Content({ slot, children }: { slot: string; children: React.ReactNode }
 
 function Presets<T>({ presets, isActive, onPick }: { presets: Preset<T>[]; isActive: (p: Preset<T>) => boolean; onPick: (value: T) => void }) {
   return (
-    <div data-slot="date-picker-presets" role="group" aria-label="Presets" className="flex gap-1 overflow-x-auto border-line p-1 max-sm:border-b sm:w-40 sm:flex-col sm:border-r">
-      {presets.map((p) => (
-        <button
-          key={p.label}
-          type="button"
-          aria-pressed={isActive(p)}
-          onClick={() => onPick(p.value)}
-          className="flex h-9 shrink-0 cursor-pointer items-center px-3 text-left font-sans text-body-sm leading-line-body-sm font-normal whitespace-nowrap text-fg hover:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-pressed:bg-subtle-hover"
-        >
-          {p.label}
-        </button>
-      ))}
+    <div data-slot="date-picker-presets" className="min-w-0 border-line max-sm:border-b sm:w-40 sm:border-r">
+      <div role="group" aria-label="Presets" className="flex gap-1 overflow-x-auto p-1 fade-x sm:flex-col">
+        {presets.map((p) => (
+          <button
+            key={p.label}
+            type="button"
+            aria-pressed={isActive(p)}
+            onClick={() => onPick(p.value)}
+            className="flex h-9 shrink-0 cursor-pointer items-center px-3 text-left font-sans text-body-sm leading-line-body-sm font-normal whitespace-nowrap text-fg hover:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring aria-pressed:bg-subtle-hover"
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

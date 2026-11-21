@@ -40,7 +40,7 @@ function Toaster({ toastOptions, closeButton, offset = 24, mobileOffset = 16, ..
           icon: "flex h-6 w-4 shrink-0 items-center justify-center",
           content: "grid min-w-0 flex-1 gap-1 pr-8 group-has-data-button/toast:pr-0",
           title: "text-body-sm leading-line-body-sm font-medium text-fg",
-          description: "max-h-40 overflow-y-auto text-body-sm leading-line-body-sm text-fg-muted whitespace-pre-line wrap-anywhere",
+          description: "max-h-40 overflow-y-auto fade-y text-body-sm leading-line-body-sm text-fg-muted whitespace-pre-line wrap-anywhere",
           actionButton: `${KEY} self-center group-has-data-close-button/toast:last:mr-8 text-on-primary before:bg-primary hover:before:bg-primary-hover active:before:bg-primary-hover`,
           cancelButton: `${KEY} self-center group-has-data-close-button/toast:last:mr-8 text-fg before:bg-line-strong after:bg-surface hover:after:bg-subtle-hover active:after:bg-pressed`,
           closeButton:

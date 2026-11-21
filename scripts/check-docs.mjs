@@ -63,6 +63,38 @@ try {
   await nav.getByText('Nothing matches.').waitFor();
   console.log('PASS: rail filter narrows the list and is kept after navigation.');
 
+  // Scroll edges fade, never cut a row off: the rail fades over 24px at an edge with more past it, tied to the scroll.
+  const fade = async (locator, scroll) => {
+    await locator.evaluate((el, to) => { if (to !== undefined) el.scrollTop = to; }, scroll);
+    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    return locator.evaluate(el => { const s = getComputedStyle(el); return { mask: s.maskImage, start: s.getPropertyValue('--fade-start').trim(), end: s.getPropertyValue('--fade-end').trim() }; });
+  };
+  await page.goto(`${base}/components/button`);
+  const railList = nav.locator('> div').last();
+  await railList.evaluate(el => { el.scrollTop = 0; });
+  const rest = await fade(railList);
+  assert.notEqual(rest.mask, 'none', 'the rail list carries the scroll fade');
+  assert.deepEqual([rest.start, rest.end], ['0px', '24px'], 'at rest the first row shows in full and the bottom fades');
+  const mid = await fade(railList, 200);
+  assert.deepEqual([mid.start, mid.end], ['24px', '24px'], 'scrolled, both edges fade 24px');
+  const end = await fade(railList, 1e6);
+  assert.deepEqual([end.start, end.end], ['24px', '0px'], 'at the end the last row shows in full');
+  await page.goto(`${base}/preview/scroll-area/Preview`);
+  await page.locator('[data-preview-ready]').waitFor();
+  const area = page.locator('[data-slot=scroll-area-viewport]').first();
+  assert.deepEqual(Object.values(await fade(area, 0)).slice(1), ['0px', '24px'], 'a scroll area at rest fades only its bottom');
+  assert.deepEqual(Object.values(await fade(area, 100)).slice(1), ['24px', '24px'], 'a scrolled scroll area fades both edges');
+  await page.goto(`${base}/components/sidebar`);
+  const both = page.locator('pre[data-slot=code-block-content]').nth(await page.evaluate(() => [...document.querySelectorAll('pre[data-slot=code-block-content]')].findIndex(e => e.scrollHeight > e.clientHeight + 50 && e.scrollWidth > e.clientWidth + 50)));
+  const axes = async (top, left) => {
+    await both.evaluate((e, [t, l]) => { e.scrollTop = t; e.scrollLeft = l; }, [top, left]);
+    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    return both.evaluate(e => ['--fade-start', '--fade-end', '--fade-x-start', '--fade-x-end'].map(n => getComputedStyle(e).getPropertyValue(n).trim()));
+  };
+  assert.deepEqual(await axes(0, 0), ['0px', '24px', '0px', '24px'], 'a code block at rest fades only its bottom and right');
+  assert.deepEqual(await axes(100, 100), ['24px', '24px', '24px', '24px'], 'a code block scrolled both ways fades all four edges');
+  console.log('PASS: the rail, scroll areas and two-way code blocks fade at the edges they scroll past, never cutting a row off.');
+
   await page.goto(`${base}/components/dialog`);
   const iframe = page.locator('iframe').first();
   assert.equal(await iframe.getAttribute('sandbox'), 'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox');

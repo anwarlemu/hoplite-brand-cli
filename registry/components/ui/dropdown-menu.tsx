@@ -15,7 +15,7 @@ import { usePortalContainer } from "@/lib/surface";
 // caret. Destructive rows are orange. The panel opens from its trigger in 240ms (fade and 0.98 scale on the strong
 // ease-out) and leaves in 200ms; with reduced motion it only fades.
 const POPUP =
-  "max-h-(--available-height) min-w-48 overflow-y-auto overscroll-contain bg-surface py-1 text-fg shadow-floating outline-none origin-(--transform-origin) transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate data-instant:transition-none motion-reduce:transition-opacity";
+  "flex max-h-(--available-height) min-w-48 flex-col bg-surface text-fg shadow-floating outline-none origin-(--transform-origin) transition-[opacity,scale] duration-slow ease-out data-starting-style:scale-98 data-starting-style:opacity-0 data-ending-style:scale-98 data-ending-style:opacity-0 data-ending-style:duration-moderate data-instant:transition-none motion-reduce:transition-opacity";
 
 const ITEM =
   "relative flex h-9 cursor-default items-center gap-2 px-3 font-sans text-body-sm leading-none whitespace-nowrap text-fg select-none transition-colors duration-fast ease-out data-highlighted:bg-subtle-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring data-disabled:pointer-events-none data-disabled:text-fg-subtle pointer-coarse:h-11 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>svg]:text-fg-muted";
@@ -48,11 +48,16 @@ function DropdownMenuTrigger({ asChild = false, render, nativeButton, children, 
 type Placement = Pick<React.ComponentProps<typeof BaseMenu.Positioner>, "side" | "align" | "sideOffset" | "alignOffset" | "collisionPadding" | "anchor">;
 type ContentProps = React.ComponentProps<typeof BaseMenu.Popup> & Placement & { className?: string };
 
-function DropdownMenuContent({ className, side, align = "start", sideOffset = 4, alignOffset = 0, collisionPadding = 8, anchor, ...props }: ContentProps) {
+function DropdownMenuContent({ className, children, side, align = "start", sideOffset = 4, alignOffset = 0, collisionPadding = 8, anchor, ...props }: ContentProps) {
   return (
     <DropdownMenuPortal>
       <BaseMenu.Positioner className="z-50 outline-none" side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset} collisionPadding={collisionPadding} anchor={anchor}>
-        <BaseMenu.Popup data-slot="dropdown-menu-content" className={cn(POPUP, className)} {...props} />
+        <BaseMenu.Popup data-slot="dropdown-menu-content" className={cn(POPUP, className)} {...props}>
+          {/* The rows scroll inside the panel, so a long menu fades at its edges while the panel keeps its cast. */}
+          <div data-slot="dropdown-menu-scroll" className="min-h-0 overflow-y-auto overscroll-contain py-1 fade-y">
+            {children}
+          </div>
+        </BaseMenu.Popup>
       </BaseMenu.Positioner>
     </DropdownMenuPortal>
   );

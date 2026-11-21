@@ -14,7 +14,7 @@ type TableVariant = "default" | "compare" | "prose";
 
 function Table({ className, variant = "default", ...props }: React.ComponentProps<"table"> & { variant?: TableVariant }) {
   return (
-    <div data-slot="table-container" className="relative w-full overflow-x-auto">
+    <div data-slot="table-container" className="relative w-full overflow-x-auto fade-x">
       <table
         data-slot="table"
         data-variant={variant}

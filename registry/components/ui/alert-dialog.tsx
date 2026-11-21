@@ -52,7 +52,7 @@ function AlertDialogContent({ className, size = "default", ...props }: Omit<Reac
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
-      <BaseAlertDialog.Viewport data-slot="alert-dialog-viewport" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 sm:p-6">
+      <BaseAlertDialog.Viewport data-slot="alert-dialog-viewport" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 fade-y sm:p-6">
         <BaseAlertDialog.Popup data-slot="alert-dialog-content" data-size={size} className={cn(POPUP, className)} {...props} />
       </BaseAlertDialog.Viewport>
     </AlertDialogPortal>

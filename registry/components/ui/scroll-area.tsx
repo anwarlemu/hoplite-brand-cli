@@ -9,10 +9,11 @@ import { cn } from "@/lib/utils";
 // rules: the native scroll with a thin square bar instead of the system one. The thumb is a 4px square bar of the field
 // line (32 percent) in a 12px lane along the edge, turning to the strong line (70 percent) under the pointer or while
 // it is dragged (120ms). The bar only shows when the content overflows. Focus on the viewport is the inset ink outline.
-function ScrollArea({ className, children, ...props }: React.ComponentProps<typeof BaseScrollArea.Root>) {
+// Content that runs past an edge fades over 24px there (fade-y down the list, fade-x along a row that scrolls sideways).
+function ScrollArea({ className, children, orientation = "vertical", ...props }: React.ComponentProps<typeof BaseScrollArea.Root> & { orientation?: "vertical" | "horizontal" }) {
   return (
     <BaseScrollArea.Root data-slot="scroll-area" className={cn("relative min-h-0 overflow-hidden", className)} {...props}>
-      <BaseScrollArea.Viewport data-slot="scroll-area-viewport" className="size-full overscroll-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring">
+      <BaseScrollArea.Viewport data-slot="scroll-area-viewport" className={cn("size-full overscroll-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring", orientation === "horizontal" ? "fade-x" : "fade-y")}>
         {children}
       </BaseScrollArea.Viewport>
       <ScrollBar />

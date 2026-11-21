@@ -76,7 +76,7 @@ function SelectContent({ className, children, side = "bottom", sideOffset = 4, a
       <BaseSelect.Positioner side={side} sideOffset={sideOffset} align={align} alignOffset={alignOffset} alignItemWithTrigger={alignItemWithTrigger ?? position === "item-aligned"} className="z-50 outline-none select-none">
         <BaseSelect.Popup data-slot="select-content" className={cn(POPUP, className)} {...props}>
           <SelectScrollUpButton />
-          <BaseSelect.List data-slot="select-list" className="max-h-80 min-h-0 scroll-py-1 overflow-y-auto overscroll-contain p-1">
+          <BaseSelect.List data-slot="select-list" className="max-h-80 min-h-0 scroll-py-1 overflow-y-auto overscroll-contain p-1 fade-y">
             {children}
           </BaseSelect.List>
           <SelectScrollDownButton />

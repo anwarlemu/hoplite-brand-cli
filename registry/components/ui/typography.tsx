@@ -100,7 +100,7 @@ function TypographyInlineCode({ className, ...props }: React.ComponentProps<"cod
 
 function TypographyTable({ className, ...props }: React.ComponentProps<"table">) {
   return (
-    <div data-slot="typography-table" className="my-6 w-full overflow-x-auto">
+    <div data-slot="typography-table" className="my-6 w-full overflow-x-auto fade-x">
       <table
         className={cn(
           "w-full border-collapse font-sans text-body-sm leading-line-body-sm [&_td]:border-b [&_td]:border-line [&_td]:py-3 [&_td]:pr-6 [&_td]:text-left [&_td]:text-fg [&_th]:border-b [&_th]:border-line [&_th]:py-3 [&_th]:pr-6 [&_th]:text-left [&_th]:font-mono [&_th]:text-caption [&_th]:font-normal [&_th]:tracking-caps [&_th]:text-fg-label [&_th]:[text-transform:uppercase] [&_td:first-child]:text-fg-secondary",

@@ -32,7 +32,7 @@ function PricingPage({ plans = PLANS, groups = GROUPS, className }: { plans?: st
               <TypographyH2>Compare every plan</TypographyH2>
               <TypographyLead>The plan names stay pinned while you read down.</TypographyLead>
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto fade-x">
               <Table variant="compare" className="min-w-180">
                 <TableHeader>
                   <TableRow>

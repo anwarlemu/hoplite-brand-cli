@@ -131,7 +131,7 @@ function ComboboxContent({ className, children, side = "bottom", sideOffset = 4,
 }
 
 function ComboboxList({ className, ...props }: React.ComponentProps<typeof BaseCombobox.List>) {
-  return <BaseCombobox.List data-slot="combobox-list" className={cn("max-h-72 min-h-0 scroll-py-1 overflow-y-auto overscroll-contain p-1 data-empty:p-0", className)} {...props} />;
+  return <BaseCombobox.List data-slot="combobox-list" className={cn("max-h-72 min-h-0 scroll-py-1 overflow-y-auto overscroll-contain p-1 fade-y data-empty:p-0", className)} {...props} />;
 }
 
 function ComboboxItem({ className, children, ...props }: React.ComponentProps<typeof BaseCombobox.Item>) {

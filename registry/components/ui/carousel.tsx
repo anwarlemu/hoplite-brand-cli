@@ -160,7 +160,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       ref={viewport}
       data-slot="carousel-viewport"
-      className={cn("relative overflow-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", vertical ? "h-full snap-y snap-mandatory" : "snap-x snap-mandatory")}
+      className={cn("relative overflow-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", vertical ? "h-full snap-y snap-mandatory fade-y" : "snap-x snap-mandatory fade-x")}
     >
       <div data-slot="carousel-content" className={cn("flex", vertical ? "-mb-4 flex-col" : "-mr-4", className)} {...props} />
     </div>

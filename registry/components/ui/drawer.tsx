@@ -88,14 +88,14 @@ function DrawerContent({ className, children, ...props }: Omit<React.ComponentPr
           data-slot="drawer-content"
           data-direction={direction}
           className={cn(
-            "fixed flex flex-col overflow-y-auto overscroll-contain bg-surface text-fg shadow-floating outline-none touch-auto transition-transform duration-slow ease-drawer data-ending-style:duration-[calc(var(--drawer-swipe-strength)*var(--ds-duration-slow))] data-swiping:duration-0 data-swiping:select-none motion-reduce:transition-none",
+            "fixed flex flex-col bg-surface text-fg shadow-floating outline-none touch-auto transition-transform duration-slow ease-drawer data-ending-style:duration-[calc(var(--drawer-swipe-strength)*var(--ds-duration-slow))] data-swiping:duration-0 data-swiping:select-none motion-reduce:transition-none",
             PLACE[direction],
             className,
           )}
           {...props}
         >
           {direction === "bottom" && <div data-slot="drawer-handle" aria-hidden className="mx-auto mt-3 h-1 w-12 shrink-0 bg-line-field" />}
-          <BaseDrawer.Content data-slot="drawer-body" className="flex min-h-0 flex-1 flex-col">
+          <BaseDrawer.Content data-slot="drawer-body" className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain fade-y">
             {children}
           </BaseDrawer.Content>
         </BaseDrawer.Popup>

@@ -48,6 +48,10 @@ export function tokensOnly(css: string): string {
 		if (/^@(import|charset|font-face|keyframes|-webkit-keyframes|property|theme)\b/.test(head)) return true;
 		if (/^:root\b/.test(head)) return true;
 		if (/^\.ds-[\w-]+(\s*,\s*\.ds-[\w-]+)*$/.test(head)) return true;
+		// The scroll fades (fade-y, fade-x, fade-xy) the library's scrolling parts carry, with their scroll-timeline switch.
+		const fade = /\.fade-(?:xy|x|y)(\s*,\s*\.fade-(?:xy|x|y))*\s*\{[^{}]*\}/g;
+		if (/^\.fade-(?:xy|x|y)(\s*,\s*\.fade-(?:xy|x|y))*$/.test(head)) return true;
+		if (/^@supports\b/.test(head)) return !block.slice(block.indexOf('{') + 1, block.lastIndexOf('}')).replace(/\/\*[\s\S]*?\*\//g, '').replace(fade, '').trim();
 		// A media query that only re-declares tokens (a system dark theme).
 		if (/^@media\b/.test(head)) return !block.slice(block.indexOf('{') + 1, block.lastIndexOf('}')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/:root\s*\{[^{}]*\}/g, '').trim();
 		return false;

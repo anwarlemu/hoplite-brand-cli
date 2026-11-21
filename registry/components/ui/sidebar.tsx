@@ -270,7 +270,7 @@ function SidebarSeparator({ className, ...props }: React.ComponentProps<"hr">) {
 }
 
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="sidebar-content" data-sidebar="content" className={cn("flex min-h-0 flex-1 flex-col overflow-auto overscroll-contain [scrollbar-width:none] group-data-[collapsible=icon]/sidebar:overflow-hidden", className)} {...props} />;
+  return <div data-slot="sidebar-content" data-sidebar="content" className={cn("flex min-h-0 flex-1 flex-col overflow-auto overscroll-contain fade-y [scrollbar-width:none] group-data-[collapsible=icon]/sidebar:overflow-hidden", className)} {...props} />;
 }
 
 /** A group of rows, 12px in from the rail's sides; a labeled group keeps 12px above and below it. */

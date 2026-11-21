@@ -429,6 +429,10 @@ describe('bugs found applying to real apps', () => {
 		expect(out).toContain('--ds-color-x: #000');
 		expect(out).not.toMatch(/@layer base|touch-action|transition: none/);
 	});
+	it('the selection stylesheet keeps the scroll fades the library carries', () => {
+		const out = tokensOnly(readFileSync(new URL('../build/site.css', import.meta.url), 'utf8'));
+		for (const part of ['@property --fade-start', '@keyframes fade-end', '.fade-y {', '.fade-x {', '.fade-xy {', 'mask-composite: intersect', 'animation-timeline: scroll(self block)', '--fade-start: 8px']) expect(out).toContain(part);
+	});
 });
 
 describe('fixes shared with the sibling engine', () => {
