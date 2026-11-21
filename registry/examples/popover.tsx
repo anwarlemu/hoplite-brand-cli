@@ -13,7 +13,9 @@ function Seats({ defaultOpen }: { defaultOpen?: boolean }) {
         Add seats
         <CaretDownIcon />
       </PopoverTrigger>
-      <PopoverContent align="start" className="flex flex-col gap-4">
+      {/* Shown open on load, nobody opened it: it keeps focus where it is instead of pulling it (and the page's scroll)
+          into the field. Opened from the trigger, focus moves in as usual. */}
+      <PopoverContent align="start" initialFocus={defaultOpen ? false : undefined} className="flex flex-col gap-4">
         <PopoverHeader>
           <PopoverTitle>Seats on the Team plan</PopoverTitle>
           <PopoverDescription>$20 per seat a month, prorated from today.</PopoverDescription>
